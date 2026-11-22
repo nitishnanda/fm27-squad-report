@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+.DS_Store
+.playwright-mcp/
+.claude/settings.local.json
+Reports/
+# written by the app while it runs, so a git pull never clashes with them
+data/history.json
+data/club.json
+scouting.txt

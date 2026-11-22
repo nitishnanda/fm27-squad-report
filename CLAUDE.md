@@ -39,7 +39,7 @@ LW (AML/ML) IF/WMF · AM SS/AM · RW (AMR/MR) IW/WMF · ST CFD/CFD. `STYLE_KEYS`
 
 ## Site structure (live mode)
 - Branding: the app has its own identity (`APP_LOGO_SVG`, `assets/app-logo.svg`, "Squad Report", neutral "tactics board"
-  green-black + highlighter yellow). The user's club only drives accents: `club_identity(name)` gives kit colour, readable
+  green-black + pitch green `#1C7F46` (white text on it; `--brand-hi` `#4FC77F` for green text on dark). He dropped the old yellow, so keep it out). The user's club only drives accents: `club_identity(name)` gives kit colour, readable
   ink and crest markup (Liverpool = Liver bird assets; any other club = initials shield). FM saves hold no club colours,
   so `CLUB_COLOURS` covers well-known clubs and other names get a stable generated colour. `data/club.json` remembers the
   last club so the loader can wear its colours before a save is read; with no club yet it shows the app brand.
@@ -48,7 +48,7 @@ LW (AML/ML) IF/WMF · AM SS/AM · RW (AMR/MR) IW/WMF · ST CFD/CFD. `STYLE_KEYS`
   story (GSAP ScrollTrigger + Lenis; pins `.story-in`), does/won't lists, Launch buttons. The four previews are real app
   pages built from demo data (`demo_pages()` → `<iframe srcdoc>` at 1440x945, scaled with `--k`); the point of each step
   is `.focus`, everything else `.blur` (`MINI_CSS`). Custom cursor only over the 3D pitch.
-- Launch → red wipe → `/app`. The app shows the loader (`boot_html()`, `BOOT_JS`) only when launched from the home page
+- Launch → green wipe → `/app`. The app shows the loader (`boot_html()`, `BOOT_JS`) only when launched from the home page
   (sessionStorage `fm27-launch`). If the report isn't built yet, `/app` serves `loader_page()`, which follows the real
   rebuild through `/status` (`step` comes from `progress()` calls in `build()` / `make_report()`, labels in `BUILD_STEPS`).
 - `/assets/<file>` serves `assets/` (whitelisted names only). Pages reference `../assets/` so `--once` report files work too.

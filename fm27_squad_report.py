@@ -2847,7 +2847,7 @@ apply();
 
 CSS = r"""
 :root{--bg:#0e1512;--bg2:#121a16;--panel:#16201b;--panel2:#1d2923;--line:#2a3a32;--line2:#1f2c26;--text:#eef1e8;--text2:#c3cbc0;--muted:#8d9a91;
---red:var(--kit);--kit:#C8102E;--kit-ink:#fff;--brand:#FFD84A;--brand-ink:#10170F;--gold:#e9b949;--star:#e9b949;--star0:#34443b;
+--red:var(--kit);--kit:#C8102E;--kit-ink:#fff;--brand:#1C7F46;--brand-ink:#fff;--gold:#e9b949;--star:#e9b949;--star0:#34443b;
 --loanin:#3b82f6;--loanout:#a855f7;--dealin:#22c55e;--dealout:#ec4899;--injs:#facc15;--injl:#ef4444;--sus:#94a3b8;
 --vred:#ff5d5d;--vamber:#f59e0b;--vgreen:#10b981;--vgrey:#6b7a71;
 --display:"Archivo","Arial Narrow",system-ui,sans-serif;--gutter:clamp(18px,3.4vw,80px)}
@@ -3204,7 +3204,7 @@ PITCH_XY = [(50, 89), (14, 69), (37, 75), (63, 75), (86, 69), (36, 54), (64, 54)
 # ---------------------------------------------------------------------------------------------
 # Brand (the app's own identity) and club identity (whoever you manage: colours + crest or initials badge)
 
-APP_LOGO_SVG = ('<svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><rect x="1" y="1" width="30" height="30" rx="8" fill="#1E8A4C"/>'
+APP_LOGO_SVG = ('<svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><rect x="1" y="1" width="30" height="30" rx="8" fill="#1C7F46"/>'
                 '<rect x="8.5" y="5" width="15" height="22" rx="1.5" fill="none" stroke="#F2F4EE" stroke-width="2"/>'
                 '<path d="M8.5 16h15" stroke="#F2F4EE" stroke-width="2"/><circle cx="16" cy="9.6" r="1.9" fill="#F2F4EE"/>'
                 '<circle cx="11.9" cy="12.9" r="1.9" fill="#F2F4EE"/><circle cx="20.1" cy="12.9" r="1.9" fill="#F2F4EE"/>'
@@ -3482,7 +3482,7 @@ body.mini{pointer-events:none;padding-bottom:0}
 .mini .ah{position:relative;z-index:5}
 .mini main.wrap{padding-top:26px}
 .mini .blur{filter:blur(3px) saturate(.55);opacity:.38}
-.mini .focus{position:relative;border-radius:12px;box-shadow:0 0 0 3px #FFD84A,0 0 0 16px rgba(255,216,74,.13),0 40px 90px -30px rgba(0,0,0,.9)}
+.mini .focus{position:relative;border-radius:12px;box-shadow:0 0 0 3px #4FC77F,0 0 0 16px rgba(79,199,127,.14),0 40px 90px -30px rgba(0,0,0,.9)}
 .mini .tk-tr{animation-duration:80s}
 """
 
@@ -3557,23 +3557,23 @@ def landing_page() -> str:
 
 LANDING_CSS = r"""
 :root{--bg:#0e1512;--panel:#16201b;--panel2:#1d2923;--line:#2a3a32;--text:#eef1e8;--text2:#c3cbc0;--muted:#8d9a91;
- --brand:#FFD84A;--brand-ink:#10170F;--kit:#FFD84A;--kit-ink:#10170F;--gold:#e9b949;
+ --brand:#1C7F46;--brand-ink:#fff;--brand-hi:#4FC77F;--kit:#1C7F46;--kit-ink:#fff;--gold:#e9b949;
  --display:"Archivo","Arial Narrow",system-ui,sans-serif;--gut:clamp(20px,5vw,72px)}
 *{box-sizing:border-box}
 html{background:var(--bg)}
 body{margin:0;color:var(--text);font:17px/1.55 "Archivo",system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 a{color:inherit}
-:focus-visible{outline:2px solid var(--brand);outline-offset:3px;border-radius:4px}
+:focus-visible{outline:2px solid var(--brand-hi);outline-offset:3px;border-radius:4px}
 ::selection{background:var(--brand);color:var(--brand-ink)}
 .skip{position:absolute;left:12px;top:-60px;z-index:100;background:var(--brand);color:var(--brand-ink);padding:8px 14px;border-radius:6px;font-weight:700}
 .skip:focus{top:12px}
 h1,h2,h3{font-family:var(--display);margin:0}
 .btn{display:inline-flex;align-items:center;gap:10px;background:var(--brand);color:var(--brand-ink);text-decoration:none;font-family:var(--display);font-stretch:75%;
- font-weight:800;font-size:21px;line-height:1;padding:17px 26px;border-radius:7px;box-shadow:0 10px 30px -14px rgba(255,216,74,.6);
+ font-weight:800;font-size:21px;line-height:1;padding:17px 26px;border-radius:7px;box-shadow:0 10px 30px -14px rgba(28,127,70,.7);
  transition:transform .2s ease,background-color .2s ease}
-.btn:hover{background:#ffe27a;transform:translateY(-2px)}.btn:active{transform:scale(.97)}
+.btn:hover{background:#18703E;transform:translateY(-2px)}.btn:active{transform:scale(.97)}
 .btn.sm{font-size:16px;padding:10px 16px;box-shadow:none}
-.btn.inv{background:var(--brand-ink);color:var(--brand);box-shadow:0 14px 40px -14px rgba(0,0,0,.6)}.btn.inv:hover{background:#000}
+.btn.inv{background:#10170F;color:#fff;box-shadow:0 14px 40px -14px rgba(0,0,0,.6)}.btn.inv:hover{background:#000}
 .tlink{font-weight:600;text-underline-offset:5px;text-decoration-thickness:1px;color:var(--text2)}.tlink:hover{color:var(--text)}
 .logo{display:block}
 /* nav */
@@ -3585,7 +3585,7 @@ h1,h2,h3{font-family:var(--display);margin:0}
 /* hero */
 .hero{min-height:100svh;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);align-items:center;gap:20px;padding:110px var(--gut) 40px;
  background:radial-gradient(55% 65% at 72% 55%,rgba(46,140,82,.28),transparent 70%)}
-.for{color:var(--brand);font-family:var(--display);font-stretch:75%;font-weight:700;font-size:18px;margin:0 0 14px}
+.for{color:var(--brand-hi);font-family:var(--display);font-stretch:75%;font-weight:700;font-size:18px;margin:0 0 14px}
 .hero h1{font-stretch:62%;font-weight:850;font-size:clamp(54px,6.8vw,112px);line-height:.9;letter-spacing:-.005em;max-width:12ch;text-wrap:balance}
 .lede{color:var(--text2);font-size:clamp(17px,1.35vw,20px);max-width:44ch;margin:26px 0 34px;text-wrap:pretty}
 .ctas{display:flex;align-items:center;gap:26px;flex-wrap:wrap}
@@ -3601,7 +3601,7 @@ h1,h2,h3{font-family:var(--display);margin:0}
  transition:color .3s,border-color .3s}
 .st b{display:block;font-family:var(--display);font-stretch:75%;font-size:24px;font-weight:800;line-height:1.1}
 .st span{display:block;font-size:15px;margin-top:4px;max-width:40ch}
-.st.on{color:var(--text);border-color:var(--brand)}.st:hover{color:var(--text2)}.st:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.st.on{color:var(--text);border-color:var(--brand-hi)}.st:hover{color:var(--text2)}.st:focus-visible{outline:2px solid var(--brand-hi);outline-offset:2px}
 .fwrap{perspective:1800px}
 .frame{position:relative;transform:rotateY(-16deg) rotateX(7deg);aspect-ratio:1440/945;background:#121a16;border:1px solid var(--line);
  border-radius:12px;overflow:hidden;box-shadow:40px 60px 100px -30px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.03) inset}
@@ -3622,12 +3622,12 @@ h1,h2,h3{font-family:var(--display);margin:0}
 .aside{color:var(--muted);font-size:14px;margin:18px 0 0;max-width:46ch}
 .how ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
 .how li{border-top:2px solid var(--text);padding-top:18px}
-.how li>b{display:block;font-family:var(--display);font-stretch:62%;font-style:italic;font-weight:900;font-size:84px;line-height:.85;color:var(--brand)}
+.how li>b{display:block;font-family:var(--display);font-stretch:62%;font-style:italic;font-weight:900;font-size:84px;line-height:.85;color:var(--brand-hi)}
 .how h3{font-stretch:75%;font-weight:800;font-size:28px;margin:14px 0 6px}.how p{margin:0;color:var(--text2);max-width:32ch}
 .cta{background:var(--brand);color:var(--brand-ink);padding:120px var(--gut);display:grid;justify-items:start;gap:28px;
- background-image:linear-gradient(100deg,rgba(255,255,255,.18) 0 40%,transparent 40%)}
+ background-image:linear-gradient(100deg,rgba(0,0,0,.14) 0 40%,transparent 40%)}
 .cta h2{font-stretch:62%;font-style:italic;font-weight:900;font-size:clamp(60px,10vw,160px);line-height:.85}
-.cta p{margin:0;color:rgba(16,23,15,.75);font-size:15px}
+.cta p{margin:0;color:rgba(255,255,255,.82);font-size:15px}
 .lfoot{padding:28px var(--gut) 40px;color:var(--muted);font-size:13px}.lfoot p{margin:0;max-width:90ch}
 /* launch + cursor */
 .launch{position:fixed;inset:0;z-index:90;display:none;place-items:center;background:var(--brand);clip-path:circle(0% at 50% 50%)}
@@ -3770,7 +3770,7 @@ def boot_html(club: dict | None = None) -> str:
         ident = f'<div class="boot-id">{club["dark"]}<b>{E(club["name"])}</b></div>'
     else:
         panel = f'<div class="boot-red brand"><span class="boot-crest">{APP_LOGO_SVG}</span><b class="boot-club">FM27 {APP_NAME}</b></div>'
-        style, who = "", f"<span>FM27 {APP_NAME}</span>"
+        style, who = ' style="--kit:#1C7F46;--kit-ink:#fff"', f"<span>FM27 {APP_NAME}</span>"
         ident = f'<div class="boot-id brand">{APP_LOGO_SVG}<b>FM27 {APP_NAME}</b></div>'
     return f"""<div id="boot" class="boot" role="status" aria-live="polite" aria-busy="true"{style}>
  {panel}
@@ -3790,10 +3790,10 @@ BOOT_CSS = r"""
 .boot-red{position:absolute;inset:0;z-index:2;display:grid;place-items:center;align-content:center;gap:18px;background:var(--kit,#C8102E);color:var(--kit-ink,#fff)}
 .boot-crest{display:block;line-height:0}.boot-crest img,.boot-crest svg{height:min(190px,30vh);width:auto}
 .boot-club{font-family:"Archivo","Arial Narrow",sans-serif;font-stretch:62%;font-style:italic;font-weight:900;font-size:clamp(34px,5vw,64px);text-transform:uppercase;line-height:.9}
-.boot-red.brand{background:#FFD84A;color:#10170F}
+.boot-red.brand{background:#1C7F46;color:#fff}
 .boot-id{display:flex;align-items:center;gap:12px;margin:0 0 16px}
 .boot-id img,.boot-id svg{height:46px;width:auto;flex:none}
-.boot-id b{font-family:"Archivo","Arial Narrow",sans-serif;font-stretch:62%;font-style:italic;font-weight:900;font-size:28px;text-transform:uppercase;line-height:1;color:var(--kit,#FFD84A)}
+.boot-id b{font-family:"Archivo","Arial Narrow",sans-serif;font-stretch:62%;font-style:italic;font-weight:900;font-size:28px;text-transform:uppercase;line-height:1;color:var(--kit,#1C7F46)}
 .boot-id.brand b{color:#eef1e8;font-style:normal;font-stretch:75%;text-transform:none}
 .boot.wait .boot-red{display:none}
 .boot-in{position:absolute;inset:0;display:grid;grid-template-columns:auto minmax(0,440px);align-items:center;justify-content:center;gap:64px;padding:40px}

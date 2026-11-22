@@ -3204,12 +3204,12 @@ PITCH_XY = [(50, 89), (14, 69), (37, 75), (63, 75), (86, 69), (36, 54), (64, 54)
 # ---------------------------------------------------------------------------------------------
 # Brand (the app's own identity) and club identity (whoever you manage: colours + crest or initials badge)
 
-APP_LOGO_SVG = ('<svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><rect x="1" y="1" width="30" height="30" rx="8" fill="#FFD84A"/>'
-                '<rect x="8.5" y="5" width="15" height="22" rx="1.5" fill="none" stroke="#10170F" stroke-width="2"/>'
-                '<path d="M8.5 16h15" stroke="#10170F" stroke-width="2"/><circle cx="16" cy="9.6" r="1.9" fill="#10170F"/>'
-                '<circle cx="11.9" cy="12.9" r="1.9" fill="#10170F"/><circle cx="20.1" cy="12.9" r="1.9" fill="#10170F"/>'
-                '<circle cx="12.4" cy="20.6" r="1.9" fill="#10170F"/>'
-                '<circle cx="19.6" cy="20.6" r="2.5" fill="none" stroke="#D63B2F" stroke-width="1.7"/></svg>')
+APP_LOGO_SVG = ('<svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><rect x="1" y="1" width="30" height="30" rx="8" fill="#1E8A4C"/>'
+                '<rect x="8.5" y="5" width="15" height="22" rx="1.5" fill="none" stroke="#F2F4EE" stroke-width="2"/>'
+                '<path d="M8.5 16h15" stroke="#F2F4EE" stroke-width="2"/><circle cx="16" cy="9.6" r="1.9" fill="#F2F4EE"/>'
+                '<circle cx="11.9" cy="12.9" r="1.9" fill="#F2F4EE"/><circle cx="20.1" cy="12.9" r="1.9" fill="#F2F4EE"/>'
+                '<circle cx="12.4" cy="20.6" r="1.9" fill="#F2F4EE"/>'
+                '<circle cx="19.6" cy="20.6" r="2.5" fill="none" stroke="#F2F4EE" stroke-width="1.7"/></svg>')
 APP_NAME = "Squad Report"
 
 # FM saves don't store club colours or crests, so: a table of well-known clubs, and a stable colour from the name otherwise

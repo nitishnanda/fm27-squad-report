@@ -154,6 +154,9 @@ h1,h2,h3{font-family:var(--display);margin:0}
 .lk-foot kbd{font:inherit;font-size:11px;border:1px solid var(--line);border-radius:4px;padding:0 5px}
 .ah-look b{font-weight:700}
 @media (max-width:1100px){.ah-look .lk-cur{display:none}}
+/* the redesign looks set wider type, so the look's name (also ticked in the popover) goes before the button wraps */
+@media (max-width:1680px){:root[data-theme] .ah-look .lk-cur{display:none}}
+.ah-btn{white-space:nowrap}
 @media (max-width:860px){.lookpop{top:100px;right:12px;left:12px;width:auto}}
 ::view-transition-old(root),::view-transition-new(root){animation-duration:.32s}
 </style>
@@ -876,6 +879,13 @@ button.sbg:hover{color:var(--text)}button.sbg:focus-visible{outline:2px solid va
 @media (prefers-reduced-motion:reduce){.tk-tr{animation:none}.tk-vp{overflow-x:auto}.tk ul[aria-hidden]{display:none}.tk-btn{display:none}.tilt{transition:none}}
 /* phone-only parts (shown by PHONE_CSS) */
 .ni,.ah-more,.ah-title,.ph-only{display:none}
+.ah-phone{display:inline-flex;align-items:center;justify-content:center;padding-left:7px;padding-right:7px}.ah-phone svg{display:block}
+.phonepop{width:min(340px,calc(100vw - 24px))}
+.pp-steps{margin:0 0 12px;padding-left:20px;font-size:14px;line-height:1.45;color:var(--text2)}
+.pp-qr{margin:0 auto 8px;width:220px;border-radius:8px;overflow:hidden;background:#fff}.pp-qr svg{display:block;width:100%;height:auto}
+.pp-link{margin:0 0 10px;text-align:center}.pp-link code{font:12px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted);word-break:break-all;user-select:all}
+.pp-alt{display:block;margin:0 auto;font:inherit;font-size:13px;font-weight:600;color:inherit;background:none;border:0;padding:4px;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.pp-note{margin:10px 0 0;padding-top:10px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
 .pkey-fold&gt;summary{display:none}
 
 html,body{height:945px;overflow:hidden;scrollbar-width:none}
@@ -1543,6 +1553,13 @@ button.sbg:hover{color:var(--text)}button.sbg:focus-visible{outline:2px solid va
 @media (prefers-reduced-motion:reduce){.tk-tr{animation:none}.tk-vp{overflow-x:auto}.tk ul[aria-hidden]{display:none}.tk-btn{display:none}.tilt{transition:none}}
 /* phone-only parts (shown by PHONE_CSS) */
 .ni,.ah-more,.ah-title,.ph-only{display:none}
+.ah-phone{display:inline-flex;align-items:center;justify-content:center;padding-left:7px;padding-right:7px}.ah-phone svg{display:block}
+.phonepop{width:min(340px,calc(100vw - 24px))}
+.pp-steps{margin:0 0 12px;padding-left:20px;font-size:14px;line-height:1.45;color:var(--text2)}
+.pp-qr{margin:0 auto 8px;width:220px;border-radius:8px;overflow:hidden;background:#fff}.pp-qr svg{display:block;width:100%;height:auto}
+.pp-link{margin:0 0 10px;text-align:center}.pp-link code{font:12px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted);word-break:break-all;user-select:all}
+.pp-alt{display:block;margin:0 auto;font:inherit;font-size:13px;font-weight:600;color:inherit;background:none;border:0;padding:4px;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.pp-note{margin:10px 0 0;padding-top:10px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
 .pkey-fold&gt;summary{display:none}
 
 html,body{height:945px;overflow:hidden;scrollbar-width:none}
@@ -2211,6 +2228,13 @@ button.sbg:hover{color:var(--text)}button.sbg:focus-visible{outline:2px solid va
 @media (prefers-reduced-motion:reduce){.tk-tr{animation:none}.tk-vp{overflow-x:auto}.tk ul[aria-hidden]{display:none}.tk-btn{display:none}.tilt{transition:none}}
 /* phone-only parts (shown by PHONE_CSS) */
 .ni,.ah-more,.ah-title,.ph-only{display:none}
+.ah-phone{display:inline-flex;align-items:center;justify-content:center;padding-left:7px;padding-right:7px}.ah-phone svg{display:block}
+.phonepop{width:min(340px,calc(100vw - 24px))}
+.pp-steps{margin:0 0 12px;padding-left:20px;font-size:14px;line-height:1.45;color:var(--text2)}
+.pp-qr{margin:0 auto 8px;width:220px;border-radius:8px;overflow:hidden;background:#fff}.pp-qr svg{display:block;width:100%;height:auto}
+.pp-link{margin:0 0 10px;text-align:center}.pp-link code{font:12px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted);word-break:break-all;user-select:all}
+.pp-alt{display:block;margin:0 auto;font:inherit;font-size:13px;font-weight:600;color:inherit;background:none;border:0;padding:4px;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.pp-note{margin:10px 0 0;padding-top:10px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
 .pkey-fold&gt;summary{display:none}
 
 html,body{height:945px;overflow:hidden;scrollbar-width:none}
@@ -2872,6 +2896,13 @@ button.sbg:hover{color:var(--text)}button.sbg:focus-visible{outline:2px solid va
 @media (prefers-reduced-motion:reduce){.tk-tr{animation:none}.tk-vp{overflow-x:auto}.tk ul[aria-hidden]{display:none}.tk-btn{display:none}.tilt{transition:none}}
 /* phone-only parts (shown by PHONE_CSS) */
 .ni,.ah-more,.ah-title,.ph-only{display:none}
+.ah-phone{display:inline-flex;align-items:center;justify-content:center;padding-left:7px;padding-right:7px}.ah-phone svg{display:block}
+.phonepop{width:min(340px,calc(100vw - 24px))}
+.pp-steps{margin:0 0 12px;padding-left:20px;font-size:14px;line-height:1.45;color:var(--text2)}
+.pp-qr{margin:0 auto 8px;width:220px;border-radius:8px;overflow:hidden;background:#fff}.pp-qr svg{display:block;width:100%;height:auto}
+.pp-link{margin:0 0 10px;text-align:center}.pp-link code{font:12px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted);word-break:break-all;user-select:all}
+.pp-alt{display:block;margin:0 auto;font:inherit;font-size:13px;font-weight:600;color:inherit;background:none;border:0;padding:4px;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.pp-note{margin:10px 0 0;padding-top:10px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
 .pkey-fold&gt;summary{display:none}
 
 html,body{height:945px;overflow:hidden;scrollbar-width:none}

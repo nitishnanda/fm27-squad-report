@@ -15,13 +15,17 @@ import bisect
 import colorsys
 import hashlib
 import glob
+import hmac
 import html
 import json
 import statistics
 import math
 import os
 import re
+import secrets
 import shutil
+import socket
+import subprocess
 import sys
 import tempfile
 import time
@@ -127,6 +131,9 @@ HISTORY_FILE = APP_DIR / "data" / "history.json"
 LIVE_PORT = 8027            # the report lives at http://localhost:8027 while the window is open
 LIVE_POLL_SECONDS = 4       # how often it checks for a new save
 LIVE_SETTLE_SECONDS = 4     # waits this long after a save is written before reading it
+PHONE_ACCESS = True         # your phone can open the live app over your home Wi-Fi through a private link (the phone
+                            # icon in the app shows it as a QR code). False, or starting with --mac-only, keeps it to this Mac
+PHONE_FILE = APP_DIR / "data" / "phone.json"   # the private part of that link; delete it to make a new one
 
 # Visible-attribute rating model from fmsave's _scouting_v1.json ("visible": no CA/PA, no hidden
 # attributes). i = intercept, w = weight per attribute on the 1-20 scale.
@@ -4319,6 +4326,13 @@ button.sbg:hover{color:var(--text)}button.sbg:focus-visible{outline:2px solid va
 @media (prefers-reduced-motion:reduce){.tk-tr{animation:none}.tk-vp{overflow-x:auto}.tk ul[aria-hidden]{display:none}.tk-btn{display:none}.tilt{transition:none}}
 /* phone-only parts (shown by PHONE_CSS) */
 .ni,.ah-more,.ah-title,.ph-only{display:none}
+.ah-phone{display:inline-flex;align-items:center;justify-content:center;padding-left:7px;padding-right:7px}.ah-phone svg{display:block}
+.phonepop{width:min(340px,calc(100vw - 24px))}
+.pp-steps{margin:0 0 12px;padding-left:20px;font-size:14px;line-height:1.45;color:var(--text2)}
+.pp-qr{margin:0 auto 8px;width:220px;border-radius:8px;overflow:hidden;background:#fff}.pp-qr svg{display:block;width:100%;height:auto}
+.pp-link{margin:0 0 10px;text-align:center}.pp-link code{font:12px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted);word-break:break-all;user-select:all}
+.pp-alt{display:block;margin:0 auto;font:inherit;font-size:13px;font-weight:600;color:inherit;background:none;border:0;padding:4px;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.pp-note{margin:10px 0 0;padding-top:10px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
 .pkey-fold>summary{display:none}
 """
 
@@ -4920,6 +4934,9 @@ LOOK_CSS = r"""
 .lk-foot kbd{font:inherit;font-size:11px;border:1px solid var(--line);border-radius:4px;padding:0 5px}
 .ah-look b{font-weight:700}
 @media (max-width:1100px){.ah-look .lk-cur{display:none}}
+/* the redesign looks set wider type, so the look's name (also ticked in the popover) goes before the button wraps */
+@media (max-width:1680px){:root[data-theme] .ah-look .lk-cur{display:none}}
+.ah-btn{white-space:nowrap}
 @media (max-width:860px){.lookpop{top:100px;right:12px;left:12px;width:auto}}
 ::view-transition-old(root),::view-transition-new(root){animation-duration:.32s}
 """
@@ -5570,8 +5587,292 @@ def update_scouting_file(action: str, name: str) -> None:
     SCOUTING_FILE.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
+# ---- Phone access ---------------------------------------------------------------------------------------------
+# The live server can also listen on the Wi-Fi so his iPhone can open the app. This Mac always gets in; any other
+# device needs the key from the phone link once, then keeps a cookie. Everyone else on the network gets PHONE_DENIED.
+
+PHONE_COOKIE = "fm27phone"
+PHONE_DENIED = """<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Squad Report</title></head><body style="margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;box-sizing:border-box;
+background:#0f1411;color:#e8ece6;font:16px/1.5 -apple-system,system-ui,sans-serif"><main style="max-width:420px">
+<h1 style="font-size:22px;line-height:1.25;margin:0 0 8px">This page needs the code from the Mac</h1>
+<p style="margin:0;color:#aab3a8">Squad Report runs on a Mac on this Wi-Fi. On that Mac, open the app, click the phone icon at the top and
+scan the QR code with this phone.</p></main></body></html>"""
+
+
+def phone_key() -> str:
+    """The private part of the phone link. Kept in data/phone.json so a saved Home Screen link keeps working."""
+    try:
+        key = json.loads(PHONE_FILE.read_text(encoding="utf-8")).get("key", "")
+        if re.fullmatch(r"[a-z0-9]{12,40}", key):
+            return key
+    except (OSError, ValueError, AttributeError):
+        pass
+    key = "".join(secrets.choice("abcdefghijkmnpqrstuvwxyz23456789") for _ in range(16))
+    PHONE_FILE.parent.mkdir(parents=True, exist_ok=True)
+    PHONE_FILE.write_text(json.dumps({"key": key}), encoding="utf-8")
+    try:
+        os.chmod(PHONE_FILE, 0o600)
+    except OSError:
+        pass
+    return key
+
+
+def phone_links(key: str) -> list[tuple[str, str]]:
+    """How a phone on the same Wi-Fi reaches this Mac: its Bonjour name (stays the same, so it's the one to save)
+    and its current IP address (for networks where .local names don't work)."""
+    links = []
+    if sys.platform == "darwin":
+        try:
+            name = subprocess.run(["scutil", "--get", "LocalHostName"], capture_output=True, text=True, timeout=3).stdout.strip()
+            if re.fullmatch(r"[A-Za-z0-9-]{1,63}", name):
+                links.append(("name", f"http://{name}.local:{LIVE_PORT}/?k={key}"))
+        except (OSError, subprocess.SubprocessError):
+            pass
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
+            sock.connect(("10.254.254.254", 1))   # only picks the network interface; nothing is sent
+            ip = sock.getsockname()[0]
+        if not ip.startswith(("127.", "0.")):
+            links.append(("ip", f"http://{ip}:{LIVE_PORT}/?k={key}"))
+    except OSError:
+        pass
+    return links
+
+
+# A small byte-mode QR encoder (error correction M, versions 1-10) so the Mac can show the phone link as a code the
+# iPhone camera reads, with nothing extra to install. It follows the structure of Project Nayuki's QR Code generator (MIT).
+_QR_ECC_PER_BLOCK = (0, 10, 16, 26, 18, 24, 16, 18, 22, 22, 26)
+_QR_BLOCKS = (0, 1, 1, 1, 2, 2, 4, 4, 4, 5, 5)
+
+
+def _qr_raw_modules(ver: int) -> int:
+    n = (16 * ver + 128) * ver + 64
+    if ver >= 2:
+        na = ver // 7 + 2
+        n -= (25 * na - 10) * na - 55
+        if ver >= 7:
+            n -= 36
+    return n
+
+
+def _gf_mul(x: int, y: int) -> int:
+    z = 0
+    for i in range(7, -1, -1):
+        z = (z << 1) ^ ((z >> 7) * 0x11D)
+        z ^= ((y >> i) & 1) * x
+    return z
+
+
+def _rs_divisor(degree: int) -> list[int]:
+    result = [0] * (degree - 1) + [1]
+    root = 1
+    for _ in range(degree):
+        for j in range(degree):
+            result[j] = _gf_mul(result[j], root)
+            if j + 1 < degree:
+                result[j] ^= result[j + 1]
+        root = _gf_mul(root, 0x02)
+    return result
+
+
+def _rs_remainder(data: list[int], divisor: list[int]) -> list[int]:
+    result = [0] * len(divisor)
+    for b in data:
+        factor = b ^ result.pop(0)
+        result.append(0)
+        for i, coef in enumerate(divisor):
+            result[i] ^= _gf_mul(coef, factor)
+    return result
+
+
+def qr_matrix(text: str) -> list[list[bool]] | None:
+    """The QR code for text as rows of dark (True) / light modules, or None if it's too long for version 10."""
+    data = text.encode("utf-8")
+    for ver in range(1, 11):
+        capacity = _qr_raw_modules(ver) // 8 - _QR_ECC_PER_BLOCK[ver] * _QR_BLOCKS[ver]
+        count_bits = 8 if ver < 10 else 16
+        if 4 + count_bits + 8 * len(data) <= capacity * 8:
+            break
+    else:
+        return None
+    bits: list[int] = []
+
+    def put(val: int, n: int) -> None:
+        bits.extend((val >> i) & 1 for i in range(n - 1, -1, -1))
+    put(0b0100, 4)                        # byte mode
+    put(len(data), count_bits)
+    for b in data:
+        put(b, 8)
+    put(0, min(4, capacity * 8 - len(bits)))
+    put(0, -len(bits) % 8)
+    words = [int("".join(map(str, bits[i:i + 8])), 2) for i in range(0, len(bits), 8)]
+    pad = 0xEC
+    while len(words) < capacity:
+        words.append(pad)
+        pad ^= 0xEC ^ 0x11
+
+    # split into blocks, add error correction, interleave
+    nblocks, ecc_len = _QR_BLOCKS[ver], _QR_ECC_PER_BLOCK[ver]
+    raw = _qr_raw_modules(ver) // 8
+    nshort, short_len = nblocks - raw % nblocks, raw // nblocks
+    divisor = _rs_divisor(ecc_len)
+    blocks, k = [], 0
+    for i in range(nblocks):
+        dat = words[k:k + short_len - ecc_len + (0 if i < nshort else 1)]
+        k += len(dat)
+        ecc = _rs_remainder(dat, divisor)
+        if i < nshort:
+            dat = dat + [0]
+        blocks.append(dat + ecc)
+    stream = [blk[i] for i in range(len(blocks[0])) for j, blk in enumerate(blocks)
+              if i != short_len - ecc_len or j >= nshort]
+
+    size = ver * 4 + 17
+    dark = [[False] * size for _ in range(size)]
+    fixed = [[False] * size for _ in range(size)]
+
+    def mark(x: int, y: int, on: bool) -> None:
+        dark[y][x], fixed[y][x] = on, True
+    for i in range(size):                                     # timing patterns
+        mark(6, i, i % 2 == 0)
+        mark(i, 6, i % 2 == 0)
+    for cx, cy in ((3, 3), (size - 4, 3), (3, size - 4)):     # finder patterns + separators
+        for dy in range(-4, 5):
+            for dx in range(-4, 5):
+                x, y = cx + dx, cy + dy
+                if 0 <= x < size and 0 <= y < size:
+                    mark(x, y, max(abs(dx), abs(dy)) not in (2, 4))
+    if ver > 1:                                               # alignment patterns
+        na = ver // 7 + 2
+        step = (ver * 8 + na * 3 + 5) // (na * 4 - 4) * 2
+        pos = sorted([size - 7 - i * step for i in range(na - 1)] + [6])
+        last = len(pos) - 1
+        for i, ax in enumerate(pos):
+            for j, ay in enumerate(pos):
+                if (i, j) in ((0, 0), (0, last), (last, 0)):
+                    continue
+                for dy in range(-2, 3):
+                    for dx in range(-2, 3):
+                        mark(ax + dx, ay + dy, max(abs(dx), abs(dy)) != 1)
+
+    def format_bits(mask: int) -> None:                       # error correction M = 0b00
+        rem = mask
+        for _ in range(10):
+            rem = (rem << 1) ^ ((rem >> 9) * 0x537)
+        fb = ((mask << 10) | rem) ^ 0x5412
+        bit = [(fb >> i) & 1 == 1 for i in range(15)]
+        for i in range(6):
+            mark(8, i, bit[i])
+        mark(8, 7, bit[6])
+        mark(8, 8, bit[7])
+        mark(7, 8, bit[8])
+        for i in range(9, 15):
+            mark(14 - i, 8, bit[i])
+        for i in range(8):
+            mark(size - 1 - i, 8, bit[i])
+        for i in range(8, 15):
+            mark(8, size - 15 + i, bit[i])
+        mark(8, size - 8, True)
+    format_bits(0)
+    if ver >= 7:                                              # version information
+        rem = ver
+        for _ in range(12):
+            rem = (rem << 1) ^ ((rem >> 11) * 0x1F25)
+        vb = (ver << 12) | rem
+        for i in range(18):
+            on = (vb >> i) & 1 == 1
+            a, b = size - 11 + i % 3, i // 3
+            mark(a, b, on)
+            mark(b, a, on)
+
+    i = 0                                                     # data, in two-column zigzags from the bottom right
+    right = size - 1
+    while right >= 1:
+        if right == 6:
+            right = 5
+        for vert in range(size):
+            for j in range(2):
+                x = right - j
+                y = size - 1 - vert if (right + 1) & 2 == 0 else vert
+                if not fixed[y][x] and i < len(stream) * 8:
+                    dark[y][x] = (stream[i >> 3] >> (7 - (i & 7))) & 1 == 1
+                    i += 1
+        right -= 2
+
+    masks = (lambda x, y: (x + y) % 2 == 0, lambda x, y: y % 2 == 0, lambda x, y: x % 3 == 0,
+             lambda x, y: (x + y) % 3 == 0, lambda x, y: (x // 3 + y // 2) % 2 == 0,
+             lambda x, y: x * y % 2 + x * y % 3 == 0, lambda x, y: (x * y % 2 + x * y % 3) % 2 == 0,
+             lambda x, y: ((x + y) % 2 + x * y % 3) % 2 == 0)
+
+    def apply(m: int) -> None:
+        for y in range(size):
+            for x in range(size):
+                if not fixed[y][x] and masks[m](x, y):
+                    dark[y][x] = not dark[y][x]
+
+    def penalty() -> int:
+        score = 0
+        for line in dark + [list(col) for col in zip(*dark)]:
+            run = 1
+            for a, b in zip(line, line[1:]):
+                if a == b:
+                    run += 1
+                else:
+                    score += run - 2 if run >= 5 else 0
+                    run = 1
+            score += run - 2 if run >= 5 else 0
+            row = "0000" + "".join("1" if v else "0" for v in line) + "0000"
+            score += 40 * sum(row.count(pat) for pat in ("10111010000", "00001011101"))
+        score += 3 * sum(dark[y][x] == dark[y][x + 1] == dark[y + 1][x] == dark[y + 1][x + 1]
+                         for y in range(size - 1) for x in range(size - 1))
+        total = size * size
+        score += 10 * ((abs(sum(map(sum, dark)) * 20 - total * 10) + total - 1) // total - 1)
+        return score
+    best, best_score = 0, None
+    for m in range(8):
+        apply(m)
+        format_bits(m)
+        sc = penalty()
+        if best_score is None or sc < best_score:
+            best, best_score = m, sc
+        apply(m)
+    apply(best)
+    format_bits(best)
+    return dark
+
+
+def qr_svg(text: str, label: str = "QR code") -> str:
+    """The QR code as an inline SVG: black on white with the 4-module quiet zone, whatever the look."""
+    m = qr_matrix(text)
+    if m is None:
+        return ""
+    n = len(m) + 8
+    cells = "".join(f"M{x + 4} {y + 4}h1v1h-1z" for y, row in enumerate(m) for x, on in enumerate(row) if on)
+    return (f'<svg viewBox="0 0 {n} {n}" shape-rendering="crispEdges" role="img" aria-label="{E(label)}">'
+            f'<rect width="{n}" height="{n}" fill="#fff"/><path d="{cells}" fill="#000"/></svg>')
+
+
+def phone_popover(links: list[tuple[str, str]]) -> str:
+    """The Phone popover the app adds to its header on the Mac: one QR code per way in, the name one first."""
+    ways = []
+    for kind, url in links:
+        svg = qr_svg(url, "QR code for the phone link" if kind == "name" else "QR code for the IP address link")
+        if svg:
+            ways.append(f'<div class="pp-way"{" hidden" if ways else ""}><figure class="pp-qr">{svg}</figure>'
+                        f'<p class="pp-link"><code>{E(url)}</code></p></div>')
+    if not ways:
+        return ""
+    alt = ('<button class="pp-alt" type="button" data-other="Back to the first code">Code won\'t open? Try the IP address</button>'
+           if len(ways) > 1 else "")
+    return (f'<div id="phonepop" class="keypop phonepop" popover><p class="kp-h">Open on your phone</p>'
+            f'<ol class="pp-steps"><li>Join the same Wi-Fi as this Mac.</li><li>Scan the code with the iPhone camera, then tap the link.</li>'
+            f'<li>To keep it, tap Share in Safari, then Add to Home Screen.</li></ol>{"".join(ways)}{alt}'
+            f'<p class="pp-note">Only phones that scan this code get in. Anyone else on the Wi-Fi is turned away.</p></div>')
+
+
 LIVE_JS = r"""
-(function(){const v=window.FM27_LIVE;if(!v)return;const el=document.createElement('div');el.className='livebar';el.setAttribute('role','status');document.body.appendChild(el);
+(function(){const v=window.FM27_LIVE;if(!v)return;const onMac=/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);const el=document.createElement('div');el.className='livebar';el.setAttribute('role','status');document.body.appendChild(el);
 const dot=document.getElementById('liveDot'),txt=document.getElementById('liveTxt');
 function state(c,t){if(dot){dot.className='ah-live '+c;txt.textContent=t;dot.title=t;}}
 function show(cls,h){el.className='livebar show '+cls;el.innerHTML=h;}
@@ -5581,8 +5882,16 @@ async function tick(){try{const r=await fetch('/status',{cache:'no-store'});cons
  else if(s.error){show('err','Couldn\'t read your latest save: '+s.error);state('err','Last save unreadable');}
  else{el.className='livebar';state('','Up to date');}
  const a=document.getElementById('lvR');if(a)a.onclick=e=>{e.preventDefault();location.reload();};}
- catch(e){show('err','The app window is closed. Double-click Run Squad Report to start it again.');state('err','Offline');}}
-setInterval(tick,3000);tick();})();
+ catch(e){show('err',onMac?'The app window is closed. Double-click Run Squad Report to start it again.':'Can\'t reach your Mac. Check Squad Report is still open there and this phone is on the same Wi-Fi.');state('err','Offline');}}
+setInterval(tick,3000);tick();
+// on the Mac: a Phone button with the QR code for opening the app on a phone (only when phone access is on)
+if(onMac)fetch('/phone',{cache:'no-store'}).then(r=>r.json()).then(j=>{if(!j.on||document.getElementById('phonepop'))return;
+ const look=document.querySelector('.ah-look');if(!look)return;
+ document.body.insertAdjacentHTML('beforeend',j.html);
+ look.insertAdjacentHTML('beforebegin','<button class="ah-btn ah-phone" type="button" popovertarget="phonepop" aria-label="Open on your phone" title="Open on your phone"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M10.5 18h3"/></svg></button>');
+ const pp=document.getElementById('phonepop'),alt=pp.querySelector('.pp-alt');
+ if(alt)alt.addEventListener('click',()=>{pp.querySelectorAll('.pp-way').forEach(w=>w.hidden=!w.hidden);const t=alt.textContent;alt.textContent=alt.dataset.other;alt.dataset.other=t;});
+}).catch(()=>{});})();
 """
 
 def loader_page() -> str:
@@ -5600,7 +5909,13 @@ def serve_live(argv: list[str]) -> None:
     import threading
     from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
-    fixed = pick_save(argv) if argv else None
+    from http.cookies import CookieError, SimpleCookie
+    from urllib.parse import parse_qsl
+
+    save_args = [a for a in argv if not a.startswith("--")]
+    fixed = pick_save(save_args) if save_args else None
+    phone_on = PHONE_ACCESS and "--mac-only" not in argv
+    key = phone_key() if phone_on else ""
     url = f"http://localhost:{LIVE_PORT}/"
     script = Path(__file__).resolve()
     script_mtime = script.stat().st_mtime
@@ -5626,8 +5941,37 @@ def serve_live(argv: list[str]) -> None:
             self.end_headers()
             self.wfile.write(data)
 
+        def from_mac(self) -> bool:
+            return self.client_address[0] in ("127.0.0.1", "::1", "::ffff:127.0.0.1")
+
+        def let_in(self) -> bool:
+            """This Mac always gets in. Another device needs the phone link's key, kept in a cookie after the first visit."""
+            if self.from_mac():
+                return True
+            if not phone_on:
+                return False
+            jar = SimpleCookie()
+            try:
+                jar.load(self.headers.get("Cookie") or "")
+            except CookieError:
+                return False
+            got = jar.get(PHONE_COOKIE)
+            return got is not None and hmac.compare_digest(got.value.encode(), key.encode())
+
         def do_GET(self):  # noqa: N802
             path = self.path.split("?")[0]
+            if not self.from_mac():
+                given = dict(parse_qsl(self.path.partition("?")[2])).get("k", "")
+                if phone_on and given and hmac.compare_digest(given.encode(), key.encode()):
+                    # the phone link: remember this phone, then load the page without the key in the address bar
+                    self.send_response(303)
+                    self.send_header("Location", path if path.startswith("/") and not path.startswith("//") else "/")
+                    self.send_header("Set-Cookie", f"{PHONE_COOKIE}={key}; Path=/; Max-Age=31536000; HttpOnly; SameSite=Lax")
+                    self.send_header("Content-Length", "0")
+                    self.end_headers()
+                    return
+                if not self.let_in():
+                    return self.send(PHONE_DENIED, code=403)
             with lock:
                 snap = dict(state)
             if path == "/status":
@@ -5643,8 +5987,11 @@ def serve_live(argv: list[str]) -> None:
                     flag = f'<script>window.FM27_LIVE={json.dumps(snap["version"])};</script></head>'
                     page = snap["html"].replace("</head>", flag, 1).replace("</body>", f"<script>{LIVE_JS}</script></body>", 1)
                     self.send(page)
+            elif path == "/phone" and self.from_mac():
+                links = phone_links(key) if phone_on else []
+                pop = phone_popover(links)
+                self.send(json.dumps({"on": bool(pop), "html": pop}), "application/json")
             elif path == "/players":
-                from urllib.parse import parse_qsl
                 qs = dict(parse_qsl(self.path.partition("?")[2]))
                 self.send(json.dumps(search_players(qs.get("q", "")[:60], qs.get("pos", "")[:4].upper(), qs.get("age", "")[:2])),
                           "application/json")
@@ -5659,6 +6006,8 @@ def serve_live(argv: list[str]) -> None:
                 self.send("Not found", "text/plain", 404)
 
         def do_POST(self):  # noqa: N802
+            if not self.let_in():
+                return self.send("Not allowed", "text/plain", 403)
             if self.path.split("?")[0] != "/scouting":
                 return self.send("Not found", "text/plain", 404)
             try:
@@ -5682,7 +6031,7 @@ def serve_live(argv: list[str]) -> None:
                 self.send(json.dumps({"ok": False, "error": str(exc)}), "application/json", 400)
 
     try:
-        server = ThreadingHTTPServer(("127.0.0.1", LIVE_PORT), Handler)
+        server = ThreadingHTTPServer(("0.0.0.0" if phone_on else "127.0.0.1", LIVE_PORT), Handler)
     except OSError:
         print(f"\n  It's already running — opening {url}")
         webbrowser.open(url)
@@ -5750,6 +6099,8 @@ def serve_live(argv: list[str]) -> None:
     threading.Thread(target=watch, daemon=True).start()
     print(f"\n  Your report lives at {url}  (the app itself is at {url}app)")
     print("  Leave this window open (minimise it if you like). Save in FM, then refresh the page in your browser.")
+    if phone_on:
+        print("  On your phone: join the same Wi-Fi, click the phone icon at the top of the app on this Mac and scan the code.")
     print("  Close this window when you're done.\n")
     if not os.environ.get("FM27_NO_OPEN"):
         webbrowser.open(url)
@@ -5761,7 +6112,7 @@ def serve_live(argv: list[str]) -> None:
 
 def main(argv: list[str]) -> None:
     if "--once" in argv:
-        out, _ = make_report(pick_save([a for a in argv if a != "--once"]))
+        out, _ = make_report(pick_save([a for a in argv if not a.startswith("--")]))
         webbrowser.open(out.as_uri())
     else:
         serve_live(argv)

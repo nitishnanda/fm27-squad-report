@@ -6,7 +6,7 @@ session; these notes carry that context over.
 
 ## How it runs
 - `Run Squad Report.command` creates `.venv`, installs/upgrades `fmsave` (PyPI, reads FM26/27 saves), runs the script.
-- Default is **live mode**: a server on `http://localhost:8027` (127.0.0.1 only). A watcher rebuilds when a newer save
+- Default is **live mode**: a server on `http://localhost:8027`. A watcher rebuilds when a newer save
   appears (waits `LIVE_SETTLE_SECONDS` after the save is written) and **restarts itself when this script changes**
   (only once the new file compiles), so edits show up on a browser refresh. `--once` = old single-report mode.
 - Output also goes to `Reports/` (dated copy + `latest.html`). `data/history.json` holds the star anchors and trends.
@@ -103,7 +103,14 @@ LW (AML/ML) IF/WMF · AM SS/AM · RW (AMR/MR) IW/WMF · ST CFD/CFD. `STYLE_KEYS`
   `section[data-xi]`), Positions folds its key and puts red/amber positions first, the squad list becomes one card per player,
   chip rows swipe sideways, training's week scrolls, transfers is a vertical timeline, Sandbox says it's quicker on a bigger screen.
   Narrow desktop windows (861–1280px) get a tighter header and the squad list drops extra columns instead of scrolling sideways.
-  The server only listens on 127.0.0.1, so a real iPhone can't open it yet.
+  His real iPhone opens it over home Wi-Fi (Phone access, below).
+- Phone access (`PHONE_ACCESS`, off with `--mac-only`): the live server listens on the network (0.0.0.0), but only this Mac
+  (loopback) gets in freely. Other devices need the key from `data/phone.json` (`phone_key()`, gitignored, delete it for a new
+  one) once via `/?k=key`, which sets the `fm27phone` cookie (a year) and redirects; everyone else gets `PHONE_DENIED` (403).
+  On the Mac, LIVE_JS fetches `/phone` (loopback only) and adds a phone icon before Look that opens `phone_popover()`: QR codes
+  for the `.local` Bonjour name and the IP (`phone_links()`). The QR encoder is built in (`qr_matrix()`, byte mode, ECC M,
+  versions 1–10), so there's nothing extra to install. Careful when testing: the server restarts into the real script when
+  the file changes, so a test wrapper's patches (and its scratch `PHONE_FILE`) are lost on the first edit.
 
 ## Hosted demo
 - `python3 demo/build_site.py` builds `docs/` from `demo/fake_save.py` (a made-up save: Liverpool names with invented ratings,

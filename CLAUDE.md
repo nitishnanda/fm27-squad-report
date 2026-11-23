@@ -1,7 +1,7 @@
 # FM27 Squad Report — handoff notes
 
 Nitish's tool for his Football Manager 27 save (Liverpool). It reads his newest save **read-only** and builds a
-tabbed HTML report. Everything is in `fm27_squad_report.py` (one file, ~3,800 lines) plus `assets/` (GSAP, Lenis, crest). Built in a claude.ai
+tabbed HTML report. Everything is in `fm27_squad_report.py` (one file, ~5,300 lines) plus `assets/` (GSAP, Lenis, crest, theme fonts). Built in a claude.ai
 session; these notes carry that context over.
 
 ## How it runs
@@ -81,6 +81,15 @@ LW (AML/ML) IF/WMF · AM SS/AM · RW (AMR/MR) IW/WMF · ST CFD/CFD. `STYLE_KEYS`
   position/age filters, multi-select and one "Add N" (`POST /scouting` `add_uids`, ~30 s rebuild). It shows public facts
   only (age, positions, club), never ratings or values, and sorts by name match, never by quality.
 - `--ahh` = header height (set from `.ah` by a ResizeObserver) for anything sticky under the header.
+- Looks (theme switch): "Look" button in the app header opens a popover with 6 radio options (`THEMES`): Original (no CSS,
+  pixel-identical to the old design), A Matchday programme (light paper, Archivo + Newsreader + Martian Mono), B Floodlit glass
+  (Bricolage + Hanken + JetBrains Mono), C Scoreboard (Geist + Geist Mono, Doto for big numbers), D Sticker album (Big Shoulders +
+  Schibsted Grotesk, sections are white sticker panels on a mown pitch), E Glass + scoreboard (B's frame and pitch + C's data layer,
+  his pick from the design research). Each look is plain CSS scoped by `scope_css()` to `:root[data-theme="X"]`; E is composed from
+  `B_FRAME` + `C_DATA` + `B_PITCH` + `E_GLASS`. The light looks share `LIGHT_FIX` (pastel text turned into readable inks) and use
+  `--kit-l` (`kit_on_light()`, the club colour dark enough for paper and white text). Choice is in localStorage `fm27-theme`, applied
+  in `<head>` before paint (`LOOK_HEAD_JS`); `L` / `Shift+L` cycles. Fonts are vendored in `assets/font-*.woff2` (OFL, see
+  `assets/FONTS-LICENSE.txt`) and only download when a look uses them. The home page and the loader aren't themed.
 - Layout is fluid (no max width); `--gutter` scales with the window.
 
 ## What fmsave gives us (worked out in that session)

@@ -1,0 +1,5 @@
+# Upload only the built demo site and its assets to Vercel (never Reports/, data/, the script or notes)
+/*
+!/web
+!/assets
+!/vercel.json

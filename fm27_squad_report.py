@@ -5670,6 +5670,106 @@ Press 1 to 6 to jump between sections, and [ or ] for the pages inside one.</foo
 
 
 # =============================================================================================
+# ---- Report as JSON (for the Mac app) -------------------------------------------------------------------------
+# The Mac app reads the report from /api/report. Everything is copied field by field from an explicit list, never
+# by dumping the build() dict, so nothing hidden can leak by accident: no CA/PA, no raw model scores, no FM position
+# ratings, no hidden attributes. Stars are numbers (0-5), dates ISO strings, statuses fixed strings. Bump
+# REPORT_SCHEMA when a field changes meaning, so the app can say "update the app".
+REPORT_SCHEMA = 1
+HIDDEN_ATTRS = HIDDEN | {"adaptability", "ambition", "controversy", "loyalty", "pressure", "professionalism",
+                         "sportsmanship", "temperament", "injury_proneness", "important_matches"}
+MOVE_KINDS = ("deal_in", "deal_out", "loan_in", "loan_out", "loan_in_arr", "loan_out_arr")
+LAST_REPORT = None   # the last build() result; make_report() keeps it so the live server can turn it into JSON
+
+
+def _plain(v):
+    """Numbers, strings, lists and dicts only: dates become ISO strings, sets and tuples lists, keys strings."""
+    if isinstance(v, (date, datetime)):
+        return v.isoformat()
+    if isinstance(v, float):
+        return round(v, 4) if math.isfinite(v) else None
+    if isinstance(v, dict):
+        return {str(k): _plain(x) for k, x in v.items()}
+    if isinstance(v, (list, tuple)):
+        return [_plain(x) for x in v]
+    if isinstance(v, (set, frozenset)):
+        return sorted(_plain(x) for x in v)
+    return v
+
+
+def _rating(r):   # (stars, familiarity code) -> {"stars": 4.2, "fam": "N"}
+    return {"stars": _plain(r[0]), "fam": r[1]} if r else None
+
+
+def player_json(p: dict) -> dict:
+    status = {"tokens": status_tokens(p).split()}
+    if "inj" in p:
+        days, what, back = p["inj"]
+        status["injury"] = {"days": days, "what": what, "back": _plain(back), "long": days >= LONG_INJURY_DAYS}
+    if "sus" in p:
+        status["suspended_matches"] = p["sus"]
+    status["moves"] = [{"kind": k, "club": p[k][0], "date": _plain(p[k][1])} for k in MOVE_KINDS if k in p]
+    best = p.get("best")
+    return {
+        "uid": p["uid"], "name": p["name"], "age": p.get("age"), "where": p.get("where"), "youth": bool(p.get("youth")),
+        "value": p.get("value"), "wage": p.get("wage"), "contract_end": _plain(p.get("contract_end")),
+        "expiring": bool(p.get("expiring")),
+        "positions": {"natural": list(p.get("fm_nat") or []), "accomplished": list(p.get("fm_acc") or []),
+                      "can_play": can_play(p).split(), "groups": list(p.get("groups") or [])},
+        "best": {"slot": best[0], **_rating(best[1])} if best else None,
+        "system": {slot: _rating(r) for slot, r in (p.get("slots") or {}).items()},
+        "ability": {slot: _plain(v) for slot, v in (p.get("aslots") or {}).items()},
+        "ability_best": _plain(p.get("ability")),
+        "potential": _plain(p.get("potential")) if p.get("where") != "target" else None,
+        "rows": {str(i): _rating(r) for i, r in (p.get("rows") or {}).items()},
+        "open_rows": {str(i): _rating(r) for i, r in (p.get("orows") or {}).items()},
+        "trend": p.get("trend", 0),
+        "stats": _plain(p.get("stats")), "youth_stats": _plain(p.get("ystats") or []), "played": _plain(p.get("played") or {}),
+        "attributes": {k: v for k, v in (p.get("attrs") or {}).items() if k not in HIDDEN_ATTRS},
+        "status": status,
+    }
+
+
+def _fit_entry(e: dict) -> dict:
+    return {"uid": e["p"]["uid"], "xi": bool(e.get("xi")), "fit": _plain(e.get("fit")), "ip": _plain(e.get("ip")),
+            "oop": _plain(e.get("oop")), "style": _plain(e.get("style")), "suit": _plain(e.get("suit")),
+            "weak": [{"value": v, "attribute": a} for v, a in e.get("weak", [])],
+            "style_weak": [{"value": v, "attribute": a} for v, a in e.get("style_weak", [])]}
+
+
+def report_json(R: dict) -> dict:
+    club = club_identity(R["club"])
+    perf = R.get("perf") or {}
+    return {
+        "schema": REPORT_SCHEMA,
+        "club": {"name": R["club"], "kit": club["kit"], "ink": club["ink"], "kit_on_light": kit_on_light(club["kit"]),
+                 "initials": club["initials"]},
+        "save_name": R.get("save_name"), "game_date": _plain(R.get("game_date")), "last_run": _plain(R.get("last_run")),
+        "formation": {"name": FORMATION_NAME, "rows": [{"slot": s, "ip": ip, "oop": oop, "ip_role": ipr, "oop_role": oopr}
+                                                      for s, ip, oop, ipr, oopr in FORMATION]},
+        "finances": _plain(R.get("finances") or {}),
+        "team_names": _plain(R.get("team_names") or {}),
+        "players": [player_json(p) for p in R["players"]],
+        "targets": [player_json(p) for p in R.get("targets") or []],
+        "xi1": [{"slot": s, "uid": p["uid"] if p else None} for s, p in R.get("xi1") or []],
+        "xi2": [{"slot": s, "uid": p["uid"] if p else None} for s, p in R.get("xi2") or []],
+        "xi_level": _plain(R.get("xi_level")),
+        "verdicts": [{"slot": v[0], "level": v[1], "title": v[2], "text": v[3], "gap": _plain(v[4])} for v in R.get("verdicts") or []],
+        "fit": {"rows": [{"label": r["label"], "slot": r["row"][0], "ip_role": r["row"][3], "oop_role": r["row"][4],
+                          "entries": [_fit_entry(e) for e in r["entries"]]} for r in (R.get("fit") or {}).get("rows", [])],
+                "misfits": [{"uid": m["best"][0]["p"]["uid"], "why": m["why"], "best_row": m["best"][1]["label"],
+                             "best": _fit_entry(m["best"][0])} for m in (R.get("fit") or {}).get("misfits", [])]},
+        "performance": {"record": _plain(perf.get("record")), "form": _plain(perf.get("form") or []),
+                        "metrics": _plain(perf.get("metrics") or []), "matches": perf.get("reports"),
+                        "league_name": perf.get("league_name"), "league_size": len(perf.get("league_clubs") or ()),
+                        "players": {str(uid): _plain(v) for uid, v in (perf.get("players") or {}).items()}},
+        "training": [{k: _plain(t.get(k)) for k in ("slot", "name", "current", "week", "upcoming", "rotation", "recent_codes",
+                                                     "recent_weeks", "grid")} for t in R.get("training") or []],
+        "news": [{"kind": c, "tag": t, "text": x, "route": r} for c, t, x, r in ticker_items(R)],
+        "notes": list(R.get("notes") or []),
+    }
+
+
 def make_report(save_path: Path) -> tuple[Path, str]:
     """Read a save and write the report. Returns (report file, html)."""
     print(f"Reading {save_path.name} (saved {datetime.fromtimestamp(save_path.stat().st_mtime):%d %b %Y %H:%M}) …")
@@ -5679,6 +5779,7 @@ def make_report(save_path: Path) -> tuple[Path, str]:
         save, tmp = open_save(save_path)
         try:
             report = build(save, save_path)
+            globals()["LAST_REPORT"] = report
         finally:
             try:
                 save.close()
@@ -6058,7 +6159,8 @@ def serve_live(argv: list[str]) -> None:
     url = f"http://localhost:{LIVE_PORT}/"
     script = Path(__file__).resolve()
     script_mtime = script.stat().st_mtime
-    state = {"html": None, "version": "", "building": False, "error": "", "built": None, "n": 0, "step": -1}
+    state = {"html": None, "json": None, "version": "", "building": False, "error": "", "built": None, "n": 0, "step": -1}
+    headless = "--headless" in argv
     lock = threading.Lock()
     landing = landing_page()
 
@@ -6107,6 +6209,22 @@ def serve_live(argv: list[str]) -> None:
                         .replace("</head>", f"<script>{PHONE_URL_JS.replace('__K__', key)}</script></head>", 1))
             self.send(body)
 
+        def api(self, path: str, snap: dict) -> None:
+            """For the Mac app: this Mac only, and only under its own address (a web page can't reach it by renaming itself)."""
+            host = (self.headers.get("Host") or "").lower()
+            if not self.from_mac() or host not in {f"127.0.0.1:{LIVE_PORT}", f"localhost:{LIVE_PORT}", f"[::1]:{LIVE_PORT}"}:
+                return self.send(json.dumps({"error": "this Mac only"}), "application/json", 403)
+            if path == "/api/status":
+                return self.send(json.dumps({"schema": REPORT_SCHEMA, "version": snap["version"], "building": snap["building"],
+                                             "step": snap["step"], "steps": BUILD_STEPS, "error": snap["error"],
+                                             "ready": snap["json"] is not None}), "application/json")
+            if path == "/api/report":
+                if snap["json"] is None:
+                    return self.send(json.dumps({"ready": False, "building": snap["building"], "error": snap["error"]}),
+                                     "application/json", 503)
+                return self.send(snap["json"], "application/json; charset=utf-8")
+            return self.send(json.dumps({"error": "not found"}), "application/json", 404)
+
         def do_GET(self):  # noqa: N802
             path = self.path.split("?")[0]
             self.cookie = ""
@@ -6119,6 +6237,8 @@ def serve_live(argv: list[str]) -> None:
                     return self.send(PHONE_DENIED, code=403)
             with lock:
                 snap = dict(state)
+            if path.startswith("/api/"):
+                return self.api(path, snap)
             if path == "/status":
                 self.send(json.dumps({"version": snap["version"], "building": snap["building"], "error": snap["error"],
                                       "step": snap["step"], "steps": BUILD_STEPS, "ready": snap["html"] is not None}),
@@ -6182,8 +6302,9 @@ def serve_live(argv: list[str]) -> None:
     try:
         server = ThreadingHTTPServer(("0.0.0.0" if phone_on else "127.0.0.1", LIVE_PORT), Handler)
     except OSError:
-        print(f"\n  It's already running — opening {url}")
-        webbrowser.open(url)
+        print(f"\n  It's already running at {url}")
+        if not headless:
+            webbrowser.open(url)
         return
 
     def newest() -> Path | None:
@@ -6225,9 +6346,14 @@ def serve_live(argv: list[str]) -> None:
                             state["step"] = 0
                         try:
                             _, page = make_report(save)
+                            try:
+                                data = json.dumps(report_json(LAST_REPORT), ensure_ascii=False)
+                            except Exception as exc:  # noqa: BLE001 - the web app still works without the JSON
+                                data = None
+                                print(f"  Couldn't prepare the report for the Mac app: {exc}")
                             with lock:
                                 state["n"] += 1
-                                state.update(html=page, error="", built=key,
+                                state.update(html=page, json=data, error="", built=key,
                                              version=f"{st.st_mtime:.0f}-{script_mtime:.0f}-{state['n']}")
                             print(f"  Refresh {url} to see it.")
                         except (Exception, SystemExit) as exc:  # noqa: BLE001
@@ -6246,12 +6372,15 @@ def serve_live(argv: list[str]) -> None:
             time.sleep(LIVE_POLL_SECONDS)
 
     threading.Thread(target=watch, daemon=True).start()
-    print(f"\n  Your report lives at {url}  (the app itself is at {url}app)")
-    print("  Leave this window open (minimise it if you like). Save in FM, then refresh the page in your browser.")
-    if phone_on:
-        print("  On your phone: join the same Wi-Fi, click the phone icon at the top of the app on this Mac and scan the code.")
-    print("  Close this window when you're done.\n")
-    if not os.environ.get("FM27_NO_OPEN"):
+    if headless:
+        print(f"  Squad Report engine running at {url}", flush=True)
+    else:
+        print(f"\n  Your report lives at {url}  (the app itself is at {url}app)")
+        print("  Leave this window open (minimise it if you like). Save in FM, then refresh the page in your browser.")
+        if phone_on:
+            print("  On your phone: join the same Wi-Fi, click the phone icon at the top of the app on this Mac and scan the code.")
+        print("  Close this window when you're done.\n")
+    if not headless and not os.environ.get("FM27_NO_OPEN"):
         webbrowser.open(url)
     try:
         server.serve_forever()

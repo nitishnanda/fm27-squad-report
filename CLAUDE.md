@@ -122,6 +122,17 @@ LW (AML/ML) IF/WMF · AM SS/AM · RW (AMR/MR) IW/WMF · ST CFD/CFD. `STYLE_KEYS`
   (`HOME_SCREEN_CSS`, zero everywhere else), and the light looks A and D paint that strip #111 because iOS draws the status bar
   in white. `theme-color` follows the look (`THEME_COLORS`, set in LOOK_JS).
 
+## Mac app (in progress, plan in `mac/PLAN.md`)
+- A SwiftUI Mac app will replace the `.command` + browser. The Python engine stays (fmsave is Python); the app starts it
+  with `--headless` (no browser, no Terminal tips) and reads `GET /api/report` and `GET /api/status`.
+- `report_json(R)` builds the feed field by field (`player_json`, `_fit_entry`, `_plain`): never the raw `build()` dict, so
+  no CA/PA, raw model scores, FM position ratings or `HIDDEN_ATTRS`. Potential is already filtered in `build()` and always
+  None for targets. Bump `REPORT_SCHEMA` when a field changes meaning. `make_report()` keeps the last build in `LAST_REPORT`;
+  the live server stores the JSON next to the page after each rebuild.
+- `/api/*` answers only loopback with a `127.0.0.1`/`localhost` Host header (blocks the network and DNS rebinding), even
+  with the phone key. `demo/build_site.py` writes `mac/Fixtures/report.json` from the fake save for SwiftUI previews.
+- Tests: `python3 -m unittest discover -s tests -v` (feed contents, his rules, and the real server in headless mode).
+
 ## Hosted demo
 - `python3 demo/build_site.py` builds `docs/` from `demo/fake_save.py` (a made-up save: Liverpool names with invented ratings,
   injuries and moves; also handy for testing every tab without his save): home page at the root, app in `app/`, `assets/` copied

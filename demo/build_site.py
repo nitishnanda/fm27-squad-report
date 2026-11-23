@@ -6,6 +6,7 @@ injuries and moves). Run from the repo root:  python3 demo/build_site.py
 docs/ is self-contained (assets copied in, links relative), so it works from any address: GitHub Pages
 (https://<user>.github.io/<repo>/), Vercel, or `python3 -m http.server -d docs`.
 """
+import json
 import shutil
 import sys
 import tempfile
@@ -37,9 +38,13 @@ def main() -> None:
         report = fm.build(FakeSave(), Path("Demo career.fm"))
     (out / "app" / "index.html").write_text(relative_links(fm.render(report), at_root=False), encoding="utf-8")
     (out / "index.html").write_text(relative_links(fm.landing_page(), at_root=True), encoding="utf-8")
+    # the same made-up report as JSON, for the Mac app's previews and tests
+    fixtures = ROOT / "mac" / "Fixtures"
+    fixtures.mkdir(parents=True, exist_ok=True)
+    (fixtures / "report.json").write_text(json.dumps(fm.report_json(report), ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     shutil.copytree(ROOT / "assets", out / "assets")
     (out / ".nojekyll").write_text("")                 # GitHub Pages: serve the files as they are
-    print(f"Built {out}/index.html and {out}/app/index.html")
+    print(f"Built {out}/index.html, {out}/app/index.html and {fixtures}/report.json")
 
 
 if __name__ == "__main__":

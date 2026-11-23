@@ -25,7 +25,7 @@ Engine (unchanged job) ── watches the save folder, rebuilds, still serves /a
 On a Mac, an app you build yourself in Xcode keeps running. There's no 7-day limit like on the iPhone, and no paid
 developer account is needed for his own use.
 
-## Phase 0: the engine side (can be done now, no Mac needed)
+## Phase 0: the engine side ✅ done
 
 - `--headless`: start the live server without opening a browser or printing the Terminal instructions.
 - `GET /api/report`: the report as JSON from an explicit whitelist of fields, never the raw `build()` dict, so nothing

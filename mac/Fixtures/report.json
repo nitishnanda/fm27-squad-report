@@ -1,0 +1,8080 @@
+{
+ "schema": 1,
+ "club": {
+  "name": "Liverpool",
+  "kit": "#C8102E",
+  "ink": "#FFFFFF",
+  "kit_on_light": "#C8102E",
+  "initials": "L"
+ },
+ "save_name": "Demo career",
+ "game_date": "2026-11-22",
+ "last_run": null,
+ "formation": {
+  "name": "4-2-3-1",
+  "rows": [
+   {
+    "slot": "GK",
+    "ip": "GK",
+    "oop": "GK",
+    "ip_role": "BGK",
+    "oop_role": "SK"
+   },
+   {
+    "slot": "LB",
+    "ip": "DL",
+    "oop": "DL",
+    "ip_role": "FB",
+    "oop_role": "FB"
+   },
+   {
+    "slot": "CB",
+    "ip": "DC",
+    "oop": "DC",
+    "ip_role": "CB",
+    "oop_role": "CB"
+   },
+   {
+    "slot": "CB",
+    "ip": "DC",
+    "oop": "DC",
+    "ip_role": "BCB",
+    "oop_role": "CB"
+   },
+   {
+    "slot": "RB",
+    "ip": "WBR",
+    "oop": "DR",
+    "ip_role": "WB",
+    "oop_role": "FB"
+   },
+   {
+    "slot": "DM",
+    "ip": "DM",
+    "oop": "DM",
+    "ip_role": "DLP",
+    "oop_role": "PDM"
+   },
+   {
+    "slot": "DM",
+    "ip": "DM",
+    "oop": "DM",
+    "ip_role": "DM",
+    "oop_role": "DM"
+   },
+   {
+    "slot": "LW",
+    "ip": "AML",
+    "oop": "ML",
+    "ip_role": "IF",
+    "oop_role": "WMF"
+   },
+   {
+    "slot": "AM",
+    "ip": "AMC",
+    "oop": "AMC",
+    "ip_role": "SS",
+    "oop_role": "AM"
+   },
+   {
+    "slot": "RW",
+    "ip": "AMR",
+    "oop": "MR",
+    "ip_role": "IW",
+    "oop_role": "WMF"
+   },
+   {
+    "slot": "ST",
+    "ip": "STC",
+    "oop": "STC",
+    "ip_role": "CFD",
+    "oop_role": "CFD"
+   }
+  ]
+ },
+ "finances": {
+  "transfer_left": 62000000,
+  "wage_budget": 5400000,
+  "wage_bill": 4860000,
+  "month": "2026-11-01"
+ },
+ "team_names": {
+  "0": "First team",
+  "1": "U21",
+  "2": "U18"
+ },
+ "players": [
+  {
+   "uid": 1001,
+   "name": "Alisson Becker",
+   "age": 34,
+   "where": "squad",
+   "youth": false,
+   "value": 21975755,
+   "wage": 156376,
+   "contract_end": "2027-06-30",
+   "expiring": true,
+   "positions": {
+    "natural": [
+     "GK"
+    ],
+    "accomplished": [],
+    "can_play": [
+     "GK"
+    ],
+    "groups": [
+     "GK"
+    ]
+   },
+   "best": {
+    "slot": "GK",
+    "stars": 4.7094,
+    "fam": "N"
+   },
+   "system": {
+    "GK": {
+     "stars": 4.7094,
+     "fam": "N"
+    }
+   },
+   "ability": {
+    "GK": 4.3063
+   },
+   "ability_best": 4.3063,
+   "potential": null,
+   "rows": {
+    "0": {
+     "stars": 4.7094,
+     "fam": "N"
+    }
+   },
+   "open_rows": {
+    "0": {
+     "stars": 4.7094,
+     "fam": "N"
+    }
+   },
+   "trend": 0,
+   "stats": {
+    "apps": 13,
+    "g": 2,
+    "a": 3,
+    "avg": 6.82,
+    "cs": 1,
+    "y": 3,
+    "r": 0,
+    "team": 0
+   },
+   "youth_stats": [],
+   "played": {
+    "GK": 13
+   },
+   "attributes": {
+    "acceleration": 14,
+    "aerial_reach": 16,
+    "aggression": 16,
+    "agility": 15,
+    "anticipation": 15,
+    "balance": 13,
+    "bravery": 12,
+    "command_of_area": 18,
+    "communication": 20,
+    "composure": 14,
+    "concentration": 20,
+    "corners": 13,
+    "crossing": 5,
+    "decisions": 20,
+    "determination": 13,
+    "dribbling": 6,
+    "eccentricity": 17,
+    "finishing": 5,
+    "first_touch": 12,
+    "flair": 16,
+    "free_kick_taking": 16,
+    "handling": 19,
+    "heading": 3,
+    "jumping_reach": 16,
+    "kicking": 17,
+    "leadership": 15,
+    "long_shots": 6,
+    "long_throws": 12,
+    "marking": 5,
+    "natural_fitness": 12,
+    "off_the_ball": 16,
+    "one_on_ones": 17,
+    "pace": 12,
+    "passing": 16,
+    "penalty_taking": 15,
+    "positioning": 17,
+    "punching": 20,
+    "reflexes": 19,
+    "rushing_out": 18,
+    "stamina": 16,
+    "strength": 16,
+    "tackling": 6,
+    "teamwork": 12,
+    "technique": 14,
+    "throwing": 19,
+    "vision": 13,
+    "work_rate": 14
+   },
+   "status": {
+    "tokens": [
+     "expiring"
+    ],
+    "moves": []
+   }
+  },
+  {
+   "uid": 1002,
+   "name": "Giorgi Mamardashvili",
+   "age": 26,
+   "where": "squad",
+   "youth": false,
+   "value": 16564472,
+   "wage": 156130,
+   "contract_end": "2027-06-30",
+   "expiring": true,
+   "positions": {
+    "natural": [
+     "GK"
+    ],
+    "accomplished": [],
+    "can_play": [
+     "GK"
+    ],
+    "groups": [
+     "GK"
+    ]
+   },
+   "best": {
+    "slot": "GK",
+    "stars": 3.034,
+    "fam": "N"
+   },
+   "system": {
+    "GK": {
+     "stars": 3.034,
+     "fam": "N"
+    }
+   },
+   "ability": {
+    "GK": 3.0
+   },
+   "ability_best": 3.0,
+   "potential": null,
+   "rows": {
+    "0": {
+     "stars": 3.034,
+     "fam": "N"
+    }
+   },
+   "open_rows": {
+    "0": {
+     "stars": 3.034,
+     "fam": "N"
+    }
+   },
+   "trend": 0,
+   "stats": {
+    "apps": 13,
+    "g": 1,
+    "a": 5,
+    "avg": 6.82,
+    "cs": 3,
+    "y": 1,
+    "r": 0,
+    "team": 0
+   },
+   "youth_stats": [],
+   "played": {
+    "GK": 13
+   },
+   "attributes": {
+    "acceleration": 11,
+    "aerial_reach": 17,
+    "aggression": 13,
+    "agility": 13,
+    "anticipation": 14,
+    "balance": 12,
+    "bravery": 13,
+    "command_of_area": 20,
+    "communication": 16,
+    "composure": 11,
+    "concentration": 19,
+    "corners": 13,
+    "crossing": 6,
+    "decisions": 20,
+    "determination": 12,
+    "dribbling": 5,
+    "eccentricity": 18,
+    "finishing": 2,
+    "first_touch": 13,
+    "flair": 12,
+    "free_kick_taking": 15,
+    "handling": 16,
+    "heading": 3,
+    "jumping_reach": 11,
+    "kicking": 17,
+    "leadership": 13,
+    "long_shots": 3,
+    "long_throws": 11,
+    "marking": 6,
+    "natural_fitness": 12,
+    "off_the_ball": 11,
+    "one_on_ones": 16,
+    "pace": 13,
+    "passing": 11,
+    "penalty_taking": 14,
+    "positioning": 16,
+    "punching": 18,
+    "reflexes": 18,
+    "rushing_out": 19,
+    "stamina": 11,
+    "strength": 14,
+    "tackling": 5,
+    "teamwork": 11,
+    "technique": 14,
+    "throwing": 19,
+    "vision": 13,
+    "work_rate": 10
+   },
+   "status": {
+    "tokens": [
+     "expiring"
+    ],
+    "moves": []
+   }
+  },
+  {
+   "uid": 1003,
+   "name": "Freddie Woodman",
+   "age": 29,
+   "where": "squad",
+   "youth": false,
+   "value": 9983441,
+   "wage": 137704,
+   "contract_end": "2030-06-30",
+   "expiring": false,
+   "positions": {
+    "natural": [
+     "GK"
+    ],
+    "accomplished": [],
+    "can_play": [
+     "GK"
+    ],
+    "groups": [
+     "GK"
+    ]
+   },
+   "best": {
+    "slot": "GK",
+    "stars": 0.5,
+    "fam": "N"
+   },
+   "system": {
+    "GK": {
+     "stars": 0.5,
+     "fam": "N"
+    }
+   },
+   "ability": {
+    "GK": 0.8696
+   },
+   "ability_best": 0.8696,
+   "potential": null,
+   "rows": {
+    "0": {
+     "stars": 0.5,
+     "fam": "N"
+    }
+   },
+   "open_rows": {
+    "0": {
+     "stars": 0.5,
+     "fam": "N"
+    }
+   },
+   "trend": 0,
+   "stats": null,
+   "youth_stats": [],
+   "played": {},
+   "attributes": {
+    "acceleration": 9,
+    "aerial_reach": 15,
+    "aggression": 9,
+    "agility": 7,
+    "anticipation": 8,
+    "balance": 11,
+    "bravery": 10,
+    "command_of_area": 12,
+    "communication": 15,
+    "composure": 11,
+    "concentration": 15,
+    "corners": 8,
+    "crossing": 4,
+    "decisions": 14,
+    "determination": 11,
+    "dribbling": 6,
+    "eccentricity": 12,
+    "finishing": 3,
+    "first_touch": 8,
+    "flair": 7,
+    "free_kick_taking": 10,
+    "handling": 13,
+    "heading": 4,
+    "jumping_reach": 9,
+    "kicking": 14,
+    "leadership": 11,
+    "long_shots": 6,
+    "long_throws": 7,
+    "marking": 6,
+    "natural_fitness": 7,
+    "off_the_ball": 11,
+    "one_on_ones": 15,
+    "pace": 11,
+    "passing": 8,
+    "penalty_taking": 10,
+    "positioning": 13,
+    "punching": 12,
+    "reflexes": 12,
+    "rushing_out": 11,
+    "stamina": 10,
+    "strength": 10,
+    "tackling": 3,
+    "teamwork": 10,
+    "technique": 10,
+    "throwing": 12,
+    "vision": 10,
+    "work_rate": 8
+   },
+   "status": {
+    "tokens": [],
+    "moves": []
+   }
+  },
+  {
+   "uid": 1004,
+   "name": "Milos Kerkez",
+   "age": 23,
+   "where": "squad",
+   "youth": false,
+   "value": 27481009,
+   "wage": 111350,
+   "contract_end": "2028-06-30",
+   "expiring": false,
+   "positions": {
+    "natural": [
+     "LB"
+    ],
+    "accomplished": [
+     "LWB"
+    ],
+    "can_play": [
+     "LB",
+     "LWB"
+    ],
+    "groups": [
+     "FB/WB"
+    ]
+   },
+   "best": {
+    "slot": "LB",
+    "stars": 2.9972,
+    "fam": "N"
+   },
+   "system": {
+    "LB": {
+     "stars": 2.9972,
+     "fam": "N"
+    }
+   },
+   "ability": {
+    "LB": 2.9713
+   },
+   "ability_best": 2.9713,
+   "potential": 4.13,
+   "rows": {
+    "1": {
+     "stars": 2.9972,
+     "fam": "N"
+    }
+   },
+   "open_rows": {
+    "1": {
+     "stars": 2.9972,
+     "fam": "N"
+    },
+    "2": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "3": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "4": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "5": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "6": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "7": {
+     "stars": 0.5,
+     "fam": "C"
+    },
+    "8": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "9": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "10": {
+     "stars": 0.5,
+     "fam": "X"
+    }
+   },
+   "trend": 0,
+   "stats": {
+    "apps": 13,
+    "g": 1,
+    "a": 3,
+    "avg": 7.46,
+    "cs": 0,
+    "y": 1,
+    "r": 0,
+    "team": 0
+   },
+   "youth_stats": [],
+   "played": {
+    "LB": 13
+   },
+   "attributes": {
+    "acceleration": 17,
+    "aerial_reach": 6,
+    "aggression": 15,
+    "agility": 13,
+    "anticipation": 11,
+    "balance": 15,
+    "bravery": 14,
+    "command_of_area": 5,
+    "communication": 4,
+    "composure": 15,
+    "concentration": 13,
+    "corners": 11,
+    "crossing": 16,
+    "decisions": 13,
+    "determination": 12,
+    "dribbling": 13,
+    "eccentricity": 3,
+    "finishing": 14,
+    "first_touch": 13,
+    "flair": 12,
+    "free_kick_taking": 14,
+    "handling": 3,
+    "heading": 12,
+    "jumping_reach": 12,
+    "kicking": 4,
+    "leadership": 11,
+    "long_shots": 13,
+    "long_throws": 14,
+    "marking": 17,
+    "natural_fitness": 11,
+    "off_the_ball": 13,
+    "one_on_ones": 3,
+    "pace": 17,
+    "passing": 13,
+    "penalty_taking": 13,
+    "positioning": 12,
+    "punching": 6,
+    "reflexes": 5,
+    "rushing_out": 5,
+    "stamina": 19,
+    "strength": 11,
+    "tackling": 17,
+    "teamwork": 11,
+    "technique": 12,
+    "throwing": 3,
+    "vision": 14,
+    "work_rate": 17
+   },
+   "status": {
+    "tokens": [],
+    "moves": []
+   }
+  },
+  {
+   "uid": 1005,
+   "name": "Andrew Robertson",
+   "age": 32,
+   "where": "squad",
+   "youth": false,
+   "value": 11336519,
+   "wage": 167062,
+   "contract_end": "2027-06-30",
+   "expiring": true,
+   "positions": {
+    "natural": [
+     "LB"
+    ],
+    "accomplished": [
+     "LWB"
+    ],
+    "can_play": [
+     "LB",
+     "LWB"
+    ],
+    "groups": [
+     "FB/WB"
+    ]
+   },
+   "best": {
+    "slot": "LB",
+    "stars": 2.1455,
+    "fam": "N"
+   },
+   "system": {
+    "LB": {
+     "stars": 2.1455,
+     "fam": "N"
+    }
+   },
+   "ability": {
+    "LB": 2.2506
+   },
+   "ability_best": 2.2506,
+   "potential": null,
+   "rows": {
+    "1": {
+     "stars": 2.1455,
+     "fam": "N"
+    }
+   },
+   "open_rows": {
+    "1": {
+     "stars": 2.1455,
+     "fam": "N"
+    },
+    "2": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "3": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "4": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "5": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "6": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "7": {
+     "stars": 0.5,
+     "fam": "C"
+    },
+    "8": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "9": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "10": {
+     "stars": 0.5,
+     "fam": "X"
+    }
+   },
+   "trend": 0,
+   "stats": null,
+   "youth_stats": [],
+   "played": {},
+   "attributes": {
+    "acceleration": 16,
+    "aerial_reach": 2,
+    "aggression": 14,
+    "agility": 10,
+    "anticipation": 14,
+    "balance": 11,
+    "bravery": 14,
+    "command_of_area": 4,
+    "communication": 4,
+    "composure": 12,
+    "concentration": 13,
+    "corners": 13,
+    "crossing": 15,
+    "decisions": 13,
+    "determination": 13,
+    "dribbling": 10,
+    "eccentricity": 4,
+    "finishing": 10,
+    "first_touch": 11,
+    "flair": 12,
+    "free_kick_taking": 12,
+    "handling": 3,
+    "heading": 9,
+    "jumping_reach": 12,
+    "kicking": 2,
+    "leadership": 12,
+    "long_shots": 10,
+    "long_throws": 14,
+    "marking": 15,
+    "natural_fitness": 13,
+    "off_the_ball": 12,
+    "one_on_ones": 4,
+    "pace": 18,
+    "passing": 12,
+    "penalty_taking": 11,
+    "positioning": 9,
+    "punching": 3,
+    "reflexes": 2,
+    "rushing_out": 3,
+    "stamina": 15,
+    "strength": 10,
+    "tackling": 16,
+    "teamwork": 10,
+    "technique": 11,
+    "throwing": 5,
+    "vision": 9,
+    "work_rate": 17
+   },
+   "status": {
+    "tokens": [
+     "expiring"
+    ],
+    "moves": []
+   }
+  },
+  {
+   "uid": 1006,
+   "name": "Virgil van Dijk",
+   "age": 35,
+   "where": "squad",
+   "youth": false,
+   "value": 41725044,
+   "wage": 203973,
+   "contract_end": "2028-06-30",
+   "expiring": false,
+   "positions": {
+    "natural": [
+     "CB"
+    ],
+    "accomplished": [],
+    "can_play": [
+     "CB"
+    ],
+    "groups": [
+     "CB"
+    ]
+   },
+   "best": {
+    "slot": "CB",
+    "stars": 5.0,
+    "fam": "N"
+   },
+   "system": {
+    "CB": {
+     "stars": 5.0,
+     "fam": "N"
+    }
+   },
+   "ability": {
+    "CB": 5.0
+   },
+   "ability_best": 5.0,
+   "potential": null,
+   "rows": {
+    "2": {
+     "stars": 5.0,
+     "fam": "N"
+    },
+    "3": {
+     "stars": 5.0,
+     "fam": "N"
+    }
+   },
+   "open_rows": {
+    "1": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "2": {
+     "stars": 5.0,
+     "fam": "N"
+    },
+    "3": {
+     "stars": 5.0,
+     "fam": "N"
+    },
+    "4": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "5": {
+     "stars": 1.368,
+     "fam": "C"
+    },
+    "6": {
+     "stars": 1.1979,
+     "fam": "C"
+    },
+    "7": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "8": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "9": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "10": {
+     "stars": 0.5,
+     "fam": "X"
+    }
+   },
+   "trend": 0,
+   "stats": {
+    "apps": 13,
+    "g": 1,
+    "a": 5,
+    "avg": 6.66,
+    "cs": 0,
+    "y": 1,
+    "r": 0,
+    "team": 0
+   },
+   "youth_stats": [],
+   "played": {
+    "CB": 13
+   },
+   "attributes": {
+    "acceleration": 15,
+    "aerial_reach": 2,
+    "aggression": 14,
+    "agility": 15,
+    "anticipation": 19,
+    "balance": 17,
+    "bravery": 15,
+    "command_of_area": 4,
+    "communication": 5,
+    "composure": 14,
+    "concentration": 13,
+    "corners": 15,
+    "crossing": 15,
+    "decisions": 18,
+    "determination": 14,
+    "dribbling": 13,
+    "eccentricity": 4,
+    "finishing": 14,
+    "first_touch": 13,
+    "flair": 16,
+    "free_kick_taking": 14,
+    "handling": 2,
+    "heading": 19,
+    "jumping_reach": 17,
+    "kicking": 6,
+    "leadership": 16,
+    "long_shots": 14,
+    "long_throws": 12,
+    "marking": 20,
+    "natural_fitness": 15,
+    "off_the_ball": 15,
+    "one_on_ones": 6,
+    "pace": 12,
+    "passing": 13,
+    "penalty_taking": 15,
+    "positioning": 18,
+    "punching": 3,
+    "reflexes": 2,
+    "rushing_out": 4,
+    "stamina": 16,
+    "strength": 20,
+    "tackling": 19,
+    "teamwork": 16,
+    "technique": 16,
+    "throwing": 4,
+    "vision": 15,
+    "work_rate": 15
+   },
+   "status": {
+    "tokens": [],
+    "moves": []
+   }
+  },
+  {
+   "uid": 1007,
+   "name": "Jérémy Jacquet",
+   "age": 21,
+   "where": "squad",
+   "youth": false,
+   "value": 29483850,
+   "wage": 144053,
+   "contract_end": "2029-06-30",
+   "expiring": false,
+   "positions": {
+    "natural": [
+     "CB"
+    ],
+    "accomplished": [],
+    "can_play": [
+     "CB"
+    ],
+    "groups": [
+     "CB"
+    ]
+   },
+   "best": {
+    "slot": "CB",
+    "stars": 3.0,
+    "fam": "N"
+   },
+   "system": {
+    "CB": {
+     "stars": 3.0,
+     "fam": "N"
+    }
+   },
+   "ability": {
+    "CB": 3.1735
+   },
+   "ability_best": 3.1735,
+   "potential": 4.0916,
+   "rows": {
+    "2": {
+     "stars": 2.8982,
+     "fam": "N"
+    },
+    "3": {
+     "stars": 3.0,
+     "fam": "N"
+    }
+   },
+   "open_rows": {
+    "1": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "2": {
+     "stars": 2.8982,
+     "fam": "N"
+    },
+    "3": {
+     "stars": 3.0,
+     "fam": "N"
+    },
+    "4": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "5": {
+     "stars": 0.5,
+     "fam": "C"
+    },
+    "6": {
+     "stars": 0.5,
+     "fam": "C"
+    },
+    "7": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "8": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "9": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "10": {
+     "stars": 0.5,
+     "fam": "X"
+    }
+   },
+   "trend": 0,
+   "stats": null,
+   "youth_stats": [],
+   "played": {},
+   "attributes": {
+    "acceleration": 11,
+    "aerial_reach": 3,
+    "aggression": 14,
+    "agility": 14,
+    "anticipation": 14,
+    "balance": 12,
+    "bravery": 10,
+    "command_of_area": 3,
+    "communication": 3,
+    "composure": 14,
+    "concentration": 13,
+    "corners": 13,
+    "crossing": 12,
+    "decisions": 18,
+    "determination": 11,
+    "dribbling": 13,
+    "eccentricity": 3,
+    "finishing": 15,
+    "first_touch": 11,
+    "flair": 11,
+    "free_kick_taking": 10,
+    "handling": 3,
+    "heading": 16,
+    "jumping_reach": 17,
+    "kicking": 2,
+    "leadership": 13,
+    "long_shots": 13,
+    "long_throws": 12,
+    "marking": 18,
+    "natural_fitness": 12,
+    "off_the_ball": 13,
+    "one_on_ones": 4,
+    "pace": 14,
+    "passing": 13,
+    "penalty_taking": 13,
+    "positioning": 17,
+    "punching": 2,
+    "reflexes": 4,
+    "rushing_out": 5,
+    "stamina": 12,
+    "strength": 17,
+    "tackling": 19,
+    "teamwork": 13,
+    "technique": 14,
+    "throwing": 6,
+    "vision": 13,
+    "work_rate": 14
+   },
+   "status": {
+    "tokens": [],
+    "moves": []
+   }
+  },
+  {
+   "uid": 1008,
+   "name": "Joe Gomez",
+   "age": 29,
+   "where": "squad",
+   "youth": false,
+   "value": 26067259,
+   "wage": 187662,
+   "contract_end": "2029-06-30",
+   "expiring": false,
+   "positions": {
+    "natural": [
+     "CB"
+    ],
+    "accomplished": [
+     "RB",
+     "LB"
+    ],
+    "can_play": [
+     "LB",
+     "CB",
+     "RB"
+    ],
+    "groups": [
+     "CB"
+    ]
+   },
+   "best": {
+    "slot": "CB",
+    "stars": 2.9785,
+    "fam": "N"
+   },
+   "system": {
+    "LB": {
+     "stars": 1.4733,
+     "fam": "A"
+    },
+    "CB": {
+     "stars": 2.9785,
+     "fam": "N"
+    }
+   },
+   "ability": {
+    "LB": 2.1036,
+    "CB": 3.4389
+   },
+   "ability_best": 3.4389,
+   "potential": null,
+   "rows": {
+    "1": {
+     "stars": 1.4733,
+     "fam": "A"
+    },
+    "2": {
+     "stars": 2.8982,
+     "fam": "N"
+    },
+    "3": {
+     "stars": 2.9785,
+     "fam": "N"
+    }
+   },
+   "open_rows": {
+    "1": {
+     "stars": 1.4733,
+     "fam": "A"
+    },
+    "2": {
+     "stars": 2.8982,
+     "fam": "N"
+    },
+    "3": {
+     "stars": 2.9785,
+     "fam": "N"
+    },
+    "4": {
+     "stars": 0.5,
+     "fam": "C"
+    },
+    "5": {
+     "stars": 0.5,
+     "fam": "C"
+    },
+    "6": {
+     "stars": 0.5,
+     "fam": "C"
+    },
+    "7": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "8": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "9": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "10": {
+     "stars": 0.5,
+     "fam": "X"
+    }
+   },
+   "trend": 0,
+   "stats": null,
+   "youth_stats": [],
+   "played": {},
+   "attributes": {
+    "acceleration": 13,
+    "aerial_reach": 5,
+    "aggression": 11,
+    "agility": 13,
+    "anticipation": 18,
+    "balance": 13,
+    "bravery": 10,
+    "command_of_area": 3,
+    "communication": 4,
+    "composure": 13,
+    "concentration": 13,
+    "corners": 10,
+    "crossing": 12,
+    "decisions": 17,
+    "determination": 11,
+    "dribbling": 10,
+    "eccentricity": 2,
+    "finishing": 10,
+    "first_touch": 10,
+    "flair": 13,
+    "free_kick_taking": 11,
+    "handling": 4,
+    "heading": 14,
+    "jumping_reach": 19,
+    "kicking": 3,
+    "leadership": 10,
+    "long_shots": 10,
+    "long_throws": 12,
+    "marking": 15,
+    "natural_fitness": 10,
+    "off_the_ball": 13,
+    "one_on_ones": 3,
+    "pace": 11,
+    "passing": 13,
+    "penalty_taking": 14,
+    "positioning": 16,
+    "punching": 3,
+    "reflexes": 4,
+    "rushing_out": 2,
+    "stamina": 11,
+    "strength": 19,
+    "tackling": 18,
+    "teamwork": 11,
+    "technique": 10,
+    "throwing": 4,
+    "vision": 10,
+    "work_rate": 14
+   },
+   "status": {
+    "tokens": [
+     "injured"
+    ],
+    "injury": {
+     "days": 13,
+     "what": "Hamstring strain",
+     "back": "2026-12-05",
+     "long": false
+    },
+    "moves": []
+   }
+  },
+  {
+   "uid": 1009,
+   "name": "Giovanni Leoni",
+   "age": 19,
+   "where": "squad",
+   "youth": false,
+   "value": 24054259,
+   "wage": 130484,
+   "contract_end": "2028-06-30",
+   "expiring": false,
+   "positions": {
+    "natural": [
+     "CB"
+    ],
+    "accomplished": [],
+    "can_play": [
+     "CB"
+    ],
+    "groups": [
+     "CB"
+    ]
+   },
+   "best": {
+    "slot": "CB",
+    "stars": 1.8604,
+    "fam": "N"
+   },
+   "system": {
+    "CB": {
+     "stars": 1.8604,
+     "fam": "N"
+    }
+   },
+   "ability": {
+    "CB": 2.0374
+   },
+   "ability_best": 2.0374,
+   "potential": 4.2338,
+   "rows": {
+    "2": {
+     "stars": 1.8604,
+     "fam": "N"
+    },
+    "3": {
+     "stars": 1.8604,
+     "fam": "N"
+    }
+   },
+   "open_rows": {
+    "1": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "2": {
+     "stars": 1.8604,
+     "fam": "N"
+    },
+    "3": {
+     "stars": 1.8604,
+     "fam": "N"
+    },
+    "4": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "5": {
+     "stars": 0.5,
+     "fam": "C"
+    },
+    "6": {
+     "stars": 0.5,
+     "fam": "C"
+    },
+    "7": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "8": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "9": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "10": {
+     "stars": 0.5,
+     "fam": "X"
+    }
+   },
+   "trend": 0,
+   "stats": null,
+   "youth_stats": [],
+   "played": {},
+   "attributes": {
+    "acceleration": 9,
+    "aerial_reach": 4,
+    "aggression": 13,
+    "agility": 11,
+    "anticipation": 18,
+    "balance": 11,
+    "bravery": 13,
+    "command_of_area": 6,
+    "communication": 4,
+    "composure": 10,
+    "concentration": 10,
+    "corners": 12,
+    "crossing": 12,
+    "decisions": 16,
+    "determination": 12,
+    "dribbling": 13,
+    "eccentricity": 5,
+    "finishing": 11,
+    "first_touch": 13,
+    "flair": 13,
+    "free_kick_taking": 11,
+    "handling": 3,
+    "heading": 17,
+    "jumping_reach": 17,
+    "kicking": 4,
+    "leadership": 9,
+    "long_shots": 12,
+    "long_throws": 11,
+    "marking": 16,
+    "natural_fitness": 10,
+    "off_the_ball": 9,
+    "one_on_ones": 4,
+    "pace": 11,
+    "passing": 10,
+    "penalty_taking": 11,
+    "positioning": 17,
+    "punching": 3,
+    "reflexes": 2,
+    "rushing_out": 4,
+    "stamina": 12,
+    "strength": 15,
+    "tackling": 17,
+    "teamwork": 11,
+    "technique": 9,
+    "throwing": 5,
+    "vision": 12,
+    "work_rate": 13
+   },
+   "status": {
+    "tokens": [],
+    "moves": []
+   }
+  },
+  {
+   "uid": 1010,
+   "name": "Ronald Araújo",
+   "age": 27,
+   "where": "squad",
+   "youth": false,
+   "value": 16667660,
+   "wage": 154251,
+   "contract_end": "2028-06-30",
+   "expiring": false,
+   "positions": {
+    "natural": [
+     "RB"
+    ],
+    "accomplished": [
+     "CB"
+    ],
+    "can_play": [
+     "CB",
+     "RB"
+    ],
+    "groups": [
+     "FB/WB"
+    ]
+   },
+   "best": {
+    "slot": "RB",
+    "stars": 3.0008,
+    "fam": "N"
+   },
+   "system": {
+    "CB": {
+     "stars": 0.5,
+     "fam": "A"
+    },
+    "RB": {
+     "stars": 3.0008,
+     "fam": "N"
+    }
+   },
+   "ability": {
+    "CB": 0.624,
+    "RB": 2.9742
+   },
+   "ability_best": 2.9742,
+   "potential": null,
+   "rows": {
+    "2": {
+     "stars": 0.5,
+     "fam": "A"
+    },
+    "3": {
+     "stars": 0.5,
+     "fam": "A"
+    },
+    "4": {
+     "stars": 3.0008,
+     "fam": "N"
+    }
+   },
+   "open_rows": {
+    "1": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "2": {
+     "stars": 0.5,
+     "fam": "A"
+    },
+    "3": {
+     "stars": 0.5,
+     "fam": "A"
+    },
+    "4": {
+     "stars": 3.0008,
+     "fam": "N"
+    },
+    "5": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "6": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "7": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "8": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "9": {
+     "stars": 0.5,
+     "fam": "C"
+    },
+    "10": {
+     "stars": 0.5,
+     "fam": "X"
+    }
+   },
+   "trend": 0,
+   "stats": null,
+   "youth_stats": [],
+   "played": {},
+   "attributes": {
+    "acceleration": 18,
+    "aerial_reach": 6,
+    "aggression": 13,
+    "agility": 14,
+    "anticipation": 14,
+    "balance": 11,
+    "bravery": 14,
+    "command_of_area": 2,
+    "communication": 4,
+    "composure": 15,
+    "concentration": 14,
+    "corners": 11,
+    "crossing": 16,
+    "decisions": 11,
+    "determination": 13,
+    "dribbling": 13,
+    "eccentricity": 4,
+    "finishing": 12,
+    "first_touch": 12,
+    "flair": 11,
+    "free_kick_taking": 12,
+    "handling": 3,
+    "heading": 12,
+    "jumping_reach": 12,
+    "kicking": 2,
+    "leadership": 12,
+    "long_shots": 11,
+    "long_throws": 11,
+    "marking": 18,
+    "natural_fitness": 14,
+    "off_the_ball": 14,
+    "one_on_ones": 5,
+    "pace": 16,
+    "passing": 15,
+    "penalty_taking": 11,
+    "positioning": 11,
+    "punching": 6,
+    "reflexes": 5,
+    "rushing_out": 5,
+    "stamina": 19,
+    "strength": 15,
+    "tackling": 18,
+    "teamwork": 13,
+    "technique": 15,
+    "throwing": 6,
+    "vision": 15,
+    "work_rate": 15
+   },
+   "status": {
+    "tokens": [],
+    "moves": []
+   }
+  },
+  {
+   "uid": 1011,
+   "name": "Jeremie Frimpong",
+   "age": 25,
+   "where": "squad",
+   "youth": false,
+   "value": 17870332,
+   "wage": 106206,
+   "contract_end": "2028-06-30",
+   "expiring": false,
+   "positions": {
+    "natural": [
+     "RB",
+     "RWB"
+    ],
+    "accomplished": [
+     "RW"
+    ],
+    "can_play": [
+     "RB",
+     "RW",
+     "RWB"
+    ],
+    "groups": [
+     "FB/WB",
+     "FB/WB"
+    ]
+   },
+   "best": {
+    "slot": "RB",
+    "stars": 2.3884,
+    "fam": "N"
+   },
+   "system": {
+    "RB": {
+     "stars": 2.3884,
+     "fam": "N"
+    },
+    "RW": {
+     "stars": 0.7758,
+     "fam": "A"
+    }
+   },
+   "ability": {
+    "RB": 2.6293,
+    "RW": 0.7797
+   },
+   "ability_best": 2.6293,
+   "potential": null,
+   "rows": {
+    "4": {
+     "stars": 2.3884,
+     "fam": "N"
+    },
+    "9": {
+     "stars": 0.7758,
+     "fam": "A"
+    }
+   },
+   "open_rows": {
+    "1": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "2": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "3": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "4": {
+     "stars": 2.3884,
+     "fam": "N"
+    },
+    "5": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "6": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "7": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "8": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "9": {
+     "stars": 0.7758,
+     "fam": "A"
+    },
+    "10": {
+     "stars": 0.5,
+     "fam": "X"
+    }
+   },
+   "trend": 0,
+   "stats": null,
+   "youth_stats": [],
+   "played": {},
+   "attributes": {
+    "acceleration": 17,
+    "aerial_reach": 3,
+    "aggression": 12,
+    "agility": 11,
+    "anticipation": 11,
+    "balance": 12,
+    "bravery": 11,
+    "command_of_area": 4,
+    "communication": 4,
+    "composure": 14,
+    "concentration": 11,
+    "corners": 11,
+    "crossing": 16,
+    "decisions": 13,
+    "determination": 13,
+    "dribbling": 12,
+    "eccentricity": 2,
+    "finishing": 9,
+    "first_touch": 10,
+    "flair": 10,
+    "free_kick_taking": 13,
+    "handling": 5,
+    "heading": 12,
+    "jumping_reach": 10,
+    "kicking": 6,
+    "leadership": 9,
+    "long_shots": 13,
+    "long_throws": 14,
+    "marking": 15,
+    "natural_fitness": 10,
+    "off_the_ball": 12,
+    "one_on_ones": 3,
+    "pace": 15,
+    "passing": 14,
+    "penalty_taking": 14,
+    "positioning": 13,
+    "punching": 4,
+    "reflexes": 4,
+    "rushing_out": 6,
+    "stamina": 17,
+    "strength": 9,
+    "tackling": 19,
+    "teamwork": 11,
+    "technique": 11,
+    "throwing": 6,
+    "vision": 14,
+    "work_rate": 14
+   },
+   "status": {
+    "tokens": [],
+    "moves": []
+   }
+  },
+  {
+   "uid": 1012,
+   "name": "Conor Bradley",
+   "age": 23,
+   "where": "squad",
+   "youth": false,
+   "value": 15462084,
+   "wage": 181741,
+   "contract_end": "2030-06-30",
+   "expiring": false,
+   "positions": {
+    "natural": [
+     "RB"
+    ],
+    "accomplished": [],
+    "can_play": [
+     "RB"
+    ],
+    "groups": [
+     "FB/WB"
+    ]
+   },
+   "best": {
+    "slot": "RB",
+    "stars": 0.5,
+    "fam": "N"
+   },
+   "system": {
+    "RB": {
+     "stars": 0.5,
+     "fam": "N"
+    }
+   },
+   "ability": {
+    "RB": 0.5677
+   },
+   "ability_best": 0.5677,
+   "potential": 2.7532,
+   "rows": {
+    "4": {
+     "stars": 0.5,
+     "fam": "N"
+    }
+   },
+   "open_rows": {
+    "1": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "2": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "3": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "4": {
+     "stars": 0.5,
+     "fam": "N"
+    },
+    "5": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "6": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "7": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "8": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "9": {
+     "stars": 0.5,
+     "fam": "C"
+    },
+    "10": {
+     "stars": 0.5,
+     "fam": "X"
+    }
+   },
+   "trend": 0,
+   "stats": null,
+   "youth_stats": [],
+   "played": {},
+   "attributes": {
+    "acceleration": 17,
+    "aerial_reach": 4,
+    "aggression": 9,
+    "agility": 9,
+    "anticipation": 12,
+    "balance": 13,
+    "bravery": 10,
+    "command_of_area": 4,
+    "communication": 4,
+    "composure": 12,
+    "concentration": 10,
+    "corners": 11,
+    "crossing": 16,
+    "decisions": 9,
+    "determination": 9,
+    "dribbling": 10,
+    "eccentricity": 3,
+    "finishing": 9,
+    "first_touch": 11,
+    "flair": 13,
+    "free_kick_taking": 10,
+    "handling": 2,
+    "heading": 9,
+    "jumping_reach": 10,
+    "kicking": 2,
+    "leadership": 9,
+    "long_shots": 11,
+    "long_throws": 13,
+    "marking": 17,
+    "natural_fitness": 13,
+    "off_the_ball": 11,
+    "one_on_ones": 3,
+    "pace": 17,
+    "passing": 9,
+    "penalty_taking": 13,
+    "positioning": 12,
+    "punching": 5,
+    "reflexes": 3,
+    "rushing_out": 6,
+    "stamina": 16,
+    "strength": 9,
+    "tackling": 15,
+    "teamwork": 9,
+    "technique": 12,
+    "throwing": 3,
+    "vision": 12,
+    "work_rate": 15
+   },
+   "status": {
+    "tokens": [],
+    "moves": []
+   }
+  },
+  {
+   "uid": 1013,
+   "name": "Alexis Mac Allister",
+   "age": 27,
+   "where": "squad",
+   "youth": false,
+   "value": 42372599,
+   "wage": 118471,
+   "contract_end": "2030-06-30",
+   "expiring": false,
+   "positions": {
+    "natural": [
+     "DM",
+     "CM"
+    ],
+    "accomplished": [],
+    "can_play": [
+     "DM",
+     "CM"
+    ],
+    "groups": [
+     "DM",
+     "CM"
+    ]
+   },
+   "best": {
+    "slot": "DM",
+    "stars": 4.7094,
+    "fam": "N"
+   },
+   "system": {
+    "DM": {
+     "stars": 4.7094,
+     "fam": "N"
+    },
+    "CM": {
+     "stars": 4.2463,
+     "fam": "N"
+    }
+   },
+   "ability": {
+    "DM": 4.3063,
+    "CM": 3.9452
+   },
+   "ability_best": 4.3063,
+   "potential": null,
+   "rows": {
+    "5": {
+     "stars": 4.7094,
+     "fam": "N"
+    },
+    "6": {
+     "stars": 4.7094,
+     "fam": "N"
+    }
+   },
+   "open_rows": {
+    "1": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "2": {
+     "stars": 3.1175,
+     "fam": "C"
+    },
+    "3": {
+     "stars": 3.9552,
+     "fam": "C"
+    },
+    "4": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "5": {
+     "stars": 4.7094,
+     "fam": "N"
+    },
+    "6": {
+     "stars": 4.7094,
+     "fam": "N"
+    },
+    "7": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "8": {
+     "stars": 1.0625,
+     "fam": "C"
+    },
+    "9": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "10": {
+     "stars": 0.5,
+     "fam": "X"
+    }
+   },
+   "trend": 0,
+   "stats": {
+    "apps": 13,
+    "g": 1,
+    "a": 3,
+    "avg": 6.68,
+    "cs": 1,
+    "y": 0,
+    "r": 0,
+    "team": 0
+   },
+   "youth_stats": [],
+   "played": {
+    "DM": 13
+   },
+   "attributes": {
+    "acceleration": 12,
+    "aerial_reach": 3,
+    "aggression": 15,
+    "agility": 15,
+    "anticipation": 20,
+    "balance": 15,
+    "bravery": 17,
+    "command_of_area": 3,
+    "communication": 3,
+    "composure": 15,
+    "concentration": 14,
+    "corners": 13,
+    "crossing": 16,
+    "decisions": 20,
+    "determination": 13,
+    "dribbling": 14,
+    "eccentricity": 4,
+    "finishing": 15,
+    "first_touch": 20,
+    "flair": 13,
+    "free_kick_taking": 13,
+    "handling": 3,
+    "heading": 13,
+    "jumping_reach": 15,
+    "kicking": 3,
+    "leadership": 13,
+    "long_shots": 15,
+    "long_throws": 15,
+    "marking": 13,
+    "natural_fitness": 14,
+    "off_the_ball": 13,
+    "one_on_ones": 3,
+    "pace": 14,
+    "passing": 20,
+    "penalty_taking": 15,
+    "positioning": 19,
+    "punching": 6,
+    "reflexes": 3,
+    "rushing_out": 5,
+    "stamina": 20,
+    "strength": 16,
+    "tackling": 18,
+    "teamwork": 20,
+    "technique": 17,
+    "throwing": 4,
+    "vision": 17,
+    "work_rate": 16
+   },
+   "status": {
+    "tokens": [],
+    "moves": []
+   }
+  },
+  {
+   "uid": 1014,
+   "name": "Dominik Szoboszlai",
+   "age": 26,
+   "where": "squad",
+   "youth": false,
+   "value": 36418896,
+   "wage": 170961,
+   "contract_end": "2030-06-30",
+   "expiring": false,
+   "positions": {
+    "natural": [
+     "CM",
+     "AM"
+    ],
+    "accomplished": [
+     "DM"
+    ],
+    "can_play": [
+     "DM",
+     "CM",
+     "AM"
+    ],
+    "groups": [
+     "CM",
+     "AM"
+    ]
+   },
+   "best": {
+    "slot": "AM",
+    "stars": 4.1809,
+    "fam": "N"
+   },
+   "system": {
+    "DM": {
+     "stars": 1.9367,
+     "fam": "A"
+    },
+    "AM": {
+     "stars": 4.1809,
+     "fam": "N"
+    },
+    "CM": {
+     "stars": 3.6279,
+     "fam": "N"
+    }
+   },
+   "ability": {
+    "DM": 2.3156,
+    "AM": 4.3063,
+    "CM": 3.4631
+   },
+   "ability_best": 4.3063,
+   "potential": null,
+   "rows": {
+    "5": {
+     "stars": 1.9367,
+     "fam": "A"
+    },
+    "6": {
+     "stars": 1.51,
+     "fam": "A"
+    },
+    "8": {
+     "stars": 4.1809,
+     "fam": "N"
+    }
+   },
+   "open_rows": {
+    "1": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "2": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "3": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "4": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "5": {
+     "stars": 1.9367,
+     "fam": "A"
+    },
+    "6": {
+     "stars": 1.51,
+     "fam": "A"
+    },
+    "7": {
+     "stars": 2.1665,
+     "fam": "C"
+    },
+    "8": {
+     "stars": 4.1809,
+     "fam": "N"
+    },
+    "9": {
+     "stars": 1.5344,
+     "fam": "C"
+    },
+    "10": {
+     "stars": 0.5,
+     "fam": "X"
+    }
+   },
+   "trend": 0,
+   "stats": {
+    "apps": 13,
+    "g": 0,
+    "a": 0,
+    "avg": 6.79,
+    "cs": 5,
+    "y": 1,
+    "r": 0,
+    "team": 0
+   },
+   "youth_stats": [],
+   "played": {
+    "CM": 13
+   },
+   "attributes": {
+    "acceleration": 15,
+    "aerial_reach": 3,
+    "aggression": 12,
+    "agility": 16,
+    "anticipation": 15,
+    "balance": 14,
+    "bravery": 13,
+    "command_of_area": 2,
+    "communication": 4,
+    "composure": 16,
+    "concentration": 15,
+    "corners": 12,
+    "crossing": 12,
+    "decisions": 19,
+    "determination": 16,
+    "dribbling": 18,
+    "eccentricity": 3,
+    "finishing": 12,
+    "first_touch": 16,
+    "flair": 17,
+    "free_kick_taking": 13,
+    "handling": 2,
+    "heading": 15,
+    "jumping_reach": 14,
+    "kicking": 5,
+    "leadership": 16,
+    "long_shots": 13,
+    "long_throws": 13,
+    "marking": 15,
+    "natural_fitness": 11,
+    "off_the_ball": 16,
+    "one_on_ones": 3,
+    "pace": 16,
+    "passing": 16,
+    "penalty_taking": 14,
+    "positioning": 15,
+    "punching": 6,
+    "reflexes": 2,
+    "rushing_out": 4,
+    "stamina": 19,
+    "strength": 14,
+    "tackling": 14,
+    "teamwork": 13,
+    "technique": 20,
+    "throwing": 5,
+    "vision": 17,
+    "work_rate": 16
+   },
+   "status": {
+    "tokens": [],
+    "moves": []
+   }
+  },
+  {
+   "uid": 1015,
+   "name": "Ryan Gravenberch",
+   "age": 24,
+   "where": "squad",
+   "youth": false,
+   "value": 29588389,
+   "wage": 157267,
+   "contract_end": "2028-06-30",
+   "expiring": false,
+   "positions": {
+    "natural": [
+     "DM",
+     "CM"
+    ],
+    "accomplished": [],
+    "can_play": [
+     "DM",
+     "CM"
+    ],
+    "groups": [
+     "DM",
+     "CM"
+    ]
+   },
+   "best": {
+    "slot": "CM",
+    "stars": 5.0,
+    "fam": "N"
+   },
+   "system": {
+    "DM": {
+     "stars": 3.6523,
+     "fam": "N"
+    },
+    "CM": {
+     "stars": 5.0,
+     "fam": "N"
+    }
+   },
+   "ability": {
+    "DM": 3.4821,
+    "CM": 4.7693
+   },
+   "ability_best": 4.7693,
+   "potential": null,
+   "rows": {
+    "5": {
+     "stars": 3.6523,
+     "fam": "N"
+    },
+    "6": {
+     "stars": 3.1238,
+     "fam": "N"
+    }
+   },
+   "open_rows": {
+    "1": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "2": {
+     "stars": 2.4715,
+     "fam": "C"
+    },
+    "3": {
+     "stars": 3.1175,
+     "fam": "C"
+    },
+    "4": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "5": {
+     "stars": 3.6523,
+     "fam": "N"
+    },
+    "6": {
+     "stars": 3.1238,
+     "fam": "N"
+    },
+    "7": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "8": {
+     "stars": 1.0625,
+     "fam": "C"
+    },
+    "9": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "10": {
+     "stars": 0.5,
+     "fam": "X"
+    }
+   },
+   "trend": 0,
+   "stats": {
+    "apps": 13,
+    "g": 0,
+    "a": 1,
+    "avg": 7.42,
+    "cs": 5,
+    "y": 0,
+    "r": 0,
+    "team": 0
+   },
+   "youth_stats": [],
+   "played": {
+    "DM": 13
+   },
+   "attributes": {
+    "acceleration": 14,
+    "aerial_reach": 3,
+    "aggression": 14,
+    "agility": 14,
+    "anticipation": 18,
+    "balance": 15,
+    "bravery": 16,
+    "command_of_area": 4,
+    "communication": 5,
+    "composure": 15,
+    "concentration": 13,
+    "corners": 14,
+    "crossing": 13,
+    "decisions": 20,
+    "determination": 12,
+    "dribbling": 14,
+    "eccentricity": 3,
+    "finishing": 12,
+    "first_touch": 20,
+    "flair": 12,
+    "free_kick_taking": 15,
+    "handling": 2,
+    "heading": 13,
+    "jumping_reach": 13,
+    "kicking": 4,
+    "leadership": 16,
+    "long_shots": 16,
+    "long_throws": 13,
+    "marking": 15,
+    "natural_fitness": 15,
+    "off_the_ball": 13,
+    "one_on_ones": 3,
+    "pace": 12,
+    "passing": 20,
+    "penalty_taking": 15,
+    "positioning": 19,
+    "punching": 6,
+    "reflexes": 4,
+    "rushing_out": 5,
+    "stamina": 20,
+    "strength": 14,
+    "tackling": 20,
+    "teamwork": 17,
+    "technique": 17,
+    "throwing": 4,
+    "vision": 19,
+    "work_rate": 16
+   },
+   "status": {
+    "tokens": [],
+    "moves": []
+   }
+  },
+  {
+   "uid": 1016,
+   "name": "Wataru Endo",
+   "age": 33,
+   "where": "squad",
+   "youth": false,
+   "value": 19199170,
+   "wage": 132901,
+   "contract_end": "2028-06-30",
+   "expiring": false,
+   "positions": {
+    "natural": [
+     "DM"
+    ],
+    "accomplished": [
+     "CB"
+    ],
+    "can_play": [
+     "CB",
+     "DM"
+    ],
+    "groups": [
+     "DM"
+    ]
+   },
+   "best": {
+    "slot": "DM",
+    "stars": 1.368,
+    "fam": "N"
+   },
+   "system": {
+    "CB": {
+     "stars": 0.5,
+     "fam": "A"
+    },
+    "DM": {
+     "stars": 1.368,
+     "fam": "N"
+    }
+   },
+   "ability": {
+    "CB": 0.9018,
+    "DM": 1.5685
+   },
+   "ability_best": 1.5685,
+   "potential": null,
+   "rows": {
+    "2": {
+     "stars": 0.5,
+     "fam": "A"
+    },
+    "3": {
+     "stars": 0.5,
+     "fam": "A"
+    },
+    "5": {
+     "stars": 1.368,
+     "fam": "N"
+    },
+    "6": {
+     "stars": 1.368,
+     "fam": "N"
+    }
+   },
+   "open_rows": {
+    "1": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "2": {
+     "stars": 0.5,
+     "fam": "A"
+    },
+    "3": {
+     "stars": 0.5,
+     "fam": "A"
+    },
+    "4": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "5": {
+     "stars": 1.368,
+     "fam": "N"
+    },
+    "6": {
+     "stars": 1.368,
+     "fam": "N"
+    },
+    "7": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "8": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "9": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "10": {
+     "stars": 0.5,
+     "fam": "X"
+    }
+   },
+   "trend": 0,
+   "stats": null,
+   "youth_stats": [],
+   "played": {},
+   "attributes": {
+    "acceleration": 10,
+    "aerial_reach": 6,
+    "aggression": 13,
+    "agility": 13,
+    "anticipation": 16,
+    "balance": 11,
+    "bravery": 11,
+    "command_of_area": 5,
+    "communication": 4,
+    "composure": 13,
+    "concentration": 9,
+    "corners": 13,
+    "crossing": 9,
+    "decisions": 17,
+    "determination": 10,
+    "dribbling": 13,
+    "eccentricity": 4,
+    "finishing": 12,
+    "first_touch": 9,
+    "flair": 13,
+    "free_kick_taking": 11,
+    "handling": 4,
+    "heading": 13,
+    "jumping_reach": 10,
+    "kicking": 6,
+    "leadership": 12,
+    "long_shots": 9,
+    "long_throws": 13,
+    "marking": 11,
+    "natural_fitness": 12,
+    "off_the_ball": 9,
+    "one_on_ones": 2,
+    "pace": 11,
+    "passing": 17,
+    "penalty_taking": 13,
+    "positioning": 18,
+    "punching": 4,
+    "reflexes": 5,
+    "rushing_out": 5,
+    "stamina": 16,
+    "strength": 10,
+    "tackling": 14,
+    "teamwork": 18,
+    "technique": 13,
+    "throwing": 3,
+    "vision": 10,
+    "work_rate": 13
+   },
+   "status": {
+    "tokens": [
+     "suspended"
+    ],
+    "suspended_matches": 1,
+    "moves": []
+   }
+  },
+  {
+   "uid": 1017,
+   "name": "Curtis Jones",
+   "age": 25,
+   "where": "squad",
+   "youth": false,
+   "value": 11280755,
+   "wage": 95130,
+   "contract_end": "2029-06-30",
+   "expiring": false,
+   "positions": {
+    "natural": [
+     "CM"
+    ],
+    "accomplished": [
+     "DM"
+    ],
+    "can_play": [
+     "DM",
+     "CM"
+    ],
+    "groups": [
+     "CM"
+    ]
+   },
+   "best": {
+    "slot": "CM",
+    "stars": 2.5709,
+    "fam": "N"
+   },
+   "system": {
+    "DM": {
+     "stars": 0.5,
+     "fam": "A"
+    },
+    "CM": {
+     "stars": 2.5709,
+     "fam": "N"
+    }
+   },
+   "ability": {
+    "DM": 0.6672,
+    "CM": 2.6389
+   },
+   "ability_best": 2.6389,
+   "potential": null,
+   "rows": {
+    "5": {
+     "stars": 0.5,
+     "fam": "A"
+    },
+    "6": {
+     "stars": 0.5,
+     "fam": "A"
+    }
+   },
+   "open_rows": {
+    "1": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "2": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "3": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "4": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "5": {
+     "stars": 0.5,
+     "fam": "A"
+    },
+    "6": {
+     "stars": 0.5,
+     "fam": "A"
+    },
+    "7": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "8": {
+     "stars": 0.5,
+     "fam": "C"
+    },
+    "9": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "10": {
+     "stars": 0.5,
+     "fam": "X"
+    }
+   },
+   "trend": 0,
+   "stats": null,
+   "youth_stats": [],
+   "played": {},
+   "attributes": {
+    "acceleration": 10,
+    "aerial_reach": 5,
+    "aggression": 14,
+    "agility": 12,
+    "anticipation": 12,
+    "balance": 10,
+    "bravery": 12,
+    "command_of_area": 5,
+    "communication": 4,
+    "composure": 12,
+    "concentration": 12,
+    "corners": 13,
+    "crossing": 10,
+    "decisions": 18,
+    "determination": 11,
+    "dribbling": 14,
+    "eccentricity": 3,
+    "finishing": 13,
+    "first_touch": 18,
+    "flair": 10,
+    "free_kick_taking": 11,
+    "handling": 3,
+    "heading": 13,
+    "jumping_reach": 11,
+    "kicking": 4,
+    "leadership": 11,
+    "long_shots": 14,
+    "long_throws": 12,
+    "marking": 13,
+    "natural_fitness": 10,
+    "off_the_ball": 11,
+    "one_on_ones": 6,
+    "pace": 12,
+    "passing": 15,
+    "penalty_taking": 12,
+    "positioning": 13,
+    "punching": 5,
+    "reflexes": 6,
+    "rushing_out": 6,
+    "stamina": 15,
+    "strength": 13,
+    "tackling": 12,
+    "teamwork": 10,
+    "technique": 14,
+    "throwing": 5,
+    "vision": 18,
+    "work_rate": 18
+   },
+   "status": {
+    "tokens": [
+     "arranged"
+    ],
+    "moves": [
+     {
+      "kind": "deal_out",
+      "club": "Tottenham",
+      "date": "2027-01-02"
+     }
+    ]
+   }
+  },
+  {
+   "uid": 1018,
+   "name": "Florian Wirtz",
+   "age": 23,
+   "where": "squad",
+   "youth": false,
+   "value": 24011883,
+   "wage": 230222,
+   "contract_end": "2030-06-30",
+   "expiring": false,
+   "positions": {
+    "natural": [
+     "AM"
+    ],
+    "accomplished": [
+     "LW"
+    ],
+    "can_play": [
+     "LW",
+     "AM"
+    ],
+    "groups": [
+     "AM"
+    ]
+   },
+   "best": {
+    "slot": "AM",
+    "stars": 4.1809,
+    "fam": "N"
+   },
+   "system": {
+    "AM": {
+     "stars": 4.1809,
+     "fam": "N"
+    }
+   },
+   "ability": {
+    "AM": 3.4821
+   },
+   "ability_best": 3.4821,
+   "potential": null,
+   "rows": {
+    "8": {
+     "stars": 4.1809,
+     "fam": "N"
+    }
+   },
+   "open_rows": {
+    "1": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "2": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "3": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "4": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "5": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "6": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "7": {
+     "stars": 2.6932,
+     "fam": "C"
+    },
+    "8": {
+     "stars": 4.1809,
+     "fam": "N"
+    },
+    "9": {
+     "stars": 2.1665,
+     "fam": "C"
+    },
+    "10": {
+     "stars": 0.5,
+     "fam": "X"
+    }
+   },
+   "trend": 0,
+   "stats": {
+    "apps": 13,
+    "g": 0,
+    "a": 0,
+    "avg": 6.67,
+    "cs": 2,
+    "y": 3,
+    "r": 0,
+    "team": 0
+   },
+   "youth_stats": [],
+   "played": {
+    "AM": 13
+   },
+   "attributes": {
+    "acceleration": 16,
+    "aerial_reach": 5,
+    "aggression": 16,
+    "agility": 13,
+    "anticipation": 13,
+    "balance": 14,
+    "bravery": 14,
+    "command_of_area": 6,
+    "communication": 5,
+    "composure": 16,
+    "concentration": 17,
+    "corners": 15,
+    "crossing": 17,
+    "decisions": 20,
+    "determination": 13,
+    "dribbling": 17,
+    "eccentricity": 6,
+    "finishing": 15,
+    "first_touch": 18,
+    "flair": 20,
+    "free_kick_taking": 13,
+    "handling": 2,
+    "heading": 17,
+    "jumping_reach": 14,
+    "kicking": 4,
+    "leadership": 16,
+    "long_shots": 17,
+    "long_throws": 13,
+    "marking": 14,
+    "natural_fitness": 16,
+    "off_the_ball": 20,
+    "one_on_ones": 5,
+    "pace": 16,
+    "passing": 20,
+    "penalty_taking": 15,
+    "positioning": 13,
+    "punching": 5,
+    "reflexes": 3,
+    "rushing_out": 4,
+    "stamina": 15,
+    "strength": 13,
+    "tackling": 17,
+    "teamwork": 15,
+    "technique": 20,
+    "throwing": 2,
+    "vision": 20,
+    "work_rate": 14
+   },
+   "status": {
+    "tokens": [],
+    "moves": []
+   }
+  },
+  {
+   "uid": 1019,
+   "name": "Rio Ngumoha",
+   "age": 18,
+   "where": "squad",
+   "youth": false,
+   "value": 18887184,
+   "wage": 107504,
+   "contract_end": "2028-06-30",
+   "expiring": false,
+   "positions": {
+    "natural": [
+     "LW"
+    ],
+    "accomplished": [],
+    "can_play": [
+     "LW"
+    ],
+    "groups": [
+     "WIDE"
+    ]
+   },
+   "best": {
+    "slot": "LW",
+    "stars": 0.5999,
+    "fam": "N"
+   },
+   "system": {
+    "LW": {
+     "stars": 0.5999,
+     "fam": "N"
+    }
+   },
+   "ability": {
+    "LW": 1.1022
+   },
+   "ability_best": 1.1022,
+   "potential": 4.2175,
+   "rows": {
+    "7": {
+     "stars": 0.5999,
+     "fam": "N"
+    }
+   },
+   "open_rows": {
+    "1": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "2": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "3": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "4": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "5": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "6": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "7": {
+     "stars": 0.5999,
+     "fam": "N"
+    },
+    "8": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "9": {
+     "stars": 0.5,
+     "fam": "C"
+    },
+    "10": {
+     "stars": 0.5,
+     "fam": "C"
+    }
+   },
+   "trend": 0,
+   "stats": null,
+   "youth_stats": [],
+   "played": {},
+   "attributes": {
+    "acceleration": 18,
+    "aerial_reach": 5,
+    "aggression": 13,
+    "agility": 17,
+    "anticipation": 12,
+    "balance": 9,
+    "bravery": 10,
+    "command_of_area": 3,
+    "communication": 6,
+    "composure": 11,
+    "concentration": 10,
+    "corners": 13,
+    "crossing": 14,
+    "decisions": 13,
+    "determination": 11,
+    "dribbling": 14,
+    "eccentricity": 5,
+    "finishing": 11,
+    "first_touch": 11,
+    "flair": 16,
+    "free_kick_taking": 10,
+    "handling": 5,
+    "heading": 13,
+    "jumping_reach": 12,
+    "kicking": 4,
+    "leadership": 13,
+    "long_shots": 13,
+    "long_throws": 10,
+    "marking": 14,
+    "natural_fitness": 13,
+    "off_the_ball": 14,
+    "one_on_ones": 5,
+    "pace": 15,
+    "passing": 9,
+    "penalty_taking": 10,
+    "positioning": 11,
+    "punching": 6,
+    "reflexes": 6,
+    "rushing_out": 4,
+    "stamina": 10,
+    "strength": 10,
+    "tackling": 13,
+    "teamwork": 11,
+    "technique": 16,
+    "throwing": 3,
+    "vision": 10,
+    "work_rate": 10
+   },
+   "status": {
+    "tokens": [],
+    "moves": []
+   }
+  },
+  {
+   "uid": 1020,
+   "name": "Cody Gakpo",
+   "age": 27,
+   "where": "squad",
+   "youth": false,
+   "value": 14637500,
+   "wage": 145384,
+   "contract_end": "2027-06-30",
+   "expiring": true,
+   "positions": {
+    "natural": [
+     "LW",
+     "ST"
+    ],
+    "accomplished": [],
+    "can_play": [
+     "LW",
+     "ST"
+    ],
+    "groups": [
+     "WIDE",
+     "ST"
+    ]
+   },
+   "best": {
+    "slot": "ST",
+    "stars": 4.75,
+    "fam": "N"
+   },
+   "system": {
+    "LW": {
+     "stars": 4.6245,
+     "fam": "N"
+    },
+    "ST": {
+     "stars": 4.75,
+     "fam": "N"
+    }
+   },
+   "ability": {
+    "LW": 4.2401,
+    "ST": 4.75
+   },
+   "ability_best": 4.75,
+   "potential": null,
+   "rows": {
+    "7": {
+     "stars": 4.6245,
+     "fam": "N"
+    },
+    "10": {
+     "stars": 4.75,
+     "fam": "N"
+    }
+   },
+   "open_rows": {
+    "1": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "2": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "3": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "4": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "5": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "6": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "7": {
+     "stars": 4.6245,
+     "fam": "N"
+    },
+    "8": {
+     "stars": 1.9002,
+     "fam": "C"
+    },
+    "9": {
+     "stars": 1.5344,
+     "fam": "C"
+    },
+    "10": {
+     "stars": 4.75,
+     "fam": "N"
+    }
+   },
+   "trend": 0,
+   "stats": {
+    "apps": 13,
+    "g": 6,
+    "a": 4,
+    "avg": 7.25,
+    "cs": 2,
+    "y": 3,
+    "r": 0,
+    "team": 0
+   },
+   "youth_stats": [],
+   "played": {
+    "LW": 13
+   },
+   "attributes": {
+    "acceleration": 20,
+    "aerial_reach": 4,
+    "aggression": 12,
+    "agility": 18,
+    "anticipation": 19,
+    "balance": 10,
+    "bravery": 11,
+    "command_of_area": 3,
+    "communication": 5,
+    "composure": 18,
+    "concentration": 13,
+    "corners": 11,
+    "crossing": 16,
+    "decisions": 14,
+    "determination": 13,
+    "dribbling": 19,
+    "eccentricity": 4,
+    "finishing": 18,
+    "first_touch": 17,
+    "flair": 16,
+    "free_kick_taking": 14,
+    "handling": 4,
+    "heading": 20,
+    "jumping_reach": 12,
+    "kicking": 5,
+    "leadership": 13,
+    "long_shots": 13,
+    "long_throws": 12,
+    "marking": 13,
+    "natural_fitness": 15,
+    "off_the_ball": 19,
+    "one_on_ones": 2,
+    "pace": 19,
+    "passing": 12,
+    "penalty_taking": 13,
+    "positioning": 13,
+    "punching": 4,
+    "reflexes": 4,
+    "rushing_out": 5,
+    "stamina": 14,
+    "strength": 14,
+    "tackling": 12,
+    "teamwork": 11,
+    "technique": 15,
+    "throwing": 4,
+    "vision": 15,
+    "work_rate": 11
+   },
+   "status": {
+    "tokens": [
+     "expiring"
+    ],
+    "moves": []
+   }
+  },
+  {
+   "uid": 1021,
+   "name": "Bradley Barcola",
+   "age": 24,
+   "where": "squad",
+   "youth": false,
+   "value": 19742619,
+   "wage": 228410,
+   "contract_end": "2030-06-30",
+   "expiring": false,
+   "positions": {
+    "natural": [
+     "RW",
+     "LW"
+    ],
+    "accomplished": [],
+    "can_play": [
+     "LW",
+     "RW"
+    ],
+    "groups": [
+     "WIDE",
+     "WIDE"
+    ]
+   },
+   "best": {
+    "slot": "LW",
+    "stars": 3.5674,
+    "fam": "N"
+   },
+   "system": {
+    "LW": {
+     "stars": 3.5674,
+     "fam": "N"
+    },
+    "RW": {
+     "stars": 3.5674,
+     "fam": "N"
+    }
+   },
+   "ability": {
+    "LW": 3.4159,
+    "RW": 3.4159
+   },
+   "ability_best": 3.4159,
+   "potential": null,
+   "rows": {
+    "7": {
+     "stars": 3.5674,
+     "fam": "N"
+    },
+    "9": {
+     "stars": 3.5674,
+     "fam": "N"
+    }
+   },
+   "open_rows": {
+    "1": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "2": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "3": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "4": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "5": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "6": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "7": {
+     "stars": 3.5674,
+     "fam": "N"
+    },
+    "8": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "9": {
+     "stars": 3.5674,
+     "fam": "N"
+    },
+    "10": {
+     "stars": 0.71,
+     "fam": "C"
+    }
+   },
+   "trend": 0,
+   "stats": null,
+   "youth_stats": [],
+   "played": {},
+   "attributes": {
+    "acceleration": 17,
+    "aerial_reach": 3,
+    "aggression": 11,
+    "agility": 18,
+    "anticipation": 14,
+    "balance": 12,
+    "bravery": 14,
+    "command_of_area": 5,
+    "communication": 5,
+    "composure": 15,
+    "concentration": 13,
+    "corners": 13,
+    "crossing": 16,
+    "decisions": 14,
+    "determination": 12,
+    "dribbling": 20,
+    "eccentricity": 4,
+    "finishing": 14,
+    "first_touch": 15,
+    "flair": 17,
+    "free_kick_taking": 13,
+    "handling": 3,
+    "heading": 14,
+    "jumping_reach": 13,
+    "kicking": 3,
+    "leadership": 14,
+    "long_shots": 11,
+    "long_throws": 13,
+    "marking": 13,
+    "natural_fitness": 15,
+    "off_the_ball": 16,
+    "one_on_ones": 5,
+    "pace": 17,
+    "passing": 11,
+    "penalty_taking": 15,
+    "positioning": 12,
+    "punching": 2,
+    "reflexes": 3,
+    "rushing_out": 2,
+    "stamina": 12,
+    "strength": 12,
+    "tackling": 15,
+    "teamwork": 14,
+    "technique": 18,
+    "throwing": 3,
+    "vision": 13,
+    "work_rate": 15
+   },
+   "status": {
+    "tokens": [],
+    "moves": []
+   }
+  },
+  {
+   "uid": 1022,
+   "name": "Federico Chiesa",
+   "age": 29,
+   "where": "squad",
+   "youth": false,
+   "value": 31976277,
+   "wage": 160836,
+   "contract_end": "2029-06-30",
+   "expiring": false,
+   "positions": {
+    "natural": [
+     "RW"
+    ],
+    "accomplished": [
+     "LW"
+    ],
+    "can_play": [
+     "LW",
+     "RW"
+    ],
+    "groups": [
+     "WIDE"
+    ]
+   },
+   "best": {
+    "slot": "RW",
+    "stars": 1.2832,
+    "fam": "N"
+   },
+   "system": {
+    "RW": {
+     "stars": 1.2832,
+     "fam": "N"
+    }
+   },
+   "ability": {
+    "RW": 1.7676
+   },
+   "ability_best": 1.7676,
+   "potential": null,
+   "rows": {
+    "9": {
+     "stars": 1.2832,
+     "fam": "N"
+    }
+   },
+   "open_rows": {
+    "1": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "2": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "3": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "4": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "5": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "6": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "7": {
+     "stars": 0.5,
+     "fam": "C"
+    },
+    "8": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "9": {
+     "stars": 1.2832,
+     "fam": "N"
+    },
+    "10": {
+     "stars": 0.5,
+     "fam": "C"
+    }
+   },
+   "trend": 0,
+   "stats": null,
+   "youth_stats": [],
+   "played": {},
+   "attributes": {
+    "acceleration": 18,
+    "aerial_reach": 4,
+    "aggression": 10,
+    "agility": 18,
+    "anticipation": 14,
+    "balance": 14,
+    "bravery": 13,
+    "command_of_area": 4,
+    "communication": 5,
+    "composure": 14,
+    "concentration": 11,
+    "corners": 12,
+    "crossing": 18,
+    "decisions": 12,
+    "determination": 10,
+    "dribbling": 16,
+    "eccentricity": 4,
+    "finishing": 12,
+    "first_touch": 11,
+    "flair": 18,
+    "free_kick_taking": 12,
+    "handling": 2,
+    "heading": 12,
+    "jumping_reach": 14,
+    "kicking": 6,
+    "leadership": 11,
+    "long_shots": 13,
+    "long_throws": 11,
+    "marking": 12,
+    "natural_fitness": 13,
+    "off_the_ball": 16,
+    "one_on_ones": 4,
+    "pace": 16,
+    "passing": 10,
+    "penalty_taking": 12,
+    "positioning": 11,
+    "punching": 3,
+    "reflexes": 5,
+    "rushing_out": 5,
+    "stamina": 12,
+    "strength": 12,
+    "tackling": 10,
+    "teamwork": 11,
+    "technique": 18,
+    "throwing": 3,
+    "vision": 12,
+    "work_rate": 14
+   },
+   "status": {
+    "tokens": [
+     "injured"
+    ],
+    "injury": {
+     "days": 52,
+     "what": "Torn knee ligaments",
+     "back": "2027-01-13",
+     "long": true
+    },
+    "moves": []
+   }
+  },
+  {
+   "uid": 1023,
+   "name": "Alexander Isak",
+   "age": 27,
+   "where": "squad",
+   "youth": false,
+   "value": 28779966,
+   "wage": 120997,
+   "contract_end": "2028-06-30",
+   "expiring": false,
+   "positions": {
+    "natural": [
+     "ST"
+    ],
+    "accomplished": [],
+    "can_play": [
+     "ST"
+    ],
+    "groups": [
+     "ST"
+    ]
+   },
+   "best": {
+    "slot": "ST",
+    "stars": 4.75,
+    "fam": "N"
+   },
+   "system": {
+    "ST": {
+     "stars": 4.75,
+     "fam": "N"
+    }
+   },
+   "ability": {
+    "ST": 3.9258
+   },
+   "ability_best": 3.9258,
+   "potential": null,
+   "rows": {
+    "10": {
+     "stars": 4.75,
+     "fam": "N"
+    }
+   },
+   "open_rows": {
+    "1": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "2": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "3": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "4": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "5": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "6": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "7": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "8": {
+     "stars": 2.4251,
+     "fam": "C"
+    },
+    "9": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "10": {
+     "stars": 4.75,
+     "fam": "N"
+    }
+   },
+   "trend": 0,
+   "stats": {
+    "apps": 13,
+    "g": 0,
+    "a": 2,
+    "avg": 6.84,
+    "cs": 1,
+    "y": 0,
+    "r": 0,
+    "team": 0
+   },
+   "youth_stats": [],
+   "played": {
+    "ST": 13
+   },
+   "attributes": {
+    "acceleration": 17,
+    "aerial_reach": 3,
+    "aggression": 15,
+    "agility": 13,
+    "anticipation": 19,
+    "balance": 17,
+    "bravery": 15,
+    "command_of_area": 2,
+    "communication": 5,
+    "composure": 19,
+    "concentration": 16,
+    "corners": 14,
+    "crossing": 16,
+    "decisions": 16,
+    "determination": 12,
+    "dribbling": 16,
+    "eccentricity": 5,
+    "finishing": 20,
+    "first_touch": 20,
+    "flair": 13,
+    "free_kick_taking": 16,
+    "handling": 3,
+    "heading": 20,
+    "jumping_reach": 15,
+    "kicking": 5,
+    "leadership": 13,
+    "long_shots": 16,
+    "long_throws": 17,
+    "marking": 16,
+    "natural_fitness": 16,
+    "off_the_ball": 20,
+    "one_on_ones": 6,
+    "pace": 19,
+    "passing": 12,
+    "penalty_taking": 14,
+    "positioning": 12,
+    "punching": 4,
+    "reflexes": 3,
+    "rushing_out": 4,
+    "stamina": 12,
+    "strength": 14,
+    "tackling": 16,
+    "teamwork": 14,
+    "technique": 16,
+    "throwing": 3,
+    "vision": 16,
+    "work_rate": 13
+   },
+   "status": {
+    "tokens": [],
+    "moves": []
+   }
+  },
+  {
+   "uid": 1024,
+   "name": "Hugo Ekitiké",
+   "age": 24,
+   "where": "squad",
+   "youth": false,
+   "value": 26481378,
+   "wage": 120656,
+   "contract_end": "2030-06-30",
+   "expiring": false,
+   "positions": {
+    "natural": [
+     "ST"
+    ],
+    "accomplished": [
+     "LW"
+    ],
+    "can_play": [
+     "LW",
+     "ST"
+    ],
+    "groups": [
+     "ST"
+    ]
+   },
+   "best": {
+    "slot": "ST",
+    "stars": 3.6031,
+    "fam": "N"
+   },
+   "system": {
+    "ST": {
+     "stars": 3.6031,
+     "fam": "N"
+    }
+   },
+   "ability": {
+    "ST": 3.4437
+   },
+   "ability_best": 3.4437,
+   "potential": null,
+   "rows": {
+    "10": {
+     "stars": 3.6031,
+     "fam": "N"
+    }
+   },
+   "open_rows": {
+    "1": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "2": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "3": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "4": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "5": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "6": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "7": {
+     "stars": 1.1076,
+     "fam": "C"
+    },
+    "8": {
+     "stars": 1.0625,
+     "fam": "C"
+    },
+    "9": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "10": {
+     "stars": 3.6031,
+     "fam": "N"
+    }
+   },
+   "trend": 0,
+   "stats": {
+    "apps": 13,
+    "g": 3,
+    "a": 1,
+    "avg": 6.74,
+    "cs": 0,
+    "y": 3,
+    "r": 0,
+    "team": 0
+   },
+   "youth_stats": [],
+   "played": {
+    "ST": 13
+   },
+   "attributes": {
+    "acceleration": 18,
+    "aerial_reach": 4,
+    "aggression": 14,
+    "agility": 12,
+    "anticipation": 18,
+    "balance": 13,
+    "bravery": 14,
+    "command_of_area": 5,
+    "communication": 3,
+    "composure": 17,
+    "concentration": 11,
+    "corners": 11,
+    "crossing": 13,
+    "decisions": 13,
+    "determination": 12,
+    "dribbling": 14,
+    "eccentricity": 5,
+    "finishing": 17,
+    "first_touch": 20,
+    "flair": 14,
+    "free_kick_taking": 14,
+    "handling": 4,
+    "heading": 19,
+    "jumping_reach": 14,
+    "kicking": 3,
+    "leadership": 14,
+    "long_shots": 11,
+    "long_throws": 14,
+    "marking": 12,
+    "natural_fitness": 14,
+    "off_the_ball": 18,
+    "one_on_ones": 4,
+    "pace": 18,
+    "passing": 15,
+    "penalty_taking": 12,
+    "positioning": 13,
+    "punching": 3,
+    "reflexes": 6,
+    "rushing_out": 3,
+    "stamina": 14,
+    "strength": 13,
+    "tackling": 12,
+    "teamwork": 14,
+    "technique": 13,
+    "throwing": 4,
+    "vision": 12,
+    "work_rate": 11
+   },
+   "status": {
+    "tokens": [],
+    "moves": []
+   }
+  },
+  {
+   "uid": 1025,
+   "name": "Trey Nyoni",
+   "age": 19,
+   "where": "squad",
+   "youth": true,
+   "value": 18059092,
+   "wage": 86562,
+   "contract_end": "2027-06-30",
+   "expiring": true,
+   "positions": {
+    "natural": [
+     "CM"
+    ],
+    "accomplished": [],
+    "can_play": [
+     "CM"
+    ],
+    "groups": [
+     "CM"
+    ]
+   },
+   "best": {
+    "slot": "CM",
+    "stars": 1.0751,
+    "fam": "N"
+   },
+   "system": {
+    "CM": {
+     "stars": 1.0751,
+     "fam": "N"
+    }
+   },
+   "ability": {
+    "CM": 1.4727
+   },
+   "ability_best": 1.4727,
+   "potential": 3.4031,
+   "rows": {},
+   "open_rows": {
+    "1": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "2": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "3": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "4": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "5": {
+     "stars": 0.5,
+     "fam": "C"
+    },
+    "6": {
+     "stars": 0.5,
+     "fam": "C"
+    },
+    "7": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "8": {
+     "stars": 0.5,
+     "fam": "C"
+    },
+    "9": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "10": {
+     "stars": 0.5,
+     "fam": "X"
+    }
+   },
+   "trend": 0,
+   "stats": null,
+   "youth_stats": [],
+   "played": {},
+   "attributes": {
+    "acceleration": 12,
+    "aerial_reach": 5,
+    "aggression": 11,
+    "agility": 10,
+    "anticipation": 9,
+    "balance": 10,
+    "bravery": 10,
+    "command_of_area": 5,
+    "communication": 5,
+    "composure": 9,
+    "concentration": 12,
+    "corners": 11,
+    "crossing": 10,
+    "decisions": 14,
+    "determination": 8,
+    "dribbling": 8,
+    "eccentricity": 6,
+    "finishing": 9,
+    "first_touch": 16,
+    "flair": 7,
+    "free_kick_taking": 11,
+    "handling": 3,
+    "heading": 10,
+    "jumping_reach": 8,
+    "kicking": 4,
+    "leadership": 9,
+    "long_shots": 12,
+    "long_throws": 12,
+    "marking": 12,
+    "natural_fitness": 8,
+    "off_the_ball": 11,
+    "one_on_ones": 3,
+    "pace": 8,
+    "passing": 15,
+    "penalty_taking": 8,
+    "positioning": 10,
+    "punching": 6,
+    "reflexes": 5,
+    "rushing_out": 2,
+    "stamina": 15,
+    "strength": 10,
+    "tackling": 9,
+    "teamwork": 7,
+    "technique": 13,
+    "throwing": 3,
+    "vision": 16,
+    "work_rate": 16
+   },
+   "status": {
+    "tokens": [
+     "arranged",
+     "expiring"
+    ],
+    "moves": [
+     {
+      "kind": "loan_out_arr",
+      "club": "Sunderland",
+      "date": "2027-01-02"
+     }
+    ]
+   }
+  },
+  {
+   "uid": 1026,
+   "name": "Jayden Danns",
+   "age": 20,
+   "where": "squad",
+   "youth": true,
+   "value": 12244765,
+   "wage": 173393,
+   "contract_end": "2028-06-30",
+   "expiring": false,
+   "positions": {
+    "natural": [
+     "ST"
+    ],
+    "accomplished": [],
+    "can_play": [
+     "ST"
+    ],
+    "groups": [
+     "ST"
+    ]
+   },
+   "best": {
+    "slot": "ST",
+    "stars": 0.5,
+    "fam": "N"
+   },
+   "system": {
+    "ST": {
+     "stars": 0.5,
+     "fam": "N"
+    }
+   },
+   "ability": {
+    "ST": 0.7463
+   },
+   "ability_best": 0.7463,
+   "potential": 2.8407,
+   "rows": {
+    "10": {
+     "stars": 0.5,
+     "fam": "N"
+    }
+   },
+   "open_rows": {
+    "1": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "2": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "3": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "4": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "5": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "6": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "7": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "8": {
+     "stars": 0.5,
+     "fam": "C"
+    },
+    "9": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "10": {
+     "stars": 0.5,
+     "fam": "N"
+    }
+   },
+   "trend": 0,
+   "stats": null,
+   "youth_stats": [],
+   "played": {},
+   "attributes": {
+    "acceleration": 16,
+    "aerial_reach": 4,
+    "aggression": 10,
+    "agility": 7,
+    "anticipation": 14,
+    "balance": 11,
+    "bravery": 10,
+    "command_of_area": 3,
+    "communication": 5,
+    "composure": 15,
+    "concentration": 10,
+    "corners": 7,
+    "crossing": 8,
+    "decisions": 8,
+    "determination": 12,
+    "dribbling": 9,
+    "eccentricity": 6,
+    "finishing": 14,
+    "first_touch": 13,
+    "flair": 9,
+    "free_kick_taking": 11,
+    "handling": 6,
+    "heading": 14,
+    "jumping_reach": 8,
+    "kicking": 3,
+    "leadership": 10,
+    "long_shots": 12,
+    "long_throws": 11,
+    "marking": 9,
+    "natural_fitness": 10,
+    "off_the_ball": 12,
+    "one_on_ones": 6,
+    "pace": 13,
+    "passing": 11,
+    "penalty_taking": 7,
+    "positioning": 9,
+    "punching": 4,
+    "reflexes": 6,
+    "rushing_out": 4,
+    "stamina": 8,
+    "strength": 8,
+    "tackling": 8,
+    "teamwork": 9,
+    "technique": 9,
+    "throwing": 6,
+    "vision": 8,
+    "work_rate": 7
+   },
+   "status": {
+    "tokens": [],
+    "moves": []
+   }
+  },
+  {
+   "uid": 1027,
+   "name": "Amara Nallo",
+   "age": 19,
+   "where": "squad",
+   "youth": true,
+   "value": 14834393,
+   "wage": 165656,
+   "contract_end": "2028-06-30",
+   "expiring": false,
+   "positions": {
+    "natural": [
+     "CB"
+    ],
+    "accomplished": [],
+    "can_play": [
+     "CB"
+    ],
+    "groups": [
+     "CB"
+    ]
+   },
+   "best": {
+    "slot": "CB",
+    "stars": 0.6591,
+    "fam": "N"
+   },
+   "system": {
+    "CB": {
+     "stars": 0.6591,
+     "fam": "N"
+    }
+   },
+   "ability": {
+    "CB": 1.0834
+   },
+   "ability_best": 1.0834,
+   "potential": 2.9762,
+   "rows": {
+    "2": {
+     "stars": 0.6303,
+     "fam": "N"
+    },
+    "3": {
+     "stars": 0.6591,
+     "fam": "N"
+    }
+   },
+   "open_rows": {
+    "1": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "2": {
+     "stars": 0.6303,
+     "fam": "N"
+    },
+    "3": {
+     "stars": 0.6591,
+     "fam": "N"
+    },
+    "4": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "5": {
+     "stars": 0.5,
+     "fam": "C"
+    },
+    "6": {
+     "stars": 0.5,
+     "fam": "C"
+    },
+    "7": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "8": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "9": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "10": {
+     "stars": 0.5,
+     "fam": "X"
+    }
+   },
+   "trend": 0,
+   "stats": null,
+   "youth_stats": [],
+   "played": {},
+   "attributes": {
+    "acceleration": 10,
+    "aerial_reach": 5,
+    "aggression": 12,
+    "agility": 11,
+    "anticipation": 13,
+    "balance": 8,
+    "bravery": 8,
+    "command_of_area": 4,
+    "communication": 4,
+    "composure": 8,
+    "concentration": 7,
+    "corners": 7,
+    "crossing": 7,
+    "decisions": 13,
+    "determination": 8,
+    "dribbling": 8,
+    "eccentricity": 5,
+    "finishing": 10,
+    "first_touch": 7,
+    "flair": 11,
+    "free_kick_taking": 10,
+    "handling": 4,
+    "heading": 16,
+    "jumping_reach": 16,
+    "kicking": 4,
+    "leadership": 9,
+    "long_shots": 11,
+    "long_throws": 8,
+    "marking": 16,
+    "natural_fitness": 11,
+    "off_the_ball": 9,
+    "one_on_ones": 4,
+    "pace": 10,
+    "passing": 11,
+    "penalty_taking": 10,
+    "positioning": 16,
+    "punching": 5,
+    "reflexes": 4,
+    "rushing_out": 3,
+    "stamina": 11,
+    "strength": 12,
+    "tackling": 13,
+    "teamwork": 7,
+    "technique": 10,
+    "throwing": 2,
+    "vision": 8,
+    "work_rate": 9
+   },
+   "status": {
+    "tokens": [],
+    "moves": []
+   }
+  },
+  {
+   "uid": 1028,
+   "name": "Kieran Morrison",
+   "age": 18,
+   "where": "squad",
+   "youth": true,
+   "value": 10022764,
+   "wage": 164632,
+   "contract_end": "2027-06-30",
+   "expiring": true,
+   "positions": {
+    "natural": [
+     "RW"
+    ],
+    "accomplished": [],
+    "can_play": [
+     "RW"
+    ],
+    "groups": [
+     "WIDE"
+    ]
+   },
+   "best": {
+    "slot": "RW",
+    "stars": 0.5,
+    "fam": "N"
+   },
+   "system": {
+    "RW": {
+     "stars": 0.5,
+     "fam": "N"
+    }
+   },
+   "ability": {
+    "RW": 0.5
+   },
+   "ability_best": 0.5,
+   "potential": 3.1911,
+   "rows": {
+    "9": {
+     "stars": 0.5,
+     "fam": "N"
+    }
+   },
+   "open_rows": {
+    "1": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "2": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "3": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "4": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "5": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "6": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "7": {
+     "stars": 0.5,
+     "fam": "C"
+    },
+    "8": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "9": {
+     "stars": 0.5,
+     "fam": "N"
+    },
+    "10": {
+     "stars": 0.5,
+     "fam": "C"
+    }
+   },
+   "trend": 0,
+   "stats": null,
+   "youth_stats": [],
+   "played": {},
+   "attributes": {
+    "acceleration": 14,
+    "aerial_reach": 3,
+    "aggression": 11,
+    "agility": 13,
+    "anticipation": 8,
+    "balance": 8,
+    "bravery": 8,
+    "command_of_area": 2,
+    "communication": 3,
+    "composure": 8,
+    "concentration": 10,
+    "corners": 8,
+    "crossing": 12,
+    "decisions": 10,
+    "determination": 9,
+    "dribbling": 11,
+    "eccentricity": 2,
+    "finishing": 8,
+    "first_touch": 10,
+    "flair": 15,
+    "free_kick_taking": 10,
+    "handling": 2,
+    "heading": 10,
+    "jumping_reach": 8,
+    "kicking": 5,
+    "leadership": 10,
+    "long_shots": 9,
+    "long_throws": 8,
+    "marking": 6,
+    "natural_fitness": 9,
+    "off_the_ball": 12,
+    "one_on_ones": 5,
+    "pace": 14,
+    "passing": 7,
+    "penalty_taking": 7,
+    "positioning": 10,
+    "punching": 2,
+    "reflexes": 3,
+    "rushing_out": 3,
+    "stamina": 11,
+    "strength": 9,
+    "tackling": 10,
+    "teamwork": 8,
+    "technique": 14,
+    "throwing": 3,
+    "vision": 10,
+    "work_rate": 7
+   },
+   "status": {
+    "tokens": [
+     "expiring"
+    ],
+    "moves": []
+   }
+  },
+  {
+   "uid": 1029,
+   "name": "Ranel Young",
+   "age": 17,
+   "where": "squad",
+   "youth": true,
+   "value": 6195605,
+   "wage": 102439,
+   "contract_end": "2029-06-30",
+   "expiring": false,
+   "positions": {
+    "natural": [
+     "AM"
+    ],
+    "accomplished": [],
+    "can_play": [
+     "AM"
+    ],
+    "groups": [
+     "AM"
+    ]
+   },
+   "best": {
+    "slot": "AM",
+    "stars": 0.5,
+    "fam": "N"
+   },
+   "system": {
+    "AM": {
+     "stars": 0.5,
+     "fam": "N"
+    }
+   },
+   "ability": {
+    "AM": 0.8696
+   },
+   "ability_best": 0.8696,
+   "potential": 3.4539,
+   "rows": {
+    "8": {
+     "stars": 0.5,
+     "fam": "N"
+    }
+   },
+   "open_rows": {
+    "1": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "2": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "3": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "4": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "5": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "6": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "7": {
+     "stars": 0.5,
+     "fam": "C"
+    },
+    "8": {
+     "stars": 0.5,
+     "fam": "N"
+    },
+    "9": {
+     "stars": 0.5,
+     "fam": "C"
+    },
+    "10": {
+     "stars": 0.5,
+     "fam": "X"
+    }
+   },
+   "trend": 0,
+   "stats": null,
+   "youth_stats": [],
+   "played": {},
+   "attributes": {
+    "acceleration": 6,
+    "aerial_reach": 5,
+    "aggression": 8,
+    "agility": 10,
+    "anticipation": 11,
+    "balance": 8,
+    "bravery": 10,
+    "command_of_area": 4,
+    "communication": 4,
+    "composure": 8,
+    "concentration": 7,
+    "corners": 7,
+    "crossing": 10,
+    "decisions": 14,
+    "determination": 10,
+    "dribbling": 13,
+    "eccentricity": 3,
+    "finishing": 6,
+    "first_touch": 11,
+    "flair": 10,
+    "free_kick_taking": 8,
+    "handling": 5,
+    "heading": 7,
+    "jumping_reach": 8,
+    "kicking": 3,
+    "leadership": 6,
+    "long_shots": 6,
+    "long_throws": 9,
+    "marking": 9,
+    "natural_fitness": 6,
+    "off_the_ball": 12,
+    "one_on_ones": 3,
+    "pace": 10,
+    "passing": 14,
+    "penalty_taking": 10,
+    "positioning": 7,
+    "punching": 5,
+    "reflexes": 3,
+    "rushing_out": 2,
+    "stamina": 8,
+    "strength": 9,
+    "tackling": 10,
+    "teamwork": 6,
+    "technique": 13,
+    "throwing": 2,
+    "vision": 15,
+    "work_rate": 9
+   },
+   "status": {
+    "tokens": [],
+    "moves": []
+   }
+  },
+  {
+   "uid": 1030,
+   "name": "Josh Davidson",
+   "age": 17,
+   "where": "squad",
+   "youth": true,
+   "value": 4017575,
+   "wage": 78265,
+   "contract_end": "2029-06-30",
+   "expiring": false,
+   "positions": {
+    "natural": [
+     "LB"
+    ],
+    "accomplished": [],
+    "can_play": [
+     "LB"
+    ],
+    "groups": [
+     "FB/WB"
+    ]
+   },
+   "best": {
+    "slot": "LB",
+    "stars": 0.5,
+    "fam": "N"
+   },
+   "system": {
+    "LB": {
+     "stars": 0.5,
+     "fam": "N"
+    }
+   },
+   "ability": {
+    "LB": 0.5
+   },
+   "ability_best": 0.5,
+   "potential": 3.0159,
+   "rows": {
+    "1": {
+     "stars": 0.5,
+     "fam": "N"
+    }
+   },
+   "open_rows": {
+    "1": {
+     "stars": 0.5,
+     "fam": "N"
+    },
+    "2": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "3": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "4": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "5": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "6": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "7": {
+     "stars": 0.5,
+     "fam": "C"
+    },
+    "8": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "9": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "10": {
+     "stars": 0.5,
+     "fam": "X"
+    }
+   },
+   "trend": 0,
+   "stats": null,
+   "youth_stats": [],
+   "played": {},
+   "attributes": {
+    "acceleration": 15,
+    "aerial_reach": 5,
+    "aggression": 6,
+    "agility": 8,
+    "anticipation": 9,
+    "balance": 7,
+    "bravery": 9,
+    "command_of_area": 3,
+    "communication": 3,
+    "composure": 8,
+    "concentration": 10,
+    "corners": 7,
+    "crossing": 10,
+    "decisions": 9,
+    "determination": 7,
+    "dribbling": 7,
+    "eccentricity": 4,
+    "finishing": 8,
+    "first_touch": 9,
+    "flair": 9,
+    "free_kick_taking": 6,
+    "handling": 4,
+    "heading": 7,
+    "jumping_reach": 6,
+    "kicking": 5,
+    "leadership": 10,
+    "long_shots": 6,
+    "long_throws": 6,
+    "marking": 13,
+    "natural_fitness": 8,
+    "off_the_ball": 9,
+    "one_on_ones": 6,
+    "pace": 13,
+    "passing": 6,
+    "penalty_taking": 8,
+    "positioning": 7,
+    "punching": 5,
+    "reflexes": 3,
+    "rushing_out": 5,
+    "stamina": 13,
+    "strength": 6,
+    "tackling": 11,
+    "teamwork": 10,
+    "technique": 10,
+    "throwing": 5,
+    "vision": 9,
+    "work_rate": 11
+   },
+   "status": {
+    "tokens": [],
+    "moves": []
+   }
+  },
+  {
+   "uid": 1031,
+   "name": "Hákon Valdimarsson",
+   "age": 25,
+   "where": "squad",
+   "youth": false,
+   "value": 17938351,
+   "wage": 167414,
+   "contract_end": "2029-06-30",
+   "expiring": false,
+   "positions": {
+    "natural": [
+     "GK"
+    ],
+    "accomplished": [],
+    "can_play": [
+     "GK"
+    ],
+    "groups": [
+     "GK"
+    ]
+   },
+   "best": {
+    "slot": "GK",
+    "stars": 0.5303,
+    "fam": "N"
+   },
+   "system": {
+    "GK": {
+     "stars": 0.5303,
+     "fam": "N"
+    }
+   },
+   "ability": {
+    "GK": 1.0096
+   },
+   "ability_best": 1.0096,
+   "potential": null,
+   "rows": {
+    "0": {
+     "stars": 0.5303,
+     "fam": "N"
+    }
+   },
+   "open_rows": {
+    "0": {
+     "stars": 0.5303,
+     "fam": "N"
+    }
+   },
+   "trend": 0,
+   "stats": null,
+   "youth_stats": [],
+   "played": {},
+   "attributes": {
+    "acceleration": 9,
+    "aerial_reach": 13,
+    "aggression": 11,
+    "agility": 10,
+    "anticipation": 11,
+    "balance": 12,
+    "bravery": 10,
+    "command_of_area": 16,
+    "communication": 13,
+    "composure": 8,
+    "concentration": 15,
+    "corners": 11,
+    "crossing": 4,
+    "decisions": 13,
+    "determination": 8,
+    "dribbling": 6,
+    "eccentricity": 13,
+    "finishing": 3,
+    "first_touch": 11,
+    "flair": 7,
+    "free_kick_taking": 9,
+    "handling": 17,
+    "heading": 2,
+    "jumping_reach": 12,
+    "kicking": 15,
+    "leadership": 10,
+    "long_shots": 3,
+    "long_throws": 10,
+    "marking": 6,
+    "natural_fitness": 11,
+    "off_the_ball": 9,
+    "one_on_ones": 12,
+    "pace": 9,
+    "passing": 11,
+    "penalty_taking": 9,
+    "positioning": 14,
+    "punching": 15,
+    "reflexes": 13,
+    "rushing_out": 16,
+    "stamina": 10,
+    "strength": 10,
+    "tackling": 5,
+    "teamwork": 12,
+    "technique": 11,
+    "throwing": 15,
+    "vision": 9,
+    "work_rate": 8
+   },
+   "status": {
+    "tokens": [
+     "loan"
+    ],
+    "moves": [
+     {
+      "kind": "loan_in",
+      "club": "Brentford",
+      "date": "2027-06-30"
+     }
+    ]
+   }
+  },
+  {
+   "uid": 1032,
+   "name": "Harvey Elliott",
+   "age": 23,
+   "where": "loan_out",
+   "youth": false,
+   "value": 12467461,
+   "wage": 119681,
+   "contract_end": "2027-06-30",
+   "expiring": false,
+   "positions": {
+    "natural": [
+     "AM",
+     "RW"
+    ],
+    "accomplished": [],
+    "can_play": [
+     "AM",
+     "RW"
+    ],
+    "groups": [
+     "AM",
+     "WIDE"
+    ]
+   },
+   "best": {
+    "slot": "RW",
+    "stars": 2.9491,
+    "fam": "N"
+   },
+   "system": {
+    "AM": {
+     "stars": 2.8146,
+     "fam": "N"
+    },
+    "RW": {
+     "stars": 2.9491,
+     "fam": "N"
+    }
+   },
+   "ability": {
+    "AM": 3.0,
+    "RW": 2.9338
+   },
+   "ability_best": 2.9338,
+   "potential": null,
+   "rows": {
+    "8": {
+     "stars": 2.8146,
+     "fam": "N"
+    },
+    "9": {
+     "stars": 2.9491,
+     "fam": "N"
+    }
+   },
+   "open_rows": {
+    "1": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "2": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "3": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "4": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "5": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "6": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "7": {
+     "stars": 0.5,
+     "fam": "C"
+    },
+    "8": {
+     "stars": 2.8146,
+     "fam": "N"
+    },
+    "9": {
+     "stars": 2.9491,
+     "fam": "N"
+    },
+    "10": {
+     "stars": 0.5,
+     "fam": "C"
+    }
+   },
+   "trend": 0,
+   "stats": null,
+   "youth_stats": [],
+   "played": {},
+   "attributes": {
+    "acceleration": 15,
+    "aerial_reach": 4,
+    "aggression": 14,
+    "agility": 18,
+    "anticipation": 12,
+    "balance": 12,
+    "bravery": 14,
+    "command_of_area": 4,
+    "communication": 3,
+    "composure": 11,
+    "concentration": 11,
+    "corners": 15,
+    "crossing": 19,
+    "decisions": 15,
+    "determination": 11,
+    "dribbling": 19,
+    "eccentricity": 4,
+    "finishing": 10,
+    "first_touch": 19,
+    "flair": 15,
+    "free_kick_taking": 13,
+    "handling": 3,
+    "heading": 11,
+    "jumping_reach": 10,
+    "kicking": 6,
+    "leadership": 10,
+    "long_shots": 12,
+    "long_throws": 13,
+    "marking": 13,
+    "natural_fitness": 14,
+    "off_the_ball": 19,
+    "one_on_ones": 6,
+    "pace": 18,
+    "passing": 16,
+    "penalty_taking": 14,
+    "positioning": 10,
+    "punching": 4,
+    "reflexes": 2,
+    "rushing_out": 4,
+    "stamina": 11,
+    "strength": 14,
+    "tackling": 10,
+    "teamwork": 14,
+    "technique": 17,
+    "throwing": 4,
+    "vision": 16,
+    "work_rate": 13
+   },
+   "status": {
+    "tokens": [
+     "loan"
+    ],
+    "moves": [
+     {
+      "kind": "loan_out",
+      "club": "Aston Villa",
+      "date": "2027-06-30"
+     }
+    ]
+   }
+  },
+  {
+   "uid": 1033,
+   "name": "Tyler Morton",
+   "age": 23,
+   "where": "loan_out",
+   "youth": false,
+   "value": 12848491,
+   "wage": 154333,
+   "contract_end": "2027-06-30",
+   "expiring": false,
+   "positions": {
+    "natural": [
+     "DM"
+    ],
+    "accomplished": [],
+    "can_play": [
+     "DM"
+    ],
+    "groups": [
+     "DM"
+    ]
+   },
+   "best": {
+    "slot": "DM",
+    "stars": 1.1252,
+    "fam": "N"
+   },
+   "system": {
+    "DM": {
+     "stars": 1.1252,
+     "fam": "N"
+    }
+   },
+   "ability": {
+    "DM": 1.4551
+   },
+   "ability_best": 1.4551,
+   "potential": null,
+   "rows": {
+    "5": {
+     "stars": 1.1252,
+     "fam": "N"
+    },
+    "6": {
+     "stars": 1.1252,
+     "fam": "N"
+    }
+   },
+   "open_rows": {
+    "1": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "2": {
+     "stars": 0.5,
+     "fam": "C"
+    },
+    "3": {
+     "stars": 0.5,
+     "fam": "C"
+    },
+    "4": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "5": {
+     "stars": 1.1252,
+     "fam": "N"
+    },
+    "6": {
+     "stars": 1.1252,
+     "fam": "N"
+    },
+    "7": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "8": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "9": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "10": {
+     "stars": 0.5,
+     "fam": "X"
+    }
+   },
+   "trend": 0,
+   "stats": null,
+   "youth_stats": [],
+   "played": {},
+   "attributes": {
+    "acceleration": 11,
+    "aerial_reach": 5,
+    "aggression": 12,
+    "agility": 9,
+    "anticipation": 15,
+    "balance": 10,
+    "bravery": 11,
+    "command_of_area": 5,
+    "communication": 3,
+    "composure": 13,
+    "concentration": 9,
+    "corners": 10,
+    "crossing": 9,
+    "decisions": 16,
+    "determination": 9,
+    "dribbling": 10,
+    "eccentricity": 2,
+    "finishing": 11,
+    "first_touch": 9,
+    "flair": 10,
+    "free_kick_taking": 11,
+    "handling": 2,
+    "heading": 10,
+    "jumping_reach": 10,
+    "kicking": 5,
+    "leadership": 13,
+    "long_shots": 12,
+    "long_throws": 13,
+    "marking": 10,
+    "natural_fitness": 10,
+    "off_the_ball": 10,
+    "one_on_ones": 4,
+    "pace": 10,
+    "passing": 14,
+    "penalty_taking": 11,
+    "positioning": 17,
+    "punching": 3,
+    "reflexes": 3,
+    "rushing_out": 3,
+    "stamina": 17,
+    "strength": 10,
+    "tackling": 16,
+    "teamwork": 17,
+    "technique": 11,
+    "throwing": 5,
+    "vision": 12,
+    "work_rate": 17
+   },
+   "status": {
+    "tokens": [
+     "loan"
+    ],
+    "moves": [
+     {
+      "kind": "loan_out",
+      "club": "Everton",
+      "date": "2027-06-30"
+     }
+    ]
+   }
+  },
+  {
+   "uid": 1034,
+   "name": "Ben Doak",
+   "age": 21,
+   "where": "loan_out",
+   "youth": false,
+   "value": 21666435,
+   "wage": 181095,
+   "contract_end": "2030-06-30",
+   "expiring": false,
+   "positions": {
+    "natural": [
+     "RW"
+    ],
+    "accomplished": [],
+    "can_play": [
+     "RW"
+    ],
+    "groups": [
+     "WIDE"
+    ]
+   },
+   "best": {
+    "slot": "RW",
+    "stars": 0.6564,
+    "fam": "N"
+   },
+   "system": {
+    "RW": {
+     "stars": 0.6564,
+     "fam": "N"
+    }
+   },
+   "ability": {
+    "RW": 1.1903
+   },
+   "ability_best": 1.1903,
+   "potential": 3.5168,
+   "rows": {
+    "9": {
+     "stars": 0.6564,
+     "fam": "N"
+    }
+   },
+   "open_rows": {
+    "1": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "2": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "3": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "4": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "5": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "6": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "7": {
+     "stars": 0.5,
+     "fam": "C"
+    },
+    "8": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "9": {
+     "stars": 0.6564,
+     "fam": "N"
+    },
+    "10": {
+     "stars": 0.5,
+     "fam": "C"
+    }
+   },
+   "trend": 0,
+   "stats": null,
+   "youth_stats": [],
+   "played": {},
+   "attributes": {
+    "acceleration": 17,
+    "aerial_reach": 5,
+    "aggression": 12,
+    "agility": 18,
+    "anticipation": 10,
+    "balance": 9,
+    "bravery": 9,
+    "command_of_area": 6,
+    "communication": 5,
+    "composure": 9,
+    "concentration": 13,
+    "corners": 11,
+    "crossing": 17,
+    "decisions": 13,
+    "determination": 9,
+    "dribbling": 17,
+    "eccentricity": 6,
+    "finishing": 9,
+    "first_touch": 9,
+    "flair": 17,
+    "free_kick_taking": 12,
+    "handling": 4,
+    "heading": 9,
+    "jumping_reach": 9,
+    "kicking": 4,
+    "leadership": 12,
+    "long_shots": 12,
+    "long_throws": 9,
+    "marking": 9,
+    "natural_fitness": 9,
+    "off_the_ball": 14,
+    "one_on_ones": 5,
+    "pace": 17,
+    "passing": 11,
+    "penalty_taking": 9,
+    "positioning": 9,
+    "punching": 3,
+    "reflexes": 5,
+    "rushing_out": 3,
+    "stamina": 12,
+    "strength": 11,
+    "tackling": 12,
+    "teamwork": 12,
+    "technique": 14,
+    "throwing": 2,
+    "vision": 11,
+    "work_rate": 10
+   },
+   "status": {
+    "tokens": [
+     "loan"
+    ],
+    "moves": [
+     {
+      "kind": "loan_out",
+      "club": "Bournemouth",
+      "date": "2027-06-30"
+     }
+    ]
+   }
+  },
+  {
+   "uid": 1091,
+   "name": "Malo Gusto",
+   "age": 23,
+   "where": "incoming",
+   "youth": false,
+   "value": 27346353,
+   "wage": 123971,
+   "contract_end": "2028-06-30",
+   "expiring": false,
+   "positions": {
+    "natural": [
+     "RB"
+    ],
+    "accomplished": [],
+    "can_play": [
+     "RB"
+    ],
+    "groups": [
+     "FB/WB"
+    ]
+   },
+   "best": {
+    "slot": "RB",
+    "stars": 1.3332,
+    "fam": "N"
+   },
+   "system": {
+    "RB": {
+     "stars": 1.3332,
+     "fam": "N"
+    }
+   },
+   "ability": {
+    "RB": 1.4739
+   },
+   "ability_best": 1.4739,
+   "potential": null,
+   "rows": {
+    "4": {
+     "stars": 1.3332,
+     "fam": "N"
+    }
+   },
+   "open_rows": {
+    "1": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "2": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "3": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "4": {
+     "stars": 1.3332,
+     "fam": "N"
+    },
+    "5": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "6": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "7": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "8": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "9": {
+     "stars": 0.5,
+     "fam": "C"
+    },
+    "10": {
+     "stars": 0.5,
+     "fam": "X"
+    }
+   },
+   "trend": 0,
+   "stats": null,
+   "youth_stats": [],
+   "played": {},
+   "attributes": {
+    "acceleration": 17,
+    "aerial_reach": 6,
+    "aggression": 12,
+    "agility": 14,
+    "anticipation": 10,
+    "balance": 11,
+    "bravery": 13,
+    "command_of_area": 5,
+    "communication": 5,
+    "composure": 14,
+    "concentration": 13,
+    "corners": 13,
+    "crossing": 18,
+    "decisions": 14,
+    "determination": 13,
+    "dribbling": 12,
+    "eccentricity": 5,
+    "finishing": 14,
+    "first_touch": 14,
+    "flair": 13,
+    "free_kick_taking": 11,
+    "handling": 3,
+    "heading": 11,
+    "jumping_reach": 13,
+    "kicking": 2,
+    "leadership": 11,
+    "long_shots": 13,
+    "long_throws": 14,
+    "marking": 15,
+    "natural_fitness": 14,
+    "off_the_ball": 10,
+    "one_on_ones": 4,
+    "pace": 16,
+    "passing": 10,
+    "penalty_taking": 12,
+    "positioning": 10,
+    "punching": 3,
+    "reflexes": 5,
+    "rushing_out": 4,
+    "stamina": 18,
+    "strength": 12,
+    "tackling": 18,
+    "teamwork": 14,
+    "technique": 11,
+    "throwing": 2,
+    "vision": 13,
+    "work_rate": 19
+   },
+   "status": {
+    "tokens": [
+     "arranged"
+    ],
+    "moves": [
+     {
+      "kind": "deal_in",
+      "club": "Chelsea",
+      "date": "2027-01-02"
+     }
+    ]
+   }
+  },
+  {
+   "uid": 1111,
+   "name": "Sven Botman",
+   "age": 28,
+   "where": "incoming",
+   "youth": false,
+   "value": 14001997,
+   "wage": 173982,
+   "contract_end": "2027-06-30",
+   "expiring": false,
+   "positions": {
+    "natural": [
+     "CB"
+    ],
+    "accomplished": [],
+    "can_play": [
+     "CB"
+    ],
+    "groups": [
+     "CB"
+    ]
+   },
+   "best": {
+    "slot": "CB",
+    "stars": 0.9307,
+    "fam": "N"
+   },
+   "system": {
+    "CB": {
+     "stars": 0.9307,
+     "fam": "N"
+    }
+   },
+   "ability": {
+    "CB": 1.4119
+   },
+   "ability_best": 1.4119,
+   "potential": null,
+   "rows": {
+    "2": {
+     "stars": 0.8996,
+     "fam": "N"
+    },
+    "3": {
+     "stars": 0.9307,
+     "fam": "N"
+    }
+   },
+   "open_rows": {
+    "1": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "2": {
+     "stars": 0.8996,
+     "fam": "N"
+    },
+    "3": {
+     "stars": 0.9307,
+     "fam": "N"
+    },
+    "4": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "5": {
+     "stars": 0.5,
+     "fam": "C"
+    },
+    "6": {
+     "stars": 0.5,
+     "fam": "C"
+    },
+    "7": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "8": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "9": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "10": {
+     "stars": 0.5,
+     "fam": "X"
+    }
+   },
+   "trend": 0,
+   "stats": null,
+   "youth_stats": [],
+   "played": {},
+   "attributes": {
+    "acceleration": 11,
+    "aerial_reach": 4,
+    "aggression": 10,
+    "agility": 9,
+    "anticipation": 13,
+    "balance": 9,
+    "bravery": 11,
+    "command_of_area": 3,
+    "communication": 4,
+    "composure": 12,
+    "concentration": 11,
+    "corners": 13,
+    "crossing": 9,
+    "decisions": 14,
+    "determination": 11,
+    "dribbling": 9,
+    "eccentricity": 4,
+    "finishing": 13,
+    "first_touch": 13,
+    "flair": 11,
+    "free_kick_taking": 13,
+    "handling": 6,
+    "heading": 13,
+    "jumping_reach": 17,
+    "kicking": 4,
+    "leadership": 9,
+    "long_shots": 10,
+    "long_throws": 11,
+    "marking": 16,
+    "natural_fitness": 10,
+    "off_the_ball": 10,
+    "one_on_ones": 3,
+    "pace": 11,
+    "passing": 10,
+    "penalty_taking": 10,
+    "positioning": 15,
+    "punching": 5,
+    "reflexes": 5,
+    "rushing_out": 6,
+    "stamina": 9,
+    "strength": 15,
+    "tackling": 13,
+    "teamwork": 9,
+    "technique": 12,
+    "throwing": 3,
+    "vision": 11,
+    "work_rate": 9
+   },
+   "status": {
+    "tokens": [
+     "arranged"
+    ],
+    "moves": [
+     {
+      "kind": "loan_in_arr",
+      "club": "Newcastle",
+      "date": "2027-01-02"
+     }
+    ]
+   }
+  }
+ ],
+ "targets": [],
+ "xi1": [
+  {
+   "slot": "GK",
+   "uid": 1001
+  },
+  {
+   "slot": "LB",
+   "uid": 1004
+  },
+  {
+   "slot": "CB",
+   "uid": 1006
+  },
+  {
+   "slot": "CB",
+   "uid": 1007
+  },
+  {
+   "slot": "RB",
+   "uid": 1010
+  },
+  {
+   "slot": "DM",
+   "uid": 1015
+  },
+  {
+   "slot": "DM",
+   "uid": 1013
+  },
+  {
+   "slot": "LW",
+   "uid": 1020
+  },
+  {
+   "slot": "AM",
+   "uid": 1014
+  },
+  {
+   "slot": "RW",
+   "uid": 1021
+  },
+  {
+   "slot": "ST",
+   "uid": 1023
+  }
+ ],
+ "xi2": [
+  {
+   "slot": "GK",
+   "uid": 1002
+  },
+  {
+   "slot": "LB",
+   "uid": 1005
+  },
+  {
+   "slot": "CB",
+   "uid": 1009
+  },
+  {
+   "slot": "CB",
+   "uid": 1008
+  },
+  {
+   "slot": "RB",
+   "uid": 1011
+  },
+  {
+   "slot": "DM",
+   "uid": 1016
+  },
+  {
+   "slot": "DM",
+   "uid": null
+  },
+  {
+   "slot": "LW",
+   "uid": 1019
+  },
+  {
+   "slot": "AM",
+   "uid": 1018
+  },
+  {
+   "slot": "RW",
+   "uid": 1022
+  },
+  {
+   "slot": "ST",
+   "uid": 1024
+  }
+ ],
+ "xi_level": 4.0175,
+ "verdicts": [
+  {
+   "slot": "LB",
+   "level": "red",
+   "title": "Needs a better starter",
+   "text": "Best LB is 3★, 1.0★ under your XI level.",
+   "gap": 1.0202
+  },
+  {
+   "slot": "CB",
+   "level": "red",
+   "title": "Needs a better starter",
+   "text": "van Dijk (5★) is carrying it — your next best CB is 3★, 1.0★ under your XI level. He's also 35.",
+   "gap": 1.0175
+  },
+  {
+   "slot": "RB",
+   "level": "red",
+   "title": "Needs a better starter",
+   "text": "Best RB is 3★, 1.0★ under your XI level.",
+   "gap": 1.0166
+  },
+  {
+   "slot": "LW",
+   "level": "amber",
+   "title": "Needs more depth",
+   "text": "Backup is Ngumoha (0.5★, 18), 3.4★ under your XI level.",
+   "gap": 0.8418
+  },
+  {
+   "slot": "GK",
+   "level": "amber",
+   "title": "Ageing starter",
+   "text": "Becker (4.5★) is 34. Next best is Mamardashvili on 3★ — a 1.5★ drop when he goes.",
+   "gap": 0.8351
+  },
+  {
+   "slot": "RW",
+   "level": "amber",
+   "title": "Needs more depth",
+   "text": "Backup is Chiesa (1.5★, 29), 2.7★ under your XI level.",
+   "gap": 0.7734
+  },
+  {
+   "slot": "DM",
+   "level": "amber",
+   "title": "Needs more depth",
+   "text": "No backup left. Everyone who can play DM is already in your first or second XI.",
+   "gap": 0.6
+  },
+  {
+   "slot": "AM",
+   "level": "green",
+   "title": "Sorted",
+   "text": "Szoboszlai 4★, with Wirtz 4★ as cover.",
+   "gap": 0
+  },
+  {
+   "slot": "ST",
+   "level": "green",
+   "title": "Sorted",
+   "text": "Isak 5★, with Ekitiké 3.5★ as cover.",
+   "gap": 0
+  },
+  {
+   "slot": "CM",
+   "level": "grey",
+   "title": "Not in your tactic",
+   "text": "Shown for cover only.",
+   "gap": 0
+  }
+ ],
+ "fit": {
+  "rows": [
+   {
+    "label": "GK",
+    "slot": "GK",
+    "ip_role": "BGK",
+    "oop_role": "SK",
+    "entries": [
+     {
+      "uid": 1001,
+      "xi": true,
+      "fit": 15.6833,
+      "ip": 16.0,
+      "oop": 17.25,
+      "style": 13.7778,
+      "suit": -0.5019,
+      "weak": [],
+      "style_weak": []
+     },
+     {
+      "uid": 1002,
+      "xi": false,
+      "fit": 14.4692,
+      "ip": 14.875,
+      "oop": 16.625,
+      "style": 11.8889,
+      "suit": -0.5308,
+      "weak": [],
+      "style_weak": [
+       {
+        "value": 10,
+        "attribute": "work_rate"
+       }
+      ]
+     },
+     {
+      "uid": 1031,
+      "xi": false,
+      "fit": 11.5067,
+      "ip": 11.5,
+      "oop": 13.25,
+      "style": 9.8889,
+      "suit": -0.4563,
+      "weak": [
+       {
+        "value": 8,
+        "attribute": "composure"
+       },
+       {
+        "value": 9,
+        "attribute": "acceleration"
+       },
+       {
+        "value": 9,
+        "attribute": "vision"
+       }
+      ],
+      "style_weak": [
+       {
+        "value": 8,
+        "attribute": "determination"
+       },
+       {
+        "value": 8,
+        "attribute": "work_rate"
+       },
+       {
+        "value": 9,
+        "attribute": "acceleration"
+       },
+       {
+        "value": 9,
+        "attribute": "pace"
+       },
+       {
+        "value": 10,
+        "attribute": "stamina"
+       }
+      ]
+     },
+     {
+      "uid": 1003,
+      "xi": false,
+      "fit": 10.9217,
+      "ip": 11.5,
+      "oop": 11.875,
+      "style": 9.2222,
+      "suit": -0.4117,
+      "weak": [
+       {
+        "value": 8,
+        "attribute": "anticipation"
+       },
+       {
+        "value": 8,
+        "attribute": "first_touch"
+       },
+       {
+        "value": 8,
+        "attribute": "passing"
+       },
+       {
+        "value": 9,
+        "attribute": "acceleration"
+       },
+       {
+        "value": 10,
+        "attribute": "vision"
+       }
+      ],
+      "style_weak": [
+       {
+        "value": 7,
+        "attribute": "natural_fitness"
+       },
+       {
+        "value": 8,
+        "attribute": "anticipation"
+       },
+       {
+        "value": 8,
+        "attribute": "work_rate"
+       },
+       {
+        "value": 9,
+        "attribute": "acceleration"
+       },
+       {
+        "value": 9,
+        "attribute": "aggression"
+       },
+       {
+        "value": 10,
+        "attribute": "stamina"
+       },
+       {
+        "value": 10,
+        "attribute": "teamwork"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "label": "LB",
+    "slot": "LB",
+    "ip_role": "FB",
+    "oop_role": "FB",
+    "entries": [
+     {
+      "uid": 1004,
+      "xi": true,
+      "fit": 14.8217,
+      "ip": 15.75,
+      "oop": 13.8333,
+      "style": 14.4444,
+      "suit": 1.3044,
+      "weak": [],
+      "style_weak": []
+     },
+     {
+      "uid": 1005,
+      "xi": false,
+      "fit": 14.1042,
+      "ip": 14.375,
+      "oop": 13.3333,
+      "style": 14.4444,
+      "suit": 1.518,
+      "weak": [
+       {
+        "value": 9,
+        "attribute": "positioning"
+       },
+       {
+        "value": 10,
+        "attribute": "teamwork"
+       }
+      ],
+      "style_weak": [
+       {
+        "value": 10,
+        "attribute": "teamwork"
+       }
+      ]
+     },
+     {
+      "uid": 1008,
+      "xi": false,
+      "fit": 13.8633,
+      "ip": 13.5,
+      "oop": 16.1667,
+      "style": 12.2222,
+      "suit": 0.7599,
+      "weak": [],
+      "style_weak": [
+       {
+        "value": 10,
+        "attribute": "natural_fitness"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "label": "LCB",
+    "slot": "CB",
+    "ip_role": "CB",
+    "oop_role": "CB",
+    "entries": [
+     {
+      "uid": 1006,
+      "xi": true,
+      "fit": 17.7333,
+      "ip": 18.8571,
+      "oop": 18.8571,
+      "style": 15.1111,
+      "suit": 1.5061,
+      "weak": [],
+      "style_weak": []
+     },
+     {
+      "uid": 1007,
+      "xi": true,
+      "fit": 15.6333,
+      "ip": 16.8571,
+      "oop": 16.8571,
+      "style": 12.7778,
+      "suit": 1.6333,
+      "weak": [],
+      "style_weak": []
+     },
+     {
+      "uid": 1008,
+      "xi": false,
+      "fit": 15.5667,
+      "ip": 17.0,
+      "oop": 17.0,
+      "style": 12.2222,
+      "suit": 2.0667,
+      "weak": [],
+      "style_weak": [
+       {
+        "value": 10,
+        "attribute": "natural_fitness"
+       }
+      ]
+     },
+     {
+      "uid": 1009,
+      "xi": false,
+      "fit": 15.3333,
+      "ip": 16.7143,
+      "oop": 16.7143,
+      "style": 12.1111,
+      "suit": 2.2424,
+      "weak": [],
+      "style_weak": [
+       {
+        "value": 9,
+        "attribute": "acceleration"
+       },
+       {
+        "value": 10,
+        "attribute": "natural_fitness"
+       }
+      ]
+     },
+     {
+      "uid": 1010,
+      "xi": false,
+      "fit": 14.5,
+      "ip": 14.2857,
+      "oop": 14.2857,
+      "style": 15.0,
+      "suit": 0.5,
+      "weak": [],
+      "style_weak": []
+     },
+     {
+      "uid": 1111,
+      "xi": false,
+      "fit": 13.3,
+      "ip": 14.5714,
+      "oop": 14.5714,
+      "style": 10.3333,
+      "suit": 1.3909,
+      "weak": [],
+      "style_weak": [
+       {
+        "value": 9,
+        "attribute": "stamina"
+       },
+       {
+        "value": 9,
+        "attribute": "teamwork"
+       },
+       {
+        "value": 9,
+        "attribute": "work_rate"
+       },
+       {
+        "value": 10,
+        "attribute": "aggression"
+       },
+       {
+        "value": 10,
+        "attribute": "natural_fitness"
+       }
+      ]
+     },
+     {
+      "uid": 1016,
+      "xi": false,
+      "fit": 13.1667,
+      "ip": 13.1429,
+      "oop": 13.1429,
+      "style": 13.2222,
+      "suit": 0.5758,
+      "weak": [
+       {
+        "value": 10,
+        "attribute": "jumping_reach"
+       },
+       {
+        "value": 10,
+        "attribute": "strength"
+       }
+      ],
+      "style_weak": [
+       {
+        "value": 10,
+        "attribute": "acceleration"
+       },
+       {
+        "value": 10,
+        "attribute": "determination"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "label": "RCB",
+    "slot": "CB",
+    "ip_role": "BCB",
+    "oop_role": "CB",
+    "entries": [
+     {
+      "uid": 1006,
+      "xi": true,
+      "fit": 17.2333,
+      "ip": 17.6667,
+      "oop": 18.8571,
+      "style": 15.1111,
+      "suit": 1.0061,
+      "weak": [],
+      "style_weak": []
+     },
+     {
+      "uid": 1007,
+      "xi": true,
+      "fit": 15.32,
+      "ip": 16.1111,
+      "oop": 16.8571,
+      "style": 12.7778,
+      "suit": 1.32,
+      "weak": [],
+      "style_weak": []
+     },
+     {
+      "uid": 1008,
+      "xi": false,
+      "fit": 15.1933,
+      "ip": 16.1111,
+      "oop": 17.0,
+      "style": 12.2222,
+      "suit": 1.6933,
+      "weak": [],
+      "style_weak": [
+       {
+        "value": 10,
+        "attribute": "natural_fitness"
+       }
+      ]
+     },
+     {
+      "uid": 1009,
+      "xi": false,
+      "fit": 14.7067,
+      "ip": 15.2222,
+      "oop": 16.7143,
+      "style": 12.1111,
+      "suit": 1.6158,
+      "weak": [
+       {
+        "value": 10,
+        "attribute": "composure"
+       },
+       {
+        "value": 10,
+        "attribute": "passing"
+       }
+      ],
+      "style_weak": [
+       {
+        "value": 9,
+        "attribute": "acceleration"
+       },
+       {
+        "value": 10,
+        "attribute": "natural_fitness"
+       }
+      ]
+     },
+     {
+      "uid": 1010,
+      "xi": false,
+      "fit": 14.5667,
+      "ip": 14.4444,
+      "oop": 14.2857,
+      "style": 15.0,
+      "suit": 0.5667,
+      "weak": [],
+      "style_weak": []
+     },
+     {
+      "uid": 1016,
+      "xi": false,
+      "fit": 13.34,
+      "ip": 13.5556,
+      "oop": 13.1429,
+      "style": 13.2222,
+      "suit": 0.7491,
+      "weak": [
+       {
+        "value": 10,
+        "attribute": "jumping_reach"
+       },
+       {
+        "value": 10,
+        "attribute": "strength"
+       }
+      ],
+      "style_weak": [
+       {
+        "value": 10,
+        "attribute": "acceleration"
+       },
+       {
+        "value": 10,
+        "attribute": "determination"
+       }
+      ]
+     },
+     {
+      "uid": 1111,
+      "xi": false,
+      "fit": 12.9667,
+      "ip": 13.7778,
+      "oop": 14.5714,
+      "style": 10.3333,
+      "suit": 1.0576,
+      "weak": [
+       {
+        "value": 10,
+        "attribute": "passing"
+       }
+      ],
+      "style_weak": [
+       {
+        "value": 9,
+        "attribute": "stamina"
+       },
+       {
+        "value": 9,
+        "attribute": "teamwork"
+       },
+       {
+        "value": 9,
+        "attribute": "work_rate"
+       },
+       {
+        "value": 10,
+        "attribute": "aggression"
+       },
+       {
+        "value": 10,
+        "attribute": "natural_fitness"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "label": "RB",
+    "slot": "RB",
+    "ip_role": "WB",
+    "oop_role": "FB",
+    "entries": [
+     {
+      "uid": 1010,
+      "xi": true,
+      "fit": 15.4958,
+      "ip": 16.625,
+      "oop": 14.3333,
+      "style": 15.0,
+      "suit": 1.8062,
+      "weak": [],
+      "style_weak": []
+     },
+     {
+      "uid": 1091,
+      "xi": false,
+      "fit": 15.2542,
+      "ip": 16.875,
+      "oop": 13.3333,
+      "style": 14.7778,
+      "suit": 1.9783,
+      "weak": [
+       {
+        "value": 10,
+        "attribute": "anticipation"
+       },
+       {
+        "value": 10,
+        "attribute": "positioning"
+       }
+      ],
+      "style_weak": [
+       {
+        "value": 10,
+        "attribute": "anticipation"
+       }
+      ]
+     },
+     {
+      "uid": 1011,
+      "xi": false,
+      "fit": 14.3367,
+      "ip": 15.5,
+      "oop": 13.6667,
+      "style": 13.3333,
+      "suit": 1.7505,
+      "weak": [],
+      "style_weak": [
+       {
+        "value": 10,
+        "attribute": "natural_fitness"
+       }
+      ]
+     },
+     {
+      "uid": 1012,
+      "xi": false,
+      "fit": 13.805,
+      "ip": 15.25,
+      "oop": 12.5,
+      "style": 13.0,
+      "suit": 1.8395,
+      "weak": [
+       {
+        "value": 9,
+        "attribute": "decisions"
+       },
+       {
+        "value": 9,
+        "attribute": "teamwork"
+       },
+       {
+        "value": 10,
+        "attribute": "concentration"
+       }
+      ],
+      "style_weak": [
+       {
+        "value": 9,
+        "attribute": "aggression"
+       },
+       {
+        "value": 9,
+        "attribute": "determination"
+       },
+       {
+        "value": 9,
+        "attribute": "teamwork"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "label": "LDM",
+    "slot": "DM",
+    "ip_role": "DLP",
+    "oop_role": "PDM",
+    "entries": [
+     {
+      "uid": 1013,
+      "xi": true,
+      "fit": 17.38,
+      "ip": 18.4286,
+      "oop": 17.2857,
+      "style": 16.0,
+      "suit": 1.9157,
+      "weak": [],
+      "style_weak": []
+     },
+     {
+      "uid": 1015,
+      "xi": true,
+      "fit": 17.04,
+      "ip": 18.2857,
+      "oop": 17.0,
+      "style": 15.3333,
+      "suit": 1.5043,
+      "weak": [],
+      "style_weak": []
+     },
+     {
+      "uid": 1014,
+      "xi": false,
+      "fit": 15.6133,
+      "ip": 16.7143,
+      "oop": 14.8571,
+      "style": 14.7778,
+      "suit": 0.4705,
+      "weak": [],
+      "style_weak": []
+     },
+     {
+      "uid": 1016,
+      "xi": false,
+      "fit": 13.7867,
+      "ip": 13.8571,
+      "oop": 14.2857,
+      "style": 13.2222,
+      "suit": 1.3224,
+      "weak": [
+       {
+        "value": 9,
+        "attribute": "first_touch"
+       },
+       {
+        "value": 10,
+        "attribute": "acceleration"
+       },
+       {
+        "value": 10,
+        "attribute": "vision"
+       }
+      ],
+      "style_weak": [
+       {
+        "value": 10,
+        "attribute": "acceleration"
+       },
+       {
+        "value": 10,
+        "attribute": "determination"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "label": "RDM",
+    "slot": "DM",
+    "ip_role": "DM",
+    "oop_role": "DM",
+    "entries": [
+     {
+      "uid": 1013,
+      "xi": true,
+      "fit": 17.54,
+      "ip": 18.2,
+      "oop": 18.2,
+      "style": 16.0,
+      "suit": 2.0757,
+      "weak": [],
+      "style_weak": []
+     },
+     {
+      "uid": 1015,
+      "xi": true,
+      "fit": 16.78,
+      "ip": 17.4,
+      "oop": 17.4,
+      "style": 15.3333,
+      "suit": 1.2443,
+      "weak": [],
+      "style_weak": []
+     },
+     {
+      "uid": 1014,
+      "xi": false,
+      "fit": 14.5133,
+      "ip": 14.4,
+      "oop": 14.4,
+      "style": 14.7778,
+      "suit": -0.6295,
+      "weak": [],
+      "style_weak": []
+     },
+     {
+      "uid": 1016,
+      "xi": false,
+      "fit": 14.4667,
+      "ip": 15.0,
+      "oop": 15.0,
+      "style": 13.2222,
+      "suit": 2.0024,
+      "weak": [
+       {
+        "value": 9,
+        "attribute": "concentration"
+       }
+      ],
+      "style_weak": [
+       {
+        "value": 10,
+        "attribute": "acceleration"
+       },
+       {
+        "value": 10,
+        "attribute": "determination"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "label": "LW",
+    "slot": "LW",
+    "ip_role": "IF",
+    "oop_role": "WMF",
+    "entries": [
+     {
+      "uid": 1020,
+      "xi": true,
+      "fit": 15.5267,
+      "ip": 18.0,
+      "oop": 12.5,
+      "style": 14.8889,
+      "suit": 0.3481,
+      "weak": [],
+      "style_weak": []
+     },
+     {
+      "uid": 1021,
+      "xi": false,
+      "fit": 15.14,
+      "ip": 16.8571,
+      "oop": 13.6667,
+      "style": 14.1111,
+      "suit": 0.8186,
+      "weak": [],
+      "style_weak": []
+     },
+     {
+      "uid": 1019,
+      "xi": false,
+      "fit": 13.0,
+      "ip": 14.4286,
+      "oop": 11.3333,
+      "style": 12.5556,
+      "suit": 0.6071,
+      "weak": [
+       {
+        "value": 10,
+        "attribute": "stamina"
+       },
+       {
+        "value": 10,
+        "attribute": "work_rate"
+       }
+      ],
+      "style_weak": [
+       {
+        "value": 10,
+        "attribute": "stamina"
+       },
+       {
+        "value": 10,
+        "attribute": "work_rate"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "label": "AM",
+    "slot": "AM",
+    "ip_role": "SS",
+    "oop_role": "AM",
+    "entries": [
+     {
+      "uid": 1018,
+      "xi": false,
+      "fit": 15.6787,
+      "ip": 16.4286,
+      "oop": 15.4,
+      "style": 14.8889,
+      "suit": -0.5436,
+      "weak": [],
+      "style_weak": []
+     },
+     {
+      "uid": 1014,
+      "xi": true,
+      "fit": 15.5053,
+      "ip": 15.4286,
+      "oop": 16.4,
+      "style": 14.7778,
+      "suit": 0.2831,
+      "weak": [],
+      "style_weak": []
+     }
+    ]
+   },
+   {
+    "label": "RW",
+    "slot": "RW",
+    "ip_role": "IW",
+    "oop_role": "WMF",
+    "entries": [
+     {
+      "uid": 1021,
+      "xi": true,
+      "fit": 14.72,
+      "ip": 15.8571,
+      "oop": 13.6667,
+      "style": 14.1111,
+      "suit": 0.3986,
+      "weak": [],
+      "style_weak": []
+     },
+     {
+      "uid": 1011,
+      "xi": false,
+      "fit": 13.58,
+      "ip": 13.1429,
+      "oop": 14.5,
+      "style": 13.3333,
+      "suit": 0.9371,
+      "weak": [],
+      "style_weak": [
+       {
+        "value": 10,
+        "attribute": "natural_fitness"
+       }
+      ]
+     },
+     {
+      "uid": 1022,
+      "xi": false,
+      "fit": 13.44,
+      "ip": 14.8571,
+      "oop": 11.6667,
+      "style": 13.1111,
+      "suit": 0.19,
+      "weak": [
+       {
+        "value": 10,
+        "attribute": "passing"
+       },
+       {
+        "value": 10,
+        "attribute": "tackling"
+       }
+      ],
+      "style_weak": [
+       {
+        "value": 10,
+        "attribute": "aggression"
+       },
+       {
+        "value": 10,
+        "attribute": "determination"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "label": "ST",
+    "slot": "ST",
+    "ip_role": "CFD",
+    "oop_role": "CFD",
+    "entries": [
+     {
+      "uid": 1023,
+      "xi": true,
+      "fit": 16.5927,
+      "ip": 19.1667,
+      "oop": 14.2,
+      "style": 15.2222,
+      "suit": 0.6284,
+      "weak": [],
+      "style_weak": []
+     },
+     {
+      "uid": 1020,
+      "xi": false,
+      "fit": 16.0447,
+      "ip": 18.5,
+      "oop": 13.6,
+      "style": 14.8889,
+      "suit": 1.2947,
+      "weak": [],
+      "style_weak": []
+     },
+     {
+      "uid": 1024,
+      "xi": false,
+      "fit": 15.9693,
+      "ip": 18.0,
+      "oop": 14.2,
+      "style": 14.7778,
+      "suit": 1.4693,
+      "weak": [],
+      "style_weak": []
+     }
+    ]
+   }
+  ],
+  "misfits": [
+   {
+    "uid": 1003,
+    "why": "His key attributes for GK only average 10.9; 5 key attributes at 10 or below; not built for gegenpress (its attributes average 9.2).",
+    "best_row": "GK",
+    "best": {
+     "uid": 1003,
+     "xi": false,
+     "fit": 10.9217,
+     "ip": 11.5,
+     "oop": 11.875,
+     "style": 9.2222,
+     "suit": -0.4117,
+     "weak": [
+      {
+       "value": 8,
+       "attribute": "anticipation"
+      },
+      {
+       "value": 8,
+       "attribute": "first_touch"
+      },
+      {
+       "value": 8,
+       "attribute": "passing"
+      },
+      {
+       "value": 9,
+       "attribute": "acceleration"
+      },
+      {
+       "value": 10,
+       "attribute": "vision"
+      }
+     ],
+     "style_weak": [
+      {
+       "value": 7,
+       "attribute": "natural_fitness"
+      },
+      {
+       "value": 8,
+       "attribute": "anticipation"
+      },
+      {
+       "value": 8,
+       "attribute": "work_rate"
+      },
+      {
+       "value": 9,
+       "attribute": "acceleration"
+      },
+      {
+       "value": 9,
+       "attribute": "aggression"
+      },
+      {
+       "value": 10,
+       "attribute": "stamina"
+      },
+      {
+       "value": 10,
+       "attribute": "teamwork"
+      }
+     ]
+    }
+   },
+   {
+    "uid": 1031,
+    "why": "3 key attributes at 10 or below; not built for gegenpress (its attributes average 9.9).",
+    "best_row": "GK",
+    "best": {
+     "uid": 1031,
+     "xi": false,
+     "fit": 11.5067,
+     "ip": 11.5,
+     "oop": 13.25,
+     "style": 9.8889,
+     "suit": -0.4563,
+     "weak": [
+      {
+       "value": 8,
+       "attribute": "composure"
+      },
+      {
+       "value": 9,
+       "attribute": "acceleration"
+      },
+      {
+       "value": 9,
+       "attribute": "vision"
+      }
+     ],
+     "style_weak": [
+      {
+       "value": 8,
+       "attribute": "determination"
+      },
+      {
+       "value": 8,
+       "attribute": "work_rate"
+      },
+      {
+       "value": 9,
+       "attribute": "acceleration"
+      },
+      {
+       "value": 9,
+       "attribute": "pace"
+      },
+      {
+       "value": 10,
+       "attribute": "stamina"
+      }
+     ]
+    }
+   },
+   {
+    "uid": 1019,
+    "why": "2 key attributes at 10 or below.",
+    "best_row": "LW",
+    "best": {
+     "uid": 1019,
+     "xi": false,
+     "fit": 13.0,
+     "ip": 14.4286,
+     "oop": 11.3333,
+     "style": 12.5556,
+     "suit": 0.6071,
+     "weak": [
+      {
+       "value": 10,
+       "attribute": "stamina"
+      },
+      {
+       "value": 10,
+       "attribute": "work_rate"
+      }
+     ],
+     "style_weak": [
+      {
+       "value": 10,
+       "attribute": "stamina"
+      },
+      {
+       "value": 10,
+       "attribute": "work_rate"
+      }
+     ]
+    }
+   },
+   {
+    "uid": 1111,
+    "why": "Not built for gegenpress (its attributes average 10.3).",
+    "best_row": "LCB",
+    "best": {
+     "uid": 1111,
+     "xi": false,
+     "fit": 13.3,
+     "ip": 14.5714,
+     "oop": 14.5714,
+     "style": 10.3333,
+     "suit": 1.3909,
+     "weak": [],
+     "style_weak": [
+      {
+       "value": 9,
+       "attribute": "stamina"
+      },
+      {
+       "value": 9,
+       "attribute": "teamwork"
+      },
+      {
+       "value": 9,
+       "attribute": "work_rate"
+      },
+      {
+       "value": 10,
+       "attribute": "aggression"
+      },
+      {
+       "value": 10,
+       "attribute": "natural_fitness"
+      }
+     ]
+    }
+   },
+   {
+    "uid": 1022,
+    "why": "2 key attributes at 10 or below.",
+    "best_row": "RW",
+    "best": {
+     "uid": 1022,
+     "xi": false,
+     "fit": 13.44,
+     "ip": 14.8571,
+     "oop": 11.6667,
+     "style": 13.1111,
+     "suit": 0.19,
+     "weak": [
+      {
+       "value": 10,
+       "attribute": "passing"
+      },
+      {
+       "value": 10,
+       "attribute": "tackling"
+      }
+     ],
+     "style_weak": [
+      {
+       "value": 10,
+       "attribute": "aggression"
+      },
+      {
+       "value": 10,
+       "attribute": "determination"
+      }
+     ]
+    }
+   },
+   {
+    "uid": 1012,
+    "why": "3 key attributes at 10 or below.",
+    "best_row": "RB",
+    "best": {
+     "uid": 1012,
+     "xi": false,
+     "fit": 13.805,
+     "ip": 15.25,
+     "oop": 12.5,
+     "style": 13.0,
+     "suit": 1.8395,
+     "weak": [
+      {
+       "value": 9,
+       "attribute": "decisions"
+      },
+      {
+       "value": 9,
+       "attribute": "teamwork"
+      },
+      {
+       "value": 10,
+       "attribute": "concentration"
+      }
+     ],
+     "style_weak": [
+      {
+       "value": 9,
+       "attribute": "aggression"
+      },
+      {
+       "value": 9,
+       "attribute": "determination"
+      },
+      {
+       "value": 9,
+       "attribute": "teamwork"
+      }
+     ]
+    }
+   },
+   {
+    "uid": 1005,
+    "why": "2 key attributes at 10 or below.",
+    "best_row": "LB",
+    "best": {
+     "uid": 1005,
+     "xi": false,
+     "fit": 14.1042,
+     "ip": 14.375,
+     "oop": 13.3333,
+     "style": 14.4444,
+     "suit": 1.518,
+     "weak": [
+      {
+       "value": 9,
+       "attribute": "positioning"
+      },
+      {
+       "value": 10,
+       "attribute": "teamwork"
+      }
+     ],
+     "style_weak": [
+      {
+       "value": 10,
+       "attribute": "teamwork"
+      }
+     ]
+    }
+   },
+   {
+    "uid": 1091,
+    "why": "2 key attributes at 10 or below.",
+    "best_row": "RB",
+    "best": {
+     "uid": 1091,
+     "xi": false,
+     "fit": 15.2542,
+     "ip": 16.875,
+     "oop": 13.3333,
+     "style": 14.7778,
+     "suit": 1.9783,
+     "weak": [
+      {
+       "value": 10,
+       "attribute": "anticipation"
+      },
+      {
+       "value": 10,
+       "attribute": "positioning"
+      }
+     ],
+     "style_weak": [
+      {
+       "value": 10,
+       "attribute": "anticipation"
+      }
+     ]
+    }
+   }
+  ]
+ },
+ "performance": {
+  "record": {
+   "pos": 1,
+   "of": 20,
+   "p": 13,
+   "w": 12,
+   "d": 0,
+   "l": 1,
+   "gf": 33,
+   "ga": 4,
+   "pts": 36
+  },
+  "form": [
+   {
+    "res": "W",
+    "score": "2–0",
+    "opp": "Brentford",
+    "home": true,
+    "date": "2026-10-25"
+   },
+   {
+    "res": "W",
+    "score": "3–1",
+    "opp": "Bournemouth",
+    "home": false,
+    "date": "2026-11-01"
+   },
+   {
+    "res": "W",
+    "score": "2–0",
+    "opp": "Nott'm Forest",
+    "home": true,
+    "date": "2026-11-08"
+   },
+   {
+    "res": "L",
+    "score": "0–2",
+    "opp": "Brighton",
+    "home": false,
+    "date": "2026-11-15"
+   },
+   {
+    "res": "W",
+    "score": "1–0",
+    "opp": "Man United",
+    "home": true,
+    "date": "2026-11-22"
+   }
+  ],
+  "metrics": [
+   {
+    "key": "gf",
+    "label": "Goals scored",
+    "value": 2.5385,
+    "unit": "per game",
+    "rank": 4,
+    "of": 20,
+    "avg": 1.3846,
+    "good": "you're scoring freely",
+    "bad": "goals are drying up",
+    "higher": true,
+    "above": true
+   },
+   {
+    "key": "ga",
+    "label": "Goals conceded",
+    "value": 0.3077,
+    "unit": "per game",
+    "rank": 1,
+    "of": 20,
+    "avg": 1.3846,
+    "good": "hard to score against",
+    "bad": "leaking goals",
+    "higher": false,
+    "above": true
+   },
+   {
+    "key": "xg",
+    "label": "Expected goals (xG)",
+    "value": 1.8062,
+    "unit": "per game",
+    "rank": 1,
+    "of": 20,
+    "avg": 1.2732,
+    "good": "creating big chances",
+    "bad": "not creating enough good chances",
+    "higher": true,
+    "above": true
+   },
+   {
+    "key": "xga",
+    "label": "xG against",
+    "value": 0.8223,
+    "unit": "per game",
+    "rank": 3,
+    "of": 20,
+    "avg": 1.2732,
+    "good": "opponents barely get a sniff",
+    "bad": "opponents get good chances",
+    "higher": false,
+    "above": true
+   },
+   {
+    "key": "shots",
+    "label": "Shots",
+    "value": 17.4615,
+    "unit": "per game",
+    "rank": 2,
+    "of": 20,
+    "avg": 12.3423,
+    "good": "constant pressure on goal",
+    "bad": "not many shots",
+    "higher": true,
+    "above": true
+   },
+   {
+    "key": "ccc",
+    "label": "Clear-cut chances",
+    "value": 1.7308,
+    "unit": "per game",
+    "rank": 3,
+    "of": 20,
+    "avg": 1.32,
+    "good": "carving teams open",
+    "bad": "few clear-cut chances",
+    "higher": true,
+    "above": true
+   },
+   {
+    "key": "ccc_ag",
+    "label": "Clear-cut chances conceded",
+    "value": 0.8538,
+    "unit": "per game",
+    "rank": 2,
+    "of": 20,
+    "avg": 1.32,
+    "good": "rarely opened up",
+    "bad": "getting opened up",
+    "higher": false,
+    "above": true
+   },
+   {
+    "key": "poss",
+    "label": "Possession",
+    "value": 59.1804,
+    "unit": "%",
+    "rank": 1,
+    "of": 20,
+    "avg": 50.2758,
+    "good": "dominating the ball",
+    "bad": "losing the ball battle",
+    "higher": true,
+    "above": true
+   },
+   {
+    "key": "pass_pct",
+    "label": "Pass completion",
+    "value": 89.0528,
+    "unit": "%",
+    "rank": 1,
+    "of": 20,
+    "avg": 83.226,
+    "good": "keeping the ball well",
+    "bad": "sloppy in possession",
+    "higher": true,
+    "above": true
+   },
+   {
+    "key": "prog",
+    "label": "Progressive passes",
+    "value": 57.4615,
+    "unit": "per game",
+    "rank": 1,
+    "of": 20,
+    "avg": 44.2962,
+    "good": "moving the ball forward quickly",
+    "bad": "struggling to progress the ball",
+    "higher": true,
+    "above": true
+   },
+   {
+    "key": "final3",
+    "label": "Final-third passes",
+    "value": 129.6154,
+    "unit": "per game",
+    "rank": 1,
+    "of": 20,
+    "avg": 101.2538,
+    "good": "living in the final third",
+    "bad": "not getting into the final third",
+    "higher": true,
+    "above": true
+   },
+   {
+    "key": "opp_pass_pct",
+    "label": "Opponents' pass completion",
+    "value": 78.0431,
+    "unit": "%",
+    "rank": 3,
+    "of": 20,
+    "avg": 83.1889,
+    "good": "the press is biting — they can't keep the ball",
+    "bad": "opponents pass through your press too easily",
+    "higher": false,
+    "above": true
+   },
+   {
+    "key": "opp_final3",
+    "label": "Opponents' final-third passes",
+    "value": 72.1538,
+    "unit": "per game",
+    "rank": 1,
+    "of": 20,
+    "avg": 101.2538,
+    "good": "keeping teams pinned back",
+    "bad": "opponents get into your final third a lot",
+    "higher": false,
+    "above": true
+   },
+   {
+    "key": "tackle_pct",
+    "label": "Tackles won",
+    "value": 66.4179,
+    "unit": "%",
+    "rank": 14,
+    "of": 20,
+    "avg": 67.7377,
+    "good": "winning the ball back",
+    "bad": "losing too many tackles",
+    "higher": true,
+    "above": false
+   },
+   {
+    "key": "aerial_pct",
+    "label": "Aerial duels won",
+    "value": 57.3298,
+    "unit": "%",
+    "rank": 1,
+    "of": 20,
+    "avg": 52.4923,
+    "good": "strong in the air",
+    "bad": "losing headers",
+    "higher": true,
+    "above": true
+   },
+   {
+    "key": "dist",
+    "label": "Distance covered",
+    "value": 113.1692,
+    "unit": "km per game",
+    "rank": 6,
+    "of": 20,
+    "avg": 112.9958,
+    "good": "outrunning teams",
+    "bad": "being outrun",
+    "higher": true,
+    "above": true
+   },
+   {
+    "key": "dist_diff",
+    "label": "Running vs opponents",
+    "value": 0.6154,
+    "unit": "km per game",
+    "rank": 6,
+    "of": 20,
+    "avg": -0.0,
+    "good": "outworking opponents",
+    "bad": "opponents run more than you",
+    "higher": true,
+    "above": true
+   },
+   {
+    "key": "cross_pct",
+    "label": "Cross accuracy",
+    "value": 29.0441,
+    "unit": "%",
+    "rank": 14,
+    "of": 20,
+    "avg": 30.2006,
+    "good": "crosses are finding people",
+    "bad": "crosses aren't landing",
+    "higher": true,
+    "above": false
+   },
+   {
+    "key": "finishing",
+    "label": "Goals vs xG",
+    "value": 0.7323,
+    "unit": "per game",
+    "rank": 5,
+    "of": 20,
+    "avg": 0.1115,
+    "good": "finishing above expectation",
+    "bad": "wasting chances",
+    "higher": true,
+    "above": true
+   },
+   {
+    "key": "keeping",
+    "label": "Goals conceded vs xG against",
+    "value": 0.5146,
+    "unit": "per game",
+    "rank": 2,
+    "of": 20,
+    "avg": -0.1115,
+    "good": "keeper and defence beat expectation",
+    "bad": "conceding more than the chances deserve",
+    "higher": true,
+    "above": true
+   },
+   {
+    "key": "fouls",
+    "label": "Fouls",
+    "value": 11.6923,
+    "unit": "per game",
+    "rank": 13,
+    "of": 20,
+    "avg": 11.4154,
+    "good": "disciplined",
+    "bad": "giving away a lot of fouls",
+    "higher": false,
+    "above": false
+   }
+  ],
+  "matches": 13,
+  "league_name": "Premier League",
+  "league_size": 20,
+  "players": {
+   "1018": {
+    "group": "AM",
+    "good": [
+     {
+      "key": "dribbles90",
+      "label": "Dribbles",
+      "value": 0.5986,
+      "pctl": 97.0588,
+      "press": false,
+      "higher": true
+     },
+     {
+      "key": "xa90",
+      "label": "Expected assists (xA)",
+      "value": 0.5563,
+      "pctl": 85.2941,
+      "press": false,
+      "higher": true
+     },
+     {
+      "key": "lost90",
+      "label": "Possession lost",
+      "value": 0.2574,
+      "pctl": 85.2941,
+      "press": false,
+      "higher": false
+     }
+    ],
+    "bad": [
+     {
+      "key": "npxg90",
+      "label": "Non-penalty xG",
+      "value": 0.268,
+      "pctl": 8.8235,
+      "press": false,
+      "higher": true
+     },
+     {
+      "key": "dist90",
+      "label": "Distance covered",
+      "value": 0.2281,
+      "pctl": 8.8235,
+      "press": true,
+      "higher": true
+     }
+    ],
+    "minutes": 1105,
+    "avg": 6.67,
+    "peers": 17
+   },
+   "1006": {
+    "group": "CB",
+    "good": [
+     {
+      "key": "won90",
+      "label": "Possession won",
+      "value": 0.5913,
+      "pctl": 98.4848,
+      "press": true,
+      "higher": true
+     }
+    ],
+    "bad": [
+     {
+      "key": "pass_pct",
+      "label": "Pass completion",
+      "value": 78.1719,
+      "pctl": 19.697,
+      "press": false,
+      "higher": true
+     }
+    ],
+    "minutes": 1105,
+    "avg": 6.66,
+    "peers": 33
+   },
+   "1014": {
+    "group": "CM",
+    "good": [
+     {
+      "key": "xa90",
+      "label": "Expected assists (xA)",
+      "value": 0.571,
+      "pctl": 87.037,
+      "press": false,
+      "higher": true
+     },
+     {
+      "key": "won90",
+      "label": "Possession won",
+      "value": 0.5009,
+      "pctl": 79.6296,
+      "press": true,
+      "higher": true
+     },
+     {
+      "key": "pass_pct",
+      "label": "Pass completion",
+      "value": 135.1351,
+      "pctl": 75.9259,
+      "press": false,
+      "higher": true
+     },
+     {
+      "key": "lost90",
+      "label": "Possession lost",
+      "value": 0.3005,
+      "pctl": 75.9259,
+      "press": false,
+      "higher": false
+     }
+    ],
+    "bad": [
+     {
+      "key": "kp90",
+      "label": "Key passes",
+      "value": 0.2509,
+      "pctl": 5.5556,
+      "press": false,
+      "higher": true
+     },
+     {
+      "key": "dist90",
+      "label": "Distance covered",
+      "value": 0.294,
+      "pctl": 12.963,
+      "press": true,
+      "higher": true
+     }
+    ],
+    "minutes": 1105,
+    "avg": 6.79,
+    "peers": 27
+   },
+   "1013": {
+    "group": "DM",
+    "good": [
+     {
+      "key": "pass_pct",
+      "label": "Pass completion",
+      "value": 189.2593,
+      "pctl": 92.1053,
+      "press": false,
+      "higher": true
+     },
+     {
+      "key": "dist90",
+      "label": "Distance covered",
+      "value": 0.5685,
+      "pctl": 86.8421,
+      "press": true,
+      "higher": true
+     },
+     {
+      "key": "tackle_pct",
+      "label": "Tackles won %",
+      "value": 105.5556,
+      "pctl": 76.3158,
+      "press": true,
+      "higher": true
+     }
+    ],
+    "bad": [
+     {
+      "key": "won90",
+      "label": "Possession won",
+      "value": 0.2134,
+      "pctl": 2.6316,
+      "press": true,
+      "higher": true
+     },
+     {
+      "key": "int90",
+      "label": "Interceptions",
+      "value": 0.3339,
+      "pctl": 23.6842,
+      "press": true,
+      "higher": true
+     },
+     {
+      "key": "tackles90",
+      "label": "Tackles won",
+      "value": 0.2476,
+      "pctl": 23.6842,
+      "press": true,
+      "higher": true
+     }
+    ],
+    "minutes": 1105,
+    "avg": 6.68,
+    "peers": 19
+   },
+   "1015": {
+    "group": "DM",
+    "good": [
+     {
+      "key": "prog90",
+      "label": "Progressive passes",
+      "value": 0.5595,
+      "pctl": 92.1053,
+      "press": false,
+      "higher": true
+     },
+     {
+      "key": "lost90",
+      "label": "Possession lost",
+      "value": 0.2378,
+      "pctl": 86.8421,
+      "press": false,
+      "higher": false
+     },
+     {
+      "key": "kp90",
+      "label": "Key passes",
+      "value": 0.5335,
+      "pctl": 81.5789,
+      "press": false,
+      "higher": true
+     },
+     {
+      "key": "tackles90",
+      "label": "Tackles won",
+      "value": 0.4276,
+      "pctl": 76.3158,
+      "press": true,
+      "higher": true
+     }
+    ],
+    "bad": [],
+    "minutes": 1105,
+    "avg": 7.42,
+    "peers": 19
+   },
+   "1004": {
+    "group": "FB/WB",
+    "good": [
+     {
+      "key": "lost90",
+      "label": "Possession lost",
+      "value": 0.2069,
+      "pctl": 98.8889,
+      "press": false,
+      "higher": false
+     },
+     {
+      "key": "won90",
+      "label": "Possession won",
+      "value": 0.5864,
+      "pctl": 96.6667,
+      "press": true,
+      "higher": true
+     },
+     {
+      "key": "prog90",
+      "label": "Progressive passes",
+      "value": 0.5905,
+      "pctl": 93.3333,
+      "press": false,
+      "higher": true
+     },
+     {
+      "key": "kp90",
+      "label": "Key passes",
+      "value": 0.4911,
+      "pctl": 76.6667,
+      "press": false,
+      "higher": true
+     }
+    ],
+    "bad": [
+     {
+      "key": "sprints90",
+      "label": "Sprints",
+      "value": 0.2142,
+      "pctl": 5.5556,
+      "press": true,
+      "higher": true
+     },
+     {
+      "key": "dist90",
+      "label": "Distance covered",
+      "value": 0.2729,
+      "pctl": 18.8889,
+      "press": true,
+      "higher": true
+     },
+     {
+      "key": "xa90",
+      "label": "Expected assists (xA)",
+      "value": 0.2794,
+      "pctl": 21.1111,
+      "press": false,
+      "higher": true
+     }
+    ],
+    "minutes": 1105,
+    "avg": 7.46,
+    "peers": 45
+   },
+   "1024": {
+    "group": "ST",
+    "good": [
+     {
+      "key": "offsides90",
+      "label": "Offsides",
+      "value": 0.237,
+      "pctl": 94.6429,
+      "press": false,
+      "higher": false
+     },
+     {
+      "key": "finish",
+      "label": "Goals vs xG",
+      "value": 0.0358,
+      "pctl": 76.7857,
+      "press": false,
+      "higher": true
+     },
+     {
+      "key": "xa90",
+      "label": "Expected assists (xA)",
+      "value": 0.4903,
+      "pctl": 76.7857,
+      "press": false,
+      "higher": true
+     }
+    ],
+    "bad": [
+     {
+      "key": "npxg90",
+      "label": "Non-penalty xG",
+      "value": 0.2085,
+      "pctl": 1.7857,
+      "press": false,
+      "higher": true
+     },
+     {
+      "key": "sprints90",
+      "label": "Sprints",
+      "value": 0.2729,
+      "pctl": 8.9286,
+      "press": true,
+      "higher": true
+     },
+     {
+      "key": "won90",
+      "label": "Possession won",
+      "value": 0.2769,
+      "pctl": 19.6429,
+      "press": true,
+      "higher": true
+     }
+    ],
+    "minutes": 1105,
+    "avg": 6.74,
+    "peers": 28
+   },
+   "1002": {
+    "group": "GK",
+    "good": [],
+    "bad": [
+     {
+      "key": "xgp",
+      "label": "xG prevented",
+      "value": 0.2411,
+      "pctl": 12.5,
+      "press": false,
+      "higher": true
+     },
+     {
+      "key": "mistakes",
+      "label": "Mistakes leading to goals",
+      "value": 6.66,
+      "pctl": 22.5,
+      "press": false,
+      "higher": false
+     }
+    ],
+    "minutes": 1105,
+    "avg": 6.82,
+    "peers": 20
+   },
+   "1023": {
+    "group": "ST",
+    "good": [
+     {
+      "key": "shots90",
+      "label": "Shots",
+      "value": 0.5473,
+      "pctl": 83.9286,
+      "press": false,
+      "higher": true
+     }
+    ],
+    "bad": [
+     {
+      "key": "won90",
+      "label": "Possession won",
+      "value": 0.2207,
+      "pctl": 12.5,
+      "press": true,
+      "higher": true
+     },
+     {
+      "key": "sot_pct",
+      "label": "Shots on target %",
+      "value": 58.631,
+      "pctl": 16.0714,
+      "press": false,
+      "higher": true
+     },
+     {
+      "key": "npxg90",
+      "label": "Non-penalty xG",
+      "value": 0.2541,
+      "pctl": 19.6429,
+      "press": false,
+      "higher": true
+     }
+    ],
+    "minutes": 1105,
+    "avg": 6.84,
+    "peers": 28
+   },
+   "1001": {
+    "group": "GK",
+    "good": [
+     {
+      "key": "xgp",
+      "label": "xG prevented",
+      "value": 0.5579,
+      "pctl": 87.5,
+      "press": false,
+      "higher": true
+     }
+    ],
+    "bad": [
+     {
+      "key": "mistakes",
+      "label": "Mistakes leading to goals",
+      "value": 7.32,
+      "pctl": 2.5,
+      "press": false,
+      "higher": false
+     }
+    ],
+    "minutes": 1105,
+    "avg": 6.82,
+    "peers": 20
+   },
+   "1020": {
+    "group": "WIDE",
+    "good": [
+     {
+      "key": "finish",
+      "label": "Goals vs xG",
+      "value": 0.0676,
+      "pctl": 98.3871,
+      "press": false,
+      "higher": true
+     },
+     {
+      "key": "ccc90",
+      "label": "Clear-cut chances created",
+      "value": 0.5335,
+      "pctl": 85.4839,
+      "press": false,
+      "higher": true
+     }
+    ],
+    "bad": [
+     {
+      "key": "sprints90",
+      "label": "Sprints",
+      "value": 0.2069,
+      "pctl": 4.8387,
+      "press": true,
+      "higher": true
+     },
+     {
+      "key": "kp90",
+      "label": "Key passes",
+      "value": 0.2199,
+      "pctl": 8.0645,
+      "press": false,
+      "higher": true
+     }
+    ],
+    "minutes": 1105,
+    "avg": 7.25,
+    "peers": 31
+   }
+  }
+ },
+ "training": [
+  {
+   "slot": 0,
+   "name": "First team",
+   "current": "Balanced",
+   "week": "2026-11-16",
+   "upcoming": [
+    [
+     "2026-11-23",
+     "Recovery Week"
+    ],
+    [
+     "2026-11-30",
+     "Attacking Focus"
+    ],
+    [
+     "2026-12-07",
+     "Recovery Week"
+    ],
+    [
+     "2026-12-14",
+     "Recovery Week"
+    ]
+   ],
+   "rotation": {
+    "Match Preview": 3,
+    "Recovery Week": 5,
+    "Balanced": 5,
+    "Attacking Focus": 4,
+    "Pressing Focus": 3
+   },
+   "recent_codes": {
+    "5": 12,
+    "6": 12,
+    "300": 12,
+    "0": 8,
+    "1": 8,
+    "2": 8,
+    "500": 8,
+    "301": 8,
+    "402": 8
+   },
+   "recent_weeks": 4,
+   "grid": [
+    {
+     "day": "2026-11-16",
+     "sessions": [
+      5,
+      6,
+      300
+     ]
+    },
+    {
+     "day": "2026-11-17",
+     "sessions": [
+      0,
+      1,
+      2
+     ]
+    },
+    {
+     "day": "2026-11-18",
+     "sessions": [
+      500,
+      301,
+      402
+     ]
+    },
+    {
+     "day": "2026-11-19",
+     "sessions": [
+      5,
+      6,
+      300
+     ]
+    },
+    {
+     "day": "2026-11-20",
+     "sessions": [
+      0,
+      1,
+      2
+     ]
+    },
+    {
+     "day": "2026-11-21",
+     "sessions": [
+      500,
+      301,
+      402
+     ]
+    },
+    {
+     "day": "2026-11-22",
+     "sessions": [
+      5,
+      6,
+      300
+     ]
+    }
+   ]
+  },
+  {
+   "slot": 1,
+   "name": "U21",
+   "current": "Match Preview",
+   "week": "2026-11-16",
+   "upcoming": [
+    [
+     "2026-11-23",
+     "Pressing Focus"
+    ],
+    [
+     "2026-11-30",
+     "Balanced"
+    ],
+    [
+     "2026-12-07",
+     "Attacking Focus"
+    ],
+    [
+     "2026-12-14",
+     "Recovery Week"
+    ]
+   ],
+   "rotation": {
+    "Match Preview": 3,
+    "Recovery Week": 3,
+    "Pressing Focus": 9,
+    "Balanced": 2,
+    "Attacking Focus": 3
+   },
+   "recent_codes": {
+    "5": 12,
+    "6": 12,
+    "300": 12,
+    "0": 8,
+    "1": 8,
+    "2": 8,
+    "500": 8,
+    "301": 8,
+    "402": 8
+   },
+   "recent_weeks": 4,
+   "grid": [
+    {
+     "day": "2026-11-16",
+     "sessions": [
+      5,
+      6,
+      300
+     ]
+    },
+    {
+     "day": "2026-11-17",
+     "sessions": [
+      0,
+      1,
+      2
+     ]
+    },
+    {
+     "day": "2026-11-18",
+     "sessions": [
+      500,
+      301,
+      402
+     ]
+    },
+    {
+     "day": "2026-11-19",
+     "sessions": [
+      5,
+      6,
+      300
+     ]
+    },
+    {
+     "day": "2026-11-20",
+     "sessions": [
+      0,
+      1,
+      2
+     ]
+    },
+    {
+     "day": "2026-11-21",
+     "sessions": [
+      500,
+      301,
+      402
+     ]
+    },
+    {
+     "day": "2026-11-22",
+     "sessions": [
+      5,
+      6,
+      300
+     ]
+    }
+   ]
+  }
+ ],
+ "news": [
+  {
+   "kind": "warn",
+   "tag": "Squad",
+   "text": "7 positions need work",
+   "route": "home"
+  },
+  {
+   "kind": "deal-out",
+   "tag": "Leaving",
+   "text": "Curtis Jones joins Tottenham, 2 Jan 2027",
+   "route": "transfers"
+  },
+  {
+   "kind": "loan-out",
+   "tag": "Loan agreed",
+   "text": "Trey Nyoni goes on loan to Sunderland, 2 Jan 2027",
+   "route": "transfers"
+  },
+  {
+   "kind": "deal-in",
+   "tag": "Signing",
+   "text": "Malo Gusto arrives from Chelsea, 2 Jan 2027",
+   "route": "transfers"
+  },
+  {
+   "kind": "loan-in",
+   "tag": "Loan agreed",
+   "text": "Sven Botman arrives on loan from Newcastle, 2 Jan 2027",
+   "route": "transfers"
+  },
+  {
+   "kind": "inj-short",
+   "tag": "Injured",
+   "text": "Joe Gomez: Hamstring strain, back 5 Dec 2026",
+   "route": "team/squad"
+  },
+  {
+   "kind": "sus",
+   "tag": "Suspended",
+   "text": "Wataru Endo misses 1 match",
+   "route": "team/squad"
+  },
+  {
+   "kind": "inj-long",
+   "tag": "Injured",
+   "text": "Federico Chiesa: Torn knee ligaments, back 13 Jan 2027",
+   "route": "team/squad"
+  },
+  {
+   "kind": "expiring",
+   "tag": "Contract",
+   "text": "Alisson Becker's deal ends Jun 2027",
+   "route": "team/squad"
+  },
+  {
+   "kind": "expiring",
+   "tag": "Contract",
+   "text": "Giorgi Mamardashvili's deal ends Jun 2027",
+   "route": "team/squad"
+  },
+  {
+   "kind": "expiring",
+   "tag": "Contract",
+   "text": "Andrew Robertson's deal ends Jun 2027",
+   "route": "team/squad"
+  },
+  {
+   "kind": "expiring",
+   "tag": "Contract",
+   "text": "Cody Gakpo's deal ends Jun 2027",
+   "route": "team/squad"
+  }
+ ],
+ "notes": []
+}

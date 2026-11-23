@@ -16,82 +16,204 @@
   "rows": [
    {
     "slot": "GK",
+    "label": "GK",
     "ip": "GK",
     "oop": "GK",
     "ip_role": "BGK",
-    "oop_role": "SK"
+    "oop_role": "SK",
+    "ip_role_name": "Ball-Playing Goalkeeper",
+    "oop_role_name": "Sweeper Keeper",
+    "x": 50,
+    "y": 89
    },
    {
     "slot": "LB",
+    "label": "LB",
     "ip": "DL",
     "oop": "DL",
     "ip_role": "FB",
-    "oop_role": "FB"
+    "oop_role": "FB",
+    "ip_role_name": "Full-Back",
+    "oop_role_name": "Full-Back",
+    "x": 14,
+    "y": 69
    },
    {
     "slot": "CB",
+    "label": "LCB",
     "ip": "DC",
     "oop": "DC",
     "ip_role": "CB",
-    "oop_role": "CB"
+    "oop_role": "CB",
+    "ip_role_name": "Centre-Back",
+    "oop_role_name": "Centre-Back",
+    "x": 37,
+    "y": 75
    },
    {
     "slot": "CB",
+    "label": "RCB",
     "ip": "DC",
     "oop": "DC",
     "ip_role": "BCB",
-    "oop_role": "CB"
+    "oop_role": "CB",
+    "ip_role_name": "Ball-Playing Centre-Back",
+    "oop_role_name": "Centre-Back",
+    "x": 63,
+    "y": 75
    },
    {
     "slot": "RB",
+    "label": "RB",
     "ip": "WBR",
     "oop": "DR",
     "ip_role": "WB",
-    "oop_role": "FB"
+    "oop_role": "FB",
+    "ip_role_name": "Wing-Back",
+    "oop_role_name": "Full-Back",
+    "x": 86,
+    "y": 69
    },
    {
     "slot": "DM",
+    "label": "LDM",
     "ip": "DM",
     "oop": "DM",
     "ip_role": "DLP",
-    "oop_role": "PDM"
+    "oop_role": "PDM",
+    "ip_role_name": "Deep-Lying Playmaker",
+    "oop_role_name": "Pressing Defensive Midfielder",
+    "x": 36,
+    "y": 54
    },
    {
     "slot": "DM",
+    "label": "RDM",
     "ip": "DM",
     "oop": "DM",
     "ip_role": "DM",
-    "oop_role": "DM"
+    "oop_role": "DM",
+    "ip_role_name": "Defensive Midfielder",
+    "oop_role_name": "Defensive Midfielder",
+    "x": 64,
+    "y": 54
    },
    {
     "slot": "LW",
+    "label": "LW",
     "ip": "AML",
     "oop": "ML",
     "ip_role": "IF",
-    "oop_role": "WMF"
+    "oop_role": "WMF",
+    "ip_role_name": "Inside Forward",
+    "oop_role_name": "Wide Midfielder",
+    "x": 16,
+    "y": 30
    },
    {
     "slot": "AM",
+    "label": "AM",
     "ip": "AMC",
     "oop": "AMC",
     "ip_role": "SS",
-    "oop_role": "AM"
+    "oop_role": "AM",
+    "ip_role_name": "Second Striker",
+    "oop_role_name": "Attacking Midfielder",
+    "x": 50,
+    "y": 37
    },
    {
     "slot": "RW",
+    "label": "RW",
     "ip": "AMR",
     "oop": "MR",
     "ip_role": "IW",
-    "oop_role": "WMF"
+    "oop_role": "WMF",
+    "ip_role_name": "Inside Winger",
+    "oop_role_name": "Wide Midfielder",
+    "x": 84,
+    "y": 30
    },
    {
     "slot": "ST",
+    "label": "ST",
     "ip": "STC",
     "oop": "STC",
     "ip_role": "CFD",
-    "oop_role": "CFD"
+    "oop_role": "CFD",
+    "ip_role_name": "Centre Forward",
+    "oop_role_name": "Centre Forward",
+    "x": 50,
+    "y": 13
    }
   ]
+ },
+ "positions": {
+  "cards": [
+   {
+    "slot": "GK",
+    "name": "Goalkeeper",
+    "ip": "GK",
+    "oop": "GK"
+   },
+   {
+    "slot": "LB",
+    "name": "Left back",
+    "ip": "LB",
+    "oop": "LB"
+   },
+   {
+    "slot": "CB",
+    "name": "Centre back",
+    "ip": "CB",
+    "oop": "CB"
+   },
+   {
+    "slot": "RB",
+    "name": "Right back",
+    "ip": "RWB",
+    "oop": "RB"
+   },
+   {
+    "slot": "DM",
+    "name": "Defensive mid",
+    "ip": "DM",
+    "oop": "DM"
+   },
+   {
+    "slot": "CM",
+    "name": "Central mid",
+    "ip": "CM",
+    "oop": "CM"
+   },
+   {
+    "slot": "AM",
+    "name": "Attacking mid",
+    "ip": "AM",
+    "oop": "AM"
+   },
+   {
+    "slot": "LW",
+    "name": "Left wing",
+    "ip": "LW",
+    "oop": "LM"
+   },
+   {
+    "slot": "RW",
+    "name": "Right wing",
+    "ip": "RW",
+    "oop": "RM"
+   },
+   {
+    "slot": "ST",
+    "name": "Striker",
+    "ip": "ST",
+    "oop": "ST"
+   }
+  ],
+  "played_many": 5,
+  "youth_per_card": 3,
+  "shown": 5
  },
  "finances": {
   "transfer_left": 62000000,
@@ -156,6 +278,12 @@
     }
    },
    "trend": 0,
+   "familiarity": {
+    "GK": [
+     "natural",
+     "natural"
+    ]
+   },
    "stats": {
     "apps": 13,
     "g": 2,
@@ -277,6 +405,12 @@
     }
    },
    "trend": 0,
+   "familiarity": {
+    "GK": [
+     "natural",
+     "natural"
+    ]
+   },
    "stats": {
     "apps": 13,
     "g": 1,
@@ -398,6 +532,12 @@
     }
    },
    "trend": 0,
+   "familiarity": {
+    "GK": [
+     "natural",
+     "natural"
+    ]
+   },
    "stats": null,
    "youth_stats": [],
    "played": {},
@@ -545,6 +685,16 @@
     }
    },
    "trend": 0,
+   "familiarity": {
+    "LB": [
+     "natural",
+     "natural"
+    ],
+    "LW": [
+     "ineffective",
+     "unconvincing"
+    ]
+   },
    "stats": {
     "apps": 13,
     "g": 1,
@@ -703,6 +853,16 @@
     }
    },
    "trend": 0,
+   "familiarity": {
+    "LB": [
+     "natural",
+     "natural"
+    ],
+    "LW": [
+     "ineffective",
+     "unconvincing"
+    ]
+   },
    "stats": null,
    "youth_stats": [],
    "played": {},
@@ -853,6 +1013,16 @@
     }
    },
    "trend": 0,
+   "familiarity": {
+    "CB": [
+     "natural",
+     "natural"
+    ],
+    "DM": [
+     "competent",
+     "competent"
+    ]
+   },
    "stats": {
     "apps": 13,
     "g": 1,
@@ -1012,6 +1182,16 @@
     }
    },
    "trend": 0,
+   "familiarity": {
+    "CB": [
+     "natural",
+     "natural"
+    ],
+    "DM": [
+     "unconvincing",
+     "unconvincing"
+    ]
+   },
    "stats": null,
    "youth_stats": [],
    "played": {},
@@ -1174,6 +1354,24 @@
     }
    },
    "trend": 0,
+   "familiarity": {
+    "LB": [
+     "accomplished",
+     "accomplished"
+    ],
+    "CB": [
+     "natural",
+     "natural"
+    ],
+    "RB": [
+     "ineffective",
+     "accomplished"
+    ],
+    "DM": [
+     "competent",
+     "competent"
+    ]
+   },
    "stats": null,
    "youth_stats": [],
    "played": {},
@@ -1330,6 +1528,16 @@
     }
    },
    "trend": 0,
+   "familiarity": {
+    "CB": [
+     "natural",
+     "natural"
+    ],
+    "DM": [
+     "unconvincing",
+     "unconvincing"
+    ]
+   },
    "stats": null,
    "youth_stats": [],
    "played": {},
@@ -1490,6 +1698,20 @@
     }
    },
    "trend": 0,
+   "familiarity": {
+    "CB": [
+     "accomplished",
+     "accomplished"
+    ],
+    "RB": [
+     "competent",
+     "natural"
+    ],
+    "RW": [
+     "ineffective",
+     "unconvincing"
+    ]
+   },
    "stats": null,
    "youth_stats": [],
    "played": {},
@@ -1649,6 +1871,16 @@
     }
    },
    "trend": 0,
+   "familiarity": {
+    "RB": [
+     "natural",
+     "natural"
+    ],
+    "RW": [
+     "accomplished",
+     "unconvincing"
+    ]
+   },
    "stats": null,
    "youth_stats": [],
    "played": {},
@@ -1793,6 +2025,16 @@
     }
    },
    "trend": 0,
+   "familiarity": {
+    "RB": [
+     "unconvincing",
+     "natural"
+    ],
+    "RW": [
+     "ineffective",
+     "unconvincing"
+    ]
+   },
    "stats": null,
    "youth_stats": [],
    "played": {},
@@ -1949,6 +2191,24 @@
     }
    },
    "trend": 0,
+   "familiarity": {
+    "CB": [
+     "competent",
+     "competent"
+    ],
+    "DM": [
+     "natural",
+     "natural"
+    ],
+    "CM": [
+     "natural",
+     "natural"
+    ],
+    "AM": [
+     "unconvincing",
+     "unconvincing"
+    ]
+   },
    "stats": {
     "apps": 13,
     "g": 1,
@@ -2128,6 +2388,28 @@
     }
    },
    "trend": 0,
+   "familiarity": {
+    "DM": [
+     "accomplished",
+     "accomplished"
+    ],
+    "CM": [
+     "natural",
+     "natural"
+    ],
+    "AM": [
+     "natural",
+     "natural"
+    ],
+    "LW": [
+     "competent",
+     "ineffective"
+    ],
+    "RW": [
+     "unconvincing",
+     "ineffective"
+    ]
+   },
    "stats": {
     "apps": 13,
     "g": 0,
@@ -2295,6 +2577,24 @@
     }
    },
    "trend": 0,
+   "familiarity": {
+    "CB": [
+     "competent",
+     "competent"
+    ],
+    "DM": [
+     "natural",
+     "natural"
+    ],
+    "CM": [
+     "natural",
+     "natural"
+    ],
+    "AM": [
+     "unconvincing",
+     "unconvincing"
+    ]
+   },
    "stats": {
     "apps": 13,
     "g": 0,
@@ -2470,6 +2770,20 @@
     }
    },
    "trend": 0,
+   "familiarity": {
+    "CB": [
+     "accomplished",
+     "accomplished"
+    ],
+    "DM": [
+     "natural",
+     "natural"
+    ],
+    "CM": [
+     "unconvincing",
+     "unconvincing"
+    ]
+   },
    "stats": null,
    "youth_stats": [],
    "played": {},
@@ -2629,6 +2943,20 @@
     }
    },
    "trend": 0,
+   "familiarity": {
+    "DM": [
+     "accomplished",
+     "accomplished"
+    ],
+    "CM": [
+     "natural",
+     "natural"
+    ],
+    "AM": [
+     "unconvincing",
+     "unconvincing"
+    ]
+   },
    "stats": null,
    "youth_stats": [],
    "played": {},
@@ -2784,6 +3112,24 @@
     }
    },
    "trend": 0,
+   "familiarity": {
+    "CM": [
+     "unconvincing",
+     "unconvincing"
+    ],
+    "AM": [
+     "natural",
+     "natural"
+    ],
+    "LW": [
+     "accomplished",
+     "ineffective"
+    ],
+    "RW": [
+     "competent",
+     "ineffective"
+    ]
+   },
    "stats": {
     "apps": 13,
     "g": 0,
@@ -2939,6 +3285,20 @@
     }
    },
    "trend": 0,
+   "familiarity": {
+    "LW": [
+     "natural",
+     "unconvincing"
+    ],
+    "RW": [
+     "competent",
+     "ineffective"
+    ],
+    "ST": [
+     "competent",
+     "competent"
+    ]
+   },
    "stats": null,
    "youth_stats": [],
    "played": {},
@@ -3095,6 +3455,24 @@
     }
    },
    "trend": 0,
+   "familiarity": {
+    "AM": [
+     "unconvincing",
+     "unconvincing"
+    ],
+    "LW": [
+     "natural",
+     "unconvincing"
+    ],
+    "RW": [
+     "unconvincing",
+     "ineffective"
+    ],
+    "ST": [
+     "natural",
+     "natural"
+    ]
+   },
    "stats": {
     "apps": 13,
     "g": 6,
@@ -3264,6 +3642,20 @@
     }
    },
    "trend": 0,
+   "familiarity": {
+    "LW": [
+     "natural",
+     "unconvincing"
+    ],
+    "RW": [
+     "natural",
+     "unconvincing"
+    ],
+    "ST": [
+     "competent",
+     "competent"
+    ]
+   },
    "stats": null,
    "youth_stats": [],
    "played": {},
@@ -3411,6 +3803,20 @@
     }
    },
    "trend": 0,
+   "familiarity": {
+    "LW": [
+     "accomplished",
+     "ineffective"
+    ],
+    "RW": [
+     "natural",
+     "unconvincing"
+    ],
+    "ST": [
+     "competent",
+     "competent"
+    ]
+   },
    "stats": null,
    "youth_stats": [],
    "played": {},
@@ -3563,6 +3969,16 @@
     }
    },
    "trend": 0,
+   "familiarity": {
+    "AM": [
+     "competent",
+     "competent"
+    ],
+    "ST": [
+     "natural",
+     "natural"
+    ]
+   },
    "stats": {
     "apps": 13,
     "g": 0,
@@ -3721,6 +4137,20 @@
     }
    },
    "trend": 0,
+   "familiarity": {
+    "AM": [
+     "unconvincing",
+     "unconvincing"
+    ],
+    "LW": [
+     "accomplished",
+     "ineffective"
+    ],
+    "ST": [
+     "natural",
+     "natural"
+    ]
+   },
    "stats": {
     "apps": 13,
     "g": 3,
@@ -3871,6 +4301,20 @@
     }
    },
    "trend": 0,
+   "familiarity": {
+    "DM": [
+     "competent",
+     "competent"
+    ],
+    "CM": [
+     "natural",
+     "natural"
+    ],
+    "AM": [
+     "unconvincing",
+     "unconvincing"
+    ]
+   },
    "stats": null,
    "youth_stats": [],
    "played": {},
@@ -4024,6 +4468,16 @@
     }
    },
    "trend": 0,
+   "familiarity": {
+    "AM": [
+     "competent",
+     "competent"
+    ],
+    "ST": [
+     "natural",
+     "natural"
+    ]
+   },
    "stats": null,
    "youth_stats": [],
    "played": {},
@@ -4172,6 +4626,16 @@
     }
    },
    "trend": 0,
+   "familiarity": {
+    "CB": [
+     "natural",
+     "natural"
+    ],
+    "DM": [
+     "unconvincing",
+     "unconvincing"
+    ]
+   },
    "stats": null,
    "youth_stats": [],
    "played": {},
@@ -4316,6 +4780,20 @@
     }
    },
    "trend": 0,
+   "familiarity": {
+    "LW": [
+     "competent",
+     "ineffective"
+    ],
+    "RW": [
+     "natural",
+     "unconvincing"
+    ],
+    "ST": [
+     "competent",
+     "competent"
+    ]
+   },
    "stats": null,
    "youth_stats": [],
    "played": {},
@@ -4462,6 +4940,24 @@
     }
    },
    "trend": 0,
+   "familiarity": {
+    "CM": [
+     "unconvincing",
+     "unconvincing"
+    ],
+    "AM": [
+     "natural",
+     "natural"
+    ],
+    "LW": [
+     "unconvincing",
+     "ineffective"
+    ],
+    "RW": [
+     "unconvincing",
+     "ineffective"
+    ]
+   },
    "stats": null,
    "youth_stats": [],
    "played": {},
@@ -4606,6 +5102,16 @@
     }
    },
    "trend": 0,
+   "familiarity": {
+    "LB": [
+     "natural",
+     "natural"
+    ],
+    "LW": [
+     "ineffective",
+     "unconvincing"
+    ]
+   },
    "stats": null,
    "youth_stats": [],
    "played": {},
@@ -4714,6 +5220,12 @@
     }
    },
    "trend": 0,
+   "familiarity": {
+    "GK": [
+     "natural",
+     "natural"
+    ]
+   },
    "stats": null,
    "youth_stats": [],
    "played": {},
@@ -4878,6 +5390,28 @@
     }
    },
    "trend": 0,
+   "familiarity": {
+    "CM": [
+     "unconvincing",
+     "unconvincing"
+    ],
+    "AM": [
+     "natural",
+     "natural"
+    ],
+    "LW": [
+     "competent",
+     "ineffective"
+    ],
+    "RW": [
+     "natural",
+     "unconvincing"
+    ],
+    "ST": [
+     "unconvincing",
+     "unconvincing"
+    ]
+   },
    "stats": null,
    "youth_stats": [],
    "played": {},
@@ -5034,6 +5568,20 @@
     }
    },
    "trend": 0,
+   "familiarity": {
+    "CB": [
+     "competent",
+     "competent"
+    ],
+    "DM": [
+     "natural",
+     "natural"
+    ],
+    "CM": [
+     "unconvincing",
+     "unconvincing"
+    ]
+   },
    "stats": null,
    "youth_stats": [],
    "played": {},
@@ -5186,6 +5734,20 @@
     }
    },
    "trend": 0,
+   "familiarity": {
+    "LW": [
+     "unconvincing",
+     "ineffective"
+    ],
+    "RW": [
+     "natural",
+     "unconvincing"
+    ],
+    "ST": [
+     "competent",
+     "competent"
+    ]
+   },
    "stats": null,
    "youth_stats": [],
    "played": {},
@@ -5338,6 +5900,16 @@
     }
    },
    "trend": 0,
+   "familiarity": {
+    "RB": [
+     "unconvincing",
+     "natural"
+    ],
+    "RW": [
+     "ineffective",
+     "competent"
+    ]
+   },
    "stats": null,
    "youth_stats": [],
    "played": {},
@@ -5494,6 +6066,16 @@
     }
    },
    "trend": 0,
+   "familiarity": {
+    "CB": [
+     "natural",
+     "natural"
+    ],
+    "DM": [
+     "competent",
+     "competent"
+    ]
+   },
    "stats": null,
    "youth_stats": [],
    "played": {},

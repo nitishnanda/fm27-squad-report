@@ -50,6 +50,50 @@ struct ReportFeedTests {
     }
 }
 
+@Suite("Team pages")
+struct TeamPageTests {
+    @Test func positionsPutTheWorkFirst() throws {
+        let report = try Report.decode(try fixture())
+        let cards = PositionCards.build(report)
+        #expect(cards.count == report.positions?.cards.count)
+        let order = cards.map { PositionCards.levelOrder[$0.verdict?.level ?? ""] ?? 4 }
+        #expect(order == order.sorted())          // red, then amber, then green, then grey
+        #expect(cards.first?.verdict?.level == "red")
+    }
+
+    @Test func everyoneListedCanPlayThere() throws {
+        let report = try Report.decode(try fixture())
+        let many = report.positions?.playedMany ?? 5
+        for card in PositionCards.build(report) {
+            for e in card.entries {
+                let rated = e.player.rating(at: card.info.slot) != nil
+                #expect(rated || e.games >= many, "\(e.player.name) at \(card.info.slot)")
+            }
+            // loaned-out seniors come after everyone who's here
+            let seniors = card.entries.filter { !$0.player.youth }
+            if let firstAway = seniors.firstIndex(where: \.player.isLoanedOut) {
+                let rest = seniors[firstAway...].allSatisfy { $0.player.isLoanedOut }
+                #expect(rest)
+            }
+        }
+    }
+
+    @Test func familiarityIsWordsOnly() throws {
+        let report = try Report.decode(try fixture())
+        let words: Set<String> = ["natural", "accomplished", "competent", "unconvincing", "awkward", "ineffective"]
+        for p in report.players {
+            for pair in (p.familiarity ?? [:]).values { #expect(Set(pair).isSubset(of: words)) }
+        }
+    }
+
+    @Test func bothXIsHaveElevenSlotsOnThePitch() throws {
+        let report = try Report.decode(try fixture())
+        #expect(report.xi2.count == report.formation.rows.count)
+        let placed = report.formation.rows.allSatisfy { $0.x != nil && $0.y != nil && $0.label != nil }
+        #expect(placed)
+    }
+}
+
 @Suite("Formats match the web app")
 struct FormatTests {
     @Test func money() {

@@ -85,6 +85,8 @@ private struct Detail: View {
     private func page(_ report: Report) -> some View {
         switch model.route {
         case .home: HomeView(report: report)
+        case .xis: BestXIsView(report: report)
+        case .positions: PositionsView(report: report)
         case .squad: SquadListView(report: report)
         default: NotYetView(route: model.route)
         }

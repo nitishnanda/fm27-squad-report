@@ -59,7 +59,14 @@ If an engine is already running on 8027 (the .command), the app uses it instead 
 - The loader: the same eight build steps as the web app, as a native progress view.
 - First real screens: Home and the Squad list.
 
-## Phase 2: Team
+## Phase 2: Team ✅ done
+
+Best XIs (two SwiftUI pitches, player card popover), Positions (cards ordered red → amber → green → grey, status
+markers as SF Symbols + colour, ⚠ for a weak phase, key with hover help) and the Squad list's native Table extras
+(resize, reorder and hide columns by right-clicking a header, remembered; folding groups, "Out on loan" folded at
+first). The feed gained `formation.rows[].label/x/y/ip_role_name/oop_role_name`, `positions` (cards, played_many,
+youth_per_card, shown) and per-player `familiarity` (FM's words per card, never the /20 numbers).
+
 
 - Best XIs: the pitch drawn in SwiftUI, both XIs, click a player for his card in a popover.
 - Positions: the depth chart, red/amber positions first, status markers as SF Symbols plus colour.

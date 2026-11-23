@@ -12,6 +12,7 @@ struct Report: Decodable, Sendable {
     let gameDate: String?
     let lastRun: String?
     let formation: Formation
+    let positions: PositionsInfo?
     let finances: Finances
     let players: [Player]
     let targets: [Player]
@@ -52,10 +53,15 @@ struct Club: Decodable, Sendable {
 struct Formation: Decodable, Sendable {
     struct Row: Decodable, Sendable {
         let slot: String
+        let label: String?        // LCB / RCB, LDM / RDM
         let ip: String
         let oop: String
         let ipRole: String
         let oopRole: String
+        let ipRoleName: String?
+        let oopRoleName: String?
+        let x: Double?            // where he stands on the pitch, % from the left
+        let y: Double?            // % from the top (your goal at the bottom)
     }
     let name: String
     let style: String?
@@ -63,6 +69,22 @@ struct Formation: Decodable, Sendable {
 
     /// "4-2-3-1 Gegenpress", or just the shape for an engine that doesn't send the style yet.
     var title: String { [name, style].compactMap { $0 }.joined(separator: " ") }
+}
+
+/// The Positions page: one card per position and what each plays with and without the ball.
+struct PositionsInfo: Decodable, Sendable {
+    struct Card: Decodable, Sendable, Identifiable {
+        let slot: String
+        let name: String
+        let ip: String
+        let oop: String
+        var id: String { slot }
+        var twoPhases: Bool { ip != oop }
+    }
+    let cards: [Card]
+    let playedMany: Int
+    let youthPerCard: Int
+    let shown: Int
 }
 
 struct Finances: Decodable, Sendable {
@@ -180,16 +202,29 @@ struct Player: Decodable, Sendable, Identifiable {
     let trend: Double?
     let stats: SeasonStats?
     let status: Status
+    /// Per formation row ("0"…"10"): his rating in that exact slot, and the same for anyone (open rows, Sandbox-style).
+    let rows: [String: Rating?]?
+    let openRows: [String: Rating?]?
+    /// Matches played at each card's position this season.
+    let played: [String: Int]?
+    /// Per card: FM's words for how well he knows the in- and out-of-possession positions. Missing = ineffective.
+    let familiarity: [String: [String]]?
 
     var id: Int { uid }
 
     private enum CodingKeys: String, CodingKey {
         case uid, name, age, youth, value, wage, contractEnd, expiring, positions, best, system, abilityBest
-        case potential, trend, stats, status
+        case potential, trend, stats, status, rows, openRows, played, familiarity
         case location = "where"
     }
 
     func rating(at slot: String) -> Rating? { system[slot] ?? nil }
+    func rating(row: Int) -> Rating? { rows?[String(row)] ?? nil }
+    func openRating(row: Int) -> Rating? { openRows?[String(row)] ?? nil }
+    func games(at slot: String) -> Int { played?[slot] ?? 0 }
+    /// [in possession, out of possession] words for a card, e.g. ["accomplished", "unconvincing"].
+    func familiarity(at slot: String) -> [String] { familiarity?[slot] ?? ["ineffective", "ineffective"] }
+    var isLoanedOut: Bool { location == "loan_out" }
     var isInjured: Bool { status.injury != nil }
     var isSuspended: Bool { status.suspendedMatches != nil }
     func has(_ token: String) -> Bool { status.tokens.contains(token) }

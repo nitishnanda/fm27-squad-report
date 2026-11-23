@@ -64,35 +64,12 @@ struct StatusBadge: View {
         .accessibilityLabel("\(status.label), \(status.detail)")
     }
 
-    private var base: Color {
-        switch status.kind {
-        case .transferIn: Palette.transferIn
-        case .transferOut: Palette.transferOut
-        case .loanIn, .loanInArranged: Palette.loanIn
-        case .loanOut, .loanOutArranged: Palette.loanOut
-        case .injuredShort: Palette.injuryShort
-        case .injuredLong: Palette.injuryLong
-        case .suspended: Palette.suspended
-        case .expiring: .secondary
-        }
-    }
+    private var base: Color { status.kind.color }
 
     /// Arranged moves and contracts ending are dashed: they haven't happened yet.
     private var dashed: Bool { [.loanInArranged, .loanOutArranged, .expiring].contains(status.kind) }
 
-    private var symbol: String {
-        switch status.kind {
-        case .transferIn: "arrow.down.circle.fill"
-        case .transferOut: "arrow.up.circle.fill"
-        case .loanIn: "arrow.down.circle"
-        case .loanOut: "arrow.up.circle"
-        case .loanInArranged, .loanOutArranged: "calendar.badge.clock"
-        case .injuredShort: "cross.case.fill"
-        case .injuredLong: "bed.double.fill"     // a different shape too, so it isn't colour alone
-        case .suspended: "nosign"
-        case .expiring: "doc.text"
-        }
-    }
+    private var symbol: String { status.kind.symbol }
 
     private var fill: Color {
         switch status.kind {
@@ -169,4 +146,49 @@ struct NewsTag: View {
         }
     }
     private var edge: Color { item.kind == "expiring" ? Color.secondary.opacity(0.7) : base.opacity(0.55) }
+}
+
+
+extension PlayerStatus.Kind {
+    /// Each status has its own symbol, so it never relies on colour alone.
+    var symbol: String {
+        switch self {
+        case .transferIn: "arrow.down.circle.fill"
+        case .transferOut: "arrow.up.circle.fill"
+        case .loanIn: "arrow.down.circle"
+        case .loanOut: "arrow.up.circle"
+        case .loanInArranged, .loanOutArranged: "calendar.badge.clock"
+        case .injuredShort: "cross.case.fill"
+        case .injuredLong: "bed.double.fill"
+        case .suspended: "nosign"
+        case .expiring: "doc.text"
+        }
+    }
+
+    var color: Color {
+        switch self {
+        case .transferIn: Palette.transferIn
+        case .transferOut: Palette.transferOut
+        case .loanIn, .loanInArranged: Palette.loanIn
+        case .loanOut, .loanOutArranged: Palette.loanOut
+        case .injuredShort: Palette.injuryShort
+        case .injuredLong: Palette.injuryLong
+        case .suspended: Palette.suspended
+        case .expiring: .secondary
+        }
+    }
+}
+
+/// A status as a small coloured symbol (Positions, pitches), with the full text on hover and for VoiceOver.
+struct StatusMarker: View {
+    let status: PlayerStatus
+    var size: CGFloat = 11
+
+    var body: some View {
+        Image(systemName: status.kind.symbol)
+            .font(.system(size: size, weight: .semibold))
+            .foregroundStyle(status.kind.color)
+            .help("\(status.label): \(status.detail)")
+            .accessibilityLabel("\(status.label), \(status.detail)")
+    }
 }

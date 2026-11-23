@@ -100,6 +100,11 @@ struct SquadListView: View {
     @State private var youth = false
     @State private var sortOrder = [KeyPathComparator(\SquadRow.system, order: .reverse)]
     @State private var selection: Set<SquadRow.ID> = []
+    /// Groups you've folded away. "Out on loan" starts folded; a filter or search opens whatever it finds.
+    @State private var folded: Set<Int> = [6]
+    /// Column widths, order and which ones are hidden (right-click a header), kept between launches.
+    @AppStorage("squadColumns") private var savedColumns = Data()
+    @State private var columns = TableColumnCustomization<SquadRow>()
 
     var body: some View {
         let all = SquadGroups.rows(report)
@@ -116,10 +121,12 @@ struct SquadListView: View {
                 .fixedSize()
                 Toggle("Youth teams", isOn: $youth)
                 Spacer()
-                Text("\(shown.count) player\(shown.count == 1 ? "" : "s")")
+                let filtering = show != .all || !search.trimmingCharacters(in: .whitespaces).isEmpty
+                let away = filtering ? 0 : shown.filter { folded.contains($0.group) }.count
+                Text("\(shown.count) player\(shown.count == 1 ? "" : "s")" + (away > 0 ? " · \(away) folded away" : ""))
                     .foregroundStyle(.secondary)
                     .monospacedDigit()
-                    .accessibilityLabel("\(shown.count) players shown")
+                    .accessibilityLabel("\(shown.count) players" + (away > 0 ? ", \(away) in folded groups" : ""))
             }
             .padding(.horizontal, 20).padding(.bottom, 10)
             if shown.isEmpty {
@@ -136,6 +143,12 @@ struct SquadListView: View {
             }
         }
         .searchable(text: $search, placement: .toolbar, prompt: "Search the squad")
+        .onAppear {
+            if let saved = try? JSONDecoder().decode(TableColumnCustomization<SquadRow>.self, from: savedColumns) { columns = saved }
+        }
+        .onChange(of: columns) { _, now in
+            if let data = try? JSONEncoder().encode(now) { savedColumns = data }
+        }
     }
 
     private func filtered(_ rows: [SquadRow]) -> [SquadRow] {
@@ -154,11 +167,14 @@ struct SquadListView: View {
 
     private func table(_ rows: [SquadRow]) -> some View {
         let groups = Dictionary(grouping: rows, by: \.group)
-        return Table(of: SquadRow.self, selection: $selection, sortOrder: $sortOrder) {
+        let filtering = show != .all || !search.trimmingCharacters(in: .whitespaces).isEmpty
+        return Table(of: SquadRow.self, selection: $selection, sortOrder: $sortOrder, columnCustomization: $columns) {
             TableColumn("Player", value: \.name) { row in
                 Text(row.name).fontWeight(.semibold)
             }
             .width(min: 130, ideal: 160)
+            .customizationID("player")
+            .disabledCustomizationBehavior(.visibility)
             TableColumn("FM positions", value: \.natural) { row in
                 (Text(row.natural) + Text(row.accomplished.isEmpty ? "" : "  \(row.accomplished)").foregroundStyle(.secondary))
                     .lineLimit(1)
@@ -167,10 +183,12 @@ struct SquadListView: View {
                     .help("Natural: \(row.natural)\(row.accomplished.isEmpty ? "" : " · accomplished (grey): \(row.accomplished)")")
             }
             .width(min: 110, ideal: 150)
+            .customizationID("positions")
             TableColumn("Age", value: \.age) { row in
                 Text(row.age == 99 ? "" : "\(row.age)").monospacedDigit()
             }
             .width(34)
+            .customizationID("age")
             TableColumn("System ★", value: \.system) { row in
                 if row.system >= 0 {
                     HStack(spacing: 5) {
@@ -188,10 +206,12 @@ struct SquadListView: View {
                 }
             }
             .width(min: 110, ideal: 128)
+            .customizationID("system")
             TableColumn("Ability ★", value: \.ability) { row in
                 if row.ability >= 0 { StarsView(value: row.ability) } else { Text("–").foregroundStyle(.secondary) }
             }
             .width(min: 70, ideal: 76)
+            .customizationID("ability")
             TableColumn("Potential ★", value: \.potential) { row in
                 if row.potential >= 0 {
                     StarsView(value: row.potential, tint: Palette.potential)
@@ -201,16 +221,19 @@ struct SquadListView: View {
                 }
             }
             .width(min: 70, ideal: 76)
+            .customizationID("potential")
             TableColumn("Value", value: \.value) { row in
                 Text(Fmt.money(row.value < 0 ? nil : row.value)).monospacedDigit()
                     .frame(maxWidth: .infinity, alignment: .trailing)
             }
             .width(min: 50, ideal: 58)
+            .customizationID("value")
             TableColumn("Wage p/w", value: \.wage) { row in
                 Text(Fmt.wage(row.wage < 0 ? nil : row.wage)).monospacedDigit()
                     .frame(maxWidth: .infinity, alignment: .trailing)
             }
             .width(min: 72, ideal: 78)
+            .customizationID("wage")
             TableColumn("Contract", value: \.contract) { row in
                 Text(Fmt.month(row.contractEnd))
                     .underline(row.expiring, pattern: .dash)
@@ -218,19 +241,38 @@ struct SquadListView: View {
                     .help(row.expiring ? "Ends within a year" : "")
             }
             .width(min: 64, ideal: 72)
+            .customizationID("contract")
             TableColumn("Status") { row in
                 HStack(spacing: 4) {
                     ForEach(row.statuses) { StatusBadge(status: $0, showDetail: row.statuses.count == 1) }
                 }
             }
             .width(min: 110, ideal: 200)
+            .customizationID("status")
         } rows: {
             ForEach(SquadGroups.titles.indices, id: \.self) { g in
                 if let members = groups[g], !members.isEmpty {
+                    let open = filtering || !folded.contains(g)
                     Section {
-                        ForEach(members.sorted(using: sortOrder)) { TableRow($0) }
+                        ForEach(open ? members.sorted(using: sortOrder) : []) { TableRow($0) }
                     } header: {
-                        Text("\(SquadGroups.titles[g])  \(members.count)")
+                        Button {
+                            if folded.contains(g) { folded.remove(g) } else { folded.insert(g) }
+                        } label: {
+                            HStack(spacing: 6) {
+                                Image(systemName: "chevron.right")
+                                    .font(.caption.weight(.bold))
+                                    .rotationEffect(.degrees(open ? 90 : 0))
+                                Text(SquadGroups.titles[g])
+                                Text("\(members.count)").foregroundStyle(.secondary)
+                            }
+                            .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
+                        .disabled(filtering)
+                        .help(filtering ? "Filters and search show every match" : (open ? "Fold this group" : "Show this group"))
+                        .accessibilityLabel("\(SquadGroups.titles[g]), \(members.count) players")
+                        .accessibilityValue(open ? "expanded" : "collapsed")
                     }
                 }
             }

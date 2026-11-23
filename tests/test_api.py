@@ -61,6 +61,12 @@ class ReportJson(unittest.TestCase):
             self.assertNotIn(f'"ca": {p["ca"]}', text)
             self.assertNotIn(f'"pa": {p["pa"]}', text)
 
+    def test_familiarity_is_words_not_numbers(self):   # FM shows these words; the /20 ratings stay hidden
+        words = {w for _, w in fm.FAMILIARITY_WORD} | {"ineffective"}
+        for p in self.J["players"]:
+            for pair in p["familiarity"].values():
+                self.assertTrue(set(pair) <= words, pair)
+
     def test_hidden_attributes_dropped_even_if_the_save_has_them(self):
         p = dict(self.R["players"][0], attrs={**self.R["players"][0]["attrs"], "consistency": 15, "ambition": 20})
         self.assertNotIn("consistency", fm.player_json(p)["attributes"])

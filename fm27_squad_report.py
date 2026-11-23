@@ -5724,10 +5724,29 @@ def player_json(p: dict) -> dict:
         "rows": {str(i): _rating(r) for i, r in (p.get("rows") or {}).items()},
         "open_rows": {str(i): _rating(r) for i, r in (p.get("orows") or {}).items()},
         "trend": p.get("trend", 0),
+        "familiarity": _familiarity(p),
         "stats": _plain(p.get("stats")), "youth_stats": _plain(p.get("ystats") or []), "played": _plain(p.get("played") or {}),
         "attributes": {k: v for k, v in (p.get("attrs") or {}).items() if k not in HIDDEN_ATTRS},
         "status": status,
     }
+
+
+def _card_phases(slot: str):
+    """FM position codes a Positions card plays in and out of possession, e.g. RB -> ("WBR", "DR")."""
+    return next(((row[1], row[2]) for row in FORMATION if row[0] == slot), EXTRA_CARDS.get(slot))
+
+
+def _familiarity(p: dict) -> dict:
+    """How well he knows each card's positions, in FM's own words (natural ... ineffective). Never the /20 numbers."""
+    posr = p.get("posr") or {}
+    out = {}
+    for slot in CARD_ORDER:
+        phases = _card_phases(slot)
+        if phases:
+            words = [familiarity_word(posr.get(code, 0)) for code in phases]
+            if words != ["ineffective", "ineffective"]:   # left out = can't play there at all
+                out[slot] = words
+    return out
 
 
 def _fit_entry(e: dict) -> dict:
@@ -5746,8 +5765,14 @@ def report_json(R: dict) -> dict:
                  "initials": club["initials"]},
         "save_name": R.get("save_name"), "game_date": _plain(R.get("game_date")), "last_run": _plain(R.get("last_run")),
         "formation": {"name": FORMATION_NAME, "style": TACTICAL_STYLE,
-                      "rows": [{"slot": s, "ip": ip, "oop": oop, "ip_role": ipr, "oop_role": oopr}
-                                                      for s, ip, oop, ipr, oopr in FORMATION]},
+                      "rows": [{"slot": s, "label": lab, "ip": ip, "oop": oop, "ip_role": ipr, "oop_role": oopr,
+                                "ip_role_name": ROLES["IP"][ipr][0], "oop_role_name": ROLES["OOP"][oopr][0], "x": x, "y": y}
+                               for (s, ip, oop, ipr, oopr), lab, (x, y) in zip(FORMATION, row_labels(), PITCH_XY)]},
+        # the Positions page: one card per position, in this order, and what each plays with and without the ball
+        "positions": {"cards": [{"slot": slot, "name": SLOT_NAMES.get(slot, slot),
+                                 "ip": POS_LABEL[_card_phases(slot)[0]], "oop": POS_LABEL[_card_phases(slot)[1]]}
+                                for slot in CARD_ORDER if _card_phases(slot)],
+                      "played_many": PLAYED_MANY, "youth_per_card": YOUTH_PER_CARD, "shown": POS_SHOWN},
         "finances": _plain(R.get("finances") or {}),
         "team_names": _plain(R.get("team_names") or {}),
         "players": [player_json(p) for p in R["players"]],

@@ -94,6 +94,16 @@ LW (AML/ML) IF/WMF · AM SS/AM · RW (AMR/MR) IW/WMF · ST CFD/CFD. `STYLE_KEYS`
   previews get the look CSS copied in from `<style id="looks-css">` by LOOK_JS (`dress()`), so the CSS isn't shipped 4 extra times.
   The launch wipe takes each look's colour. The app's loader (`boot_html`) isn't themed.
 - Layout is fluid (no max width); `--gutter` scales with the window.
+- Phones (≤860px, so small tablets in portrait too) get their own layout, not the desktop squeezed (`PHONE_CSS_RAW`, prefixed
+  with `html:not(#_)` by `prefix_css()` so layout wins over every look while the looks keep colours and type; phone-only bits are
+  hidden on desktop at the end of APP_CSS). Shell: bottom tab bar Home · Team · Tactics · Transfers · More with icons (`NAV_ICONS`,
+  `nav_icon()`) and counts; More is a sheet (`more_sheet()`) with Stats, Sandbox, Look, Key, About; the header shows the section
+  name (`#ahTitle`, set in `show()`); a section's pages are a segmented control; Key/Look/More slide up as bottom sheets
+  (`@starting-style`). Pages: the ticker becomes a "Latest" list on Home (`ph-news`), Best XIs shows one XI at a time (`.xiseg`,
+  `section[data-xi]`), Positions folds its key and puts red/amber positions first, the squad list becomes one card per player,
+  chip rows swipe sideways, training's week scrolls, transfers is a vertical timeline, Sandbox says it's quicker on a bigger screen.
+  Narrow desktop windows (861–1280px) get a tighter header and the squad list drops extra columns instead of scrolling sideways.
+  The server only listens on 127.0.0.1, so a real iPhone can't open it yet.
 
 ## What fmsave gives us (worked out in that session)
 - `player_match_stats()`: position per match is a one-bit mask in FM order —

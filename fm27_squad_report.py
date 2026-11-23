@@ -1478,7 +1478,9 @@ def overview(R):
                     for s, lvl, t, r, _ in ok)
     empty = '<div class="allgood">Nothing urgent — every position in your tactic is covered. 🔥</div>' if not need else ""
     del by_uid
-    return f"""{home_hero(R)}<section><h2>Club snapshot</h2><div class="fin">{''.join(tiles)}</div></section>
+    news = "".join(f'<li><a href="#{r}"><span class="tag {c}">{E(t)}</span><span>{E(x)}</span></a></li>' for c, t, x, r in ticker_items(R)[:8])
+    latest = f'<section class="ph-only ph-news"><h2>Latest</h2><ul class="news">{news}</ul></section>' if news else ""
+    return f"""{home_hero(R)}{latest}<section><h2>Club snapshot</h2><div class="fin">{''.join(tiles)}</div></section>
 <div class="explain"><b>How to read the stars.</b> <span class="kc sty">System ★</span> = how good a player is in <i>your</i>
   {E(FORMATION_NAME)} {E(TACTICAL_STYLE)}: his position, the key attributes of your roles there, and the {E(TACTICAL_STYLE.lower())} attributes.
   <span class="kc both">Ability ★</span> = how good he is at that position in general, ignoring your tactic.
@@ -1522,7 +1524,8 @@ def xis(R):
     crest = club_identity(R["club"])["pitch"]
     return f"""<section><h2>Best XI &amp; second XI <span class="h2sub">{E(FORMATION_NAME)} · rated in both phases · every player used once</span></h2>
   <div class="xtools" role="group" aria-label="Pitch view"><button class="seg" type="button" data-view="3d" aria-pressed="true">3D</button><button class="seg" type="button" data-view="2d" aria-pressed="false">Flat</button>
-   <span class="xhint">3D: drag a pitch to turn it. Flat shows every badge.</span></div>
+   <span class="xhint">3D: drag a pitch to turn it. Flat shows every badge.</span>
+   <span class="xiseg ph-only" role="group" aria-label="Which XI"><button class="seg" type="button" data-xi="1" aria-pressed="true">Best XI</button><button class="seg" type="button" data-xi="2" aria-pressed="false">Second XI</button></span></div>
   <div class="pitches3d">{pitch3d_card('Best XI', R['xi1'], 'fully fit squad', crest)}{pitch3d_card('Second XI', R['xi2'], "from who's left", crest)}</div>
   <div class="pitches" hidden>{pitch('Best XI', R['xi1'], 'fully fit squad')}{pitch('Second XI', R['xi2'], "from who's left")}</div></section>"""
 
@@ -1611,7 +1614,8 @@ def position_cards(R):
             <span class="pname">{E(SLOT_NAMES.get(slot, slot))}</span><span class="vtag {level}">{E(label)}</span></div>
             <div class="plist">{body}</div></div>""")
     return f"""<section><h2>Position by position <span class="h2sub">everyone who can play there · natural first · hover a player for status and details</span></h2>
-  {positions_key()}
+  <details class="pkey-fold" open><summary>What the markers mean</summary>{positions_key()}</details>
+  <p class="ph-only ph-note">The positions that need work come first.</p>
   <div class="pform"><i class="pf-box t"></i><i class="pf-box b"></i>{''.join(cards)}</div></section>"""
 
 
@@ -2623,6 +2627,7 @@ def sandbox_data(R) -> str:
 
 def sandbox_page(R):
     return f"""<section><h2>Sandbox <span class="h2sub">mark players injured, gone or away, sign your scouting targets, then build an XI · ratings change with the position you put someone in</span></h2>
+  <p class="ph-only ph-note">Everything works here, but building line-ups is quicker on a bigger screen.</p>
   <div class="sbtop">
     <div class="sbscore"><div class="lbl">Your XI</div><div class="val" id="sbAvg"></div><div class="sub" id="sbCmp"></div></div>
     <div class="sbwarn" id="sbWarn" aria-live="polite"></div>
@@ -3948,6 +3953,38 @@ def app_header(R) -> str:
                        {"squad": (squad_n, ""), "fit": (misfit_n, "amber")}, ticker(R))
 
 
+NAV_ICONS = {
+    "home": '<path d="M3.5 10.5 12 3.5l8.5 7V20a1 1 0 0 1-1 1H15v-6H9v6H4.5a1 1 0 0 1-1-1z"/>',
+    "team": '<path d="M8.5 3.5 3.5 6.5l1.8 4.3 2.2-1V20.5h9V9.8l2.2 1 1.8-4.3-5-3c-.6 1.5-2 2.4-3.5 2.4s-2.9-.9-3.5-2.4z"/>',
+    "tactics": '<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M4 12h16"/><circle cx="12" cy="12" r="2.8"/><path d="M9 3v3.5h6V3M9 21v-3.5h6V21"/>',
+    "sandbox": '<path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2.2"/><circle cx="9" cy="17" r="2.2"/>',
+    "transfers": '<path d="M4 8.5h14.5M15 5l3.5 3.5L15 12M20 15.5H5.5M9 12l-3.5 3.5L9 19"/>',
+    "stats": '<path d="M5 20.5v-8M12 20.5v-15M19 20.5v-11"/>',
+    "more": '<circle cx="5.5" cy="12" r="1.7" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.7" fill="currentColor" stroke="none"/><circle cx="18.5" cy="12" r="1.7" fill="currentColor" stroke="none"/>',
+    "look": '<circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 0 0 0 17z" fill="currentColor" stroke="none"/>',
+    "key": '<circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 7.8v.4"/>',
+    "about": '<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>',
+}
+
+
+def nav_icon(name: str, cls: str = "ni") -> str:
+    return (f'<svg class="{cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" '
+            f'stroke-linejoin="round" aria-hidden="true">{NAV_ICONS[name]}</svg>')
+
+
+def more_sheet() -> str:
+    """The phone's More tab: the sections that don't get their own tab, then the look, the key and the home page."""
+    blurb = {"stats": "Season leaders and every player's numbers", "sandbox": "Try line-ups. Easier on a bigger screen"}
+    links = "".join(f'<a href="#{pages[0][2]}" data-sec="{sid}">{nav_icon(sid, "mi")}<span><b>{E(label)}</b><small>{blurb[sid]}</small></span></a>'
+                    for sid, label, pages in SECTIONS if sid in blurb)
+    return (f'<div id="morepop" class="keypop morepop" popover><p class="kp-h">More</p>'
+            f'<nav class="mp-links" aria-label="More sections">{links}</nav>'
+            f'<div class="mp-tools"><button type="button" popovertarget="lookpop">{nav_icon("look", "mi")}<span><b>Look</b>'
+            f'<small id="lookCur2">Original</small></span></button>'
+            f'<button type="button" popovertarget="keypop">{nav_icon("key", "mi")}<span><b>Key</b><small>What the badges and letters mean</small></span></button>'
+            f'<a href="/">{nav_icon("about", "mi")}<span><b>About</b><small>The home page</small></span></a></div></div>')
+
+
 def header_html(club: dict, sec_count: dict, sub_count: dict, ticker_markup: str, route: str | None = None) -> str:
     """The app's sticky header. route pre-selects a page (used by the static previews on the home page)."""
     sec_on = route.split("/")[0] if route else None
@@ -3957,7 +3994,7 @@ def header_html(club: dict, sec_count: dict, sub_count: dict, ticker_markup: str
     links, subs = [], []
     for i, (sid, label, pages) in enumerate(SECTIONS, 1):
         cur = ' aria-current="true"' if sid == sec_on else ""
-        links.append(f'<a href="#{pages[0][2]}" data-sec="{sid}"{cur}><span class="k" aria-hidden="true">{i}</span>{E(label)}'
+        links.append(f'<a href="#{pages[0][2]}" data-sec="{sid}"{cur}>{nav_icon(sid)}<span class="k" aria-hidden="true">{i}</span><span class="nl">{E(label)}</span>'
                      f'{pill(sec_count.get(sid), "to look at")}</a>')
         on = " on" if sid == sec_on else ""
         if len(pages) > 1:
@@ -3975,13 +4012,14 @@ def header_html(club: dict, sec_count: dict, sub_count: dict, ticker_markup: str
     return f"""<a class="skip" href="#main">Skip to content</a>
 <header class="ah"><div class="ah-row">
   <a class="ah-brand" href="#home" aria-label="{APP_NAME} home">{APP_LOGO_SVG}<span><small>FM27</small>{APP_NAME}</span></a>
-  <nav class="ah-nav" aria-label="Sections">{''.join(links)}</nav>
+  <span class="ah-title" id="ahTitle" aria-hidden="true"></span>
+  <nav class="ah-nav" aria-label="Sections">{''.join(links)}<button class="ah-more" type="button" popovertarget="morepop" aria-label="More: Stats, Sandbox, look and key">{nav_icon("more")}<span class="nl">More</span></button></nav>
   <div class="ah-tools"><span class="ah-club" title="The club in your save">{club['dark']}<b>{E(club['name'])}</b></span>
    <span class="ah-live" id="liveDot"><i></i><span id="liveTxt">Up to date</span></span>
    <button class="ah-btn ah-look" type="button" popovertarget="lookpop" aria-label="Change the look">Look<span class="lk-cur">: <b id="lookCur">Original</b></span></button>
    <button class="ah-btn" type="button" popovertarget="keypop">Key</button><a class="ah-btn ah-about" href="/">About</a></div>
  </div>{''.join(subs)}{ticker_markup}</header>
-<div id="keypop" class="keypop" popover><p class="kp-h">Key</p><div class="kp-b">{legend}</div></div>{look_popover()}"""
+<div id="keypop" class="keypop" popover><p class="kp-h">Key</p><div class="kp-b">{legend}</div></div>{look_popover()}{more_sheet()}"""
 
 
 def xi_cards(xi) -> list:
@@ -4279,6 +4317,9 @@ button.sbg:hover{color:var(--text)}button.sbg:focus-visible{outline:2px solid va
  .pitches .pchip .badge{display:none}
 }
 @media (prefers-reduced-motion:reduce){.tk-tr{animation:none}.tk-vp{overflow-x:auto}.tk ul[aria-hidden]{display:none}.tk-btn{display:none}.tilt{transition:none}}
+/* phone-only parts (shown by PHONE_CSS) */
+.ni,.ah-more,.ah-title,.ph-only{display:none}
+.pkey-fold>summary{display:none}
 """
 
 # ---------------------------------------------------------------------------------------------
@@ -4324,7 +4365,11 @@ def theme_font_css() -> str:
 
 def scope_css(css: str, key: str) -> str:
     """Prefix every selector with :root[data-theme="key"] (inside @media/@supports too)."""
-    pre = f':root[data-theme="{key}"]'
+    return prefix_css(css, f':root[data-theme="{key}"]')
+
+
+def prefix_css(css: str, pre: str) -> str:
+    """Prefix every selector with `pre`; :root/html selectors are joined onto it."""
     css = re.sub(r"/\*.*?\*/", "", css, flags=re.S)
 
     def one(sel: str) -> str:
@@ -4358,7 +4403,7 @@ def scope_css(css: str, key: str) -> str:
                 depth += (s[k] == "{") - (s[k] == "}")
                 k += 1
             body = s[j + 1:k - 1]
-            if head.startswith(("@media", "@supports", "@container")):
+            if head.startswith(("@media", "@supports", "@container", "@starting-style")):
                 res.append(f"{head}{{{walk(body)}}}")
             elif head.startswith("@"):
                 res.append(f"{head}{{{body}}}")
@@ -4845,7 +4890,7 @@ h2{font-weight:700}
 # every look: wider faces than Archivo, so keep the short table cells on one line
 LOOK_COMMON = r"""
 button.tile .lbl{padding-right:50px}
-@media (min-width:761px){.squad td.nm,.squad td.exp,.squad td.r,.squad td:nth-child(3),.squad td:has(>.stars){white-space:nowrap}}
+@media (min-width:1281px){.squad td.nm,.squad td.exp,.squad td.r,.squad td:nth-child(3),.squad td:has(>.stars){white-space:nowrap}}
 .stars .on{color:var(--star)}
 """
 
@@ -4874,7 +4919,8 @@ LOOK_CSS = r"""
 .lk-foot{margin:8px 2px 0;font-size:11.5px;color:var(--muted)}
 .lk-foot kbd{font:inherit;font-size:11px;border:1px solid var(--line);border-radius:4px;padding:0 5px}
 .ah-look b{font-weight:700}
-@media (max-width:860px){.lookpop{top:100px;right:12px;left:12px;width:auto}.ah-look .lk-cur{display:none}}
+@media (max-width:1100px){.ah-look .lk-cur{display:none}}
+@media (max-width:860px){.lookpop{top:100px;right:12px;left:12px;width:auto}}
 ::view-transition-old(root),::view-transition-new(root){animation-duration:.32s}
 """
 
@@ -4887,7 +4933,7 @@ LOOK_HEAD_JS = ("try{var t=localStorage.getItem('fm27-theme');if(/^[A-E]$/.test(
 LOOK_JS = r"""
 (function(){
 const NAMES=__NAMES__,KEYS=Object.keys(NAMES),root=document.documentElement,pop=document.getElementById('lookpop');
-const cur=document.getElementById('lookCur');
+const cur=document.getElementById('lookCur'),cur2=document.getElementById('lookCur2');
 function now(){return root.dataset.theme||'orig';}
 // the home page's previews are real app pages in srcdoc frames: give them the look CSS once, then the same look
 function dress(f){let d;try{d=f.contentDocument;}catch(_){return;}if(!d||!d.body||!d.body.classList.contains('mini'))return;
@@ -4899,7 +4945,7 @@ const frames=[...document.querySelectorAll('iframe[srcdoc]')];
 frames.forEach(f=>{f.addEventListener('load',()=>dress(f));dress(f);});
 function apply(k,save){
  const set=()=>{if(k==='orig')delete root.dataset.theme;else root.dataset.theme=k;
-  if(cur)cur.textContent=NAMES[k];
+  if(cur)cur.textContent=NAMES[k];if(cur2)cur2.textContent=NAMES[k];
   document.querySelectorAll('.lk-o input').forEach(i=>{i.checked=i.value===k;});frames.forEach(dress);};
  const calm=matchMedia('(prefers-reduced-motion: reduce)').matches;
  if(save&&document.startViewTransition&&!calm)document.startViewTransition(set);else set();
@@ -5106,6 +5152,209 @@ body.landing{font-size:16.5px}
 LANDING_THEME_CSS = "".join(scope_css(css, k) for k, css in (("A", LAND_A), ("B", LAND_B), ("C", LAND_C), ("D", LAND_D), ("E", LAND_B + LAND_E)))
 
 
+# ---------------------------------------------------------------------------------------------
+# Phones: not the desktop squeezed, but its own layout. The shell (tab bar, header, sheets) and the page layouts
+# start at 860px (phones and small tablets in portrait). Prefixed with html:not(#_) so layout wins over every look's CSS, while the looks
+# keep their colours and type (these rules avoid colours wherever they can).
+PHONE_CSS_RAW = r"""
+:root{--nav-on:var(--kit)}
+:root[data-theme="A"],:root[data-theme="D"]{--nav-on:var(--kit-l)}
+:root[data-theme="C"]{--nav-on:var(--gold)}
+:root[data-theme="D"]{--seg-on:#111111}
+:root[data-theme="B"],:root[data-theme="E"]{--nav-on:#ffffff;--sticky-bg:#0c1b14}
+/* narrow desktop windows: a tighter header so the wider looks still fit on one line */
+@media (min-width:861px) and (max-width:1280px){
+ .ah-row{gap:16px}
+ .ah-nav a{padding-left:9px;padding-right:9px}
+ .ah-nav .k,.ah-club b,.ah-live span,.ah-look .lk-cur{display:none}
+}
+@media (min-width:861px) and (max-width:1024px){
+ .ah-brand span{display:none}
+ .ah-nav{gap:0}
+ .ah-nav a{padding-left:7px;padding-right:7px}
+}
+@media (max-width:860px){
+ html{-webkit-tap-highlight-color:transparent}
+ body.app{padding-bottom:calc(78px + env(safe-area-inset-bottom))}
+ .ah{padding-top:env(safe-area-inset-top)}
+ .ah-row{height:54px;gap:10px;padding:0 16px}
+ .ah-brand span{display:none}
+ .ah-brand .logo{width:28px;height:28px}
+ .ah-title{display:block;flex:1 1 auto;min-width:0;font-family:var(--display);font-stretch:75%;font-weight:800;font-size:25px;line-height:1.05;
+  letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ .ah-tools{gap:8px;margin-left:0}
+ .ah-tools .ah-btn{display:none}
+ .ah-club{padding:2px;border:0;background:none}.ah-club b{display:none}
+ .ah-live span{display:none}
+ /* the bottom tab bar: four sections and More */
+ .ah-nav{height:calc(64px + env(safe-area-inset-bottom));padding:0 4px env(safe-area-inset-bottom);justify-content:space-around;align-items:stretch;gap:0}
+ .ah-nav a[data-sec="sandbox"],.ah-nav a[data-sec="stats"]{display:none}
+ .ah-nav a,.ah-more{position:relative;flex:1 1 0;min-width:0;height:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  padding:7px 2px 5px;margin:0;border:0;border-radius:0;background:none;box-shadow:none;color:var(--muted);text-decoration:none;cursor:pointer;
+  font:inherit;touch-action:manipulation}
+ .ah-nav a::after{display:none}
+ .ah-nav .k{display:none}
+ .ah-nav .nl{font-family:inherit;font-stretch:100%;font-style:normal;font-size:11px;font-weight:600;line-height:1.1;letter-spacing:.01em;text-transform:none}
+ .ni{display:block;width:46px;height:30px;padding:4px 12px;border-radius:999px;transition:background-color .2s}
+ .ah-more{display:flex}
+ .ah-nav a[aria-current="true"],.ah-more[data-on]{color:var(--text)}
+ .ah-nav a[aria-current="true"] .ni,.ah-more[data-on] .ni{color:var(--nav-on);background:color-mix(in srgb,var(--nav-on) 17%,transparent)}
+ .ah-nav a:active .ni,.ah-more:active .ni{background:color-mix(in srgb,var(--text) 10%,transparent)}
+ .ah-nav .count{position:absolute;top:5px;left:calc(50% + 8px);right:auto;font-size:10px;line-height:15px;padding:0 5px;min-width:16px;text-align:center}
+ /* pages inside a section: a segmented control */
+ .ah-sub{height:auto;border-top:0;padding:0}
+ .ah-sub[role="tablist"].on{display:flex;gap:2px;margin:0 16px 10px;padding:3px;border-radius:11px;background:var(--panel2)}
+ .ah-sub[role="tablist"] a{flex:1 1 0;justify-content:center;min-height:34px;padding:6px 8px;border-radius:9px;font-size:13.5px;white-space:nowrap}
+ .ah-sub[role="tablist"] a[aria-selected="true"]{background:var(--seg-on,var(--panel));box-shadow:0 1px 3px rgba(0,0,0,.3)}
+ .ah-sub.note.on{display:none}
+ /* Key, Look and More slide up from the bottom */
+ .keypop,.lookpop{position:fixed;inset:auto 0 0 0;top:auto;left:0;right:0;width:100%;max-width:none;margin:0;max-height:min(84vh,680px);overflow:auto;
+  overscroll-behavior:contain;border-radius:22px 22px 0 0;border-bottom-width:0;padding:8px 18px calc(20px + env(safe-area-inset-bottom));
+  translate:0 0;transition:translate .36s cubic-bezier(.2,.8,.2,1),display .36s allow-discrete,overlay .36s allow-discrete}
+ .keypop:not(:popover-open),.lookpop:not(:popover-open){translate:0 100%}
+ @starting-style{.keypop:popover-open,.lookpop:popover-open{translate:0 100%}}
+ .keypop::before,.lookpop::before{content:"";display:block;width:38px;height:5px;border-radius:3px;background:var(--muted);opacity:.45;margin:0 auto 12px}
+ .keypop::backdrop,.lookpop::backdrop{background:rgba(0,0,0,.5)}
+ :root[data-theme="A"] .keypop,:root[data-theme="A"] .lookpop{border-radius:0}
+ .kp-h{font-size:20px}
+ .lk-o{padding:10px 8px;min-height:56px}
+ .mp-links,.mp-tools{display:grid;gap:2px;margin:2px 0 6px}
+ .mp-tools{border-top:1px solid var(--line2);padding-top:8px;margin-top:6px}
+ .mp-links a,.mp-tools a,.mp-tools button{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:14px;min-height:58px;padding:10px;border-radius:12px;
+  color:var(--text);cursor:pointer;-webkit-tap-highlight-color:transparent}
+ .mp-links a:active,.mp-tools a:active,.mp-tools button:active,.mp-links a[aria-current="true"]{background:var(--panel2)}
+ .mp-links a:focus-visible,.mp-tools a:focus-visible,.mp-tools button:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
+ .mi{flex:none;width:26px;height:26px;color:var(--text2)}
+ .mp-links a[aria-current="true"] .mi{color:var(--nav-on)}
+ .mp-links b,.mp-tools b{display:block;font-size:16px;font-weight:700;line-height:1.2}
+ .mp-links small,.mp-tools small{display:block;font-size:12.5px;line-height:1.35;color:var(--muted);margin-top:2px}
+}
+@media (max-width:860px) and (prefers-reduced-motion:reduce){.keypop,.lookpop{transition:none}.ni{transition:none}}
+/* narrow desktop windows: the squad list drops its widest extra columns instead of scrolling sideways
+   (FM positions, then ability and potential, then value and wage) */
+@media (min-width:861px) and (max-width:1180px){.squad.sq td:nth-child(2),.squad.sq th:nth-child(2){display:none}}
+@media (min-width:1181px) and (max-width:1280px){:root[data-theme] .squad.sq td:nth-child(2),:root[data-theme] .squad.sq th:nth-child(2){display:none}}
+@media (min-width:1101px) and (max-width:1180px){:root[data-theme] .squad.sq td:nth-child(5),:root[data-theme] .squad.sq th:nth-child(5),
+ :root[data-theme] .squad.sq td:nth-child(6),:root[data-theme] .squad.sq th:nth-child(6){display:none}}
+@media (min-width:861px) and (max-width:1100px){.squad.sq td:nth-child(5),.squad.sq th:nth-child(5),.squad.sq td:nth-child(6),.squad.sq th:nth-child(6){display:none}}
+@media (min-width:861px) and (max-width:980px){.squad.sq td:nth-child(7),.squad.sq th:nth-child(7),.squad.sq td:nth-child(8),.squad.sq th:nth-child(8){display:none}}
+@media (max-width:860px){
+ .ph-only{display:block}
+ .tk{display:none}
+ main.wrap{padding:12px 16px 24px}
+ section,.page section{margin-top:30px}
+ .page>:first-child{margin-top:6px}
+ h2{font-size:27px;line-height:1;gap:4px 10px;margin-bottom:12px}
+ h2 .h2sub,.h2sub{flex-basis:100%;font-size:12.5px;line-height:1.4}
+ .ph-note{margin:-2px 0 12px;padding:10px 12px;border-radius:10px;font-size:13px;line-height:1.45;color:var(--text2);background:var(--panel);border:1px solid var(--line)}
+ /* chip rows swipe sideways instead of wrapping onto four lines */
+ .filters .frow:not(.ftop),.subnav,.okrow{flex-wrap:nowrap;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;
+  -webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent)}
+ .filters .frow:not(.ftop)::-webkit-scrollbar,.subnav::-webkit-scrollbar,.okrow::-webkit-scrollbar{display:none}
+ .filters .frow>*,.subnav>*,.okrow>*{flex:none}
+ .filters .frow:not(.ftop){padding-right:28px}
+ .fchip{min-height:34px;padding:6px 13px;font-size:13px}
+ .fl{width:auto;margin-right:4px}
+ .subnav{margin-top:4px;padding:10px 12px;gap:8px}
+ .subnav .stylechips{display:none}
+ .okrow{gap:10px;padding-right:28px}
+ .okchip{width:auto;min-width:250px}
+ .morebtn,details.fold>summary::after{min-height:40px}
+ /* home: a compact cover, then the news */
+ .hband{min-height:0;border-radius:18px}
+ .hb-txt{padding:22px 20px 2px}
+ .hb-club{font-size:clamp(44px,13vw,62px);margin:4px 0 16px}
+ .hb-meta{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 18px;margin-bottom:16px}
+ .hb-meta dd{font-size:16px}
+ .hb-rec{gap:12px;margin-bottom:18px;flex-wrap:wrap}
+ .hb-pos{font-size:54px}
+ .hb-btn{display:flex;justify-content:center;width:100%;padding:14px 18px;font-size:17px}
+ .hb-3d{padding-bottom:6px}
+ .hb-3d .p3{height:320px;--pw:min(230px,58vw);--sc:.92}
+ .hb-hint{margin:-16px 0 12px}
+ .ph-news .news{list-style:none;margin:0;padding:0;border:1px solid var(--line);border-radius:14px;background:var(--panel);overflow:hidden}
+ .ph-news li+li{border-top:1px solid var(--line2)}
+ .ph-news a{display:flex;align-items:center;gap:10px;min-height:50px;padding:11px 14px;color:var(--text);text-decoration:none;font-size:14px;line-height:1.35}
+ .ph-news a:active{background:var(--panel2)}
+ .ph-news a::after{content:"›";margin-left:auto;padding-left:6px;color:var(--muted);font-size:20px;line-height:1}
+ .ph-news .tag{flex:none;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;border:1px solid transparent;white-space:nowrap}
+ .fin{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .tile{padding:12px 14px 14px}
+ .tile .val{font-size:34px}
+ .vgrid{gap:10px}
+ .vcard{padding:12px 14px}
+ /* best XIs: one XI at a time */
+ .xtools{flex-wrap:wrap;align-items:center;gap:8px 4px;margin:0 0 12px}
+ .xiseg.ph-only{display:inline-flex;margin-left:auto}
+ .xtools .seg{min-height:36px;padding:6px 14px}
+ section[data-xi="1"] .pitches3d>:nth-child(2),section[data-xi="1"] .pitches>:nth-child(2),
+ section[data-xi="2"] .pitches3d>:nth-child(1),section[data-xi="2"] .pitches>:nth-child(1){display:none}
+ .p3w{padding:12px 12px 0}
+ .p3w .p3{height:430px;margin-top:-56px;--pw:min(250px,64vw)}
+ /* positions: the key folds away, the positions that need work come first */
+ .pkey-fold>summary{display:flex;align-items:center;gap:8px;min-height:44px;padding:10px 14px;margin-bottom:12px;list-style:none;cursor:pointer;font-size:13.5px;
+  font-weight:600;color:var(--text2);border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+ .pkey-fold>summary::-webkit-details-marker{display:none}
+ .pkey-fold>summary::after{content:"Show";margin-left:auto;font-size:12.5px;color:var(--muted)}
+ .pkey-fold[open]>summary::after{content:"Hide"}
+ .pform{display:flex;flex-direction:column;gap:12px;padding:12px}
+ .pform .pcard.red{order:-2}.pform .pcard.amber{order:-1}
+ .prow2.c{min-height:40px;padding:6px 12px}
+ /* squad list: one card per player */
+ .fin.k5 .tile{padding:12px}
+ .squad.sq{display:block;border-radius:14px;overflow:hidden}
+ .squad.sq thead{display:none}
+ .squad.sq tbody{display:block}
+ .squad.sq tr{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:3px 12px;padding:11px 14px;border-left:4px solid transparent;
+  border-bottom:1px solid var(--line2)}
+ .squad.sq td,.squad.sq td:first-child{display:block;padding:0;border:0;min-width:0}
+ .squad.sq td.nm{grid-column:1;grid-row:1;font-size:15.5px;white-space:normal}
+ .squad.sq td:nth-child(4){grid-column:2;grid-row:1/span 2;justify-self:end;text-align:right}
+ .squad.sq td:nth-child(3){grid-column:1;grid-row:2;font-size:12.5px;color:var(--muted)}
+ .squad.sq td:nth-child(3)::before{content:"Age "}
+ .squad.sq td.bd{grid-column:1/-1;grid-row:3;padding-top:4px}
+ .squad.sq td.bd:empty,.squad.sq td.lo{display:none}
+ .squad.sq tr.grp,.squad.sq tr.nomatch{display:block;padding:0;border-left:0}
+ .squad.sq tr.grp td,.squad.sq tr.nomatch td{display:block;padding:10px 14px}
+ .squad.sq tr.loan-in{border-left-color:var(--loanin)}.squad.sq tr.loan-out{border-left-color:var(--loanout)}
+ .squad.sq tr.deal-in{border-left-color:var(--dealin)}.squad.sq tr.deal-out{border-left-color:var(--dealout)}
+ .squad.sq tr.inj-short{border-left-color:var(--injs)}.squad.sq tr.inj-long{border-left-color:var(--injl)}.squad.sq tr.sus{border-left-color:#94a3b8}
+ .filters{padding:10px 12px}
+ .fsearch{min-height:42px;font-size:16px}
+ /* tactics */
+ .rec{gap:8px 12px}
+ .wi{padding:10px 12px}
+ .ftable{margin:0 -12px;padding:0 12px}
+ .ftable th:first-child,.ftable td.nm{position:sticky;left:0;z-index:1;background:var(--sticky-bg,var(--panel))}
+ .rpk{min-width:56px}
+ /* training: the week scrolls sideways, everything else stacks */
+ .tgrid{overflow-x:auto;overscroll-behavior-x:contain;margin:0 -12px;padding:0 12px}
+ .tgrid table{min-width:620px}
+ .tcols{grid-template-columns:1fr}
+ /* transfers: a vertical timeline */
+ .tline{grid-template-columns:1fr;gap:0}
+ .tlm{padding:0 0 22px 26px;min-width:0}
+ .tlm::before{left:5px;right:auto;top:16px;bottom:0;width:2px;height:auto}
+ .tlm:last-child::before{display:none}
+ .tlm::after{left:0;top:3px}
+ .tlm li{padding:9px 11px}
+ /* sandbox: the roster is one column on a phone */
+ .sbcols{grid-template-columns:minmax(0,1fr)}
+ .pchip.sb select{min-width:0;max-width:100%}
+ .sbfilter,.sblegend{flex-wrap:wrap}
+ .pform,.pform .pcard{min-width:0;max-width:100%}
+ /* stats */
+ .ldrs .who{white-space:normal}
+ .squad.stats{max-width:100%}
+ .squad.stats th,.squad.stats td{padding-left:5px;padding-right:5px}
+}
+"""
+PHONE_CSS_RAW += r"""
+@media (max-width:400px){.squad.stats th,.squad.stats td{padding-left:4px;padding-right:4px;font-size:12.5px}}
+"""
+PHONE_CSS = prefix_css(PHONE_CSS_RAW, "html:not(#_)")
+
+
 APP_JS = r"""
 (function(){
 const rm=matchMedia('(prefers-reduced-motion: reduce)').matches, G=!!window.gsap;
@@ -5126,12 +5375,14 @@ let current=null;
 function show(route,animate){
  const sec=route.split('/')[0],pid=ROUTE_PAGE[route];last[sec]=route;
  pages.forEach(p=>{const on=p.id==='p-'+pid;p.classList.toggle('active',on);p.hidden=!on;});
- document.querySelectorAll('.ah-nav a').forEach(a=>a.setAttribute('aria-current',a.dataset.sec===sec?'true':'false'));
+ document.querySelectorAll('.ah-nav a,.mp-links a').forEach(a=>a.setAttribute('aria-current',a.dataset.sec===sec?'true':'false'));
+ const moreB=document.querySelector('.ah-more');if(moreB)moreB.toggleAttribute('data-on',sec==='stats'||sec==='sandbox');
  document.querySelectorAll('.ah-sub').forEach(s=>s.classList.toggle('on',s.dataset.for===sec));
  document.querySelectorAll('.ah-sub [role="tab"]').forEach(t=>{const on=t.dataset.route===route;t.setAttribute('aria-selected',on);t.tabIndex=on?0:-1;});
  const navA=document.querySelector('.ah-nav a[data-sec="'+sec+'"]');if(navA)navA.setAttribute('href','#'+route);
  const tab=document.querySelector('.ah-sub [role="tab"][data-route="'+route+'"]'),name=tab?tab.textContent.replace(/\d+$/,''):(navA?navA.textContent.replace(/^\d/,'').replace(/\d+$/,''):'');
  document.title=name.trim()+' · '+document.body.dataset.club+' · FM27 Squad Report';
+ const secName=document.querySelector('.ah-nav a[data-sec="'+sec+'"] .nl'),tt=document.getElementById('ahTitle');if(tt&&secName)tt.textContent=secName.textContent;
  const page=document.getElementById('p-'+pid);
  if(current!==route){window.scrollTo(0,0);
   if(animate&&G&&!rm&&page)gsap.fromTo(page,{y:14,autoAlpha:0},{y:0,autoAlpha:1,duration:.38,ease:'power2.out',clearProps:'transform,opacity,visibility'});}
@@ -5141,6 +5392,16 @@ function show(route,animate){
 function go(route){if(location.hash.slice(1)!==route)location.hash=route;else show(route,true);}
 addEventListener('hashchange',()=>{const r=norm(location.hash);if(r!==location.hash.slice(1))history.replaceState(null,'','#'+r);show(r,true);});
 const start=norm(location.hash);if(start!==location.hash.slice(1))history.replaceState(null,'','#'+start);show(start,false);
+// phone: the More sheet closes when you pick something, and its Look/Key buttons swap to that sheet
+const mp=document.getElementById('morepop');
+if(mp){mp.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',()=>{try{mp.hidePopover();}catch(_){}}));
+ mp.querySelectorAll('[popovertarget]').forEach(b=>b.addEventListener('click',e=>{const t=document.getElementById(b.getAttribute('popovertarget'));if(!t||!t.showPopover)return;
+  e.preventDefault();try{mp.hidePopover();t.showPopover();}catch(_){}}));}
+// phone: Best XI or Second XI, one at a time
+document.querySelectorAll('.xiseg').forEach(g=>{const sec=g.closest('section');sec.dataset.xi='1';
+ g.querySelectorAll('[data-xi]').forEach(b=>b.addEventListener('click',()=>{sec.dataset.xi=b.dataset.xi;g.querySelectorAll('[data-xi]').forEach(x=>x.setAttribute('aria-pressed',x===b));}));});
+// phone: the positions key starts folded
+if(matchMedia('(max-width: 860px)').matches)document.querySelectorAll('details.pkey-fold').forEach(d=>{d.open=false;});
 // keys: 1-6 sections, [ and ] for the pages inside a section
 addEventListener('keydown',e=>{
  if(e.metaKey||e.ctrlKey||e.altKey||(e.target.closest&&e.target.closest('input,select,textarea,[contenteditable]')))return;
@@ -5241,10 +5502,10 @@ def render(R) -> str:
     notes_html = f'<ul class="notes">{notes}</ul>' if notes else ""
     club = club_identity(R["club"])
     return f"""<!DOCTYPE html><html lang="en" style="--kit:{club['kit']};--kit-ink:{club['ink']};--kit-l:{kit_on_light(club['kit'])}"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1"><title>{E(R['club'])} · FM27 Squad Report</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>{E(R['club'])} · FM27 Squad Report</title>
 <link rel="icon" href="{asset('app-logo.svg')}">
 <script>try{{if(Date.now()-(+sessionStorage.getItem('fm27-launch')||0)<60000)document.documentElement.classList.add('booting');}}catch(e){{}}{LOOK_HEAD_JS}</script>
-{FONT_LINKS}<style>{CSS}{P3_CSS}{APP_CSS}{BOOT_CSS}{theme_font_css()}{LOOK_CSS}{THEME_CSS}</style></head><body class="app" data-club="{E(R['club'])}">
+{FONT_LINKS}<style>{CSS}{P3_CSS}{APP_CSS}{BOOT_CSS}{theme_font_css()}{LOOK_CSS}{THEME_CSS}{PHONE_CSS}</style></head><body class="app" data-club="{E(R['club'])}">
 {boot_html(club)}{app_header(R)}<main id="main" class="wrap">
 {page('overview', overview(R))}{page('xis', xis(R))}{page('positions', position_cards(R))}{page('squad', squad_table(R))}
 {page('fit', fit_page(R))}{page('training', training_page(R))}{page('sandbox', sandbox_page(R))}{page('deals', deals(R))}{page('stats', stats_table(R))}

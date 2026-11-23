@@ -82,6 +82,16 @@ class ReportJson(unittest.TestCase):
         injuries = [p["status"]["injury"] for p in self.J["players"] if "injury" in p["status"]]
         self.assertEqual({i["long"] for i in injuries}, {True, False})
 
+    def test_misfit_without_a_better_role(self):   # happens in his real save, not in the made-up one
+        R = dict(self.R, fit=dict(self.R["fit"], misfits=[dict(p=self.R["players"][0], why="Nothing suits him better.", best=None)]))
+        m = fm.report_json(R)["fit"]["misfits"][0]
+        self.assertEqual((m["uid"], m["best"], m["best_row"]), (self.R["players"][0]["uid"], None, None))
+
+    def test_survives_missing_pieces(self):   # a save with gaps: nobody injured, no league, a player with no rating
+        R = dict(self.R, perf={}, training=[], targets=[], xi2=[], verdicts=[])
+        R["players"] = [dict(p, best=None, slots={}, aslots={}, ability=None, stats=None) for p in self.R["players"][:3]]
+        json.dumps(fm.report_json(R))
+
     def test_xis_point_at_players(self):
         uids = {p["uid"] for p in self.J["players"]}
         for xi in ("xi1", "xi2"):

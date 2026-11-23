@@ -5757,8 +5757,10 @@ def report_json(R: dict) -> dict:
         "verdicts": [{"slot": v[0], "level": v[1], "title": v[2], "text": v[3], "gap": _plain(v[4])} for v in R.get("verdicts") or []],
         "fit": {"rows": [{"label": r["label"], "slot": r["row"][0], "ip_role": r["row"][3], "oop_role": r["row"][4],
                           "entries": [_fit_entry(e) for e in r["entries"]]} for r in (R.get("fit") or {}).get("rows", [])],
-                "misfits": [{"uid": m["best"][0]["p"]["uid"], "why": m["why"], "best_row": m["best"][1]["label"],
-                             "best": _fit_entry(m["best"][0])} for m in (R.get("fit") or {}).get("misfits", [])]},
+                "misfits": [{"uid": m["p"]["uid"], "why": m["why"],   # best is None when no role suits him better
+                             "best_row": m["best"][1]["label"] if m.get("best") else None,
+                             "best": _fit_entry(m["best"][0]) if m.get("best") else None}
+                            for m in (R.get("fit") or {}).get("misfits", [])]},
         "performance": {"record": _plain(perf.get("record")), "form": _plain(perf.get("form") or []),
                         "metrics": _plain(perf.get("metrics") or []), "matches": perf.get("reports"),
                         "league_name": perf.get("league_name"), "league_size": len(perf.get("league_clubs") or ()),
@@ -6350,7 +6352,9 @@ def serve_live(argv: list[str]) -> None:
                                 data = json.dumps(report_json(LAST_REPORT), ensure_ascii=False)
                             except Exception as exc:  # noqa: BLE001 - the web app still works without the JSON
                                 data = None
-                                print(f"  Couldn't prepare the report for the Mac app: {exc}")
+                                import traceback
+                                where = traceback.extract_tb(exc.__traceback__)[-1]
+                                print(f"  Couldn't prepare the report for the Mac app: {exc} (line {where.lineno}, {where.name})")
                             with lock:
                                 state["n"] += 1
                                 state.update(html=page, json=data, error="", built=key,

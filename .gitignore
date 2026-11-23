@@ -10,3 +10,7 @@ data/club.json
 data/phone.json
 scouting.txt
 
+# the Mac app: the Xcode project is generated from mac/project.yml
+mac/*.xcodeproj/
+mac/build/
+mac/SquadReport/Info.plist

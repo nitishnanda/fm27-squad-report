@@ -35,7 +35,16 @@ developer account is needed for his own use.
 - `demo/build_site.py` also writes `mac/Fixtures/report.json` from the fake save, for SwiftUI previews and tests.
 - Python tests: the JSON round-trips, has no CA/PA field, and the API refuses network requests.
 
-## Phase 1: the app shell
+## Phase 1: the app shell ✅ done (Home and Squad list native; other pages open in the web app for now)
+
+Build and run: `mac/build.sh` (generates the project with XcodeGen, builds Debug, opens the app). `mac/build.sh test` runs the
+Swift tests (fixture decoding, his-rules checks on statuses, formats that match the web app); `mac/build.sh release` builds
+into `mac/build/Release/`. Signed "to run locally", so no Apple ID is needed to build it.
+
+What's in it (`mac/SquadReport/`): `Engine/` (Python setup like the .command, the engine process, the API client),
+`Report/` (feed models, `ReportStore` with the on-disk cache, formats), `App/` (model, routes, menus), `Views/`.
+If an engine is already running on 8027 (the .command), the app uses it instead of starting a second one.
+
 
 - Project from a text file (`mac/project.yml`, XcodeGen) so it lives in git cleanly. macOS 15+, SwiftUI, Swift 6,
   no third-party packages.

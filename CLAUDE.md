@@ -132,6 +132,18 @@ LW (AML/ML) IF/WMF · AM SS/AM · RW (AMR/MR) IW/WMF · ST CFD/CFD. `STYLE_KEYS`
 - `/api/*` answers only loopback with a `127.0.0.1`/`localhost` Host header (blocks the network and DNS rebinding), even
   with the phone key. `demo/build_site.py` writes `mac/Fixtures/report.json` from the fake save for SwiftUI previews.
 - Tests: `python3 -m unittest discover -s tests -v` (feed contents, his rules, and the real server in headless mode).
+- Phase 1 is built (`mac/`, see PLAN.md): SwiftUI, macOS 15+, Swift 6 strict concurrency, no packages, not sandboxed,
+  ad-hoc signed. Project generated from `mac/project.yml` (XcodeGen; the .xcodeproj, `mac/build/` and Info.plist are
+  gitignored). Build/test with `mac/build.sh` / `mac/build.sh test`. First launch asks for the project folder (bookmark in
+  UserDefaults `projectFolderBookmark`, domain `com.squadreport.mac`); `Engine` attaches to a running engine on 8027 or
+  runs `PythonSetup` (find Python 3.12+, `.venv`, fmsave, upgrade once a day) and starts `--headless`, restarting it up to
+  3 times in 2 minutes; quitting the app stops only an engine it started. `ReportStore` polls /api/status (1 s busy, 3 s
+  idle), fetches /api/report on a new version and caches it in `~/Library/Application Support/Squad Report/last-report.json`.
+  Native pages so far: Home and Squad list (`Route.isNative`); the rest show "Open in Browser". Statuses use
+  `PlayerStatus` + `StatusBadge` (colour + SF Symbol + word, dashed for arranged/contract ending). The feed's
+  `formation.style` ("Gegenpress") was added for the Home hero; no schema bump (new field, same meanings).
+  Testing UI: the shell can't screenshot windows (no Screen Recording grant); use computer-use `app_screenshot` on
+  `com.squadreport.mac`.
 
 ## Hosted demo
 - `python3 demo/build_site.py` builds `docs/` from `demo/fake_save.py` (a made-up save: Liverpool names with invented ratings,

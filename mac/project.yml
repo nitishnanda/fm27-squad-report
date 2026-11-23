@@ -1,0 +1,76 @@
+# Squad Report for Mac. The Xcode project is generated from this file, so only this lives in git:
+#   cd mac && xcodegen generate        (or just run ./build.sh)
+name: SquadReport
+options:
+  bundleIdPrefix: com.squadreport
+  deploymentTarget:
+    macOS: "15.0"
+  createIntermediateGroups: true
+  developmentLanguage: en-GB
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    MACOSX_DEPLOYMENT_TARGET: "15.0"
+    SWIFT_STRICT_CONCURRENCY: complete
+    # Signed to run on this Mac only: no Apple developer account needed
+    CODE_SIGN_IDENTITY: "-"
+    CODE_SIGN_STYLE: Manual
+    DEVELOPMENT_TEAM: ""
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+    DEAD_CODE_STRIPPING: YES
+targets:
+  SquadReport:
+    type: application
+    platform: macOS
+    sources:
+      - path: SquadReport
+    info:
+      path: SquadReport/Info.plist
+      properties:
+        CFBundleName: Squad Report
+        CFBundleDisplayName: Squad Report
+        CFBundleShortVersionString: "0.1"
+        CFBundleVersion: "1"
+        LSApplicationCategoryType: public.app-category.sports-games
+        LSMinimumSystemVersion: "15.0"
+        NSHumanReadableCopyright: Reads your FM27 saves. Never changes them.
+        # the engine runs on this Mac at http://127.0.0.1:8027
+        NSAppTransportSecurity:
+          NSAllowsLocalNetworking: true
+    settings:
+      base:
+        PRODUCT_NAME: Squad Report
+        PRODUCT_MODULE_NAME: SquadReport
+        PRODUCT_BUNDLE_IDENTIFIER: com.squadreport.mac
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        # not sandboxed: FM keeps its saves in ~/Library/Application Support/Sports Interactive,
+        # which a sandboxed app could only read after asking every time
+        ENABLE_APP_SANDBOX: NO
+        ENABLE_HARDENED_RUNTIME: NO
+        COMBINE_HIDPI_IMAGES: YES
+  SquadReportTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: SquadReportTests
+    dependencies:
+      - target: SquadReport
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        PRODUCT_BUNDLE_IDENTIFIER: com.squadreport.mac.tests
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/Squad Report.app/Contents/MacOS/Squad Report"
+        BUNDLE_LOADER: "$(TEST_HOST)"
+schemes:
+  SquadReport:
+    build:
+      targets:
+        SquadReport: all
+        SquadReportTests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - SquadReportTests

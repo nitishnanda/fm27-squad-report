@@ -5745,7 +5745,8 @@ def report_json(R: dict) -> dict:
         "club": {"name": R["club"], "kit": club["kit"], "ink": club["ink"], "kit_on_light": kit_on_light(club["kit"]),
                  "initials": club["initials"]},
         "save_name": R.get("save_name"), "game_date": _plain(R.get("game_date")), "last_run": _plain(R.get("last_run")),
-        "formation": {"name": FORMATION_NAME, "rows": [{"slot": s, "ip": ip, "oop": oop, "ip_role": ipr, "oop_role": oopr}
+        "formation": {"name": FORMATION_NAME, "style": TACTICAL_STYLE,
+                      "rows": [{"slot": s, "ip": ip, "oop": oop, "ip_role": ipr, "oop_role": oopr}
                                                       for s, ip, oop, ipr, oopr in FORMATION]},
         "finances": _plain(R.get("finances") or {}),
         "team_names": _plain(R.get("team_names") or {}),

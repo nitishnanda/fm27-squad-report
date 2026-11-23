@@ -42,6 +42,11 @@ struct ReportFeedTests {
         for p in report.players where p.status.injury?.long == true {
             #expect(PlayerStatus.of(p).contains { $0.kind == .injuredLong })
         }
+        // injury badges keep it short; the injury itself is in the hover text
+        let gomez = try #require(report.players.first { $0.name.hasSuffix("Gomez") })
+        let injury = try #require(PlayerStatus.of(gomez).first { $0.kind == .injuredShort })
+        #expect(injury.brief == "13 days")
+        #expect(injury.detail.contains("Hamstring"))
     }
 }
 

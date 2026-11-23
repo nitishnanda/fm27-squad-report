@@ -12,6 +12,12 @@ struct PlayerStatus: Identifiable, Hashable, Sendable {
     let detail: String
     var id: String { kind.rawValue + detail }
 
+    /// What fits on the badge. Injuries show how long ("13 days"); the injury and return date are on hover.
+    var brief: String {
+        guard kind == .injuredShort || kind == .injuredLong else { return detail }
+        return detail.components(separatedBy: " · ").first ?? detail
+    }
+
     /// The same list and order as the web app's `badges()`.
     static func of(_ p: Player) -> [PlayerStatus] {
         var out: [PlayerStatus] = []
@@ -44,7 +50,7 @@ struct StatusBadge: View {
         HStack(spacing: 4) {
             Image(systemName: symbol).font(.system(size: 9, weight: .bold))
             Text(status.label).fontWeight(.bold)
-            if showDetail { Text(status.detail).fontWeight(.regular).opacity(0.85) }
+            if showDetail { Text(status.brief).fontWeight(.regular).opacity(0.85) }
         }
         .font(.system(size: 11))
         .lineLimit(1)

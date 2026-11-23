@@ -92,7 +92,9 @@ LW (AML/ML) IF/WMF · AM SS/AM · RW (AMR/MR) IW/WMF · ST CFD/CFD. `STYLE_KEYS`
   `assets/FONTS-LICENSE.txt`) and only download when a look uses them. The home page has the same Look button and follows the look
   (`LAND_A`…`LAND_D`, E = `LAND_B` + `LAND_E`, in `LANDING_THEME_CSS`; it's club-neutral, so its accent is the pitch green). Its four
   previews get the look CSS copied in from `<style id="looks-css">` by LOOK_JS (`dress()`), so the CSS isn't shipped 4 extra times.
-  The launch wipe takes each look's colour. The app's loader (`boot_html`) isn't themed.
+  The launch wipe takes each look's colour. The loader (`boot_html`, both the launch overlay and `loader_page()`) follows the look too:
+  `BOOT_LOOKS` → `BOOT_THEME_CSS` (self-contained colours, since the loader page doesn't load THEME_CSS); on phones (≤700px) the
+  looks turn the pitch into a faint backdrop so the taller type fits. Original keeps `BOOT_CSS` unchanged.
 - Layout is fluid (no max width); `--gutter` scales with the window.
 - Phones (≤860px, so small tablets in portrait too) get their own layout, not the desktop squeezed (`PHONE_CSS_RAW`, prefixed
   with `html:not(#_)` by `prefix_css()` so layout wins over every look while the looks keep colours and type; phone-only bits are
@@ -106,11 +108,19 @@ LW (AML/ML) IF/WMF · AM SS/AM · RW (AMR/MR) IW/WMF · ST CFD/CFD. `STYLE_KEYS`
   His real iPhone opens it over home Wi-Fi (Phone access, below).
 - Phone access (`PHONE_ACCESS`, off with `--mac-only`): the live server listens on the network (0.0.0.0), but only this Mac
   (loopback) gets in freely. Other devices need the key from `data/phone.json` (`phone_key()`, gitignored, delete it for a new
-  one) once via `/?k=key`, which sets the `fm27phone` cookie (a year) and redirects; everyone else gets `PHONE_DENIED` (403).
+  one) once via `?k=key`, which sets the `fm27phone` cookie (a year); everyone else gets `PHONE_DENIED` (403). `/assets/` is public
+  (scripts, fonts, crest, icons: nothing from the save). Pages served to a phone keep `?k=` in their address (`PHONE_URL_JS`) and
+  their manifest link, because a home-screen copy of the app gets its own cookie jar; the manifest's `start_url` then carries the key.
   On the Mac, LIVE_JS fetches `/phone` (loopback only) and adds a phone icon before Look that opens `phone_popover()`: QR codes
   for the `.local` Bonjour name and the IP (`phone_links()`). The QR encoder is built in (`qr_matrix()`, byte mode, ECC M,
   versions 1–10), so there's nothing extra to install. Careful when testing: the server restarts into the real script when
   the file changes, so a test wrapper's patches (and its scratch `PHONE_FILE`) are lost on the first edit.
+
+- Home-screen app: `app_head()` adds `assets/app.webmanifest` (start `../app/`, scope `../`), `app-icon-180/192/512.png` (drawn
+  from `assets/app-icon.svg`, the logo full-bleed) and Apple's tags with `black-translucent` status bar. So the page runs under
+  the clock: `.ah` pads by `env(safe-area-inset-top)`, the home page's `.lnav`/`.hero` get a transparent top border of that size
+  (`HOME_SCREEN_CSS`, zero everywhere else), and the light looks A and D paint that strip #111 because iOS draws the status bar
+  in white. `theme-color` follows the look (`THEME_COLORS`, set in LOOK_JS).
 
 ## Hosted demo
 - `python3 demo/build_site.py` builds `docs/` from `demo/fake_save.py` (a made-up save: Liverpool names with invented ratings,
@@ -135,13 +145,9 @@ LW (AML/ML) IF/WMF · AM SS/AM · RW (AMR/MR) IW/WMF · ST CFD/CFD. `STYLE_KEYS`
   200s playing development, 300s physical).
 - **Individual training is not readable** from the save, so the Training tab recommends instead.
 
-## Open task (where we left off)
-Switch the Training tab's "Focus" column from single attributes to FM27's actual individual focus options:
-Quickness, Agility and Balance, Resistance, Endurance, Chance Conversion, Chance Creation, Ball Retention,
-Ball Progression, Pressing, Containment, Defensive Positioning, Attacking Movement, Final Third, Shooting, Passing,
-Crossing, Ball Control, Tackling, Marking, Aerial. FM's Individual Training page shows which attributes each one
-trains. Nitish will send those lists — **use his lists, don't guess the mapping.** Then pick the option that covers
-the attribute(s) `individual_plan()` currently chooses, and show "Pressing (Aggression, Work Rate…)"-style labels.
+## Dropped ideas
+- Training tab "Focus" column using FM27's real individual focus options: he decided against it (it feels like a
+  cheat), so don't bring it back. The Training tab keeps recommending single attributes.
 
 ## Testing
 - Run `build()` against a copy of his save and `render()` it; check every tab in a headless browser for JS errors.

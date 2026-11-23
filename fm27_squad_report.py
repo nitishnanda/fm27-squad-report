@@ -3528,10 +3528,10 @@ def landing_page() -> str:
     wont = ["Change your save. It only ever reads it", "Show current ability, potential ability or hidden attributes",
             "Tell you who to sign. It points at positions, never players", "Send your save anywhere. It stays on your Mac",
             "Ask for an account or a subscription"]
-    return f"""<!DOCTYPE html><html lang="en" style="--kit-l:#1C7F46"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+    return f"""<!DOCTYPE html><html lang="en" style="--kit-l:#1C7F46"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <script>{LOOK_HEAD_JS}</script>
 <title>FM27 {APP_NAME}</title><meta name="description" content="Turns your Football Manager 27 save into a squad report: best XIs, positions that need work and how your tactic is going.">
-<link rel="icon" href="{asset('app-logo.svg')}">{FONT_LINKS}<style>{P3_CSS}{LANDING_CSS}{LOOK_CSS}</style>
+<link rel="icon" href="{asset('app-logo.svg')}">{app_head()}{FONT_LINKS}<style>{P3_CSS}{LANDING_CSS}{LOOK_CSS}{HOME_SCREEN_CSS}</style>
 <style id="looks-css">{theme_font_css()}{THEME_CSS}</style><style>{LANDING_THEME_CSS}</style></head>
 <body class="landing">
 <a class="skip" href="#top">Skip to content</a>
@@ -3809,7 +3809,7 @@ def boot_html(club: dict | None = None) -> str:
   <div class="boot-txt">{ident}<p class="boot-h" id="bootH">Reading your save</p><ol class="boot-steps">{steps}</ol>
    <div class="boot-bar">{ticks}</div><p class="boot-meta"><span id="bootPct">0%</span><span id="bootNote">Step 1 of {len(BUILD_STEPS)}</span></p>
    <p class="boot-err" id="bootErr" hidden></p></div>
-  <p class="boot-foot">{who}<span>localhost:{LIVE_PORT}</span></p></div>
+  <p class="boot-foot">{who}<span class="boot-host">localhost:{LIVE_PORT}</span></p></div>
 </div>"""
 
 
@@ -3828,8 +3828,8 @@ BOOT_CSS = r"""
 .boot.wait .boot-red{display:none}
 .boot-in{position:absolute;inset:0;display:grid;grid-template-columns:auto minmax(0,440px);align-items:center;justify-content:center;gap:64px;padding:40px}
 .cm{position:absolute;width:22px;height:22px;border:0 solid rgba(238,241,232,.4)}
-.cm.tl{left:24px;top:24px;border-width:2px 0 0 2px}.cm.tr{right:24px;top:24px;border-width:2px 2px 0 0}
-.cm.bl{left:24px;bottom:24px;border-width:0 0 2px 2px}.cm.br{right:24px;bottom:24px;border-width:0 2px 2px 0}
+.cm.tl{left:24px;top:calc(24px + env(safe-area-inset-top));border-width:2px 0 0 2px}.cm.tr{right:24px;top:calc(24px + env(safe-area-inset-top));border-width:2px 2px 0 0}
+.cm.bl{left:24px;bottom:calc(24px + env(safe-area-inset-bottom));border-width:0 0 2px 2px}.cm.br{right:24px;bottom:calc(24px + env(safe-area-inset-bottom));border-width:0 2px 2px 0}
 .boot-pw{position:relative;width:min(220px,34vw);overflow:hidden}
 .boot-pitch{display:block;width:100%}
 .boot-pitch *{fill:none;stroke:rgba(238,241,232,.6);stroke-width:.55;stroke-dasharray:1;stroke-dashoffset:1;animation:bdraw 1.1s cubic-bezier(.6,0,.2,1) forwards}
@@ -3851,7 +3851,7 @@ BOOT_CSS = r"""
 .boot-bar i{height:8px;border-radius:2px;background:#1d2923;transition:background-color .25s}.boot-bar i.on{background:var(--kit,#C8102E)}
 .boot-meta{display:flex;justify-content:space-between;margin:10px 0 0;font-size:13px;color:#8d9a91;font-variant-numeric:tabular-nums}
 .boot-err{margin:16px 0 0;padding:12px 14px;border-left:3px solid #ff5d5d;background:rgba(255,93,93,.08);color:#fca5a5;font-size:14px}
-.boot-foot{position:absolute;left:56px;right:56px;bottom:22px;display:flex;justify-content:space-between;margin:0;font-size:12px;color:#8d9a91}
+.boot-foot{position:absolute;left:56px;right:56px;bottom:calc(22px + env(safe-area-inset-bottom));display:flex;justify-content:space-between;margin:0;font-size:12px;color:#8d9a91}
 @media (max-width:700px){.boot-in{grid-template-columns:1fr;justify-items:center;gap:28px;align-content:center}.boot-pw{width:120px}.boot-txt{width:100%}}
 @media (prefers-reduced-motion:reduce){.boot-pitch *{animation:none;stroke-dashoffset:0}.boot-scan{display:none}.boot-steps li.act i{animation:none}}
 """
@@ -3862,6 +3862,8 @@ const boot=document.getElementById('boot');if(!boot)return null;
 const rm=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const lis=[...boot.querySelectorAll('.boot-steps li')],ticks=[...boot.querySelectorAll('.boot-bar i')],n=lis.length;
 const pct=document.getElementById('bootPct'),note=document.getElementById('bootNote'),err=document.getElementById('bootErr');
+const host=boot.querySelector('.boot-host');if(host&&location.host)host.textContent=location.host;
+const onMac=/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
 function paint(step,done){lis.forEach((li,i)=>{li.classList.toggle('done',done||i<step);li.classList.toggle('act',!done&&i===step);});
  const k=done?n:Math.max(0,step);ticks.forEach((t,i)=>t.classList.toggle('on',i<k));
  pct.textContent=Math.round(k/n*100)+'%';note.textContent=done?'Ready':('Step '+(Math.max(0,step)+1)+' of '+n);}
@@ -3886,7 +3888,7 @@ function wait(){
    if(s.building){seen=true;err.hidden=true;paint(Math.max(0,s.step),false);document.getElementById('bootH').textContent='Reading your save';}
    else if(s.error){err.hidden=false;err.textContent=s.error.startsWith('no FM27 save')?'No FM27 save found yet. Save your game in FM27 and this page carries on by itself.'
      :'Couldn\'t read your save ('+s.error+'). Save again in FM27 and this page tries again by itself.';}
-  }catch(e){err.hidden=false;err.textContent='The app window is closed. Double-click Run Squad Report to start it again.';}
+  }catch(e){err.hidden=false;err.textContent=onMac?'The app window is closed. Double-click Run Squad Report to start it again.':'Can\'t reach your Mac. Check Squad Report is still open there and this phone is on the same Wi-Fi.';}
   setTimeout(poll,900);}
  poll();
 }
@@ -4945,11 +4947,142 @@ THEME_CSS = "".join(scope_css(LOOK_COMMON + css, k) for k, css in (
     ("A", LIGHT_FIX + THEME_A), ("B", THEME_B_TOKENS + B_FRAME + B_DATA + B_PITCH), ("C", THEME_C_TOKENS + C_FRAME + C_DATA),
     ("D", LIGHT_FIX + THEME_D), ("E", THEME_E_TOKENS + B_FRAME + C_DATA + B_PITCH + E_GLASS)))
 
+# The loader in each look. Self-contained colours (the loader page doesn't load THEME_CSS), scoped like the looks.
+# Original keeps BOOT_CSS as it is. One loud thing each: A the programme-cover headline, B the glass card under the
+# floodlights, C the scoreboard digits, D the sticker on the mown pitch, E the glass card with scoreboard digits.
+_BOOT_GLOW = ("radial-gradient(60% 50% at 6% -12%,rgba(255,255,255,.13),transparent 70%),"
+              "radial-gradient(46% 52% at 98% -6%,color-mix(in srgb,var(--kit,#1C7F46) 36%,transparent),transparent 70%),"
+              "radial-gradient(80% 60% at 50% 122%,rgba(28,127,70,.42),transparent 70%)")
+_BOOT_GLASS = (".boot-txt{padding:28px 30px;border-radius:22px;background:linear-gradient(180deg,rgba(255,255,255,.085),rgba(255,255,255,.03));"
+               "border:1px solid rgba(255,255,255,.12);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 40px 80px -40px rgba(0,0,0,.9);"
+               "backdrop-filter:blur(18px) saturate(1.3);-webkit-backdrop-filter:blur(18px) saturate(1.3)}\n")
+_BOOT_DIGITS = ('.boot-meta{align-items:flex-end}\n'
+                '#bootPct{font-family:"Doto","Geist Mono",monospace;font-variation-settings:"ROND" 100;font-weight:800;font-size:46px;line-height:.9;'
+                'color:#4FC77F;text-shadow:0 0 22px rgba(79,199,127,.45)}\n'
+                '.boot-bar i{height:10px;border-radius:2px}.boot-bar i.on{background:#4FC77F;box-shadow:0 0 10px rgba(79,199,127,.55)}\n'
+                '.boot-steps{font-family:"Geist Mono",ui-monospace,monospace;font-size:13px}\n'
+                '.boot-steps li.act i{border-color:#4FC77F;border-top-color:transparent}.boot-steps li.done i{background:#4FC77F;border-color:#4FC77F}\n'
+                '.boot-steps li.done i::after{border-color:#06110C}\n'
+                '.boot-pitch *{stroke:rgba(79,199,127,.75)}\n'
+                '.boot-scan{background:linear-gradient(180deg,transparent,rgba(79,199,127,.22) 70%,rgba(79,199,127,.95) 71%,transparent 73%)}\n')
+BOOT_LOOKS = {
+    "A": r'''
+.boot{background:#F4F4F0;color:#151512;font-family:"Archivo",system-ui,sans-serif}
+.boot-club{font-stretch:125%;font-style:normal;font-weight:800;letter-spacing:-.02em;font-size:clamp(30px,4.6vw,58px)}
+.cm{border-color:#151512}
+.boot-pitch *{stroke:#151512;stroke-width:.5}
+.boot-scan{background:linear-gradient(180deg,transparent,color-mix(in srgb,var(--kit-l,#1C7F46) 16%,transparent) 70%,var(--kit-l,#1C7F46) 71%,transparent 73%)}
+.boot-id b{color:var(--kit-l,#1C7F46);font-stretch:125%;font-style:normal;font-weight:800;font-size:20px;letter-spacing:-.01em}
+.boot-id.brand b{color:#151512}
+.boot-h{font-family:"Newsreader",Georgia,serif;font-stretch:100%;font-style:italic;font-weight:500;font-size:clamp(44px,5.4vw,68px);
+ letter-spacing:-.025em;line-height:1;padding-bottom:16px;border-bottom:3px solid #151512}
+.boot-steps{font-size:15px;color:#9A9A92}
+.boot-steps li.act{color:#151512}.boot-steps li.done{color:#3D3D38}
+.boot-steps li.act i{border-color:var(--kit-l,#1C7F46);border-top-color:transparent}
+.boot-steps li.done i{background:var(--kit-l,#1C7F46);border-color:var(--kit-l,#1C7F46)}
+.boot-bar i{height:6px;border-radius:0;background:#D3D3CB}.boot-bar i.on{background:#151512}
+.boot-meta{font-family:"Martian Mono",ui-monospace,monospace;font-size:11px;color:#66665E}
+.boot-err{background:#fff;border-left-color:#B00F27;color:#8A0C1F}
+.boot-foot{font-family:"Martian Mono",ui-monospace,monospace;font-size:10.5px;color:#66665E;border-top:1px solid #151512;padding-top:8px}
+''',
+    "B": rf'''
+.boot{{background:{_BOOT_GLOW},#06120C;color:#F3F5F1;font-family:"Hanken Grotesk",system-ui,sans-serif}}
+.boot-club{{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-stretch:100%;font-style:normal;font-weight:800;text-transform:none;letter-spacing:-.035em}}
+{_BOOT_GLASS}.boot-id b{{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-stretch:100%;font-style:normal;text-transform:none;font-weight:700;font-size:24px;color:#F3F5F1}}
+.boot-h{{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-stretch:100%;font-weight:700;letter-spacing:-.04em;font-size:clamp(38px,4.6vw,58px)}}
+.boot-steps{{color:rgba(243,245,241,.4)}}.boot-steps li.act{{color:#F3F5F1}}.boot-steps li.done{{color:rgba(243,245,241,.78)}}
+.boot-bar i{{height:6px;border-radius:99px;background:rgba(255,255,255,.08)}}
+.boot-bar i.on{{background:var(--kit,#1C7F46);box-shadow:0 0 14px color-mix(in srgb,var(--kit,#1C7F46) 70%,transparent)}}
+.boot-meta{{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:12px;color:rgba(243,245,241,.56)}}
+.cm{{border-color:rgba(255,255,255,.22)}}
+.boot-pitch *{{stroke:rgba(255,255,255,.55)}}
+.boot-foot{{font-family:"JetBrains Mono",ui-monospace,monospace;color:rgba(243,245,241,.5)}}
+''',
+    "C": r'''
+.boot{background:#0A0B0A;color:#E7EAE5;font-family:"Geist",system-ui,sans-serif}
+.boot-club{font-family:"Geist",system-ui,sans-serif;font-stretch:100%;font-style:normal;font-weight:700;text-transform:none;letter-spacing:-.045em}
+.boot-id b{font-family:"Geist",system-ui,sans-serif;font-stretch:100%;font-style:normal;text-transform:none;font-weight:600;font-size:20px;color:#E7EAE5}
+.boot-h{font-family:"Geist",system-ui,sans-serif;font-stretch:100%;font-weight:600;letter-spacing:-.045em;font-size:clamp(34px,4.2vw,52px)}
+.boot-steps{color:#4A514C}.boot-steps li.act{color:#4FC77F}.boot-steps li.done{color:#B5BCB6}
+.boot-bar{gap:3px}.boot-bar i{background:#171A18}
+.boot-meta{font-family:"Geist Mono",ui-monospace,monospace;color:#7F8781}
+.cm{border-color:rgba(79,199,127,.5)}
+.boot-foot{font-family:"Geist Mono",ui-monospace,monospace;color:#7F8781;font-size:11.5px}
+''' + _BOOT_DIGITS,
+    "D": r'''
+.boot{background:repeating-linear-gradient(90deg,#1C7F46 0 96px,#1A7541 96px 192px);color:#111;font-family:"Schibsted Grotesk",system-ui,sans-serif}
+.boot-club{font-family:"Big Shoulders","Arial Narrow",sans-serif;font-stretch:100%;font-style:normal;font-weight:900;font-size:clamp(46px,7vw,96px);letter-spacing:.01em}
+.cm{border-color:rgba(255,255,255,.75)}
+.boot-pitch *{stroke:#fff;stroke-width:.7}
+.boot-scan{background:linear-gradient(180deg,transparent,rgba(255,255,255,.18) 70%,#fff 71%,transparent 73%)}
+.boot-txt{background:#fff;border:2px solid #111;border-radius:14px;box-shadow:6px 6px 0 #111;padding:26px 28px;transform:rotate(-1.2deg)}
+.boot-id b{font-family:"Big Shoulders","Arial Narrow",sans-serif;font-stretch:100%;font-style:normal;font-weight:900;font-size:26px;color:var(--kit-l,#1C7F46)}
+.boot-id.brand b{color:#111}
+.boot-h{font-family:"Big Shoulders","Arial Narrow",sans-serif;font-stretch:100%;font-weight:900;text-transform:uppercase;font-size:clamp(46px,5.6vw,72px);line-height:.9}
+.boot-steps{font-weight:600;color:#A3A39B}.boot-steps li.act{color:#111}.boot-steps li.done{color:#333330}
+.boot-steps i{border-width:2px}.boot-steps li.act i{border-color:#111;border-top-color:transparent}
+.boot-steps li.done i{background:var(--kit-l,#1C7F46);border-color:#111}
+.boot-bar i{height:12px;border:2px solid #111;border-radius:4px;background:#fff}.boot-bar i.on{background:var(--kit-l,#1C7F46)}
+.boot-meta{color:#5E5E57;font-weight:600}
+.boot-err{background:#FFF4F4;color:#8A0C1F;border:2px solid #111;border-left:6px solid #B00F27}
+.boot-foot{font-family:"Big Shoulders","Arial Narrow",sans-serif;font-weight:800;font-size:16px;color:#fff;letter-spacing:.02em}
+''',
+    "E": rf'''
+.boot{{background:{_BOOT_GLOW},#06110C;color:#EEF2EC;font-family:"Geist",system-ui,sans-serif}}
+.boot-club{{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-stretch:100%;font-style:normal;font-weight:800;text-transform:none;letter-spacing:-.035em}}
+{_BOOT_GLASS}.boot-id b{{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-stretch:100%;font-style:normal;text-transform:none;font-weight:700;font-size:24px;color:#EEF2EC}}
+.boot-h{{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-stretch:100%;font-weight:700;letter-spacing:-.04em;font-size:clamp(38px,4.6vw,58px)}}
+.boot-steps{{color:rgba(238,242,236,.38)}}.boot-steps li.act{{color:#4FC77F}}.boot-steps li.done{{color:rgba(238,242,236,.76)}}
+.boot-bar i{{background:rgba(255,255,255,.07)}}
+.boot-meta{{font-family:"Geist Mono",ui-monospace,monospace;color:rgba(238,242,236,.54)}}
+.cm{{border-color:rgba(255,255,255,.2)}}
+.boot-foot{{font-family:"Geist Mono",ui-monospace,monospace;color:rgba(238,242,236,.5)}}
+''' + _BOOT_DIGITS,
+}
+# phones: the looks set taller type, so the pitch turns into a faint backdrop behind the text and the footer keeps its room
+_BOOT_PHONE = r"""
+@media (max-width:700px){
+.boot-in{padding:48px 20px 64px;gap:0}
+.boot-pw{position:absolute;left:50%;top:50%;width:min(320px,82vw);transform:translate(-50%,-50%);opacity:.2;pointer-events:none}
+.boot-txt{position:relative;width:100%}
+.boot-h{font-size:40px}
+.boot-steps{gap:6px}
+}
+"""
+# A and C have no card behind the text, so their backdrop pitch is fainter
+BOOT_THEME_CSS = "".join(scope_css(css + _BOOT_PHONE + ("@media (max-width:700px){.boot-pw{opacity:.1}}" if k in "AC" else ""), k)
+                         for k, css in BOOT_LOOKS.items())
+
+# ---- Home-screen app ---------------------------------------------------------------------------------------------
+# Add to Home Screen on the iPhone gives the app its icon and opens it full screen (assets/app.webmanifest + Apple's tags).
+# It then runs under the status bar, so headers pad by env(safe-area-inset-top); the light looks (A, D) put a dark strip
+# there because iOS draws the clock and battery in white.
+THEME_COLORS = {"orig": "#0e1512", "A": "#F4F4F0", "B": "#06120C", "C": "#0A0B0A", "D": "#FFFFFF", "E": "#06110C"}   # each look's header
+
+
+def app_head() -> str:
+    return (f'<link rel="manifest" href="{asset("app.webmanifest")}"><link rel="apple-touch-icon" href="{asset("app-icon-180.png")}">'
+            f'<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">'
+            f'<meta name="apple-mobile-web-app-title" content="{APP_NAME}"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">'
+            f'<meta name="theme-color" content="{THEME_COLORS["orig"]}">')
+
+
+HOME_SCREEN_CSS = prefix_css(r"""
+.lnav{border-top:env(safe-area-inset-top) solid transparent}
+:root[data-theme="A"] .lnav,:root[data-theme="D"] .lnav{border-top-color:#111}
+.hero{border-top:env(safe-area-inset-top) solid transparent}
+""", "html:not(#_)")
+
+# a page served to the phone keeps the key in its address, so a home-screen copy (which gets its own cookies) still gets in
+PHONE_URL_JS = ("(function(){var k='__K__',q=new URLSearchParams(location.search);"
+                "if(q.get('k')!==k){q.set('k',k);history.replaceState(history.state,'',location.pathname+'?'+q+location.hash);}})();")
+
+
 LOOK_HEAD_JS = ("try{var t=localStorage.getItem('fm27-theme');if(/^[A-E]$/.test(t))document.documentElement.dataset.theme=t;}catch(e){}")
 
 LOOK_JS = r"""
 (function(){
-const NAMES=__NAMES__,KEYS=Object.keys(NAMES),root=document.documentElement,pop=document.getElementById('lookpop');
+const NAMES=__NAMES__,TC=__TC__,KEYS=Object.keys(NAMES),root=document.documentElement,pop=document.getElementById('lookpop');
 const cur=document.getElementById('lookCur'),cur2=document.getElementById('lookCur2');
 function now(){return root.dataset.theme||'orig';}
 // the home page's previews are real app pages in srcdoc frames: give them the look CSS once, then the same look
@@ -4963,7 +5096,8 @@ frames.forEach(f=>{f.addEventListener('load',()=>dress(f));dress(f);});
 function apply(k,save){
  const set=()=>{if(k==='orig')delete root.dataset.theme;else root.dataset.theme=k;
   if(cur)cur.textContent=NAMES[k];if(cur2)cur2.textContent=NAMES[k];
-  document.querySelectorAll('.lk-o input').forEach(i=>{i.checked=i.value===k;});frames.forEach(dress);};
+  document.querySelectorAll('.lk-o input').forEach(i=>{i.checked=i.value===k;});frames.forEach(dress);
+  const tc=document.querySelector('meta[name="theme-color"]');if(tc&&TC[k])tc.content=TC[k];};
  const calm=matchMedia('(prefers-reduced-motion: reduce)').matches;
  if(save&&document.startViewTransition&&!calm)document.startViewTransition(set);else set();
  if(save){try{if(k==='orig')localStorage.removeItem('fm27-theme');else localStorage.setItem('fm27-theme',k);}catch(e){}}
@@ -4975,7 +5109,7 @@ addEventListener('keydown',e=>{
  if(e.key==='l'||e.key==='L'){const i=KEYS.indexOf(now());apply(KEYS[(i+(e.shiftKey?-1:1)+KEYS.length)%KEYS.length],true);}
 });
 })();
-""".replace("__NAMES__", json.dumps({k: n for k, n, _ in THEMES}))
+""".replace("__NAMES__", json.dumps({k: n for k, n, _ in THEMES})).replace("__TC__", json.dumps(THEME_COLORS))
 
 
 def look_popover() -> str:
@@ -5194,6 +5328,7 @@ PHONE_CSS_RAW = r"""
  html{-webkit-tap-highlight-color:transparent}
  body.app{padding-bottom:calc(78px + env(safe-area-inset-bottom))}
  .ah{padding-top:env(safe-area-inset-top)}
+ :root[data-theme="A"] .ah,:root[data-theme="D"] .ah{padding-top:0;border-top:env(safe-area-inset-top) solid #111}
  .ah-row{height:54px;gap:10px;padding:0 16px}
  .ah-brand span{display:none}
  .ah-brand .logo{width:28px;height:28px}
@@ -5520,9 +5655,9 @@ def render(R) -> str:
     club = club_identity(R["club"])
     return f"""<!DOCTYPE html><html lang="en" style="--kit:{club['kit']};--kit-ink:{club['ink']};--kit-l:{kit_on_light(club['kit'])}"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>{E(R['club'])} · FM27 Squad Report</title>
-<link rel="icon" href="{asset('app-logo.svg')}">
+<link rel="icon" href="{asset('app-logo.svg')}">{app_head()}
 <script>try{{if(Date.now()-(+sessionStorage.getItem('fm27-launch')||0)<60000)document.documentElement.classList.add('booting');}}catch(e){{}}{LOOK_HEAD_JS}</script>
-{FONT_LINKS}<style>{CSS}{P3_CSS}{APP_CSS}{BOOT_CSS}{theme_font_css()}{LOOK_CSS}{THEME_CSS}{PHONE_CSS}</style></head><body class="app" data-club="{E(R['club'])}">
+{FONT_LINKS}<style>{CSS}{P3_CSS}{APP_CSS}{BOOT_CSS}{theme_font_css()}{LOOK_CSS}{THEME_CSS}{BOOT_THEME_CSS}{PHONE_CSS}</style></head><body class="app" data-club="{E(R['club'])}">
 {boot_html(club)}{app_header(R)}<main id="main" class="wrap">
 {page('overview', overview(R))}{page('xis', xis(R))}{page('positions', position_cards(R))}{page('squad', squad_table(R))}
 {page('fit', fit_page(R))}{page('training', training_page(R))}{page('sandbox', sandbox_page(R))}{page('deals', deals(R))}{page('stats', stats_table(R))}
@@ -5895,12 +6030,16 @@ if(onMac)fetch('/phone',{cache:'no-store'}).then(r=>r.json()).then(j=>{if(!j.on|
 """
 
 def loader_page() -> str:
-    return f"""<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Reading your save · FM27 Squad Report</title><link rel="icon" href="{asset('app-logo.svg')}">{FONT_LINKS}
-<style>body{{margin:0;background:#0e1512}}{BOOT_CSS}</style></head><body>{boot_html(last_club())}<script>{BOOT_JS}FM27Boot&&FM27Boot.wait();</script></body></html>"""
+    club = last_club()
+    kit_l = kit_on_light(club["kit"]) if club else "#1C7F46"
+    return f"""<!DOCTYPE html><html lang="en" style="--kit-l:{kit_l}"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><script>{LOOK_HEAD_JS}</script>
+<title>Reading your save · FM27 Squad Report</title><link rel="icon" href="{asset('app-logo.svg')}">{app_head()}{FONT_LINKS}
+<style>body{{margin:0;background:#0e1512}}{BOOT_CSS}{theme_font_css()}{BOOT_THEME_CSS}</style></head><body>{boot_html(club)}<script>{BOOT_JS}FM27Boot&&FM27Boot.wait();</script></body></html>"""
 
 
-ASSET_TYPES = {".js": "text/javascript; charset=utf-8", ".svg": "image/svg+xml", ".css": "text/css; charset=utf-8", ".woff2": "font/woff2"}
+ASSET_TYPES = {".js": "text/javascript; charset=utf-8", ".svg": "image/svg+xml", ".css": "text/css; charset=utf-8", ".woff2": "font/woff2",
+               ".png": "image/png", ".webmanifest": "application/manifest+json"}
 
 
 def serve_live(argv: list[str]) -> None:
@@ -5938,6 +6077,8 @@ def serve_live(argv: list[str]) -> None:
             self.send_header("Content-Type", ctype)
             self.send_header("Content-Length", str(len(data)))
             self.send_header("Cache-Control", cache)
+            if getattr(self, "cookie", ""):
+                self.send_header("Set-Cookie", self.cookie)
             self.end_headers()
             self.wfile.write(data)
 
@@ -5958,19 +6099,23 @@ def serve_live(argv: list[str]) -> None:
             got = jar.get(PHONE_COOKIE)
             return got is not None and hmac.compare_digest(got.value.encode(), key.encode())
 
+        def page(self, body: str) -> None:
+            """Pages for the phone keep the key in their address (and their manifest's), so Add to Home Screen saves a link
+            that still gets in: the home-screen copy of the app has its own cookies."""
+            if key and not self.from_mac():
+                body = (body.replace('app.webmanifest"', f'app.webmanifest?k={key}"', 1)
+                        .replace("</head>", f"<script>{PHONE_URL_JS.replace('__K__', key)}</script></head>", 1))
+            self.send(body)
+
         def do_GET(self):  # noqa: N802
             path = self.path.split("?")[0]
-            if not self.from_mac():
-                given = dict(parse_qsl(self.path.partition("?")[2])).get("k", "")
-                if phone_on and given and hmac.compare_digest(given.encode(), key.encode()):
-                    # the phone link: remember this phone, then load the page without the key in the address bar
-                    self.send_response(303)
-                    self.send_header("Location", path if path.startswith("/") and not path.startswith("//") else "/")
-                    self.send_header("Set-Cookie", f"{PHONE_COOKIE}={key}; Path=/; Max-Age=31536000; HttpOnly; SameSite=Lax")
-                    self.send_header("Content-Length", "0")
-                    self.end_headers()
-                    return
-                if not self.let_in():
+            self.cookie = ""
+            given = dict(parse_qsl(self.path.partition("?")[2])).get("k", "")
+            key_ok = bool(phone_on and given and hmac.compare_digest(given.encode(), key.encode()))
+            if not self.from_mac() and not path.startswith("/assets/"):   # assets are public files: scripts, fonts, crest, icons
+                if key_ok:   # the phone link: remember this phone
+                    self.cookie = f"{PHONE_COOKIE}={key}; Path=/; Max-Age=31536000; HttpOnly; SameSite=Lax"
+                elif not self.let_in():
                     return self.send(PHONE_DENIED, code=403)
             with lock:
                 snap = dict(state)
@@ -5979,14 +6124,14 @@ def serve_live(argv: list[str]) -> None:
                                       "step": snap["step"], "steps": BUILD_STEPS, "ready": snap["html"] is not None}),
                           "application/json")
             elif path in ("/", "/index.html"):
-                self.send(landing)
+                self.page(landing)
             elif path in ("/app", "/app/"):
                 if snap["html"] is None:
-                    self.send(loader_page())
+                    self.page(loader_page())
                 else:
                     flag = f'<script>window.FM27_LIVE={json.dumps(snap["version"])};</script></head>'
                     page = snap["html"].replace("</head>", flag, 1).replace("</body>", f"<script>{LIVE_JS}</script></body>", 1)
-                    self.send(page)
+                    self.page(page)
             elif path == "/phone" and self.from_mac():
                 links = phone_links(key) if phone_on else []
                 pop = phone_popover(links)
@@ -5995,6 +6140,10 @@ def serve_live(argv: list[str]) -> None:
                 qs = dict(parse_qsl(self.path.partition("?")[2]))
                 self.send(json.dumps(search_players(qs.get("q", "")[:60], qs.get("pos", "")[:4].upper(), qs.get("age", "")[:2])),
                           "application/json")
+            elif path == "/assets/app.webmanifest" and key_ok:   # the phone's home-screen copy opens with the key
+                manifest = json.loads((APP_DIR / "assets" / "app.webmanifest").read_text(encoding="utf-8"))
+                manifest["start_url"] = f"../app/?k={key}"
+                self.send(json.dumps(manifest), "application/manifest+json")
             elif path.startswith("/assets/"):
                 name = path[len("/assets/"):]
                 f = APP_DIR / "assets" / name

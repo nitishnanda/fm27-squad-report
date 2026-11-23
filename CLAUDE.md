@@ -105,6 +105,12 @@ LW (AML/ML) IF/WMF · AM SS/AM · RW (AMR/MR) IW/WMF · ST CFD/CFD. `STYLE_KEYS`
   Narrow desktop windows (861–1280px) get a tighter header and the squad list drops extra columns instead of scrolling sideways.
   The server only listens on 127.0.0.1, so a real iPhone can't open it yet.
 
+## Hosted demo (Vercel)
+- Vercel project in his Hobby account (team "MedOffrai"), behind Vercel Authentication (only he can open it). It serves `web/`:
+  the home page at `/` and the app at `/app`, built by `python3 demo/build_site.py` from `demo/fake_save.py` (a made-up save:
+  Liverpool names with invented ratings, injuries and moves; also handy for testing every tab without his save). `vercel.json`
+  copies `assets/` into `web/assets/` at build time. Rebuild `web/` and push after UI changes; his real report stays local.
+
 ## What fmsave gives us (worked out in that session)
 - `player_match_stats()`: position per match is a one-bit mask in FM order —
   0 GK, 1 SW, 2 DR, 3 DL, 4 DC, 5 WBR, 6 WBL, 7 DM, 8 MR, 9 ML, 10 MC, 11 AMR, 12 AML, 13 AMC, 14 ST

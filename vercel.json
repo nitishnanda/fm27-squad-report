@@ -1,0 +1,6 @@
+{
+  "framework": null,
+  "buildCommand": "mkdir -p web/assets && cp -R assets/. web/assets/",
+  "outputDirectory": "web",
+  "cleanUrls": true
+}

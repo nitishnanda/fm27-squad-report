@@ -8,3 +8,6 @@ Reports/
 data/history.json
 data/club.json
 scouting.txt
+
+# demo site build: assets are copied in by Vercel at build time
+web/assets/

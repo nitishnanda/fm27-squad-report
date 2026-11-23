@@ -89,7 +89,10 @@ LW (AML/ML) IF/WMF · AM SS/AM · RW (AMR/MR) IW/WMF · ST CFD/CFD. `STYLE_KEYS`
   `B_FRAME` + `C_DATA` + `B_PITCH` + `E_GLASS`. The light looks share `LIGHT_FIX` (pastel text turned into readable inks) and use
   `--kit-l` (`kit_on_light()`, the club colour dark enough for paper and white text). Choice is in localStorage `fm27-theme`, applied
   in `<head>` before paint (`LOOK_HEAD_JS`); `L` / `Shift+L` cycles. Fonts are vendored in `assets/font-*.woff2` (OFL, see
-  `assets/FONTS-LICENSE.txt`) and only download when a look uses them. The home page and the loader aren't themed.
+  `assets/FONTS-LICENSE.txt`) and only download when a look uses them. The home page has the same Look button and follows the look
+  (`LAND_A`…`LAND_D`, E = `LAND_B` + `LAND_E`, in `LANDING_THEME_CSS`; it's club-neutral, so its accent is the pitch green). Its four
+  previews get the look CSS copied in from `<style id="looks-css">` by LOOK_JS (`dress()`), so the CSS isn't shipped 4 extra times.
+  The launch wipe takes each look's colour. The app's loader (`boot_html`) isn't themed.
 - Layout is fluid (no max width); `--gutter` scales with the window.
 
 ## What fmsave gives us (worked out in that session)

@@ -3386,7 +3386,7 @@ def _demo_doc(route: str, body: str) -> str:
     lfc = club_identity("Liverpool")
     head = header_html(lfc, {"home": (3, "warn"), "tactics": (2, "amber"), "transfers": (4, "")}, {"squad": (27, ""), "fit": (2, "amber")},
                        ticker_html([(c, t, x, "home") for c, t, x in DEMO_TICKER]), route)
-    return (f'<!DOCTYPE html><html lang="en" style="--kit:{lfc["kit"]};--kit-ink:{lfc["ink"]}"><head><meta charset="utf-8">{FONT_LINKS}'
+    return (f'<!DOCTYPE html><html lang="en" style="--kit:{lfc["kit"]};--kit-ink:{lfc["ink"]};--kit-l:{kit_on_light(lfc["kit"])}"><head><meta charset="utf-8">{FONT_LINKS}'
             f'<style>{CSS}{P3_CSS}{APP_CSS}{MINI_CSS}</style></head><body class="app mini">{head}<main class="wrap">{body}</main></body></html>')
 
 
@@ -3516,13 +3516,16 @@ def landing_page() -> str:
     wont = ["Change your save. It only ever reads it", "Show current ability, potential ability or hidden attributes",
             "Tell you who to sign. It points at positions, never players", "Send your save anywhere. It stays on your Mac",
             "Ask for an account or a subscription"]
-    return f"""<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+    return f"""<!DOCTYPE html><html lang="en" style="--kit-l:#1C7F46"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<script>{LOOK_HEAD_JS}</script>
 <title>FM27 {APP_NAME}</title><meta name="description" content="Turns your Football Manager 27 save into a squad report: best XIs, positions that need work and how your tactic is going.">
-<link rel="icon" href="{asset('app-logo.svg')}">{FONT_LINKS}<style>{P3_CSS}{LANDING_CSS}</style></head>
+<link rel="icon" href="{asset('app-logo.svg')}">{FONT_LINKS}<style>{P3_CSS}{LANDING_CSS}{LOOK_CSS}</style>
+<style id="looks-css">{theme_font_css()}{THEME_CSS}</style><style>{LANDING_THEME_CSS}</style></head>
 <body class="landing">
 <a class="skip" href="#top">Skip to content</a>
 <header class="lnav"><a class="lbrand" href="#top">{APP_LOGO_SVG}<span>FM27 {APP_NAME}</span></a>
  <nav aria-label="Page"><a href="#inside">What's inside</a><a href="#wont">What it won't do</a><a href="#how">How it works</a></nav>
+ <button class="look-btn ah-look" type="button" popovertarget="lookpop" aria-label="Change the look">Look<span class="lk-cur">: <b id="lookCur">Original</b></span></button>
  <a class="btn sm" href="/app" data-launch>Launch the app</a></header>
 <main id="top">
 <section class="hero">
@@ -3531,7 +3534,7 @@ def landing_page() -> str:
   <p class="lede">{APP_NAME} reads your latest FM27 save and shows your best XIs, the positions that need work and how your
    tactic is going. Visible attributes only, so nothing gets spoiled.</p>
   <div class="ctas"><a class="btn" href="/app" data-launch>Launch the app</a><a class="tlink" href="#inside">See what's inside</a></div></div>
- <div class="hero-3d demo" style="--kit:{lfc['kit']};--kit-ink:{lfc['ink']}">{pitch3d(hero_cards, "Demo: Liverpool's XI from 22 November 2026 on a 3D pitch. Drag or use the arrow keys to rotate it.", lfc['pitch'])}
+ <div class="hero-3d demo" style="--kit:{lfc['kit']};--kit-ink:{lfc['ink']};--kit-l:{kit_on_light(lfc['kit'])}">{pitch3d(hero_cards, "Demo: Liverpool's XI from 22 November 2026 on a 3D pitch. Drag or use the arrow keys to rotate it.", lfc['pitch'])}
   <p class="hint">Drag to rotate. Demo squad: Liverpool, 22 Nov 2026. Your own club appears when you launch.</p></div>
 </section>
 <section class="story" id="inside" aria-label="What's inside the app">
@@ -3557,11 +3560,12 @@ def landing_page() -> str:
 </main>
 <footer class="lfoot"><p>Fan-made tool. Not affiliated with Sports Interactive or SEGA, or with any club. The demo uses Liverpool's line-up from
  22 November 2026 with made-up star ratings.</p></footer>
+{look_popover()}
 <div class="launch" id="launch" aria-hidden="true">{APP_LOGO_SVG}</div>
 <div class="cur" aria-hidden="true"><span>Drag</span></div>
 <script src="{asset('gsap.min.js')}"></script><script src="{asset('ScrollTrigger.min.js')}"></script>
 <script src="{asset('SplitText.min.js')}"></script><script src="{asset('lenis.min.js')}"></script>
-<script>{P3_JS}{LANDING_JS}</script></body></html>"""
+<script>{P3_JS}{LANDING_JS}{LOOK_JS}</script></body></html>"""
 
 
 LANDING_CSS = r"""
@@ -3591,6 +3595,11 @@ h1,h2,h3{font-family:var(--display);margin:0}
 .lbrand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--display);font-stretch:75%;font-weight:800;font-size:19px}
 .lbrand .logo{width:30px;height:30px}
 .lnav nav{display:flex;gap:24px;margin-left:auto}.lnav nav a{text-decoration:none;color:var(--text2);font-size:15px}.lnav nav a:hover{color:var(--text)}
+.look-btn{font:inherit;font-size:14px;font-weight:600;color:var(--text2);background:transparent;border:1px solid var(--line);border-radius:999px;padding:8px 14px;cursor:pointer;white-space:nowrap}
+.look-btn:hover{color:var(--text);border-color:var(--text2)}.look-btn b{font-weight:700;color:var(--text)}
+.landing .lookpop{top:72px;right:var(--gut)}
+.lnav .btn.sm{white-space:nowrap}
+@media (max-width:480px){.lbrand span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}}
 /* hero */
 .hero{min-height:100svh;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);align-items:center;gap:20px;padding:110px var(--gut) 40px;
  background:radial-gradient(55% 65% at 72% 55%,rgba(46,140,82,.28),transparent 70%)}
@@ -3646,7 +3655,7 @@ h1,h2,h3{font-family:var(--display);margin:0}
  background:rgba(14,21,18,.35);backdrop-filter:blur(2px)}
 .has-cur .p3{cursor:none}
 @media (max-width:900px){
- .lnav nav{display:none}.lnav .btn.sm{margin-left:auto}
+ .lnav nav{display:none}.lnav .look-btn{margin-left:auto}.lnav{gap:12px}
  .hero{grid-template-columns:1fr;padding-top:96px}.hero-3d .p3{height:62vh;--pw:min(300px,64vw)}
  .story-in{grid-template-columns:1fr;gap:28px}.steps{grid-template-columns:repeat(2,1fr)}.st span{display:none}
  .frame{transform:none}
@@ -3735,7 +3744,7 @@ if(G&&!rm&&matchMedia('(hover: hover) and (pointer: fine)').matches){
   el.addEventListener('pointerenter',()=>gsap.to(cur,{opacity:1,scale:1,duration:.25}));
   el.addEventListener('pointerleave',()=>gsap.to(cur,{opacity:0,scale:.6,duration:.25}));
   el.addEventListener('pointerdown',()=>gsap.to(cur,{scale:.82,backgroundColor:'color-mix(in srgb,var(--kit) 55%,transparent)',duration:.2}));
-  addEventListener('pointerup',()=>gsap.to(cur,{scale:1,backgroundColor:'rgba(14,21,18,.35)',duration:.2}));
+  addEventListener('pointerup',()=>{gsap.to(cur,{scale:1,duration:.2});gsap.set(cur,{clearProps:'backgroundColor'});});
  });
  addEventListener('pointermove',e=>{qx(e.clientX);qy(e.clientY);},{passive:true});
 }
@@ -4847,6 +4856,7 @@ LOOK_CSS = r"""
 .lookpop::backdrop{background:transparent}
 .lk-sub{margin:-4px 0 10px;font-size:12.5px;color:var(--muted)}
 .lk-list{display:grid;gap:4px;border:0;margin:0;padding:0}
+.lk-list>legend{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .lk-o{display:grid;grid-template-columns:44px minmax(0,1fr);gap:12px;align-items:center;padding:7px 8px;border-radius:8px;cursor:pointer;border:1px solid transparent}
 .lk-o:hover{background:var(--panel2)}
 .lk-o input{position:absolute;opacity:0;pointer-events:none}
@@ -4879,10 +4889,18 @@ LOOK_JS = r"""
 const NAMES=__NAMES__,KEYS=Object.keys(NAMES),root=document.documentElement,pop=document.getElementById('lookpop');
 const cur=document.getElementById('lookCur');
 function now(){return root.dataset.theme||'orig';}
+// the home page's previews are real app pages in srcdoc frames: give them the look CSS once, then the same look
+function dress(f){let d;try{d=f.contentDocument;}catch(_){return;}if(!d||!d.body||!d.body.classList.contains('mini'))return;
+ const css=document.getElementById('looks-css');
+ if(css&&!d.getElementById('looks-css')){const st=d.createElement('style');st.id='looks-css';st.textContent=css.textContent;d.head.appendChild(st);}
+ const k=now();if(k==='orig')delete d.documentElement.dataset.theme;else d.documentElement.dataset.theme=k;
+ const c=d.getElementById('lookCur');if(c)c.textContent=NAMES[k];}
+const frames=[...document.querySelectorAll('iframe[srcdoc]')];
+frames.forEach(f=>{f.addEventListener('load',()=>dress(f));dress(f);});
 function apply(k,save){
  const set=()=>{if(k==='orig')delete root.dataset.theme;else root.dataset.theme=k;
   if(cur)cur.textContent=NAMES[k];
-  document.querySelectorAll('.lk-o input').forEach(i=>{i.checked=i.value===k;});};
+  document.querySelectorAll('.lk-o input').forEach(i=>{i.checked=i.value===k;});frames.forEach(dress);};
  const calm=matchMedia('(prefers-reduced-motion: reduce)').matches;
  if(save&&document.startViewTransition&&!calm)document.startViewTransition(set);else set();
  if(save){try{if(k==='orig')localStorage.removeItem('fm27-theme');else localStorage.setItem('fm27-theme',k);}catch(e){}}
@@ -4905,6 +4923,187 @@ def look_popover() -> str:
             f'<p class="lk-sub">Try the redesign ideas. Your choice is saved in this browser.</p>'
             f'<fieldset class="lk-list"><legend class="sr">Look</legend>{opts}</fieldset>'
             f'<p class="lk-foot">Press <kbd>L</kbd> to flick through them.</p></div>')
+
+
+# The home page in each look. THEME_CSS supplies the tokens, fonts, body background and the 3D pitch;
+# these rules handle the page's own parts (nav, hero, story, lists, call to action, launch wipe, cursor).
+# The home page is club-neutral, so its accent is the app's pitch green, not a club colour.
+LAND_A = r"""
+body.landing{font-family:"Archivo",system-ui,sans-serif}
+.lnav.solid{background:var(--bg);backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:0 3px 0 var(--line)}
+.lbrand{font-stretch:125%;font-size:17px;letter-spacing:-.01em}
+.lnav nav a{color:var(--text2);font-weight:600}
+.look-btn,.btn,.btn.sm{border-radius:0}
+.btn{background:var(--text);color:var(--bg);box-shadow:none;font-stretch:100%;font-size:19px}
+.btn:hover{background:#1C7F46;color:#fff}
+.btn.inv{background:var(--bg);color:var(--text)}.btn.inv:hover{background:#fff;color:var(--text)}
+.hero{background:none;border-bottom:3px solid var(--line)}
+.for{color:#1C7F46;font-family:"Martian Mono",monospace;font-stretch:87.5%;font-weight:500;font-size:13px}
+.hero h1{font-stretch:125%;font-weight:800;font-size:clamp(44px,5.4vw,94px);line-height:.92;letter-spacing:-.045em;max-width:13ch}
+.lede{font-family:var(--serif);font-size:clamp(18px,1.45vw,22px);line-height:1.5;color:var(--text2)}
+.tlink{color:var(--text);text-decoration-thickness:2px}
+.hint,.f-demo{font-family:"Martian Mono",monospace;font-stretch:87.5%;font-size:11px}
+.story h2,.split h2,.how h2{font-stretch:125%;font-weight:800;font-size:clamp(36px,4.2vw,68px);letter-spacing:-.045em;line-height:.95}
+.story-in{border-bottom:3px solid var(--line)}
+.st{border-left-color:var(--line2);color:var(--muted)}.st.on{color:var(--text);border-left-color:var(--text)}
+.st b{font-stretch:100%;font-weight:700}.st span{font-family:var(--serif);font-size:16px}
+.frame{background:var(--bg);border:1px solid var(--line);border-radius:0;box-shadow:14px 14px 0 rgba(21,21,18,.12)}
+.scr,.scr iframe{background:var(--bg)}
+.cols>div+div{border-left:1px solid var(--line)}
+.cols h3{font-stretch:100%;font-weight:800}
+.cols li{border-top-color:var(--line2);font-family:var(--serif);font-size:19px}
+.does li::before{color:#1C7F46}.wont li::before{color:#b91c1c}
+.aside{font-family:var(--serif);font-style:italic;font-size:16px}
+.how li{border-top:3px solid var(--line)}
+.how li>b{color:#1C7F46}
+.how h3{font-stretch:100%}.how p{font-family:var(--serif);font-size:17px}
+.cta{background:var(--text);color:var(--bg);background-image:none}
+.cta h2{font-stretch:125%;font-style:normal;font-weight:800;letter-spacing:-.05em;font-size:clamp(48px,7.4vw,128px)}
+.cta p{color:rgba(244,244,240,.75);font-family:"Martian Mono",monospace;font-stretch:87.5%;font-size:12.5px}
+.lfoot{font-family:var(--serif);font-style:italic;font-size:14px;border-top:1px solid var(--line)}
+.launch{background:#151512}
+.cur{border-color:var(--text);color:var(--text);background:rgba(244,244,240,.6);border-radius:0;backdrop-filter:none}
+.skip{background:var(--text);color:var(--bg);border-radius:0}
+:focus-visible{outline-color:var(--text)}
+"""
+# B: floodlit glass on the home page (E reuses it)
+LAND_B = r"""
+.lnav.solid{background:rgba(8,20,14,.55);backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);box-shadow:0 1px 0 var(--line)}
+.lbrand{font-family:var(--display);font-stretch:100%;font-weight:700;font-size:18px;letter-spacing:-.01em}
+.lnav nav a{font-weight:500}
+.look-btn{background:rgba(255,255,255,.06);box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}
+.btn{background:#F3F5F1;color:#06120C;border-radius:999px;font-family:var(--body);font-stretch:100%;font-weight:700;font-size:18px;
+ box-shadow:0 0 0 1px rgba(255,255,255,.4),0 14px 40px -14px rgba(79,199,127,.55)}
+.btn:hover{background:#fff}
+.btn.inv{background:#F3F5F1;color:#06120C}
+.hero{background:radial-gradient(50% 60% at 72% 55%,rgba(79,199,127,.2),transparent 70%)}
+.for{color:var(--gold);font-family:var(--body);font-stretch:100%;font-weight:600;font-size:16px}
+.hero h1{font-family:var(--display);font-stretch:100%;font-weight:800;font-size:clamp(48px,5.8vw,100px);line-height:.92;letter-spacing:-.05em}
+.story h2,.split h2,.how h2{font-family:var(--display);font-stretch:100%;font-weight:700;font-size:clamp(36px,4.2vw,66px);letter-spacing:-.04em;line-height:.98}
+.st{border-left-width:2px}.st.on{border-left-color:var(--gold);box-shadow:-10px 0 22px -16px var(--gold)}
+.st b{font-family:var(--display);font-stretch:100%;font-weight:700;letter-spacing:-.02em}
+.frame{background:rgba(10,24,17,.6);border:1px solid rgba(255,255,255,.14);border-radius:22px;
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.16),40px 60px 100px -30px rgba(0,0,0,.85),0 0 80px -30px rgba(79,199,127,.35)}
+.cols{gap:20px}
+.cols>div,.cols>div+div{padding:28px 30px;border:1px solid var(--line);border-radius:24px;
+ background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.025));box-shadow:inset 0 1px 0 rgba(255,255,255,.1)}
+.cols h3{font-family:var(--display);font-stretch:100%;font-weight:700}
+.cols li{border-top-color:var(--line2)}
+.how ol{gap:18px}
+.how li{border:1px solid var(--line);border-radius:22px;padding:24px;background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.02));
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.1)}
+.how li>b{font-family:var(--display);font-style:normal;font-stretch:100%;font-weight:800;color:var(--gold);text-shadow:0 0 30px rgba(79,199,127,.45)}
+.how h3{font-family:var(--display);font-stretch:100%;font-weight:700}
+.cta{margin:20px var(--gut) 60px;border:1px solid var(--line);border-radius:30px;color:var(--text);
+ background:radial-gradient(70% 120% at 0% 0%,rgba(28,127,70,.55),transparent 62%),linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.02));
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 50px 90px -50px #000}
+.cta h2{font-family:var(--display);font-style:normal;font-stretch:100%;font-weight:800;letter-spacing:-.055em;font-size:clamp(48px,7.4vw,124px)}
+.cta p{color:var(--text2)}
+.launch{background:radial-gradient(60% 60% at 50% 40%,rgba(28,127,70,.55),transparent 70%),#06120C}
+.cur{border-color:rgba(255,255,255,.55);background:rgba(255,255,255,.08);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+ font-family:var(--body);font-stretch:100%;font-weight:700}
+.skip{border-radius:999px}
+"""
+LAND_C = r"""
+body.landing{font-size:16px}
+.lnav.solid{background:rgba(10,11,10,.94);backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:0 1px 0 var(--line)}
+.lbrand{font-family:var(--body);font-stretch:100%;font-weight:600;font-size:16px}
+.lnav nav a{font-family:var(--mono);font-size:13px}
+.look-btn,.btn,.btn.sm{border-radius:4px}
+.btn{background:var(--gold);color:#06120C;font-family:var(--body);font-stretch:100%;font-weight:600;font-size:17px;box-shadow:0 0 24px -6px rgba(79,199,127,.55)}
+.btn:hover{background:#6BD996}
+.btn.inv{background:var(--gold);color:#06120C}
+.hero{background-color:transparent;background-image:radial-gradient(45% 55% at 72% 55%,rgba(79,199,127,.08),transparent 70%),
+ linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+ background-size:auto,48px 48px,48px 48px}
+.for{color:var(--gold);font-family:var(--mono);font-stretch:100%;font-weight:500;font-size:13px}
+.hero h1{font-family:var(--body);font-stretch:100%;font-weight:600;font-size:clamp(44px,5vw,88px);line-height:.98;letter-spacing:-.045em}
+.lede{font-size:18px}
+.hint,.f-demo,.aside{font-family:var(--mono);font-size:12px}
+.story h2,.split h2,.how h2{font-family:var(--body);font-stretch:100%;font-weight:600;font-size:clamp(34px,3.8vw,60px);letter-spacing:-.04em;line-height:1}
+.st{border-left-width:2px}.st.on{border-left-color:var(--gold)}
+.st b{font-family:var(--body);font-stretch:100%;font-weight:600;font-size:20px;letter-spacing:-.01em}.st span{font-size:14px}
+.frame{background:var(--panel);border:1px solid var(--line);border-radius:6px;box-shadow:30px 50px 90px -30px rgba(0,0,0,.9)}
+.scr,.scr iframe{background:var(--bg)}
+.cols>div+div{border-left:1px solid var(--line)}
+.cols h3{font-family:var(--body);font-stretch:100%;font-weight:600}
+.cols li{border-top-color:var(--line);font-size:16.5px}
+.cols li::before{font-family:var(--mono);font-weight:600}
+.does li::before{color:var(--gold)}.wont li::before{color:#ff7a88}
+.how li{border-top:1px solid var(--line)}
+.how li>b{font-family:var(--num);font-style:normal;font-stretch:100%;font-weight:800;font-variation-settings:"ROND" 100;color:var(--gold);
+ text-shadow:0 0 18px rgba(79,199,127,.45)}
+.how h3{font-family:var(--body);font-stretch:100%;font-weight:600;font-size:22px}
+.cta{color:var(--text);background:var(--panel);border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+ background-image:linear-gradient(90deg,#1C7F46 0 6px,transparent 6px),repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0 1px,transparent 1px 4px)}
+.cta h2{font-family:var(--num);font-style:normal;font-stretch:100%;font-weight:800;font-variation-settings:"ROND" 100;color:var(--gold);
+ font-size:clamp(40px,6.4vw,112px);line-height:1;letter-spacing:0;text-shadow:0 0 26px rgba(79,199,127,.4)}
+.cta p{color:var(--muted);font-family:var(--mono);font-size:13px}
+.lfoot{font-family:var(--mono);font-size:12px}
+.launch{background:#0A0B0A}
+.cur{border-radius:6px;border-color:var(--gold);color:var(--gold);background:rgba(10,11,10,.5);font-family:var(--mono);font-stretch:100%;font-weight:500;font-size:12px}
+.skip{border-radius:4px;background:var(--gold);color:#06120C}
+"""
+LAND_D = r"""
+.lnav,.lnav.solid{background:#fff;backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:0 3px 0 #111}
+.lbrand{font-family:var(--display);font-stretch:100%;font-weight:900;font-size:24px;text-transform:uppercase}
+.lnav nav a{color:#333;font-weight:800}
+.look-btn{background:#fff;color:#111;border:2px solid #111;font-weight:800;box-shadow:2px 2px 0 #111}
+.look-btn b{color:#111}
+.btn{background:#fff;color:#111;border:3px solid #111;border-radius:999px;font-family:var(--body);font-stretch:100%;font-weight:800;font-size:19px;
+ box-shadow:5px 5px 0 #111;transition:transform .12s,box-shadow .12s}
+.btn:hover{background:#fff;transform:translate(-2px,-2px);box-shadow:7px 7px 0 #111}
+.btn:active{transform:translate(3px,3px);box-shadow:0 0 0 #111}
+.btn.sm{border-width:2px;font-size:15px;box-shadow:3px 3px 0 #111}
+.btn.inv{background:#111;color:#fff;box-shadow:5px 5px 0 #1C7F46}
+.hero{background:none}
+.hero-txt>*{position:relative}
+.for{display:inline-block;background:#111;color:#fff;font-family:var(--body);font-stretch:100%;font-weight:800;font-size:14px;padding:7px 14px;border-radius:999px}
+.hero h1{font-family:var(--display);font-stretch:100%;font-weight:900;text-transform:uppercase;color:#fff;font-size:clamp(52px,6.8vw,120px);line-height:.86;
+ letter-spacing:.004em;-webkit-text-stroke:3px #111;paint-order:stroke fill;text-shadow:6px 6px 0 #111}
+.lede{color:#fff;font-weight:600;font-size:clamp(17px,1.35vw,20px)}
+.tlink{color:#fff;font-weight:800;text-decoration-thickness:2px}
+.hint{color:rgba(255,255,255,.9);font-weight:700}
+.story-txt{background:#fff;border:3px solid #111;border-radius:18px;box-shadow:8px 8px 0 #111;padding:26px 24px}
+.story h2,.split h2,.how h2,.cta h2{font-family:var(--display);font-stretch:100%;font-weight:900;text-transform:uppercase;font-style:normal;letter-spacing:.004em}
+.story h2,.split h2,.how h2{font-size:clamp(40px,4.6vw,78px);line-height:.88}
+.st{border-left:4px solid #E2E2DB;color:#5E5E57}.st.on{color:#111;border-left-color:#1C7F46}
+.st b{font-family:var(--display);font-stretch:100%;font-weight:900;text-transform:uppercase;font-size:26px}
+.frame{background:#fff;border:3px solid #111;border-radius:16px;box-shadow:12px 12px 0 #111}
+.scr,.scr iframe{background:#1C7F46}
+.f-demo{color:#fff;font-weight:700}
+.split,.how{background:#fff;border:3px solid #111;border-radius:20px;box-shadow:10px 10px 0 #111;margin:40px var(--gut);padding:56px clamp(20px,4vw,56px)}
+.cols>div+div{border-left:3px solid #111}
+.cols h3{font-family:var(--display);font-stretch:100%;font-weight:900;text-transform:uppercase;font-size:30px}
+.cols li{border-top:2px solid #E2E2DB;font-weight:600}
+.does li::before{color:#15803d}.wont li::before{color:#b91c1c}
+.how li{border-top:3px solid #111}
+.how li>b{font-family:var(--display);font-style:normal;font-stretch:100%;font-weight:900;color:#1C7F46;-webkit-text-stroke:3px #111;paint-order:stroke fill;
+ text-shadow:5px 5px 0 #111;font-size:96px}
+.how h3{font-family:var(--display);font-stretch:100%;font-weight:900;text-transform:uppercase;font-size:30px}
+.cta{background:#fff;color:#111;border:3px solid #111;border-radius:20px;box-shadow:10px 10px 0 #111;margin:40px var(--gut) 60px;background-image:none}
+.cta h2{font-size:clamp(56px,9vw,150px);line-height:.84}
+.cta p{color:#5E5E57;font-weight:600}
+.lfoot{color:rgba(255,255,255,.9);font-weight:600}
+.launch{background:#1C7F46}
+.cur{border:3px solid #111;background:#fff;color:#111;box-shadow:3px 3px 0 #111;font-family:var(--display);font-stretch:100%;font-weight:900;text-transform:uppercase;backdrop-filter:none}
+.skip{background:#111;color:#fff;border-radius:999px}
+@media (max-width:900px){.split,.how,.cta{margin:24px 14px;box-shadow:6px 6px 0 #111}.cols>div+div{border-left:0;border-top:3px solid #111;padding-top:28px}}
+@media (prefers-reduced-motion:reduce){.btn{transition:none}}
+"""
+LAND_E = r"""
+body.landing{font-size:16.5px}
+.for,.hint,.f-demo{font-family:var(--mono);font-size:13px}
+.hint,.f-demo{font-size:12px}
+.lnav nav a{font-family:var(--body)}
+.btn{font-family:var(--body)}
+.how li>b{font-family:var(--num);font-variation-settings:"ROND" 100;text-shadow:0 0 22px rgba(79,199,127,.5)}
+.cols li::before{font-family:var(--mono);font-weight:600}
+.does li::before{color:var(--gold)}.wont li::before{color:#ff7a88}
+.cta p{font-family:var(--mono);font-size:13px}
+.cur{font-family:var(--mono);font-weight:500;font-size:12px}
+"""
+LANDING_THEME_CSS = "".join(scope_css(css, k) for k, css in (("A", LAND_A), ("B", LAND_B), ("C", LAND_C), ("D", LAND_D), ("E", LAND_B + LAND_E)))
 
 
 APP_JS = r"""

@@ -6,24 +6,22 @@ struct BestXIsView: View {
     let report: Report
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
+        // Both pitches shrink to fit the window, so the whole XI is always on screen without scrolling.
+        GeometryReader { geo in
+            let gap: CGFloat = 20, pad: CGFloat = 24, header: CGFloat = 46, pitchTitle: CGFloat = 38
+            let tall = geo.size.height - pad * 2 - header - pitchTitle
+            let width = max(220, min(tall * 0.68, (geo.size.width - pad * 2 - gap) / 2))
+            VStack(alignment: .leading, spacing: 12) {
                 SectionTitle("Best XIs", sub: "\(report.formation.title) · rated for your roles in and out of possession · click a player for his card")
-                ViewThatFits(in: .horizontal) {
-                    HStack(alignment: .top, spacing: 20) { pitches }
-                    VStack(spacing: 20) { pitches }
+                    .frame(height: header - 12, alignment: .bottomLeading)
+                HStack(alignment: .top, spacing: gap) {
+                    XIPitch(report: report, title: "Best XI", sub: "fully fit squad", xi: report.xi1).frame(width: width)
+                    XIPitch(report: report, title: "Second XI", sub: "from who's left", xi: report.xi2).frame(width: width)
                 }
+                .frame(maxWidth: .infinity, alignment: .center)
             }
-            .padding(28)
+            .padding(pad)
         }
-    }
-
-    @ViewBuilder
-    private var pitches: some View {
-        XIPitch(report: report, title: "Best XI", sub: "fully fit squad", xi: report.xi1)
-            .frame(minWidth: 420, maxWidth: 620)
-        XIPitch(report: report, title: "Second XI", sub: "from who's left", xi: report.xi2)
-            .frame(minWidth: 420, maxWidth: 620)
     }
 }
 
@@ -52,7 +50,7 @@ private struct XIPitch: View {
                 ForEach(Array(rows.enumerated()), id: \.offset) { i, row in
                     let slot = i < xi.count ? xi[i] : nil
                     PitchPlayer(report: report, row: i, rowInfo: row, player: report.player(slot?.uid))
-                        .scaleEffect(min(1, size.width / 520))
+                        .scaleEffect(min(1, size.width / 470))
                         .position(x: size.width * (row.x ?? 50) / 100, y: size.height * (row.y ?? 50) / 100)
                 }
             }
@@ -123,7 +121,7 @@ private struct PitchPlayer: View {
     var body: some View {
         let label = rowInfo.label ?? rowInfo.slot
         let rating = player?.rating(row: row)
-        let statuses = player.map(PlayerStatus.of) ?? []
+        let statuses = player.map { PlayerStatus.of($0, today: report.gameDate) } ?? []
         Button {
             if player != nil { showCard = true }
         } label: {

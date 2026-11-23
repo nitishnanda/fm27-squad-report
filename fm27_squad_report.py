@@ -1365,12 +1365,16 @@ def money(v):
     if abs(v) >= 1_000_000:
         m = v / 1_000_000
         return f"£{m:.1f}m" if abs(m) < 10 else f"£{m:.0f}m"
+    if abs(v) < 1000:
+        return f"£{v:.0f}"
     return f"£{v / 1000:.0f}k"
 
 
 def wage(v):
     if v is None:
         return "–"
+    if v < 1000:   # "£800", not "£0k"
+        return f"£{v:.0f}"
     return f"£{v / 1_000_000:.2f}m" if v >= 1_000_000 else f"£{v / 1000:.0f}k"
 
 

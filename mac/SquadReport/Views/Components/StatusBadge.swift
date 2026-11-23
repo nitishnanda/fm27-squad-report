@@ -9,34 +9,47 @@ struct PlayerStatus: Identifiable, Hashable, Sendable {
     }
     let kind: Kind
     let label: String
+    /// Everything: club, date, injury. Shown on hover and in the player card.
     let detail: String
+    /// What fits on a badge in a table: "1 Jan", "back 30 Jun", "13 days".
+    let brief: String
     var id: String { kind.rawValue + detail }
 
-    /// What fits on the badge. Injuries show how long ("13 days"); the injury and return date are on hover.
-    var brief: String {
-        guard kind == .injuredShort || kind == .injuredLong else { return detail }
-        return detail.components(separatedBy: " · ").first ?? detail
-    }
-
-    /// The same list and order as the web app's `badges()`.
-    static func of(_ p: Player) -> [PlayerStatus] {
+    /// The same list and order as the web app's `badges()`. `today` (the in-game date) lets near dates drop the year.
+    static func of(_ p: Player, today: String? = nil) -> [PlayerStatus] {
         var out: [PlayerStatus] = []
         let moves = Dictionary(p.status.moves.map { ($0.kind, $0) }, uniquingKeysWith: { a, _ in a })
-        if let m = moves["deal_in"] { out.append(.init(kind: .transferIn, label: "Transfer in", detail: "from \(m.club) · joins \(Fmt.day(m.date))")) }
-        if let m = moves["deal_out"] { out.append(.init(kind: .transferOut, label: "Transfer out", detail: "to \(m.club) · leaves \(Fmt.day(m.date))")) }
-        if let m = moves["loan_in_arr"] { out.append(.init(kind: .loanInArranged, label: "Loan in (arranged)", detail: "from \(m.club) · joins \(Fmt.day(m.date))")) }
-        if let m = moves["loan_out_arr"] { out.append(.init(kind: .loanOutArranged, label: "Loan out (arranged)", detail: "to \(m.club) · leaves \(Fmt.day(m.date))")) }
-        if let m = moves["loan_in"] { out.append(.init(kind: .loanIn, label: "Loan in", detail: "from \(m.club) · until \(Fmt.day(m.date))")) }
-        if let m = moves["loan_out"] { out.append(.init(kind: .loanOut, label: "Loan out", detail: "at \(m.club) · back \(Fmt.day(m.date))")) }
+        func near(_ date: String?) -> String { Fmt.nearDay(date, from: today) }
+        if let m = moves["deal_in"] {
+            out.append(.init(kind: .transferIn, label: "Transfer in", detail: "from \(m.club) · joins \(Fmt.day(m.date))", brief: near(m.date)))
+        }
+        if let m = moves["deal_out"] {
+            out.append(.init(kind: .transferOut, label: "Transfer out", detail: "to \(m.club) · leaves \(Fmt.day(m.date))", brief: near(m.date)))
+        }
+        if let m = moves["loan_in_arr"] {
+            out.append(.init(kind: .loanInArranged, label: "Loan in (arranged)", detail: "from \(m.club) · joins \(Fmt.day(m.date))", brief: near(m.date)))
+        }
+        if let m = moves["loan_out_arr"] {
+            out.append(.init(kind: .loanOutArranged, label: "Loan out (arranged)", detail: "to \(m.club) · leaves \(Fmt.day(m.date))", brief: near(m.date)))
+        }
+        if let m = moves["loan_in"] {
+            out.append(.init(kind: .loanIn, label: "Loan in", detail: "from \(m.club) · until \(Fmt.day(m.date))", brief: "until \(near(m.date))"))
+        }
+        if let m = moves["loan_out"] {
+            out.append(.init(kind: .loanOut, label: "Loan out", detail: "at \(m.club) · back \(Fmt.day(m.date))", brief: "back \(near(m.date))"))
+        }
         if let inj = p.status.injury {
             out.append(.init(kind: inj.long ? .injuredLong : .injuredShort, label: "Injured",
-                             detail: "\(Fmt.injury(days: inj.days)) · \(inj.what) · back \(Fmt.day(inj.back))"))
+                             detail: "\(Fmt.injury(days: inj.days)) · \(inj.what) · back \(Fmt.day(inj.back))",
+                             brief: Fmt.injury(days: inj.days)))
         }
         if let n = p.status.suspendedMatches {
-            out.append(.init(kind: .suspended, label: "Suspended", detail: "\(n) ban\(n == 1 ? "" : "s")"))
+            let text = "\(n) ban\(n == 1 ? "" : "s")"
+            out.append(.init(kind: .suspended, label: "Suspended", detail: text, brief: text))
         }
         if p.expiring, moves["deal_out"] == nil {
-            out.append(.init(kind: .expiring, label: "Contract", detail: "ends \(Fmt.month(p.contractEnd))"))
+            let text = "ends \(Fmt.month(p.contractEnd))"
+            out.append(.init(kind: .expiring, label: "Contract", detail: text, brief: text))
         }
         return out
     }
@@ -45,20 +58,26 @@ struct PlayerStatus: Identifiable, Hashable, Sendable {
 struct StatusBadge: View {
     let status: PlayerStatus
     var showDetail = true
+    /// The whole detail, wrapping onto more lines (the player card) instead of the short badge text.
+    var full = false
 
     var body: some View {
-        HStack(spacing: 4) {
+        let shape = RoundedRectangle(cornerRadius: full ? 7 : 20, style: .continuous)
+        HStack(alignment: .firstTextBaseline, spacing: 4) {
             Image(systemName: symbol).font(.system(size: 9, weight: .bold))
             Text(status.label).fontWeight(.bold)
-            if showDetail { Text(status.brief).fontWeight(.regular).opacity(0.85) }
+            if showDetail {
+                Text(full ? status.detail : status.brief).fontWeight(.regular)
+                    .fixedSize(horizontal: false, vertical: full)
+            }
         }
         .font(.system(size: 11))
-        .lineLimit(1)
+        .lineLimit(full ? nil : 1)
         .padding(.horizontal, 7)
-        .padding(.vertical, 2)
+        .padding(.vertical, full ? 4 : 2)
         .foregroundStyle(ink)
-        .background(fill, in: Capsule())
-        .overlay(Capsule().strokeBorder(edge, style: StrokeStyle(lineWidth: 1, dash: dashed ? [3, 2] : [])))
+        .background(fill, in: shape)
+        .overlay(shape.strokeBorder(edge, style: StrokeStyle(lineWidth: 1, dash: dashed ? [3, 2] : [])))
         .help("\(status.label): \(status.detail)")
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("\(status.label), \(status.detail)")

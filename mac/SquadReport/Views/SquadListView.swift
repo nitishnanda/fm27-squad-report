@@ -22,7 +22,7 @@ struct SquadRow: Identifiable, Hashable, Sendable {
     let youth: Bool
     let group: Int
 
-    init(_ p: Player, group: Int) {
+    init(_ p: Player, group: Int, today: String? = nil) {
         id = p.uid
         name = p.name
         natural = p.positions.natural.joined(separator: " ")
@@ -38,7 +38,7 @@ struct SquadRow: Identifiable, Hashable, Sendable {
         contract = p.contractEnd ?? "9999"
         contractEnd = p.contractEnd
         expiring = p.expiring
-        statuses = PlayerStatus.of(p)
+        statuses = PlayerStatus.of(p, today: today)
         tokens = p.status.tokens
         youth = p.youth
         self.group = group
@@ -72,7 +72,7 @@ enum SquadGroups {
     }
 
     static func rows(_ report: Report) -> [SquadRow] {
-        report.players.compactMap { p in group(p).map { SquadRow(p, group: $0) } }
+        report.players.compactMap { p in group(p).map { SquadRow(p, group: $0, today: report.gameDate) } }
     }
 }
 
@@ -244,7 +244,7 @@ struct SquadListView: View {
             .customizationID("contract")
             TableColumn("Status") { row in
                 HStack(spacing: 4) {
-                    ForEach(row.statuses) { StatusBadge(status: $0, showDetail: row.statuses.count == 1) }
+                    ForEach(row.statuses) { StatusBadge(status: $0) }
                 }
             }
             .width(min: 110, ideal: 200)

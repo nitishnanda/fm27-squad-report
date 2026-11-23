@@ -48,10 +48,10 @@ struct PlayerCard: View {
                 }
             }
             .font(.callout)
-            let statuses = PlayerStatus.of(player)
+            let statuses = PlayerStatus.of(player, today: report?.gameDate)
             if !statuses.isEmpty {
                 VStack(alignment: .leading, spacing: 4) {
-                    ForEach(statuses) { StatusBadge(status: $0) }
+                    ForEach(statuses) { StatusBadge(status: $0, full: true) }
                 }
             }
             if !others.isEmpty {

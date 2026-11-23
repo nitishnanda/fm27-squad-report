@@ -19,13 +19,16 @@ enum Fmt {
             let m = v / 1_000_000
             return abs(m) < 10 ? String(format: "£%.1fm", m) : String(format: "£%.0fm", m)
         }
+        if abs(v) < 1000 { return String(format: "£%.0f", v) }
         return String(format: "£%.0fk", v / 1000)
     }
 
     /// £5.17m a week, £229k
     static func wage(_ v: Double?) -> String {
         guard let v else { return "–" }
-        return v >= 1_000_000 ? String(format: "£%.2fm", v / 1_000_000) : String(format: "£%.0fk", v / 1000)
+        if v >= 1_000_000 { return String(format: "£%.2fm", v / 1_000_000) }
+        if v < 1000 { return String(format: "£%.0f", v) }     // "£800", not "£0k"
+        return String(format: "£%.0fk", v / 1000)
     }
 
     private static let iso: DateFormatter = {
@@ -57,6 +60,13 @@ enum Fmt {
     static func day(_ s: String?) -> String { date(s).map { dayFormat.string(from: $0) } ?? "–" }
     /// "22 Nov"
     static func shortDay(_ s: String?) -> String { date(s).map { shortDayFormat.string(from: $0) } ?? "–" }
+    /// "1 Jan" when it's within about a year of `today` (the in-game date), else "1 Jan 2028".
+    static func nearDay(_ s: String?, from today: String?) -> String {
+        guard let d = date(s) else { return "–" }
+        if let now = date(today), abs(d.timeIntervalSince(now)) < 330 * 86_400 { return shortDayFormat.string(from: d) }
+        return dayFormat.string(from: d)
+    }
+
     /// "Jun 2027"
     static func month(_ s: String?) -> String { date(s).map { monthFormat.string(from: $0) } ?? "–" }
 

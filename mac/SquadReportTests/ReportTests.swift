@@ -107,6 +107,22 @@ struct FormatTests {
     @Test func wages() {
         #expect(Fmt.wage(5_170_000) == "£5.17m")
         #expect(Fmt.wage(229_000) == "£229k")
+        #expect(Fmt.wage(800) == "£800")      // not "£0k"
+        #expect(Fmt.money(500) == "£500")
+    }
+
+    @Test func nearDatesDropTheYear() {
+        #expect(Fmt.nearDay("2027-01-01", from: "2026-12-31") == "1 Jan")
+        #expect(Fmt.nearDay("2028-01-01", from: "2026-12-31") == "1 Jan 2028")
+        #expect(Fmt.nearDay("2027-01-01", from: nil) == "1 Jan 2027")
+    }
+
+    @Test func transferBadgesStayShort() throws {
+        let report = try Report.decode(try fixture())
+        let mover = try #require(report.players.first { p in p.status.moves.contains { $0.kind == "deal_in" } })
+        let badge = try #require(PlayerStatus.of(mover, today: report.gameDate).first { $0.kind == .transferIn })
+        #expect(!badge.brief.contains("from"))          // the club is on hover
+        #expect(badge.detail.contains("from"))
     }
 
     @Test func halfStars() {

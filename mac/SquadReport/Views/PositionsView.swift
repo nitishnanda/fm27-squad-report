@@ -186,15 +186,14 @@ private struct PositionRow: View {
 
     var body: some View {
         let p = entry.player
-        let statuses = PlayerStatus.of(p)
+        let statuses = PlayerStatus.of(p, today: report.gameDate)
         Button {
             showCard = true
         } label: {
             HStack(spacing: 6) {
                 FamiliarityBadge(code: entry.rating.fam)
-                Text(p.name).fontWeight(.semibold).lineLimit(1)
+                Text(p.name).fontWeight(.semibold).lineLimit(1).truncationMode(.tail)
                 ForEach(statuses.filter { $0.kind != .expiring }.prefix(2)) { StatusMarker(status: $0) }
-                if (p.age ?? 99) <= 21 { Tag(text: "U21", color: .secondary) }
                 if p.youth { Tag(text: "youth", color: .secondary) }
                 Spacer(minLength: 4)
                 if !entry.weak.isEmpty {
@@ -205,8 +204,14 @@ private struct PositionRow: View {
                         .accessibilityLabel("Weak in one phase: \(entry.weak.joined(separator: ", "))")
                 }
                 if let pot = p.potential {
-                    Text("↑\(Fmt.stars(pot))").font(.caption.weight(.bold)).foregroundStyle(Palette.potential)
-                        .help("Potential: could reach \(Fmt.stars(pot))★ (from FM's hidden potential)")
+                    Text("pot \(Fmt.stars(pot))★")
+                        .font(.system(size: 10, weight: .bold))
+                        .foregroundStyle(Palette.potential)
+                        .padding(.horizontal, 4).padding(.vertical, 1)
+                        .fixedSize()
+                    .overlay(RoundedRectangle(cornerRadius: 4).strokeBorder(Palette.potential.opacity(0.55), style: StrokeStyle(lineWidth: 1, dash: [2, 2])))
+                    .help("Potential: could reach \(Fmt.stars(pot))★ (from FM's hidden potential)")
+                    .accessibilityLabel("Potential \(Fmt.stars(pot)) stars")
                 }
                 if entry.games > 0 {
                     Text("\(entry.games)")
@@ -215,9 +220,10 @@ private struct PositionRow: View {
                         .foregroundStyle(entry.games >= (report.positions?.playedMany ?? 5) ? .white : Palette.loanIn)
                         .background(entry.games >= (report.positions?.playedMany ?? 5) ? Palette.loanIn.opacity(0.75) : .clear, in: RoundedRectangle(cornerRadius: 4))
                         .overlay(RoundedRectangle(cornerRadius: 4).stroke(Palette.loanIn.opacity(0.6)))
+                        .fixedSize()
                         .help("\(entry.games) games at \(card.info.slot) this season")
                 }
-                StarsView(value: entry.rating.stars)
+                StarsView(value: entry.rating.stars).fixedSize()
                 Text(p.age.map(String.init) ?? "").font(.caption).foregroundStyle(.secondary).monospacedDigit()
                     .frame(width: 20, alignment: .trailing)
             }
@@ -248,6 +254,7 @@ private struct Tag: View {
     var body: some View {
         Text(text)
             .font(.system(size: 9.5, weight: .bold))
+            .fixedSize()
             .padding(.horizontal, 4).padding(.vertical, 0.5)
             .foregroundStyle(color)
             .overlay(RoundedRectangle(cornerRadius: 3).stroke(color.opacity(0.6)))
@@ -272,7 +279,7 @@ private struct PositionsKey: View {
             item({ Image(systemName: "exclamationmark.triangle.fill").foregroundStyle(Palette.verdict("amber")) }, "weak in one phase",
                  two.map { "Your \($0.slot) is a \($0.ip) with the ball and a \($0.oop) without it. The warning means he knows one of those well but not the other, so he'll be a bit off in that half of the game." }
                  ?? "He knows the position in one phase of play but not the other.")
-            item({ Text("↑4").font(.caption.weight(.bold)).foregroundStyle(Palette.potential) }, "potential",
+            item({ Text("pot 4★").font(.system(size: 10, weight: .bold)).foregroundStyle(Palette.potential) }, "potential",
                  "How good he could become, from FM's hidden potential: the only hidden number this app shows, and only for players 23 and under.")
             item({ Image(systemName: "cross.case.fill").foregroundStyle(Palette.injuryShort) }, "status",
                  "Injuries, bans, loans and moves, each with its own symbol and colour. Hover one for the details.")

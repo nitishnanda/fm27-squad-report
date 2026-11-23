@@ -105,11 +105,13 @@ LW (AML/ML) IF/WMF · AM SS/AM · RW (AMR/MR) IW/WMF · ST CFD/CFD. `STYLE_KEYS`
   Narrow desktop windows (861–1280px) get a tighter header and the squad list drops extra columns instead of scrolling sideways.
   The server only listens on 127.0.0.1, so a real iPhone can't open it yet.
 
-## Hosted demo (Vercel)
-- Vercel project in his Hobby account (team "MedOffrai"), behind Vercel Authentication (only he can open it). It serves `web/`:
-  the home page at `/` and the app at `/app`, built by `python3 demo/build_site.py` from `demo/fake_save.py` (a made-up save:
-  Liverpool names with invented ratings, injuries and moves; also handy for testing every tab without his save). `vercel.json`
-  copies `assets/` into `web/assets/` at build time. Rebuild `web/` and push after UI changes; his real report stays local.
+## Hosted demo
+- `python3 demo/build_site.py` builds `docs/` from `demo/fake_save.py` (a made-up save: Liverpool names with invented ratings,
+  injuries and moves; also handy for testing every tab without his save): home page at the root, app in `app/`, `assets/` copied
+  in, links made relative (`relative_links()`), `.nojekyll`. So it works from any address, including GitHub Pages' `/<repo>/`
+  sub-path. Rebuild `docs/` and push after UI changes; his real report stays local.
+- Hosting: GitHub Pages (public: anyone with the link can open it, which is why it only ever carries the made-up save).
+  `vercel.json` / `.vercelignore` serve only `docs/` if he moves it to Vercel (the Vercel connector couldn't create projects).
 
 ## What fmsave gives us (worked out in that session)
 - `player_match_stats()`: position per match is a one-bit mask in FM order —

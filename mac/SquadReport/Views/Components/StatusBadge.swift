@@ -82,7 +82,7 @@ struct StatusBadge: View {
         case .loanOut: "arrow.up.circle"
         case .loanInArranged, .loanOutArranged: "calendar.badge.clock"
         case .injuredShort: "cross.case.fill"
-        case .injuredLong: "cross.case.fill"
+        case .injuredLong: "bed.double.fill"     // a different shape too, so it isn't colour alone
         case .suspended: "nosign"
         case .expiring: "doc.text"
         }

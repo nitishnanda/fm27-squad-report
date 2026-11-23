@@ -25,7 +25,19 @@ final class ReportStore {
     }
 
     init() {
-        Task { await loadCache() }
+        if Self.demoPath == nil { Task { await loadCache() } }
+    }
+
+    /// `open "Squad Report.app" --args -demoReport /path/report.json` shows that file and leaves the engine alone.
+    /// Handy for checking screens with the demo save (mac/Fixtures/report.json), which has injuries, bans and every move.
+    static var demoPath: String? { UserDefaults.standard.string(forKey: "demoReport") }
+
+    func showDemo(_ path: String) {
+        guard let data = FileManager.default.contents(atPath: path) else {
+            problem = "Couldn't open the demo report at \(path)."
+            return
+        }
+        if use(data) { reachable = true }
     }
 
     /// Building right now, with the step being worked on (0-based) out of how many.

@@ -165,6 +165,7 @@ struct EngineStatusPill: View {
     }
 
     private var state: (String, Color, Bool) {
+        if ReportStore.demoPath != nil { return ("Demo report", .blue, false) }
         if let step = model.store.buildStep { return ("Reading save · \(step.index + 1) of \(step.of)", .orange, true) }
         switch model.engine.phase {
         case .preparing: return ("Setting up", .orange, true)

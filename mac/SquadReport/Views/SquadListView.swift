@@ -113,7 +113,7 @@ struct SquadListView: View {
                 }
                 .pickerStyle(.segmented)
                 .labelsHidden()
-                .frame(maxWidth: 620)
+                .fixedSize()
                 Toggle("Youth teams", isOn: $youth)
                 Spacer()
                 Text("\(shown.count) player\(shown.count == 1 ? "" : "s")")
@@ -158,12 +158,15 @@ struct SquadListView: View {
             TableColumn("Player", value: \.name) { row in
                 Text(row.name).fontWeight(.semibold)
             }
-            .width(min: 130, ideal: 165)
+            .width(min: 130, ideal: 160)
             TableColumn("FM positions", value: \.natural) { row in
                 (Text(row.natural) + Text(row.accomplished.isEmpty ? "" : "  \(row.accomplished)").foregroundStyle(.secondary))
+                    .lineLimit(1)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .contentShape(Rectangle())
                     .help("Natural: \(row.natural)\(row.accomplished.isEmpty ? "" : " · accomplished (grey): \(row.accomplished)")")
             }
-            .width(min: 70, ideal: 100)
+            .width(min: 110, ideal: 150)
             TableColumn("Age", value: \.age) { row in
                 Text(row.age == 99 ? "" : "\(row.age)").monospacedDigit()
             }
@@ -207,7 +210,7 @@ struct SquadListView: View {
                 Text(Fmt.wage(row.wage < 0 ? nil : row.wage)).monospacedDigit()
                     .frame(maxWidth: .infinity, alignment: .trailing)
             }
-            .width(min: 52, ideal: 62)
+            .width(min: 72, ideal: 78)
             TableColumn("Contract", value: \.contract) { row in
                 Text(Fmt.month(row.contractEnd))
                     .underline(row.expiring, pattern: .dash)
@@ -220,7 +223,7 @@ struct SquadListView: View {
                     ForEach(row.statuses) { StatusBadge(status: $0, showDetail: row.statuses.count == 1) }
                 }
             }
-            .width(min: 110, ideal: 240)
+            .width(min: 110, ideal: 200)
         } rows: {
             ForEach(SquadGroups.titles.indices, id: \.self) { g in
                 if let members = groups[g], !members.isEmpty {

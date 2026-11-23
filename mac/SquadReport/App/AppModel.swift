@@ -18,6 +18,11 @@ final class AppModel {
 
     init() {
         folder = Self.restoreFolder()
+        if let demo = ReportStore.demoPath {
+            folder = folder ?? URL(filePath: demo).deletingLastPathComponent()
+            store.showDemo(demo)
+            return
+        }
         store.follow(engine)
         if let folder { engine.start(folder: folder) }
     }

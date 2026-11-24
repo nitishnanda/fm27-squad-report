@@ -1,6 +1,6 @@
 {
-  "name": "Squad Report",
-  "short_name": "Squad Report",
+  "name": "FM27 Companion",
+  "short_name": "FM27 Companion",
   "description": "Your FM27 squad report",
   "start_url": "../app/",
   "scope": "../",

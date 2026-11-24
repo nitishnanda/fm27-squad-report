@@ -1,4 +1,4 @@
-# Squad Report for Mac: plan
+# FM27 Companion for Mac: plan
 
 A native SwiftUI Mac app that replaces double-clicking `Run Squad Report.command` and reading the report in a browser.
 It sits in the Dock (and the menu bar), notices new FM saves, and shows the report in proper Mac windows: a sidebar,
@@ -14,7 +14,7 @@ visually distinct.
 ## How the pieces fit
 
 ```
-Squad Report.app (SwiftUI)
+FM27 Companion.app (SwiftUI)
  ├─ starts the engine:  python fm27_squad_report.py --headless   (no browser, no Terminal window)
  ├─ reads              http://127.0.0.1:8027/api/report  (JSON)  ◄── new
  ├─ follows            /api/status  (version, building, step)   ◄── new
@@ -118,7 +118,7 @@ a search sheet that adds them via `POST /scouting`, Swift port of the Hungarian 
   checklist says done / in progress / to do. Keyboard: everything is a button, menu or picker, plus ⌘1–6 and ⌘[ ⌘].
 - Notifications: Settings asks again while macOS hasn't decided, links to System Settings when they're off, and has a
   Send Test Notification button.
-- Installed: `mac/build.sh install` builds Release into `/Applications/Squad Report.app` (Launchpad, Spotlight, open at
+- Installed: `mac/build.sh install` builds Release into `/Applications/FM27 Companion.app` (Launchpad, Spotlight, open at
   login). Dev builds live in `mac/build/DerivedData.noindex` so Spotlight only shows the installed copy.
 - Python bundled: the app carries its own engine (below), so it no longer needs the project folder.
 

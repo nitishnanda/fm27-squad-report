@@ -13,7 +13,7 @@ struct SquadReportApp: App {
 
     var body: some Scene {
         // One main window. Closing it keeps the app in the Dock and the menu bar, still watching your saves.
-        Window("Squad Report", id: "main") {
+        Window("FM27 Companion", id: "main") {
             ContentView()
                 .themed()
                 .environment(delegate.model)   // after themed(), so the look can use the club's colours
@@ -60,7 +60,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     /// Clicking the Dock icon with no window open brings the window back.
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
-        if !flag { NSApp.windows.first { $0.identifier?.rawValue == "main" || $0.title == "Squad Report" }?.makeKeyAndOrderFront(nil) }
+        if !flag { NSApp.windows.first { $0.identifier?.rawValue == "main" || $0.title == "FM27 Companion" }?.makeKeyAndOrderFront(nil) }
         return true
     }
 }

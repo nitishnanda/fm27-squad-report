@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""FM27 Squad Report — reads your Football Manager 27 save and builds a squad report.
+"""FM27 Companion — reads your Football Manager 27 save and builds a squad report.
 
     python3 fm27_squad_report.py                 # finds your newest FM27 save
     python3 fm27_squad_report.py path/to/x.fm    # or point it at one
@@ -2809,7 +2809,7 @@ function addForm(){const box=document.getElementById('sbAdd');
    items=j.items;active=items.length?0:-1;draw();
    msg.textContent=!j.total?`No players match “${v}”${pos.value||age.value?' with those filters':''} in your save.`:
     j.total>items.length?`Showing ${items.length} of ${j.total}. Add a club, position or age to narrow it down.`:`${j.total} player${j.total===1?'':'s'}`;}
-  catch(e){if(my===seq)msg.textContent='Couldn\'t search right now. Is the Squad Report window still open?';}}
+  catch(e){if(my===seq)msg.textContent='Couldn\'t search right now. Is the FM27 Companion window still open?';}}
  const later=()=>{clearTimeout(timer);timer=setTimeout(search,180);};
  q.addEventListener('input',later);pos.addEventListener('change',search);age.addEventListener('change',search);
  q.addEventListener('keydown',e=>{if(e.key==='ArrowDown'||e.key==='ArrowUp'){if(!items.length)return;e.preventDefault();
@@ -3243,13 +3243,8 @@ PITCH_XY = [(50, 89), (14, 69), (37, 75), (63, 75), (86, 69), (36, 54), (64, 54)
 # ---------------------------------------------------------------------------------------------
 # Brand (the app's own identity) and club identity (whoever you manage: colours + crest or initials badge)
 
-APP_LOGO_SVG = ('<svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><rect x="1" y="1" width="30" height="30" rx="8" fill="#1C7F46"/>'
-                '<rect x="8.5" y="5" width="15" height="22" rx="1.5" fill="none" stroke="#F2F4EE" stroke-width="2"/>'
-                '<path d="M8.5 16h15" stroke="#F2F4EE" stroke-width="2"/><circle cx="16" cy="9.6" r="1.9" fill="#F2F4EE"/>'
-                '<circle cx="11.9" cy="12.9" r="1.9" fill="#F2F4EE"/><circle cx="20.1" cy="12.9" r="1.9" fill="#F2F4EE"/>'
-                '<circle cx="12.4" cy="20.6" r="1.9" fill="#F2F4EE"/>'
-                '<circle cx="19.6" cy="20.6" r="2.5" fill="none" stroke="#F2F4EE" stroke-width="1.7"/></svg>')
-APP_NAME = "Squad Report"
+APP_LOGO_SVG = ('<svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><rect x="1" y="1" width="30" height="30" rx="8" fill="#232323"/><path d="M10 8.2H22L28.6 26H3.4Z M6.7 17.2H25.3" fill="none" stroke="#F2F4EE" stroke-width=".9" stroke-linejoin="round" opacity=".9"/><circle cx="16" cy="23.2" r="1.15" fill="#F2F4EE"/><circle cx="9.6" cy="20.2" r="1.15" fill="#F2F4EE"/><circle cx="13.7" cy="20.2" r="1.15" fill="#F2F4EE"/><circle cx="18.3" cy="20.2" r="1.15" fill="#F2F4EE"/><circle cx="22.4" cy="20.2" r="1.15" fill="#F2F4EE"/><circle cx="12.6" cy="17.2" r="1.15" fill="#F2F4EE"/><circle cx="19.4" cy="17.2" r="1.15" fill="#F2F4EE"/><circle cx="10.2" cy="14.2" r="1.15" fill="#F2F4EE"/><circle cx="16" cy="14.2" r="1.15" fill="#F2F4EE"/><circle cx="21.8" cy="14.2" r="1.15" fill="#F2F4EE"/><circle cx="16" cy="11.2" r="1.15" fill="#F2F4EE"/></svg>')
+APP_NAME = "Companion"
 
 # FM saves don't store club colours or crests, so: a table of well-known clubs, and a stable colour from the name otherwise
 CLUB_COLOURS = {
@@ -3536,7 +3531,7 @@ body.mini{pointer-events:none;padding-bottom:0}
 
 
 # The home page's Mac app section. Its screenshots must come from the made-up save (the demo site is public), taken with
-# the app's demo mode: open "Squad Report.app" --args -demoReport mac/Fixtures/report.json. Saved as assets/mac-*.jpg;
+# the app's demo mode: open "FM27 Companion.app" --args -demoReport mac/Fixtures/report.json. Saved as assets/mac-*.jpg;
 # the section only appears once the first one is there.
 MAC_SHOTS = [("mac-home.jpg", "Home", "The Mac app's Home page: the club banner, club snapshot and the positions that need work"),
              ("mac-squad.jpg", "Squad list", "The Mac app's squad list: a sortable table grouped by position, with status badges"),
@@ -3979,7 +3974,7 @@ function wait(){
    if(s.building){seen=true;err.hidden=true;paint(Math.max(0,s.step),false);document.getElementById('bootH').textContent='Reading your save';}
    else if(s.error){err.hidden=false;err.textContent=s.error.startsWith('no FM27 save')?'No FM27 save found yet. Save your game in FM27 and this page carries on by itself.'
      :'Couldn\'t read your save ('+s.error+'). Save again in FM27 and this page tries again by itself.';}
-  }catch(e){err.hidden=false;err.textContent=onMac?'The app window is closed. Double-click Run Squad Report to start it again.':'Can\'t reach your Mac. Check Squad Report is still open there and this phone is on the same Wi-Fi.';}
+  }catch(e){err.hidden=false;err.textContent=onMac?'The app window is closed. Double-click Run Squad Report to start it again.':'Can\'t reach your Mac. Check FM27 Companion is still open there and this phone is on the same Wi-Fi.';}
   setTimeout(poll,900);}
  poll();
 }
@@ -5624,7 +5619,7 @@ function show(route,animate){
  document.querySelectorAll('.ah-sub [role="tab"]').forEach(t=>{const on=t.dataset.route===route;t.setAttribute('aria-selected',on);t.tabIndex=on?0:-1;});
  const navA=document.querySelector('.ah-nav a[data-sec="'+sec+'"]');if(navA)navA.setAttribute('href','#'+route);
  const tab=document.querySelector('.ah-sub [role="tab"][data-route="'+route+'"]'),name=tab?tab.textContent.replace(/\d+$/,''):(navA?navA.textContent.replace(/^\d/,'').replace(/\d+$/,''):'');
- document.title=name.trim()+' · '+document.body.dataset.club+' · FM27 Squad Report';
+ document.title=name.trim()+' · '+document.body.dataset.club+' · FM27 Companion';
  const secName=document.querySelector('.ah-nav a[data-sec="'+sec+'"] .nl'),tt=document.getElementById('ahTitle');if(tt&&secName)tt.textContent=secName.textContent;
  const page=document.getElementById('p-'+pid);
  if(current!==route){window.scrollTo(0,0);
@@ -5745,7 +5740,7 @@ def render(R) -> str:
     notes_html = f'<ul class="notes">{notes}</ul>' if notes else ""
     club = club_identity(R["club"])
     return f"""<!DOCTYPE html><html lang="en" style="--kit:{club['kit']};--kit-ink:{club['ink']};--kit-l:{kit_on_light(club['kit'])}"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>{E(R['club'])} · FM27 Squad Report</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>{E(R['club'])} · FM27 Companion</title>
 <link rel="icon" href="{asset('app-logo.svg')}">{app_head()}
 <script>try{{if(Date.now()-(+sessionStorage.getItem('fm27-launch')||0)<60000)document.documentElement.classList.add('booting');}}catch(e){{}}{LOOK_HEAD_JS}</script>
 {FONT_LINKS}<style>{CSS}{P3_CSS}{APP_CSS}{BOOT_CSS}{theme_font_css()}{LOOK_CSS}{THEME_CSS}{BOOT_THEME_CSS}{PHONE_CSS}</style></head><body class="app" data-club="{E(R['club'])}">
@@ -6040,10 +6035,10 @@ def update_scouting_file(action: str, name: str) -> None:
 
 PHONE_COOKIE = "fm27phone"
 PHONE_DENIED = """<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Squad Report</title></head><body style="margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;box-sizing:border-box;
+<title>FM27 Companion</title></head><body style="margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;box-sizing:border-box;
 background:#0f1411;color:#e8ece6;font:16px/1.5 -apple-system,system-ui,sans-serif"><main style="max-width:420px">
 <h1 style="font-size:22px;line-height:1.25;margin:0 0 8px">This page needs the code from the Mac</h1>
-<p style="margin:0;color:#aab3a8">Squad Report runs on a Mac on this Wi-Fi. On that Mac, open the app, click the phone icon at the top and
+<p style="margin:0;color:#aab3a8">FM27 Companion runs on a Mac on this Wi-Fi. On that Mac, open the app, click the phone icon at the top and
 scan the QR code with this phone.</p></main></body></html>"""
 
 
@@ -6343,7 +6338,7 @@ async function tick(){try{const r=await fetch('/status',{cache:'no-store'});cons
  else if(s.error){show('err','Couldn\'t read your latest save: '+s.error);state('err','Last save unreadable');}
  else{el.className='livebar';state('','Up to date');}
  const a=document.getElementById('lvR');if(a)a.onclick=e=>{e.preventDefault();location.reload();};}
- catch(e){show('err',onMac?'The app window is closed. Double-click Run Squad Report to start it again.':'Can\'t reach your Mac. Check Squad Report is still open there and this phone is on the same Wi-Fi.');state('err','Offline');}}
+ catch(e){show('err',onMac?'The app window is closed. Double-click Run Squad Report to start it again.':'Can\'t reach your Mac. Check FM27 Companion is still open there and this phone is on the same Wi-Fi.');state('err','Offline');}}
 setInterval(tick,3000);tick();
 // on the Mac: a Phone button with the QR code for opening the app on a phone (only when phone access is on)
 if(onMac)fetch('/phone',{cache:'no-store'}).then(r=>r.json()).then(j=>{if(!j.on||document.getElementById('phonepop'))return;
@@ -6360,7 +6355,7 @@ def loader_page() -> str:
     kit_l = kit_on_light(club["kit"]) if club else "#1C7F46"
     return f"""<!DOCTYPE html><html lang="en" style="--kit-l:{kit_l}"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><script>{LOOK_HEAD_JS}</script>
-<title>Reading your save · FM27 Squad Report</title><link rel="icon" href="{asset('app-logo.svg')}">{app_head()}{FONT_LINKS}
+<title>Reading your save · FM27 Companion</title><link rel="icon" href="{asset('app-logo.svg')}">{app_head()}{FONT_LINKS}
 <style>body{{margin:0;background:#0e1512}}{BOOT_CSS}{theme_font_css()}{BOOT_THEME_CSS}</style></head><body>{boot_html(club)}<script>{BOOT_JS}FM27Boot&&FM27Boot.wait();</script></body></html>"""
 
 
@@ -6605,7 +6600,7 @@ def serve_live(argv: list[str]) -> None:
 
     threading.Thread(target=watch, daemon=True).start()
     if headless:
-        print(f"  Squad Report engine running at {url}", flush=True)
+        print(f"  FM27 Companion engine running at {url}", flush=True)
     else:
         print(f"\n  Your report lives at {url}  (the app itself is at {url}app)")
         print("  Leave this window open (minimise it if you like). Save in FM, then refresh the page in your browser.")

@@ -224,7 +224,7 @@ final class Engine {
                 if (try? await client.status()) != nil {
                     phase = .attached
                 } else {
-                    phase = .failed("An older Squad Report is still running in a Terminal window, and it can't talk to the app. "
+                    phase = .failed("An older FM27 Companion is still running in a Terminal window, and it can't talk to the app. "
                                     + "Close that window, then click Try again.")
                 }
             }

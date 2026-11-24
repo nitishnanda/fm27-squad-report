@@ -239,7 +239,7 @@ struct EngineStatusPill: View {
         case .attached: "Using the engine that's already running on this Mac"
         case .running: "The app's engine is watching your FM27 saves"
         case .failed(let why), .restarting(let why): why
-        default: "Squad Report engine"
+        default: "FM27 Companion engine"
         }
     }
 }

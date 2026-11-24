@@ -9,7 +9,7 @@ struct WelcomeView: View {
     var body: some View {
         VStack(spacing: 18) {
             AppMark(size: 84)
-            Text("Squad Report").font(.largeTitle.weight(.heavy))
+            Text("FM27 Companion").font(.largeTitle.weight(.heavy))
             Text("Reads your newest FM27 save and shows your squad: best XIs, the positions that need work, how your tactic is going. It only ever reads your saves, never changes them.")
                 .multilineTextAlignment(.center)
                 .foregroundStyle(.secondary)
@@ -18,7 +18,7 @@ struct WelcomeView: View {
                 Button {
                     picking = true
                 } label: {
-                    Text("Choose your Squad Report folder…").frame(minWidth: 240)
+                    Text("Choose your FM27 Companion folder…").frame(minWidth: 240)
                 }
                 .buttonStyle(.borderedProminent)
                 .controlSize(.large)

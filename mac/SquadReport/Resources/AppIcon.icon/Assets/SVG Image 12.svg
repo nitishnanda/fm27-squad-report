@@ -1,0 +1,58 @@
+<svg xmlns="http://w3.org" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- Pitch Front 3D Glass Edge -->
+  <polygon
+    points="146,806 878,806 878,838 146,838"
+    fill="#FFFFFF"
+    fill-opacity="0.34"
+  />
+
+  <!-- Main Frosted Glass Pitch Surface -->
+  <polygon
+    points="296,414 728,414 878,806 146,806"
+    fill="#FFFFFF"
+    fill-opacity="0.14"
+    stroke="#FFFFFF"
+    stroke-opacity="0.82"
+    stroke-width="15"
+    stroke-linejoin="round"
+  />
+
+  <!-- Halfway Line -->
+  <line
+    x1="226" y1="596"
+    x2="798" y2="596"
+    stroke="#FFFFFF"
+    stroke-width="12"
+    stroke-opacity="0.78"
+  />
+
+  <!-- Center Circle -->
+  <ellipse
+    cx="512" cy="596"
+    rx="88" ry="36"
+    fill="none"
+    stroke="#FFFFFF"
+    stroke-width="12"
+    stroke-opacity="0.78"
+  />
+
+  <!-- Far Penalty Box -->
+  <polyline
+    points="388,414 368,482 656,482 636,414"
+    fill="none"
+    stroke="#FFFFFF"
+    stroke-width="12"
+    stroke-linejoin="round"
+    stroke-opacity="0.78"
+  />
+
+  <!-- Near Penalty Box -->
+  <polyline
+    points="292,806 326,704 698,704 732,806"
+    fill="none"
+    stroke="#FFFFFF"
+    stroke-width="13"
+    stroke-linejoin="round"
+    stroke-opacity="0.82"
+  />
+</svg>

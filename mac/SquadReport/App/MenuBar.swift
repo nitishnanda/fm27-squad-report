@@ -13,7 +13,7 @@ struct MenuBarMenu: View {
             Text("\(report.club.name) · \(Fmt.day(report.gameDate))")
         }
         Divider()
-        Button("Open Squad Report") {
+        Button("Open FM27 Companion") {
             openWindow(id: "main")
             NSApp.activate()
             model.store.markSeen()
@@ -26,7 +26,7 @@ struct MenuBarMenu: View {
         Divider()
         SettingsLink { Text("Settings…") }
             .keyboardShortcut(",")
-        Button("Quit Squad Report") { NSApp.terminate(nil) }
+        Button("Quit FM27 Companion") { NSApp.terminate(nil) }
             .keyboardShortcut("q")
     }
 }
@@ -37,7 +37,7 @@ struct MenuBarIcon: View {
 
     var body: some View {
         Image(systemName: MenuBarState(model: model).symbol)
-            .accessibilityLabel("Squad Report: \(MenuBarState(model: model).title)")
+            .accessibilityLabel("FM27 Companion: \(MenuBarState(model: model).title)")
     }
 }
 
@@ -56,7 +56,7 @@ struct MenuBarState {
             title = "Engine problem: open the app to see why"
             symbol = "exclamationmark.triangle"
         } else if model.needsFolder {
-            title = "Choose your Squad Report folder to start"
+            title = "Choose your FM27 Companion folder to start"
             symbol = "sportscourt"
         } else if store.unseenUpdate {
             title = "New report ready"
@@ -86,13 +86,13 @@ enum Notifier {
 
     static func reportUpdated(club: String, gameDate: String?) {
         post(title: "Report updated: \(Fmt.day(gameDate))",
-             body: "\(club): your latest save has been read. Open Squad Report to see it.", id: "report-updated")
+             body: "\(club): your latest save has been read. Open FM27 Companion to see it.", id: "report-updated")
     }
 
     /// From Settings, so you can see what they look like.
     static func test(club: String?, gameDate: String?) {
         post(title: "Report updated: \(Fmt.day(gameDate))",
-             body: "\(club ?? "Your club"): your latest save has been read. Open Squad Report to see it. (This one's a test.)", id: "test")
+             body: "\(club ?? "Your club"): your latest save has been read. Open FM27 Companion to see it. (This one's a test.)", id: "test")
     }
 
     private static func post(title: String, body: String, id: String) {

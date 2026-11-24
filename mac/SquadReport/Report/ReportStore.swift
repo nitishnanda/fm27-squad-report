@@ -37,7 +37,7 @@ final class ReportStore {
         if Self.demoPath == nil { Task { await loadCache() } }
     }
 
-    /// `open "Squad Report.app" --args -demoReport /path/report.json` shows that file and leaves the engine alone.
+    /// `open "FM27 Companion.app" --args -demoReport /path/report.json` shows that file and leaves the engine alone.
     /// Handy for checking screens with the demo save (mac/Fixtures/report.json), which has injuries, bans and every move.
     static var demoPath: String? { UserDefaults.standard.string(forKey: "demoReport") }
 

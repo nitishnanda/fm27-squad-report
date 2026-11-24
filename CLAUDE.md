@@ -1,4 +1,4 @@
-# FM27 Squad Report — handoff notes
+# FM27 Companion — handoff notes (formerly "Squad Report"; file, data-folder and bundle-ID names kept)
 
 Nitish's tool for his Football Manager 27 save (Liverpool). It reads his newest save **read-only** and builds a
 tabbed HTML report. Everything is in `fm27_squad_report.py` (one file, ~5,300 lines) plus `assets/` (GSAP, Lenis, crest, theme fonts). Built in a claude.ai
@@ -39,7 +39,7 @@ LW (AML/ML) IF/WMF · AM SS/AM · RW (AMR/MR) IW/WMF · ST CFD/CFD. `STYLE_KEYS`
   "Ability ★" = position only. XIs via the Hungarian algorithm (Python and a JS copy in the Sandbox).
 
 ## Site structure (live mode)
-- Branding: the app has its own identity (`APP_LOGO_SVG`, `assets/app-logo.svg`, "Squad Report", neutral "tactics board"
+- Branding: the app has its own identity (`APP_LOGO_SVG`, `assets/app-logo.svg`, "FM27 Companion", the graphite icon with the 4-2-3-1 pitch and FM27 lettering (his own Icon Composer file, `mac/SquadReport/Resources/AppIcon.icon`; the web mark is the flat pitch version), neutral "tactics board"
   green-black + pitch green `#1C7F46` (white text on it; `--brand-hi` `#4FC77F` for green text on dark). He dropped the old yellow, so keep it out). The user's club only drives accents: `club_identity(name)` gives kit colour, readable
   ink and crest markup (Liverpool = Liver bird assets; any other club = initials shield). FM saves hold no club colours,
   so `CLUB_COLOURS` covers well-known clubs and other names get a stable generated colour. `data/club.json` remembers the
@@ -178,7 +178,7 @@ LW (AML/ML) IF/WMF · AM SS/AM · RW (AMR/MR) IW/WMF · ST CFD/CFD. `STYLE_KEYS`
   Settings keys: `showPotential`, `phoneAccess`, `look`. Sandbox state: `SandboxModel` (Report/Sandbox.swift), saved in
   UserDefaults `sandbox1:<club>:<save>`. Never commit a screenshot of the Phone settings: its QR codes hold the phone key.
   Background UI tools can't drag from Sandbox roster rows or open pop-up menus; test those by hand.
-  Demo mode: `open "…/Squad Report.app" --args -demoReport <path>/mac/Fixtures/report.json` (no engine).
+  Demo mode: `open "…/FM27 Companion.app" --args -demoReport <path>/mac/Fixtures/report.json` (no engine).
   Testing UI: the shell can't screenshot windows (no Screen Recording grant); use computer-use `app_screenshot` on
   `com.squadreport.mac`.
 

@@ -227,7 +227,7 @@ class Server(unittest.TestCase):
     def test_web_app_still_works(self):
         code, body = self.get("/app")
         self.assertEqual(code, 200)
-        self.assertIn(b"Squad Report", body)
+        self.assertIn(b"FM27 Companion", body)
 
 
 if __name__ == "__main__":

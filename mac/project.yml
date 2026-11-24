@@ -1,4 +1,4 @@
-# Squad Report for Mac. The Xcode project is generated from this file, so only this lives in git:
+# FM27 Companion for Mac. The Xcode project is generated from this file, so only this lives in git:
 #   cd mac && xcodegen generate        (or just run ./build.sh)
 name: SquadReport
 options:
@@ -27,8 +27,8 @@ targets:
     info:
       path: SquadReport/Info.plist
       properties:
-        CFBundleName: Squad Report
-        CFBundleDisplayName: Squad Report
+        CFBundleName: FM27 Companion
+        CFBundleDisplayName: FM27 Companion
         CFBundleShortVersionString: "0.1"
         CFBundleVersion: "1"
         LSApplicationCategoryType: public.app-category.sports-games
@@ -39,7 +39,7 @@ targets:
           NSAllowsLocalNetworking: true
     settings:
       base:
-        PRODUCT_NAME: Squad Report
+        PRODUCT_NAME: FM27 Companion
         PRODUCT_MODULE_NAME: SquadReport
         PRODUCT_BUNDLE_IDENTIFIER: com.squadreport.mac
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
@@ -67,7 +67,7 @@ targets:
       base:
         GENERATE_INFOPLIST_FILE: YES
         PRODUCT_BUNDLE_IDENTIFIER: com.squadreport.mac.tests
-        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/Squad Report.app/Contents/MacOS/Squad Report"
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/FM27 Companion.app/Contents/MacOS/FM27 Companion"
         BUNDLE_LOADER: "$(TEST_HOST)"
 schemes:
   SquadReport:

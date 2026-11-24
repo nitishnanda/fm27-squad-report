@@ -52,7 +52,7 @@ private struct GeneralSettings: View {
                 }
             }
             Section("Starting up") {
-                Toggle("Open Squad Report when you log in", isOn: $loginItem)
+                Toggle("Open FM27 Companion when you log in", isOn: $loginItem)
                     .onChange(of: loginItem) { _, on in setLogin(on) }
                 if let loginProblem {
                     Text(loginProblem).font(.caption).foregroundStyle(Palette.verdict("amber"))

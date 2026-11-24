@@ -15,15 +15,15 @@ struct SquadReportApp: App {
         // One main window. Closing it keeps the app in the Dock and the menu bar, still watching your saves.
         Window("Squad Report", id: "main") {
             ContentView()
-                .environment(delegate.model)
                 .themed()
+                .environment(delegate.model)   // after themed(), so the look can use the club's colours
                 .frame(minWidth: 900, minHeight: 600)
         }
         .defaultSize(width: 1320, height: 860)
         .commands { AppCommands(model: delegate.model) }
 
         Window("Key", id: "key") {
-            StatusKey().themed()
+            StatusKey().themed().environment(delegate.model)
         }
         .windowResizability(.contentSize)
         .defaultPosition(.topTrailing)
@@ -35,7 +35,7 @@ struct SquadReportApp: App {
         }
 
         Settings {
-            SettingsView().environment(delegate.model).themed()
+            SettingsView().themed().environment(delegate.model)
         }
     }
 }
@@ -78,6 +78,12 @@ struct AppCommands: Commands {
                 .keyboardShortcut("r")
             Button("Open in Browser") { model.openInBrowser() }
                 .keyboardShortcut("o", modifiers: [.command, .shift])
+            Divider()
+            // like the web app's L / Shift+L
+            Button("Next Look") { withAnimation(.easeInOut(duration: 0.3)) { LookCycle.step(1) } }
+                .keyboardShortcut("l", modifiers: .command)
+            Button("Previous Look") { withAnimation(.easeInOut(duration: 0.3)) { LookCycle.step(-1) } }
+                .keyboardShortcut("l", modifiers: [.command, .shift])
             Divider()
         }
         CommandGroup(after: .help) { StatusKeyMenuButton() }

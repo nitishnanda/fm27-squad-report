@@ -130,7 +130,7 @@ private struct LookSettings: View {
                 }
             }
             .pickerStyle(.radioGroup)
-            Text("The web app's other looks stay in the web app. Glass + scoreboard is always dark.")
+            Text("The same six looks as the web app. Matchday programme and Sticker album are light paper looks, Floodlit glass, Scoreboard and Glass + scoreboard are always dark. ⌘L and ⇧⌘L switch between them.")
                 .font(.caption).foregroundStyle(.secondary)
         }
         .formStyle(.grouped)

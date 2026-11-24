@@ -161,7 +161,14 @@ LW (AML/ML) IF/WMF · AM SS/AM · RW (AMR/MR) IW/WMF · ST CFD/CFD. `STYLE_KEYS`
   macOS draws category labels above each horizontal bar, so StatsView hides the y axis and labels bars itself with
   `.annotation(position: .top, alignment: .leading)`. Attribute dictionaries may come back camelCased from the decoder:
   use `Report.label/abbr` and `Player.attribute`, which try both spellings.
-  Phase 4: looks are `Theme` in Views/Components/Theme.swift (Original + Glass, `@AppStorage("look")`); use `.panel()` /
+  Phase 6: all six web looks are `Look` cases (original, programme A, floodlit B, scoreboard C, sticker D, glass E; the
+  stored value "glass" kept its meaning). `Theme` describes a look from the web tokens: `scheme` (A/D light, B/C/E dark),
+  `panelStyle`, `heroStyle`, `page` background (D wraps every page in a white sticker sheet on the mown pitch), fonts per
+  role, `star`, `pitchStripes`/`pitchLine`/`pitchRadius`, `numbersAreDoto` (C, E: NumberText's decimal fix). The theme reads
+  the club's `kitOnLight` through `Themed`, so `.themed()` must sit inside `.environment(model)`. Fonts: all the looks'
+  OFL woff2 files are in Resources/Fonts, registered in `Fonts.register()`; Archivo (look A) isn't vendored, so A uses the
+  system face, expanded. `Pitch3D` is the web's pitch3d() (manual projection, cards stand on their spots).
+  Phase 4: looks are `Theme` in Views/Components/Theme.swift (`@AppStorage("look")`); use `.panel()` /
   `.panelFill()` for cards and the font roles (`.displayFont`, `.numberFont`, `.positionFont`, `.heroFont`, `.slotFont`,
   `.dataFont`) instead of hard-coded condensed system fonts, and `theme.star` / `theme.pitchStripes` / `theme.cardFill`.
   The glass fonts must be registered synchronously in `SquadReportApp.init()` (SwiftUI caches a failed lookup).

@@ -30,7 +30,9 @@ private struct Hero: View {
     var body: some View {
         let kit = Color(hex: report.club.kit)
         let ink = Color(hex: report.club.ink)
-        let shape = RoundedRectangle(cornerRadius: theme.isGlass ? 26 : 14, style: .continuous)
+        let style = theme.heroStyle
+        let radius: CGFloat = switch style { case .glass: 26; case .paper: 0; case .board: 6; case .sticker: 16; case .kit: 14 }
+        let shape = RoundedRectangle(cornerRadius: radius, style: .continuous)
         // wide: the club on the left, your best XI on a 3D pitch on the right (the web's home band); narrower: no pitch
         ViewThatFits(in: .horizontal) {
             HStack(alignment: .center, spacing: 32) {
@@ -41,29 +43,49 @@ private struct Hero: View {
             HStack(alignment: .bottom, spacing: 32) { identity; Spacer(minLength: 0); VStack(alignment: .leading, spacing: 14) { league; openButton } }
             VStack(alignment: .leading, spacing: 24) { identity; league; openButton }
         }
-        .foregroundStyle(theme.isGlass ? Color.primary : ink)
+        .foregroundStyle(style == .kit ? ink : Color.primary)
         .padding(32)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background {
-            if theme.isGlass {
-                // glass with the club colour glowing in from the corner, like the web app's look E
+            switch style {
+            case .glass:
+                // glass with the club colour glowing in from the corner, like the web app's looks B and E
                 ZStack {
                     LinearGradient(colors: [.white.opacity(0.08), .white.opacity(0.02)], startPoint: .top, endPoint: .bottom)
                     RadialGradient(colors: [kit.opacity(0.5), .clear], center: .topLeading, startRadius: 0, endRadius: 620)
                 }
-            } else {
+            case .kit:
                 ZStack {
                     kit
                     LinearGradient(colors: [.white.opacity(0.08), .clear, .black.opacity(0.22)], startPoint: .topLeading, endPoint: .bottomTrailing)
                 }
+            case .paper: Color.clear                       // printed straight on the page
+            case .board: Color(hex: "#101211")
+            case .sticker: Color.white
             }
         }
         .overlay(alignment: .bottom) {
-            if !theme.isGlass { Rectangle().fill(Palette.brand).frame(height: 5) }
+            switch style {
+            case .kit: Rectangle().fill(Palette.brand).frame(height: 5)
+            case .paper: Rectangle().fill(Color(hex: "#1A1A17")).frame(height: 4)   // the programme's heavy rule
+            case .board: Rectangle().fill(Color(hex: "#4FC77F")).frame(height: 2)   // the scoreboard's one signal green
+            default: EmptyView()
+            }
         }
         .clipShape(shape)
-        .overlay(shape.strokeBorder(theme.isGlass ? Color.white.opacity(0.12) : .clear))
-        .shadow(color: .black.opacity(theme.isGlass ? 0.5 : 0), radius: 40, y: 30)
+        .overlay(shape.strokeBorder(style == .glass ? Color.white.opacity(0.12) : style == .board ? Color(hex: "#232825")
+                                    : style == .sticker ? Color(hex: "#111111") : .clear, lineWidth: style == .sticker ? 3 : 1))
+        .background(style == .sticker ? shape.fill(Color(hex: "#111111")).offset(x: 8, y: 8) : nil)
+        .shadow(color: .black.opacity(style == .glass ? 0.5 : 0), radius: 40, y: 30)
+    }
+
+    /// The league position: club ink on the kit, signal green on glass and the scoreboard, club colour on paper.
+    private var positionInk: Color {
+        switch theme.heroStyle {
+        case .kit: Color(hex: report.club.ink)
+        case .glass, .board: Palette.brandHigh
+        case .paper, .sticker: theme.kitOnLight
+        }
     }
 
     private var openButton: some View {
@@ -74,8 +96,9 @@ private struct Hero: View {
                 .labelStyle(.titleAndIcon)
                 .font(.callout.weight(.semibold))
                 .padding(.horizontal, 14).padding(.vertical, 7)
-                .background(.white.opacity(theme.isGlass ? 0.1 : 0.18), in: Capsule())
-                .overlay(Capsule().strokeBorder(.white.opacity(0.25)))
+                .background(theme.heroStyle == .kit ? Color.white.opacity(0.18)
+                            : theme.scheme == .light ? Color.black.opacity(0.06) : Color.white.opacity(0.1), in: Capsule())
+                .overlay(Capsule().strokeBorder(theme.scheme == .light && theme.heroStyle != .kit ? Color(hex: "#111111") : .white.opacity(0.25)))
                 .contentShape(Capsule())
         }
         .buttonStyle(.plain)
@@ -118,8 +141,8 @@ private struct Hero: View {
                 HStack(alignment: .firstTextBaseline, spacing: 10) {
                     Text(Fmt.ordinal(rec.pos))
                         .positionFont(60)
-                        .foregroundStyle(theme.isGlass ? Palette.brandHigh : Color(hex: report.club.ink))
-                        .shadow(color: theme.isGlass ? Palette.brandHigh.opacity(0.45) : .clear, radius: 12)
+                        .foregroundStyle(positionInk)
+                        .shadow(color: theme.isGlass || theme.look == .scoreboard ? Palette.brandHigh.opacity(0.45) : .clear, radius: 12)
                     VStack(alignment: .leading, spacing: 1) {
                         Text("of \(rec.of)\(report.performance.leagueName.map { " · \($0)" } ?? "")")
                         Text("\(rec.pts) pts · P\(rec.p) W\(rec.w) D\(rec.d) L\(rec.l) · \(rec.gf)–\(rec.ga)")
@@ -353,6 +376,7 @@ private struct Notes: View {
 struct SectionTitle: View {
     let title: String
     var sub: String?
+    @Environment(\.theme) private var theme
 
     init(_ title: String, sub: String? = nil) {
         self.title = title
@@ -363,7 +387,7 @@ struct SectionTitle: View {
         HStack(alignment: .firstTextBaseline, spacing: 12) {
             Text(title).displayFont(26)
                 .accessibilityAddTraits(.isHeader)
-            if let sub { Text(sub).font(.callout).foregroundStyle(.secondary) }
+            if let sub { Text(sub).font(theme.noteFont ?? .callout).foregroundStyle(.secondary) }
         }
     }
 }

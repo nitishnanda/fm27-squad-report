@@ -137,7 +137,13 @@ a search sheet that adds them via `POST /scouting`, Swift port of the Hungarian 
 - Settings › General › Engine: "Run the engine from a project folder instead" switches back to the old way (the folder's
   script and .venv), for working on the script. The .command still works and still uses the project folder's files.
 
-## Phase 6: match the web app (from a code comparison of the web app and the Mac app, 24 Nov 2026)
+## Phase 6 ✅ done: match the web app (from a code comparison of the web app and the Mac app, 24 Nov 2026)
+
+Done: 1 Can play chips (any/all, Clear filters) · 2 Mentoring part (`mentoring_groups`, `training_advice.mentoring`) ·
+3 "Doing it yourself" folded under What to change (`HOWTO_STEPS`/`HOWTO_CHEAT`, `training_howto`) · 4 × on scouting-list
+targets (`target_source`, `target_club` in the feed; the demo build has one target of each kind) · 5 position + age pop-ups
+in Find a scouted player · 6 Key popover in the toolbar + Help › Status Key window (⌘/) · 7 `Pitch3D` (Best XIs 3D/Flat,
+3D best XI in the Home hero with Open best XIs) · 8 all six looks as `Theme`s with their fonts, ⌘L / ⇧⌘L.
 
 Every web page has a native Mac page now, but these web features have no Mac version yet. Checked against
 `fm27_squad_report.py` (the web app) and `mac/SquadReport`. In order of how much he'd notice:

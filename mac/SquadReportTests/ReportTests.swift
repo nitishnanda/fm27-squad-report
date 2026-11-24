@@ -287,3 +287,21 @@ struct PhaseSixTests {
         #expect(used.isSubset(of: Set(SquadListView.filterPositions)), "no chip for \(used.subtracting(SquadListView.filterPositions))")
     }
 }
+
+@Suite("Looks")
+struct LookTests {
+    @Test func sameSixAsTheWebApp() {
+        // fm27_squad_report.py THEMES, in the same order
+        #expect(Look.allCases.map(\.title) == ["Original", "Matchday programme", "Floodlit glass", "Scoreboard",
+                                                "Sticker album", "Glass + scoreboard"])
+        #expect(Look(rawValue: "glass") == .glass)          // the setting saved before Phase 6 still works
+    }
+
+    @Test func lightLooksStayLightAndDotoGetsItsDecimalFix() {
+        #expect(Theme(look: .programme).scheme == .light)
+        #expect(Theme(look: .sticker).scheme == .light)
+        #expect(Theme(look: .scoreboard).scheme == .dark)
+        #expect(Theme(look: .original).scheme == nil)
+        #expect(Look.allCases.filter { Theme(look: $0).numbersAreDoto } == [.scoreboard, .glass])
+    }
+}

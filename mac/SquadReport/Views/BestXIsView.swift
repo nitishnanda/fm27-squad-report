@@ -97,8 +97,8 @@ struct Pitch<Players: View>: View {
         .background(
             LinearGradient(stops: stripes, startPoint: .top, endPoint: .bottom)
         )
-        .clipShape(RoundedRectangle(cornerRadius: theme.isGlass ? 22 : 12, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: theme.isGlass ? 22 : 12, style: .continuous).stroke(theme.pitchEdge, lineWidth: 1))
+        .clipShape(RoundedRectangle(cornerRadius: theme.pitchRadius, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: theme.pitchRadius, style: .continuous).stroke(theme.pitchEdge, lineWidth: theme.look == .sticker ? 3 : 1))
     }
 
     /// Mown stripes, ten of them.
@@ -112,10 +112,13 @@ struct Pitch<Players: View>: View {
 }
 
 private struct PitchMarkings: View {
+    @Environment(\.theme) private var theme
+
     var body: some View {
+        let ink = theme.pitchLine
         Canvas { ctx, size in
             let w = size.width, h = size.height
-            let line = GraphicsContext.Shading.color(.white.opacity(0.22))
+            let line = GraphicsContext.Shading.color(ink)
             let inset: CGFloat = w * 0.04
             var p = Path()
             p.addRect(CGRect(x: inset, y: inset, width: w - inset * 2, height: h - inset * 2))

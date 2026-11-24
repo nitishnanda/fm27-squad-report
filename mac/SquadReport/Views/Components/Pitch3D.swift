@@ -29,7 +29,7 @@ struct Pitch3D: View {
                 let cam = PitchCamera(turn: reduceMotion ? 0 : turn + sway, tilt: reduceMotion ? 0 : tilt,
                                       fitTurn: reduceMotion ? 0 : turn, size: geo.size, cardRoom: compact ? 40 : 58)
                 ZStack {
-                    Canvas { ctx, _ in cam.draw(in: &ctx, stripes: theme.pitchStripes) }
+                    Canvas { ctx, _ in cam.draw(in: &ctx, stripes: theme.pitchStripes, line: theme.pitchLine) }
                     ForEach(cam.backToFront(report.formation.rows), id: \.self) { i in
                         let row = report.formation.rows[i]
                         let spot = cam.project(xPercent: row.x ?? 50, yPercent: row.y ?? 50)
@@ -153,7 +153,7 @@ struct PitchCamera {
     }
 
     /// Mown stripes, then the same markings as the flat pitch (fractions of width and length).
-    func draw(in ctx: inout GraphicsContext, stripes: (Color, Color)) {
+    func draw(in ctx: inout GraphicsContext, stripes: (Color, Color), line: Color) {
         for i in 0..<10 {
             ctx.fill(quad(0, Double(i) / 10, 1, Double(i + 1) / 10), with: .color(i.isMultiple(of: 2) ? stripes.0 : stripes.1))
         }
@@ -171,7 +171,7 @@ struct PitchCamera {
             let p = point(0.5 + r * cos(a), 0.5 + r * sin(a) * 0.68)
             if k == 0 { lines.move(to: p) } else { lines.addLine(to: p) }
         }
-        ctx.stroke(lines, with: .color(.white.opacity(0.28)), lineWidth: 1.4)
+        ctx.stroke(lines, with: .color(line), lineWidth: 1.4)
         ctx.stroke(quad(0, 0, 1, 1), with: .color(.white.opacity(0.10)), lineWidth: 1)
     }
 }

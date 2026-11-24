@@ -11,6 +11,8 @@ final class AppModel {
     private(set) var folder: URL?
     var folderProblem: String?
     var route: Route = .home
+    /// The status key popover (toolbar button, Help › Status Key).
+    var showKey = false
     /// The last page you opened in each section, so ⌘2 goes back to the Team page you were on.
     private var lastPage: [AppSection: Route] = [:]
 

@@ -22,6 +22,12 @@ struct SquadReportApp: App {
         .defaultSize(width: 1320, height: 860)
         .commands { AppCommands(model: delegate.model) }
 
+        Window("Key", id: "key") {
+            StatusKey().themed()
+        }
+        .windowResizability(.contentSize)
+        .defaultPosition(.topTrailing)
+
         MenuBarExtra {
             MenuBarMenu().environment(delegate.model)
         } label: {
@@ -74,6 +80,7 @@ struct AppCommands: Commands {
                 .keyboardShortcut("o", modifiers: [.command, .shift])
             Divider()
         }
+        CommandGroup(after: .help) { StatusKeyMenuButton() }
         CommandMenu("Go") {
             ForEach(AppSection.allCases) { section in
                 Button(section.title) { model.go(section) }

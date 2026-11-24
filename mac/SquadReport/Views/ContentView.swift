@@ -18,6 +18,15 @@ struct ContentView: View {
                 ToolbarItemGroup(placement: .primaryAction) {
                     EngineStatusPill()
                     Button {
+                        model.showKey.toggle()
+                    } label: {
+                        Label("Key", systemImage: "questionmark.circle")
+                    }
+                    .help("What the badges and letters mean (Help › Status Key keeps it open in its own window, ⌘/)")
+                    .popover(isPresented: Binding(get: { model.showKey }, set: { model.showKey = $0 }), arrowEdge: .bottom) {
+                        StatusKey()
+                    }
+                    Button {
                         model.openInBrowser()
                     } label: {
                         Label("Open in Browser", systemImage: "safari")

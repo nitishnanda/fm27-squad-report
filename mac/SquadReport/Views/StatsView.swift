@@ -188,23 +188,35 @@ private struct RatingsChart: View {
         let rated = rows.filter { $0.avg >= 0 && $0.apps >= floor }.sorted { $0.avg > $1.avg }.prefix(14)
         VStack(alignment: .leading, spacing: 8) {
             Text("Average rating").font(.headline)
-            Text("Players with \(floor)+ apps · 7.20+ green, under 6.85 amber").font(.caption).foregroundStyle(.secondary)
+            Text("Players with \(floor)+ apps · 7.20+ green, under 6.85 amber (the dashed lines)").font(.caption).foregroundStyle(.secondary)
             if rated.isEmpty {
                 Text("Nobody has enough games yet.").foregroundStyle(.secondary).frame(height: 200)
             } else {
-                Chart(Array(rated)) { r in
-                    BarMark(x: .value("Average rating", r.avg), y: .value("Player", surname(r.name)), height: .ratio(0.5))
-                        .foregroundStyle(r.avg >= StatRow.high ? Palette.transferIn : r.avg < StatRow.low ? Palette.verdict("amber") : Color.secondary)
-                        .annotation(position: .trailing) {
-                            Text(String(format: "%.2f", r.avg)).font(.caption2).monospacedDigit().foregroundStyle(.secondary)
-                        }
-                        .annotation(position: .top, alignment: .leading, spacing: 2) {
-                            Text(surname(r.name)).font(.caption).foregroundStyle(.secondary)
-                        }
+                // dots, not bars: bars must start at 0, and from 0 every rating looks the same
+                let lo = min(6.0, (rated.map(\.avg).min() ?? 6.0) - 0.1)
+                let hi = max(7.5, (rated.map(\.avg).max() ?? 7.5) + 0.1)
+                Chart {
+                    RuleMark(x: .value("Amber below", StatRow.low))
+                        .lineStyle(StrokeStyle(lineWidth: 1, dash: [3, 3])).foregroundStyle(Palette.verdict("amber").opacity(0.6))
+                    RuleMark(x: .value("Green from", StatRow.high))
+                        .lineStyle(StrokeStyle(lineWidth: 1, dash: [3, 3])).foregroundStyle(Palette.transferIn.opacity(0.6))
+                    ForEach(Array(rated)) { r in
+                        RuleMark(xStart: .value("From", lo), xEnd: .value("Average rating", r.avg), y: .value("Player", surname(r.name)))
+                            .lineStyle(StrokeStyle(lineWidth: 1)).foregroundStyle(Color.secondary.opacity(0.25))
+                        PointMark(x: .value("Average rating", r.avg), y: .value("Player", surname(r.name)))
+                            .symbolSize(90)
+                            .foregroundStyle(r.avg >= StatRow.high ? Palette.transferIn : r.avg < StatRow.low ? Palette.verdict("amber") : Color.secondary)
+                            .annotation(position: .trailing, spacing: 6) {
+                                Text(String(format: "%.2f", r.avg)).font(.caption2).monospacedDigit().foregroundStyle(.secondary)
+                            }
+                            .annotation(position: .top, alignment: .leading, spacing: 4) {
+                                Text(surname(r.name)).font(.caption).foregroundStyle(.secondary)
+                            }
+                    }
                 }
-                .chartXScale(domain: 0...10)
+                .chartXScale(domain: lo...hi)
                 .chartYAxis(.hidden)
-                .chartXAxisLabel("Average match rating (out of 10)")
+                .chartXAxisLabel("Average match rating (zoomed in: \(String(format: "%.1f", lo))–\(String(format: "%.1f", hi)))")
                 .frame(height: CGFloat(max(160, rated.count * 36)))
             }
         }

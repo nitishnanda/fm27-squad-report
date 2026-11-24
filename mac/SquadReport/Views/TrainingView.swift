@@ -89,7 +89,7 @@ private struct TeamSchedule: View {
                     let most = Double(used.first?.value ?? 1)
                     ForEach(used, id: \.key) { name, n in
                         HStack(spacing: 8) {
-                            Text(name).lineLimit(1).frame(width: 200, alignment: .leading)
+                            Text(name).lineLimit(1).truncationMode(.middle).frame(minWidth: 280, alignment: .leading).help(name)
                             Capsule().fill(Color(hex: "#D0102E")).frame(width: max(4, 80 * Double(n) / most), height: 6)
                             Text("\(n)").monospacedDigit().foregroundStyle(.secondary)
                         }
@@ -264,7 +264,7 @@ private struct Plans: View {
                         .font(.callout)
                         VStack(alignment: .leading, spacing: 2) {
                             if plan.positionWork.isEmpty {
-                                Text("Natural: none").foregroundStyle(Palette.transferIn)
+                                Text("Already natural: no position work").foregroundStyle(Palette.transferIn)
                             }
                             ForEach(plan.positionWork, id: \.self) { w in
                                 Text("\(w.code) \(w.phase): \(w.word) · \(w.how)").fixedSize(horizontal: false, vertical: true)

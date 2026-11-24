@@ -122,8 +122,16 @@ private struct ComingUp: View {
             if months.isEmpty {
                 Text("Nothing arranged, and no loans or contracts ending in the next year.").foregroundStyle(.secondary)
             }
+            // one row per year, so January 2028 can never read as if it came before May 2027
+            ForEach(Self.years(months), id: \.year) { group in
+                HStack(alignment: .firstTextBaseline, spacing: 8) {
+                    Text(String(group.year)).font(.system(size: 26, weight: .heavy).width(.condensed))
+                    Rectangle().fill(.quaternary).frame(height: 1)
+                }
+                .padding(.top, 6)
+                .accessibilityAddTraits(.isHeader)
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 230), spacing: 14, alignment: .top)], spacing: 18) {
-                ForEach(months) { month in
+                ForEach(group.months) { month in
                     VStack(alignment: .leading, spacing: 8) {
                         ZStack(alignment: .leading) {
                             Rectangle().fill(.quaternary).frame(height: 2)
@@ -137,7 +145,17 @@ private struct ComingUp: View {
                     }
                 }
             }
+            }
         }
+    }
+
+    private struct Year { let year: Int; let months: [TransferTimeline.Month] }
+
+    private static func years(_ months: [TransferTimeline.Month]) -> [Year] {
+        var cal = Calendar(identifier: .gregorian)
+        cal.timeZone = TimeZone(identifier: "UTC")!
+        let byYear = Dictionary(grouping: months) { cal.component(.year, from: $0.start) }
+        return byYear.keys.sorted().map { Year(year: $0, months: byYear[$0]!) }
     }
 
     private func event(_ e: TimelineEvent) -> some View {

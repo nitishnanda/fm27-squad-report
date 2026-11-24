@@ -2354,7 +2354,7 @@ def training_page(R) -> str:
         if not plan:
             continue
         pw = "".join(f'<div class="pw"><b>{E(w["code"])}</b> {E(w["phase"])} — {E(w["word"])} ({w["fam"]}/20) · '
-                     f'<span class="acc">{E(w["how"])}</span></div>' for w in plan["pos_work"]) or '<span class="okk">Natural — none</span>'
+                     f'<span class="acc">{E(w["how"])}</span></div>' for w in plan["pos_work"]) or '<span class="okk">Already natural: no position work</span>'
         if plan["focus"]:
             attr, v = plan["focus"]
             focus = f'<span class="fz">{E(attr_label(attr))} <b>{v}</b></span>'

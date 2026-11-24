@@ -70,9 +70,12 @@ struct EngineClient: Sendable {
         let items: [Found]
     }
 
-    func searchPlayers(_ query: String) async throws -> FoundList {
+    /// `position` (e.g. "LB") and `maxAge` (19, 21 or 23) narrow it like the web picker. Name order, never quality.
+    func searchPlayers(_ query: String, position: String? = nil, maxAge: Int? = nil) async throws -> FoundList {
         var parts = URLComponents(url: base.appending(path: "players"), resolvingAgainstBaseURL: false)!
         parts.queryItems = [URLQueryItem(name: "q", value: query)]
+        if let position { parts.queryItems?.append(URLQueryItem(name: "pos", value: position)) }
+        if let maxAge { parts.queryItems?.append(URLQueryItem(name: "age", value: String(maxAge))) }
         let (data, _) = try await fetch(URLRequest(url: parts.url!))
         return try JSONDecoder().decode(FoundList.self, from: data)
     }

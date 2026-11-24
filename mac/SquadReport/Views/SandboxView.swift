@@ -473,15 +473,33 @@ private struct FindPlayers: View {
     @State private var total = 0
     @State private var picked: Set<Int> = []
     @State private var message = ""
+    @State private var position = ""        // "" = any position
+    @State private var maxAge = 0           // 0 = any age
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Find a scouted player").font(.title3.weight(.bold))
             Text("FM doesn't let other tools read your scouting shortlist, so search here by name or club. Anyone in FM's Squad Planner is added by itself.")
                 .font(.callout).foregroundStyle(.secondary)
-            TextField("Name or club, e.g. Mrozek or Benfica", text: $query)
-                .textFieldStyle(.roundedBorder)
-                .onChange(of: query) { _, _ in Task { await search() } }
+            HStack(spacing: 8) {
+                TextField("Name or club, e.g. Mrozek or Benfica", text: $query)
+                    .textFieldStyle(.roundedBorder)
+                Picker("Position", selection: $position) {
+                    Text("Any position").tag("")
+                    Divider()
+                    ForEach(SquadListView.filterPositions, id: \.self) { Text($0).tag($0) }
+                }
+                .labelsHidden().fixedSize()
+                Picker("Age", selection: $maxAge) {
+                    Text("Any age").tag(0)
+                    Divider()
+                    ForEach([19, 21, 23], id: \.self) { Text("\($0) and under").tag($0) }
+                }
+                .labelsHidden().fixedSize()
+            }
+            .onChange(of: query) { _, _ in Task { await search() } }
+            .onChange(of: position) { _, _ in Task { await search() } }
+            .onChange(of: maxAge) { _, _ in Task { await search() } }
             Text(message).font(.caption).foregroundStyle(.secondary)
             List(results) { r in
                 let already = have.contains(r.uid)
@@ -524,16 +542,20 @@ private struct FindPlayers: View {
             }
         }
         .padding(20)
-        .frame(width: 520, height: 520)
+        .frame(width: 620, height: 540)
     }
 
     private func search() async {
         let q = query.trimmingCharacters(in: .whitespaces)
         guard q.count >= 2 else { results = []; message = q.isEmpty ? "" : "Keep typing: at least 2 letters."; return }
-        guard let found = try? await client.searchPlayers(q) else { message = "Couldn't search right now."; return }
-        guard q == query.trimmingCharacters(in: .whitespaces) else { return }   // a newer search is on its way
+        let (pos, age) = (position, maxAge)
+        guard let found = try? await client.searchPlayers(q, position: pos.isEmpty ? nil : pos, maxAge: age == 0 ? nil : age)
+        else { message = "Couldn't search right now."; return }
+        // a newer search is on its way
+        guard q == query.trimmingCharacters(in: .whitespaces), pos == position, age == maxAge else { return }
         results = found.items
         total = found.total
-        message = total == 0 ? "No players match “\(q)” in your save." : total > results.count ? "Showing \(results.count) of \(total). Add a club to narrow it down." : "\(total) player\(total == 1 ? "" : "s")"
+        let narrowed = (pos.isEmpty ? "" : " who can play \(pos)") + (age == 0 ? "" : ", \(age) or under")
+        message = total == 0 ? "No players match “\(q)”\(narrowed) in your save." : total > results.count ? "Showing \(results.count) of \(total). Add a club to narrow it down." : "\(total) player\(total == 1 ? "" : "s")"
     }
 }

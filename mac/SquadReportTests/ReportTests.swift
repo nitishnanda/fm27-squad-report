@@ -268,3 +268,22 @@ struct BundledEngineTests {
         #expect(FileManager.default.fileExists(atPath: root.appending(path: "engine/assets").path))
     }
 }
+
+@Suite("Phase 6")
+struct PhaseSixTests {
+    @Test func positionFilterMatchesAnyOrAll() {
+        let fullBack: Set<String> = ["LB", "LWB", "CB"]
+        #expect(SquadListView.matches(fullBack, [], all: false))                 // no chips: everyone
+        #expect(SquadListView.matches(fullBack, ["LB", "ST"], all: false))       // any: LB is enough
+        #expect(!SquadListView.matches(fullBack, ["LB", "ST"], all: true))       // all: he can't play ST
+        #expect(SquadListView.matches(fullBack, ["LB", "CB"], all: true))
+        #expect(!SquadListView.matches(fullBack, ["GK"], all: false))
+    }
+
+    @Test func positionChipsCoverTheFixture() throws {
+        let report = try Report.decode(try fixture())
+        let used = Set(report.players.flatMap { $0.positions.natural + $0.positions.accomplished })
+        // every position a player can have has a chip (so nobody is unfilterable)
+        #expect(used.isSubset(of: Set(SquadListView.filterPositions)), "no chip for \(used.subtracting(SquadListView.filterPositions))")
+    }
+}

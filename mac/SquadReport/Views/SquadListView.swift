@@ -19,6 +19,8 @@ struct SquadRow: Identifiable, Hashable, Sendable {
     let expiring: Bool
     let statuses: [PlayerStatus]
     let tokens: [String]
+    /// Natural or accomplished: what the web's "Can play" chips filter on.
+    let canPlay: Set<String>
     let youth: Bool
     let group: Int
 
@@ -40,6 +42,7 @@ struct SquadRow: Identifiable, Hashable, Sendable {
         expiring = p.expiring
         statuses = PlayerStatus.of(p, today: today)
         tokens = p.status.tokens
+        canPlay = Set(p.positions.natural + p.positions.accomplished)
         youth = p.youth
         self.group = group
     }
@@ -96,6 +99,10 @@ struct SquadListView: View {
     }
 
     @State private var search = ""
+    /// "Can play" chips, the same positions in the same order as the web app (`FILTER_POS`).
+    nonisolated static let filterPositions = ["GK", "LB", "LWB", "CB", "RB", "RWB", "DM", "CM", "LM", "RM", "AM", "LW", "RW", "ST"]
+    @State private var positions: Set<String> = []
+    @State private var allPositions = false     // "all of these" instead of "any of these"
     @AppStorage("showPotential") private var showPotential = true
     @State private var show: Show = .all
     @State private var youth = false
@@ -127,22 +134,23 @@ struct SquadListView: View {
                 }
                 Toggle("Youth teams", isOn: $youth)
                 Spacer()
-                let filtering = show != .all || !search.trimmingCharacters(in: .whitespaces).isEmpty
-                let away = filtering ? 0 : shown.filter { folded.contains($0.group) }.count
+                let away = isFiltering ? 0 : shown.filter { folded.contains($0.group) }.count
                 Text("\(shown.count) player\(shown.count == 1 ? "" : "s")" + (away > 0 ? " · \(away) folded away" : ""))
                     .foregroundStyle(.secondary)
                     .monospacedDigit()
                     .accessibilityLabel("\(shown.count) players" + (away > 0 ? ", \(away) in folded groups" : ""))
             }
-            .padding(.horizontal, 20).padding(.bottom, 10)
+            .padding(.horizontal, 20).padding(.bottom, 8)
+            positionFilter
+                .padding(.horizontal, 20).padding(.bottom, 10)
             if shown.isEmpty {
                 ContentUnavailableView {
                     Label("No players match", systemImage: "magnifyingglass")
                 } description: {
-                    Text(search.isEmpty ? "Nobody fits “\(show.rawValue)” right now." : "Nobody called “\(search)”\(show == .all ? "" : " with “\(show.rawValue)”").")
+                    Text(emptyMessage)
                         + Text(!youth ? " Youth-team players only show with “Youth teams” on." : "")
                 } actions: {
-                    Button("Clear filters") { search = ""; show = .all }
+                    Button("Clear filters") { clearFilters() }
                 }
             } else {
                 table(shown)
@@ -163,6 +171,71 @@ struct SquadListView: View {
             (youth || !row.youth)
                 && (show.token.map { row.tokens.contains($0) } ?? true)
                 && (q.isEmpty || fold(row.name).contains(q))
+                && Self.matches(row.canPlay, positions, all: allPositions)
+        }
+    }
+
+    /// Any (or all) of the chosen positions among the ones he can play. No chips chosen: everyone.
+    nonisolated static func matches(_ canPlay: Set<String>, _ chosen: Set<String>, all: Bool) -> Bool {
+        chosen.isEmpty || (all ? chosen.isSubset(of: canPlay) : !chosen.isDisjoint(with: canPlay))
+    }
+
+    /// A filter, a position or a search: groups open up to show what they found.
+    private var isFiltering: Bool {
+        show != .all || !positions.isEmpty || !search.trimmingCharacters(in: .whitespaces).isEmpty
+    }
+
+    private func clearFilters() {
+        search = ""
+        show = .all
+        positions = []
+        allPositions = false
+    }
+
+    private var emptyMessage: String {
+        var bits: [String] = []
+        if show != .all { bits.append("“\(show.rawValue)”") }
+        if !positions.isEmpty {
+            let list = Self.filterPositions.filter(positions.contains).joined(separator: allPositions ? " and " : " or ")
+            bits.append("who can play \(list)")
+        }
+        let q = search.trimmingCharacters(in: .whitespaces)
+        if !q.isEmpty { return "Nobody called “\(q)”" + (bits.isEmpty ? "." : " " + bits.joined(separator: ", ") + ".") }
+        return bits.isEmpty ? "Nobody here right now." : "Nobody fits " + bits.joined(separator: ", ") + " right now."
+    }
+
+    /// "Can play" chips (toggle any number), "any / all of these", and Clear filters when something is on.
+    private var positionFilter: some View {
+        HStack(alignment: .top, spacing: 10) {
+            Text("Can play").font(.callout).foregroundStyle(.secondary).padding(.top, 3).fixedSize()
+            FlowRow(spacing: 5) {
+                ForEach(Self.filterPositions, id: \.self) { pos in
+                    let on = positions.contains(pos)
+                    Button {
+                        withAnimation(.snappy) { if on { positions.remove(pos) } else { positions.insert(pos) } }
+                    } label: {
+                        Text(pos).font(.caption.weight(.semibold)).monospaced()
+                            .padding(.horizontal, 8).padding(.vertical, 3)
+                            .background(on ? Palette.brand : Color.primary.opacity(0.07), in: Capsule())
+                            .foregroundStyle(on ? Color.white : Color.primary)
+                            .contentShape(Capsule())
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("Can play \(pos)")
+                    .accessibilityAddTraits(on ? .isSelected : [])
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            Picker("Match", selection: $allPositions) {
+                Text("any of these").tag(false)
+                Text("all of these").tag(true)
+            }
+            .pickerStyle(.segmented).labelsHidden().fixedSize()
+            .disabled(positions.count < 2)
+            .help("With two or more positions chosen: players who can play any of them, or all of them")
+            if isFiltering {
+                Button("Clear filters") { withAnimation(.snappy) { clearFilters() } }
+            }
         }
     }
 
@@ -173,7 +246,7 @@ struct SquadListView: View {
 
     private func table(_ rows: [SquadRow]) -> some View {
         let groups = Dictionary(grouping: rows, by: \.group)
-        let filtering = show != .all || !search.trimmingCharacters(in: .whitespaces).isEmpty
+        let filtering = isFiltering
         return Table(of: SquadRow.self, selection: $selection, sortOrder: $sortOrder, columnCustomization: $columns) {
             TableColumn("Player", value: \.name) { row in
                 Text(row.name).fontWeight(.semibold)

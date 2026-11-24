@@ -1,0 +1,31 @@
+<svg xmlns="http://w3.org" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <linearGradient id="emeraldLaser" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10B981" stop-opacity="0.68" />
+      <stop offset="45%" stop-color="#2CE59B" stop-opacity="0.96" />
+      <stop offset="100%" stop-color="#6EE7B7" stop-opacity="1" />
+    </linearGradient>
+  </defs>
+
+  <g transform="rotate(-5 512 536)">
+    <!-- Sweeping Through-Ball Arc Threading Behind the Defender -->
+    <path
+      d="M 416 672
+         C 452 558, 526 468, 636 392"
+      fill="none"
+      stroke="url(#emeraldLaser)"
+      stroke-width="24"
+      stroke-linecap="round"
+    />
+
+    <!-- Crisp Directional Chevron Arrowhead -->
+    <path
+      d="M 578 372 L 646 386 L 618 448"
+      fill="none"
+      stroke="#34D399"
+      stroke-width="24"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </g>
+</svg>

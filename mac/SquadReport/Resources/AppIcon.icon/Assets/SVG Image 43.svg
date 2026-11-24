@@ -1,0 +1,84 @@
+<svg xmlns="http://w3.org" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <linearGradient id="boardGlass" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.22" />
+      <stop offset="50%" stop-color="#FFFFFF" stop-opacity="0.10" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.04" />
+    </linearGradient>
+
+    <linearGradient id="boardEdge" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.82" />
+      <stop offset="45%" stop-color="#FFFFFF" stop-opacity="0.22" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.52" />
+    </linearGradient>
+  </defs>
+
+  <g transform="rotate(-5 512 536)">
+    <!-- Outer Smoked-Glass Clipboard Chassis -->
+    <rect
+      x="228" y="212"
+      width="568" height="648"
+      rx="76"
+      fill="url(#boardGlass)"
+      stroke="url(#boardEdge)"
+      stroke-width="6"
+    />
+
+    <!-- Inner Recessed Pitch Perimeter Frame -->
+    <rect
+      x="266" y="274"
+      width="492" height="548"
+      rx="38"
+      fill="none"
+      stroke="#FFFFFF"
+      stroke-opacity="0.18"
+      stroke-width="5"
+    />
+
+    <!-- Etched Pitch Halfway Line -->
+    <line
+      x1="266" y1="548"
+      x2="758" y2="548"
+      stroke="#FFFFFF"
+      stroke-opacity="0.22"
+      stroke-width="5"
+    />
+
+    <!-- Etched Center Circle & Kickoff Spot -->
+    <circle
+      cx="512" cy="548"
+      r="76"
+      fill="none"
+      stroke="#FFFFFF"
+      stroke-opacity="0.22"
+      stroke-width="5"
+    />
+    <circle cx="512" cy="548" r="7" fill="#FFFFFF" fill-opacity="0.28" />
+
+    <!-- Top Penalty Box (18-Yard Area) -->
+    <path
+      d="M 388 274 V 352 C 388 363, 397 372, 408 372 H 616 C 627 372, 636 363, 636 352 V 274"
+      fill="none"
+      stroke="#FFFFFF"
+      stroke-opacity="0.20"
+      stroke-width="5"
+    />
+
+    <!-- Bottom Penalty Box (18-Yard Area) -->
+    <path
+      d="M 388 822 V 744 C 388 733, 397 724, 408 724 H 616 C 627 724, 636 733, 636 744 V 822"
+      fill="none"
+      stroke="#FFFFFF"
+      stroke-opacity="0.20"
+      stroke-width="5"
+    />
+
+    <!-- Subtle Corner Hardware Micro-Rivets -->
+    <g fill="#FFFFFF" fill-opacity="0.32">
+      <circle cx="264" cy="248" r="6" />
+      <circle cx="760" cy="248" r="6" />
+      <circle cx="264" cy="824" r="6" />
+      <circle cx="760" cy="824" r="6" />
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,55 @@
+<svg xmlns="http://w3.org" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <linearGradient id="anodizedMetal" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="1" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.84" />
+    </linearGradient>
+  </defs>
+
+  <g transform="rotate(-5 512 536)">
+    <!-- 1. SLEEK TRANSLUCENT CLIPBOARD CLASP -->
+    <rect
+      x="376" y="180"
+      width="272" height="72"
+      rx="26"
+      fill="#FFFFFF"
+      fill-opacity="0.46"
+    />
+
+    <!-- 2. SECONDARY SUPPORT RUN (Dashed Tactical Line) -->
+    <path
+      d="M 372 706 C 344 622, 348 548, 376 476"
+      fill="none"
+      stroke="#FFFFFF"
+      stroke-opacity="0.42"
+      stroke-width="14"
+      stroke-linecap="round"
+      stroke-dasharray="22 24"
+    />
+
+    <!-- 3. TACTICAL PLAYER TOKENS -->
+    <!-- Deep Playmaker / Ball Carrier (Bottom-Left Solid Disc) -->
+    <circle
+      cx="376" cy="712"
+      r="44"
+      fill="url(#anodizedMetal)"
+    />
+
+    <!-- Overlapping Support Runner (Mid-Left Solid Disc) -->
+    <circle
+      cx="382" cy="456"
+      r="36"
+      fill="#FFFFFF"
+      fill-opacity="0.88"
+    />
+
+    <!-- Opposition Center-Back Marker (Center-Right Milled Ring) -->
+    <circle
+      cx="584" cy="542"
+      r="36"
+      fill="none"
+      stroke="url(#anodizedMetal)"
+      stroke-width="20"
+    />
+  </g>
+</svg>

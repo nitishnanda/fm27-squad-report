@@ -3808,11 +3808,15 @@ steps.forEach((s,i)=>s.addEventListener('click',()=>{
  else showStatic(i);}));
 showStatic(0);
 
-// gentle reveals for the lists below
-if(G&&!rm){gsap.set('.rv',{opacity:0,y:22});
- ScrollTrigger.batch('.rv',{start:'top 88%',onEnter:b=>gsap.to(b,{opacity:1,y:0,duration:.7,ease:'power3.out',stagger:.07,overwrite:true})});}
-// re-measure once fonts and the previews have loaded (never synchronously during setup)
-if(window.ScrollTrigger){document.fonts&&document.fonts.ready.then(()=>ScrollTrigger.refresh());addEventListener('load',()=>ScrollTrigger.refresh(),{once:true});}
+// gentle reveals for the lists below. The browser's own IntersectionObserver decides when (one batch per callback, like
+// ScrollTrigger.batch), so a failed ScrollTrigger refresh around the pinned previews can never leave these hidden.
+if(G&&!rm&&'IntersectionObserver' in window){gsap.set('.rv',{opacity:0,y:22});
+ const io=new IntersectionObserver(es=>{const b=es.filter(e=>e.isIntersecting).map(e=>e.target);if(!b.length)return;b.forEach(t=>io.unobserve(t));
+  gsap.to(b,{opacity:1,y:0,duration:.7,ease:'power3.out',stagger:.07,overwrite:true});},{rootMargin:'0px 0px -12% 0px'});
+ document.querySelectorAll('.rv').forEach(el=>io.observe(el));}
+// re-measure once fonts and the previews have loaded (never synchronously during setup); retry once if a refresh trips
+const refresh=()=>{try{ScrollTrigger.refresh();}catch(e){requestAnimationFrame(()=>{try{ScrollTrigger.refresh();}catch(_){}});}};
+if(window.ScrollTrigger){document.fonts&&document.fonts.ready.then(refresh);addEventListener('load',refresh,{once:true});}
 
 // custom cursor: only over the 3D pitch, only for a mouse, and it says what you can do there
 const cur=document.querySelector('.cur');

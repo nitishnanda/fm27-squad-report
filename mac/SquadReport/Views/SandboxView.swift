@@ -18,23 +18,43 @@ struct SandboxView: View {
 
 private struct SandboxPage: View {
     @Bindable var model: SandboxModel
+    @State private var area = CGSize(width: 1100, height: 700)
+
+    /// Side by side needs a pitch at least this wide, or the cards get too small to read.
+    static let minPitch: CGFloat = 380
+    static let rosterWidth: CGFloat = 420
 
     var body: some View {
+        // the pitch is 68 wide for every 100 tall, so a short window shrinks it as much as a narrow one
+        let sideBySidePitch = min(area.width - Self.rosterWidth - 40, (area.height - 40) * 0.68)
         VStack(spacing: 0) {
             ScoreBar(model: model)
             Divider()
-            HStack(alignment: .top, spacing: 0) {
-                GeometryReader { geo in
-                    let width = min(geo.size.width - 40, (geo.size.height - 40) * 0.68)
-                    SandboxPitch(model: model)
-                        .frame(width: max(300, width))
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+            Group {
+                if sideBySidePitch >= Self.minPitch {
+                    HStack(alignment: .top, spacing: 0) {
+                        SandboxPitch(model: model)
+                            .frame(width: sideBySidePitch)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        Divider()
+                        Roster(model: model, stacked: false)
+                            .frame(width: Self.rosterWidth)
+                    }
+                } else {
+                    // small window: the pitch at a readable size, the squad underneath, one scroll for both
+                    ScrollView {
+                        VStack(spacing: 0) {
+                            SandboxPitch(model: model)
+                                .frame(width: min(area.width - 40, 520))
+                                .frame(maxWidth: .infinity)
+                            Divider()
+                            Roster(model: model, stacked: true)
+                        }
+                    }
                 }
-                .frame(minWidth: 300)
-                Divider()
-                Roster(model: model)
-                    .frame(minWidth: 330, idealWidth: 440, maxWidth: 520)
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .onGeometryChange(for: CGSize.self) { $0.size } action: { area = $0 }
         }
     }
 }
@@ -216,6 +236,8 @@ private func dragPreview(_ player: Player?) -> some View {
 
 private struct Roster: View {
     let model: SandboxModel
+    /// Under the pitch (small window) instead of beside it: no List of its own, the page scrolls.
+    let stacked: Bool
     @Environment(AppModel.self) private var app
     @State private var search = ""
     @State private var youth = false
@@ -238,38 +260,88 @@ private struct Roster: View {
                 Toggle("Youth teams", isOn: $youth)
             }
             .padding(12)
-            List {
-                Section("Your squad · drag onto the pitch") {
-                    ForEach(here) { RosterRow(model: model, player: $0, inXI: inXI.contains($0.uid)) }
+            if stacked {
+                LazyVStack(alignment: .leading, spacing: 0) {
+                    sections(here: here, arriving: arriving, away: away, targets: targets, inXI: inXI, searching: !q.isEmpty)
                 }
-                if !arriving.isEmpty {
-                    Section("Arriving · already agreed, rated as if they're here") {
-                        ForEach(arriving) { RosterRow(model: model, player: $0, inXI: inXI.contains($0.uid)) }
-                    }
+                .padding(.horizontal, 16).padding(.bottom, 20)
+            } else {
+                List {
+                    sections(here: here, arriving: arriving, away: away, targets: targets, inXI: inXI, searching: !q.isEmpty)
                 }
-                if !away.isEmpty {
-                    Section(isExpanded: Binding(get: { showAway || !q.isEmpty }, set: { showAway = $0 })) {
-                        ForEach(away) { RosterRow(model: model, player: $0, inXI: inXI.contains($0.uid)) }
-                    } header: {
-                        Text("Away on loan · \(away.count) · set one to Available to try him")
-                    }
-                }
-                Section {
-                    ForEach(targets) { RosterRow(model: model, player: $0, inXI: inXI.contains($0.uid)) }
-                    if targets.isEmpty {
-                        Text("No scouting targets yet.").foregroundStyle(.secondary)
-                    }
-                    Button("Find a scouted player…") { finding = true }
-                    Text("Targets are rated from their real attributes. Only add players your scouts have fully reported on; potential is never shown for them.")
-                        .font(.caption).foregroundStyle(.secondary)
-                } header: {
-                    Text("Scouting targets · set to Signed to use them")
-                }
+                .listStyle(.inset)
+                .scrollContentBackground(.hidden)
             }
-            .listStyle(.inset)
-            .scrollContentBackground(.hidden)
         }
         .sheet(isPresented: $finding) { FindPlayers(client: app.engine.client, have: Set(model.report.targets.map(\.uid))) }
+    }
+}
+
+extension Roster {
+    @ViewBuilder
+    fileprivate func sections(here: [Player], arriving: [Player], away: [Player], targets: [Player], inXI: Set<Int>,
+                              searching: Bool) -> some View {
+        Section {
+            ForEach(here) { row($0, inXI) }
+        } header: { header("Your squad · drag onto the pitch") }
+        if !arriving.isEmpty {
+            Section {
+                ForEach(arriving) { row($0, inXI) }
+            } header: { header("Arriving · already agreed, rated as if they're here") }
+        }
+        if !away.isEmpty {
+            let open = showAway || searching
+            Section {
+                if open { ForEach(away) { row($0, inXI) } }
+            } header: {
+                Button {
+                    withAnimation(.snappy) { showAway.toggle() }
+                } label: {
+                    HStack(spacing: 5) {
+                        Image(systemName: "chevron.right").font(.caption2.weight(.bold))
+                            .rotationEffect(.degrees(open ? 90 : 0)).accessibilityHidden(true)
+                        Text("Away on loan · \(away.count) · set one to Available to try him")
+                    }
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .font(stacked ? .callout.weight(.semibold) : .subheadline.weight(.semibold))
+                .foregroundStyle(.secondary)
+                .padding(.top, stacked ? 14 : 0).padding(.bottom, stacked ? 4 : 0)
+                .accessibilityValue(open ? "expanded" : "collapsed")
+                .disabled(searching)
+            }
+        }
+        Section {
+            ForEach(targets) { row($0, inXI) }
+            if targets.isEmpty {
+                Text("No scouting targets yet.").foregroundStyle(.secondary).padding(.vertical, stacked ? 6 : 0)
+            }
+            Button("Find a scouted player…") { finding = true }
+                .padding(.vertical, stacked ? 6 : 0)
+            Text("Targets are rated from their real attributes. Only add players your scouts have fully reported on; potential is never shown for them.")
+                .font(.caption).foregroundStyle(.secondary)
+        } header: { header("Scouting targets · set to Signed to use them") }
+    }
+
+    @ViewBuilder
+    private func header(_ text: String) -> some View {
+        if stacked {
+            Text(text).font(.callout.weight(.semibold)).foregroundStyle(.secondary)
+                .padding(.top, 14).padding(.bottom, 4)
+        } else {
+            Text(text)
+        }
+    }
+
+    @ViewBuilder
+    private func row(_ p: Player, _ inXI: Set<Int>) -> some View {
+        if stacked {
+            RosterRow(model: model, player: p, inXI: inXI.contains(p.uid)).padding(.vertical, 6)
+            Divider()
+        } else {
+            RosterRow(model: model, player: p, inXI: inXI.contains(p.uid))
+        }
     }
 }
 
@@ -294,13 +366,15 @@ private struct RosterRow: View {
                     if inXI { XITag() }
                 }
                 Text(subtitle).font(.caption).foregroundStyle(.secondary).lineLimit(1)
-                HStack(spacing: 4) {
-                    ForEach(Array(slots), id: \.0) { label, r in
-                        Text("\(label) \(Fmt.stars(r.stars))★").font(.caption2.weight(.semibold))
-                            .padding(.horizontal, 4).padding(.vertical, 1)
-                            .background(r.fam == "N" ? Color.primary.opacity(0.18) : Color.primary.opacity(0.07), in: RoundedRectangle(cornerRadius: 3))
+                if slots.isEmpty {
+                    Text("no slot in your tactic").font(.caption2).foregroundStyle(.secondary)
+                } else {
+                    // never wraps: as many of his best three slots as fit on one line
+                    ViewThatFits(in: .horizontal) {
+                        chips(Array(slots))
+                        chips(Array(slots.prefix(2)))
+                        chips(Array(slots.prefix(1)))
                     }
-                    if slots.isEmpty { Text("no slot in your tactic").font(.caption2).foregroundStyle(.secondary) }
                 }
             }
             Spacer(minLength: 4)
@@ -314,6 +388,17 @@ private struct RosterRow: View {
         .contentShape(Rectangle())
         .draggable(String(player.uid)) { dragPreview(player) }
         .accessibilityElement(children: .combine)
+    }
+
+    private func chips(_ slots: [(String, Rating)]) -> some View {
+        HStack(spacing: 4) {
+            ForEach(slots, id: \.0) { label, r in
+                Text("\(label) \(Fmt.stars(r.stars))★").font(.caption2.weight(.semibold))
+                    .lineLimit(1).fixedSize()
+                    .padding(.horizontal, 4).padding(.vertical, 1)
+                    .background(r.fam == "N" ? Color.primary.opacity(0.18) : Color.primary.opacity(0.07), in: RoundedRectangle(cornerRadius: 3))
+            }
+        }
     }
 
     private var subtitle: String {

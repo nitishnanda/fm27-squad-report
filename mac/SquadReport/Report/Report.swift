@@ -30,6 +30,7 @@ struct Report: Decodable, Sendable {
     let attributeAbbr: [String: String]?
     let training: [TrainingTeam]?
     let trainingAdvice: TrainingAdvice?
+    let trainingHowto: TrainingHowto?
     let plans: [TrainingPlan]?
 
     /// "Work Rate" for "work_rate". Dictionary keys may come back camelCased by the decoder, so both are tried.
@@ -277,6 +278,30 @@ struct TrainingAdvice: Decodable, Sendable {
     }
     let changes: [Change]
     let keep: [String]
+    /// Youngsters with low Determination and senior pros with high Determination (nil when there aren't both).
+    let mentoring: Mentoring?
+
+    struct Mentoring: Decodable, Sendable {
+        struct Person: Decodable, Sendable, Identifiable {
+            let uid: Int
+            let name: String
+            let age: Int?
+            let determination: Int?
+            var id: Int { uid }
+        }
+        let young: [Person]
+        let seniors: [Person]
+        let advice: String
+        let why: String
+    }
+}
+
+/// "Doing it yourself next time": the web app's explainer, sent word for word.
+struct TrainingHowto: Decodable, Sendable {
+    struct Step: Decodable, Sendable, Hashable { let title: String; let text: String }
+    struct Cheat: Decodable, Sendable, Hashable { let problem: String; let sessions: String; let focus: String }
+    let steps: [Step]
+    let cheat: [Cheat]
 }
 
 struct TrainingPlan: Decodable, Sendable, Identifiable {

@@ -2307,6 +2307,41 @@ def team_training_advice(R, first: dict | None) -> tuple[list[dict], list[str]]:
     return recs, keep
 
 
+MENTOR_ADVICE = ("Put them in a mentoring group together (Training → Mentoring → Create New Mentoring Group). Mentoring rubs "
+                 "personality off on the youngsters over months, and it costs nothing in training time.")
+
+
+def mentoring_groups(R) -> tuple[list, list]:
+    """Young players (21 and under) with Determination 11 or less, and senior pros (26+, not youth) with 16 or more.
+    Determination is visible, so naming it is fine. Up to 8 youngsters and the 4 most determined pros."""
+    low = [p for p in R["players"] if p["where"] == "squad" and (p["age"] or 99) <= 21
+           and (p["attrs"].get("determination") or 20) <= 11][:8]
+    high = sorted((p for p in R["players"] if p["where"] == "squad" and not p["youth"] and (p["age"] or 0) >= 26
+                   and (p["attrs"].get("determination") or 0) >= 16), key=lambda p: -p["attrs"]["determination"])[:4]
+    return (low, high) if low and high else ([], [])
+
+
+# "Doing it yourself next time": how the training advice is worked out (shown by the web app and the Mac app)
+HOWTO_STEPS = [
+    ("Find the problem in the numbers, not the attributes.", "Tactical fit → How it's going lists what's in the bottom half of the league. That's what training should fix."),
+    ("Match it to a session", "with the cheat sheet below. Team problems (shape, pressing, chance creation) are team sessions; player problems (finishing, heading) are individual focus."),
+    ("Swap, don't stack.", "Every day already has three sessions. Replace a session of the same category, ideally one behind something you're already top of the league for. Adding load is how players get injured."),
+    ("Keep the match rhythm.", "Recovery the day after a match, Match Preparation the day before, anything heavy two days after a match. No extra physical work in two-match weeks."),
+    ("Check FM's own warning.", "Each schedule shows its effect on injury risk, fatigue and condition — if a change turns those red, undo it."),
+    ("Individual focus = the lowest trainable attribute that matters", "for his role or your style, preferring one behind a weak number of his. One at a time."),
+    ("Re-check in a month.", "Refresh this report and see if the number moved."),
+]
+HOWTO_CHEAT = [
+    ("Opponents pass through your press", "Out Of Possession weeks: Pressing Intensity, Pressing Trap, Out Of Possession Shape", "Anticipation, Work Rate, Aggression (only if you're not already giving away lots of fouls)"),
+    ("Lots of shots, few clear-cut chances", "Chance Creation; Final Third as the pre-match session", "Vision, Passing, Off the Ball"),
+    ("Not finishing chances (goals below xG)", "Mostly individual; Attacking Ball Work in one-match weeks", "Finishing, Composure"),
+    ("Losing the ball / low pass completion", "Possession Ball Work, Passing Style, Build Up", "First Touch, Composure, Passing, Decisions"),
+    ("Losing headers / set pieces", "Corners and Free Kicks as Match Preparation sessions", "Heading, Jumping Reach, Strength"),
+    ("Being outrun late in games", "Conditioning, two days after a match, one-match weeks only", "Stamina (Natural Fitness can't really be trained)"),
+    ("Conceding chances in behind", "Line of Engagement, Out Of Possession Shape; Defensive Positioning pre-match", "Positioning, Concentration, Pace"),
+]
+
+
 def training_page(R) -> str:
     T = R.get("training") or []
     first = next((t for t in T if t["name"] == "First team"), T[0] if T else None)
@@ -2393,25 +2428,17 @@ def training_page(R) -> str:
     prospects_html = "".join(prow)
 
     # mentoring: low determination youngsters + high determination senior pros
-    low_det = [p for p in R["players"] if p["where"] == "squad" and (p["age"] or 99) <= 21 and (p["attrs"].get("determination") or 20) <= 11]
-    high_det = sorted((p for p in R["players"] if p["where"] == "squad" and not p["youth"] and (p["age"] or 0) >= 26
-                       and (p["attrs"].get("determination") or 0) >= 16), key=lambda p: -p["attrs"]["determination"])[:4]
+    low_det, high_det = mentoring_groups(R)
     mentor = ""
     if low_det and high_det:
         mentor = f"""<section id="tr-mentor"><h2>Mentoring <span class="h2sub">Determination is part of {E(TACTICAL_STYLE.lower())} but can't be trained — mentoring is FM's way to shape it</span></h2>
-  <div class="explain">Young players with low Determination: <b>{E(", ".join(f"{short(p['name'])} ({p['attrs']['determination']})" for p in low_det[:8]))}</b>.
+  <div class="explain">Young players with low Determination: <b>{E(", ".join(f"{short(p['name'])} ({p['attrs']['determination']})" for p in low_det))}</b>.
   Senior pros with high Determination: <b>{E(", ".join(f"{short(p['name'])} ({p['attrs']['determination']})" for p in high_det))}</b>.
-  Put them in a mentoring group together (Training → Mentoring → Create New Mentoring Group). Mentoring rubs personality off on
-  the youngsters over months, and it costs nothing in training time.</div></section>"""
+  {E(MENTOR_ADVICE)}</div></section>"""
 
-    cheat = [("Opponents pass through your press", "Out Of Possession weeks: Pressing Intensity, Pressing Trap, Out Of Possession Shape", "Anticipation, Work Rate, Aggression (only if you're not already giving away lots of fouls)"),
-             ("Lots of shots, few clear-cut chances", "Chance Creation; Final Third as the pre-match session", "Vision, Passing, Off the Ball"),
-             ("Not finishing chances (goals below xG)", "Mostly individual; Attacking Ball Work in one-match weeks", "Finishing, Composure"),
-             ("Losing the ball / low pass completion", "Possession Ball Work, Passing Style, Build Up", "First Touch, Composure, Passing, Decisions"),
-             ("Losing headers / set pieces", "Corners and Free Kicks as Match Preparation sessions", "Heading, Jumping Reach, Strength"),
-             ("Being outrun late in games", "Conditioning, two days after a match, one-match weeks only", "Stamina (Natural Fitness can't really be trained)"),
-             ("Conceding chances in behind", "Line of Engagement, Out Of Possession Shape; Defensive Positioning pre-match", "Positioning, Concentration, Pace")]
+    cheat = HOWTO_CHEAT
     cheat_html = "".join(f"<tr><td>{E(a)}</td><td>{E(b)}</td><td>{E(c)}</td></tr>" for a, b, c in cheat)
+    steps_html = "".join(f"<li><b>{E(t)}</b> {E(x)}</li>" for t, x in HOWTO_STEPS)
     jumps = [("tr-teams", "Training in place"), ("tr-change", "What to change"), ("tr-indiv", "Individual training")]
     if prospects_html:
         jumps.append(("tr-prospects", "Prospects"))
@@ -2438,14 +2465,7 @@ def training_page(R) -> str:
   <tbody>{prospects_html}</tbody></table></div></section>''' if prospects_html else ''}
 {mentor}
 <section id="tr-howto"><details class="fold"><summary><h2>Doing it yourself next time <span class="h2sub">how the advice above is worked out · seven steps and a cheat sheet</span></h2></summary>
-  <div class="explain"><ol class="steps">
-    <li><b>Find the problem in the numbers, not the attributes.</b> Tactical fit → How it's going lists what's in the bottom half of the league. That's what training should fix.</li>
-    <li><b>Match it to a session</b> with the cheat sheet below. Team problems (shape, pressing, chance creation) are team sessions; player problems (finishing, heading) are individual focus.</li>
-    <li><b>Swap, don't stack.</b> Every day already has three sessions. Replace a session of the same category, ideally one behind something you're already top of the league for. Adding load is how players get injured.</li>
-    <li><b>Keep the match rhythm.</b> Recovery the day after a match, Match Preparation the day before, anything heavy two days after a match. No extra physical work in two-match weeks.</li>
-    <li><b>Check FM's own warning.</b> Each schedule shows its effect on injury risk, fatigue and condition — if a change turns those red, undo it.</li>
-    <li><b>Individual focus = the lowest trainable attribute that matters</b> for his role or your style, preferring one behind a weak number of his. One at a time.</li>
-    <li><b>Re-check in a month.</b> Refresh this report and see if the number moved.</li></ol></div>
+  <div class="explain"><ol class="steps">{steps_html}</ol></div>
   <div class="ftable cheat"><table><thead><tr><th>If this isn't working</th><th>Team sessions</th><th>Individual focus</th></tr></thead><tbody>{cheat_html}</tbody></table></div></details></section>"""
 
 
@@ -5855,7 +5875,21 @@ def _training_advice_json(R: dict) -> dict:
         recs, keep = team_training_advice(R, first)
     except Exception:  # noqa: BLE001 - the rest of the report still works without it
         recs, keep = [], []
-    return {"changes": [{k: r.get(k) for k in ("title", "why", "do", "safe")} for r in recs], "keep": list(keep)}
+    low, high = mentoring_groups(R)
+    mentoring = None
+    if low and high:
+        who = lambda ps: [{"uid": p["uid"], "name": p["name"], "age": p["age"],  # noqa: E731
+                           "determination": p["attrs"].get("determination")} for p in ps]
+        mentoring = {"young": who(low), "seniors": who(high), "advice": MENTOR_ADVICE,
+                     "why": f"Determination is part of {TACTICAL_STYLE.lower()} but can't be trained: mentoring is FM's way to shape it."}
+    return {"changes": [{k: r.get(k) for k in ("title", "why", "do", "safe")} for r in recs], "keep": list(keep),
+            "mentoring": mentoring}
+
+
+def _training_howto_json() -> dict:
+    """The "Doing it yourself next time" explainer, word for word what the web app shows."""
+    return {"steps": [{"title": t, "text": x} for t, x in HOWTO_STEPS],
+            "cheat": [{"problem": a, "sessions": b, "focus": c} for a, b, c in HOWTO_CHEAT]}
 
 
 def _plans_json(R: dict) -> list:
@@ -5932,6 +5966,7 @@ def report_json(R: dict) -> dict:
         "attribute_labels": {k: attr_label(k) for k in sorted(NEEDED_ATTRS) if k not in HIDDEN_ATTRS},
         "attribute_abbr": {k: v for k, v in ATTR_ABBR.items() if k not in HIDDEN_ATTRS},
         "training_advice": _training_advice_json(R),
+        "training_howto": _training_howto_json(),
         "plans": _plans_json(R),
         "training": [{**{k: _plain(t.get(k)) for k in ("slot", "name", "current", "week", "upcoming", "rotation", "recent_codes",
                                                         "recent_weeks", "grid")}, "sessions": _session_names(t)}

@@ -8,16 +8,28 @@ struct TrainingView: View {
 
     enum Part: String, CaseIterable, Identifiable {
         case schedule = "Schedule", change = "What to change", individual = "Individual", prospects = "Prospects"
+        case mentoring = "Mentoring"
         var id: String { rawValue }
     }
     @State private var part: Part = .schedule
     @AppStorage("showPotential") private var showPotential = true
 
+    /// Prospects only with potential stars on; Mentoring only when there's a group to suggest.
+    private var parts: [Part] {
+        Part.allCases.filter { p in
+            switch p {
+            case .prospects: showPotential
+            case .mentoring: report.trainingAdvice?.mentoring != nil
+            default: true
+            }
+        }
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             HStack {
                 Picker("Part", selection: $part) {
-                    ForEach(Part.allCases.filter { showPotential || $0 != .prospects }) { Text($0.rawValue).tag($0) }
+                    ForEach(parts) { Text($0.rawValue).tag($0) }
                 }
                     .pickerStyle(.segmented).labelsHidden().fixedSize()
                 Spacer()
@@ -31,6 +43,7 @@ struct TrainingView: View {
                     case .change: Changes(report: report)
                     case .individual: Plans(report: report, prospects: false)
                     case .prospects: Plans(report: report, prospects: true)
+                    case .mentoring: MentoringPart(report: report)
                     }
                 }
                 .padding(24)
@@ -207,6 +220,7 @@ private struct Changes: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .panel(10)
             }
+            if let howto = report.trainingHowto { HowTo(howto: howto) }
         }
     }
 
@@ -307,5 +321,113 @@ private struct Plans: View {
                 ? "\(report.label(a.attribute)) \(a.value) can't really be trained: mentoring helps"
                 : "\(report.label(a.attribute)) \(a.value) is largely fixed"
         }.joined(separator: "; ") + "."
+    }
+}
+
+// MARK: - mentoring
+
+/// Youngsters with low Determination next to senior pros with high Determination, and how to pair them up in FM.
+private struct MentoringPart: View {
+    let report: Report
+
+    var body: some View {
+        if let m = report.trainingAdvice?.mentoring {
+            VStack(alignment: .leading, spacing: 16) {
+                SectionTitle("Mentoring", sub: m.why)
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 300), spacing: 12, alignment: .top)], spacing: 12) {
+                    group("Young players with low Determination", "21 and under, Determination 11 or less", m.young,
+                          tint: Palette.verdict("amber"))
+                    group("Senior pros with high Determination", "26 and over, Determination 16 or more", m.seniors,
+                          tint: Palette.transferIn)
+                }
+                Label {
+                    Text(m.advice).fixedSize(horizontal: false, vertical: true)
+                } icon: {
+                    Image(systemName: "person.2.fill").foregroundStyle(Palette.brandHigh)
+                }
+                .font(.callout)
+                .padding(14)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .panel(10)
+            }
+        }
+    }
+
+    private func group(_ title: String, _ sub: String, _ people: [TrainingAdvice.Mentoring.Person], tint: Color) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title).font(.headline)
+            Text(sub).font(.caption).foregroundStyle(.secondary)
+            ForEach(people) { p in
+                HStack {
+                    Text(p.name).fontWeight(.semibold)
+                    if let age = p.age { Text("\(age)").foregroundStyle(.secondary).monospacedDigit() }
+                    Spacer()
+                    if let d = p.determination {
+                        Text("Determination \(d)").font(.caption.weight(.semibold)).monospacedDigit()
+                            .padding(.horizontal, 7).padding(.vertical, 2)
+                            .background(tint.opacity(0.18), in: Capsule())
+                            .foregroundStyle(tint)
+                    }
+                }
+                .accessibilityElement(children: .combine)
+            }
+        }
+        .padding(14)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .panelFill()
+        .overlay(alignment: .leading) { Rectangle().fill(tint).frame(width: 3) }
+        .clipShape(RoundedRectangle(cornerRadius: 10))
+    }
+}
+
+// MARK: - doing it yourself
+
+/// The web's folded "Doing it yourself next time": seven steps and a cheat sheet, from the feed.
+private struct HowTo: View {
+    let howto: TrainingHowto
+    @State private var open = false
+
+    var body: some View {
+        DisclosureGroup(isExpanded: $open) {
+            VStack(alignment: .leading, spacing: 16) {
+                VStack(alignment: .leading, spacing: 8) {
+                    ForEach(Array(howto.steps.enumerated()), id: \.offset) { i, step in
+                        HStack(alignment: .firstTextBaseline, spacing: 10) {
+                            Text("\(i + 1)").font(.callout.weight(.heavy)).monospacedDigit().foregroundStyle(.secondary)
+                                .frame(width: 18, alignment: .trailing)
+                            (Text(step.title).fontWeight(.semibold) + Text(" " + step.text))
+                                .font(.callout).fixedSize(horizontal: false, vertical: true)
+                        }
+                    }
+                }
+                Grid(alignment: .topLeading, horizontalSpacing: 16, verticalSpacing: 8) {
+                    GridRow {
+                        Text("If this isn't working"); Text("Team sessions"); Text("Individual focus")
+                    }
+                    .font(.caption.weight(.heavy)).foregroundStyle(.secondary)
+                    Divider().gridCellUnsizedAxes(.horizontal)
+                    ForEach(howto.cheat, id: \.self) { row in
+                        GridRow {
+                            Text(row.problem).fontWeight(.semibold)
+                            Text(row.sessions)
+                            Text(row.focus)
+                        }
+                        .font(.callout)
+                        .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
+                .padding(14)
+                .panel(10)
+            }
+            .padding(.top, 10)
+        } label: {
+            HStack(alignment: .firstTextBaseline, spacing: 8) {
+                Text("Doing it yourself next time").font(.headline)
+                Text("how the advice above is worked out · seven steps and a cheat sheet").font(.callout).foregroundStyle(.secondary)
+            }
+            .contentShape(Rectangle())
+            .onTapGesture { withAnimation(.snappy) { open.toggle() } }
+        }
+        .padding(.top, 6)
     }
 }

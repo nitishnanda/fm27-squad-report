@@ -8802,6 +8802,131 @@
    "Opponents' final-third passes (1st of 20): keeping teams pinned back — don't take out the sessions behind it.",
    "xG against (3rd of 20): opponents barely get a sniff — don't take out the sessions behind it.",
    "Goals conceded (1st of 20): hard to score against — don't take out the sessions behind it."
+  ],
+  "mentoring": {
+   "young": [
+    {
+     "uid": 1007,
+     "name": "Jérémy Jacquet",
+     "age": 21,
+     "determination": 11
+    },
+    {
+     "uid": 1019,
+     "name": "Rio Ngumoha",
+     "age": 18,
+     "determination": 11
+    },
+    {
+     "uid": 1025,
+     "name": "Trey Nyoni",
+     "age": 19,
+     "determination": 8
+    },
+    {
+     "uid": 1027,
+     "name": "Amara Nallo",
+     "age": 19,
+     "determination": 8
+    },
+    {
+     "uid": 1028,
+     "name": "Kieran Morrison",
+     "age": 18,
+     "determination": 9
+    },
+    {
+     "uid": 1029,
+     "name": "Ranel Young",
+     "age": 17,
+     "determination": 10
+    },
+    {
+     "uid": 1030,
+     "name": "Josh Davidson",
+     "age": 17,
+     "determination": 7
+    }
+   ],
+   "seniors": [
+    {
+     "uid": 1014,
+     "name": "Dominik Szoboszlai",
+     "age": 26,
+     "determination": 16
+    }
+   ],
+   "advice": "Put them in a mentoring group together (Training → Mentoring → Create New Mentoring Group). Mentoring rubs personality off on the youngsters over months, and it costs nothing in training time.",
+   "why": "Determination is part of gegenpress but can't be trained: mentoring is FM's way to shape it."
+  }
+ },
+ "training_howto": {
+  "steps": [
+   {
+    "title": "Find the problem in the numbers, not the attributes.",
+    "text": "Tactical fit → How it's going lists what's in the bottom half of the league. That's what training should fix."
+   },
+   {
+    "title": "Match it to a session",
+    "text": "with the cheat sheet below. Team problems (shape, pressing, chance creation) are team sessions; player problems (finishing, heading) are individual focus."
+   },
+   {
+    "title": "Swap, don't stack.",
+    "text": "Every day already has three sessions. Replace a session of the same category, ideally one behind something you're already top of the league for. Adding load is how players get injured."
+   },
+   {
+    "title": "Keep the match rhythm.",
+    "text": "Recovery the day after a match, Match Preparation the day before, anything heavy two days after a match. No extra physical work in two-match weeks."
+   },
+   {
+    "title": "Check FM's own warning.",
+    "text": "Each schedule shows its effect on injury risk, fatigue and condition — if a change turns those red, undo it."
+   },
+   {
+    "title": "Individual focus = the lowest trainable attribute that matters",
+    "text": "for his role or your style, preferring one behind a weak number of his. One at a time."
+   },
+   {
+    "title": "Re-check in a month.",
+    "text": "Refresh this report and see if the number moved."
+   }
+  ],
+  "cheat": [
+   {
+    "problem": "Opponents pass through your press",
+    "sessions": "Out Of Possession weeks: Pressing Intensity, Pressing Trap, Out Of Possession Shape",
+    "focus": "Anticipation, Work Rate, Aggression (only if you're not already giving away lots of fouls)"
+   },
+   {
+    "problem": "Lots of shots, few clear-cut chances",
+    "sessions": "Chance Creation; Final Third as the pre-match session",
+    "focus": "Vision, Passing, Off the Ball"
+   },
+   {
+    "problem": "Not finishing chances (goals below xG)",
+    "sessions": "Mostly individual; Attacking Ball Work in one-match weeks",
+    "focus": "Finishing, Composure"
+   },
+   {
+    "problem": "Losing the ball / low pass completion",
+    "sessions": "Possession Ball Work, Passing Style, Build Up",
+    "focus": "First Touch, Composure, Passing, Decisions"
+   },
+   {
+    "problem": "Losing headers / set pieces",
+    "sessions": "Corners and Free Kicks as Match Preparation sessions",
+    "focus": "Heading, Jumping Reach, Strength"
+   },
+   {
+    "problem": "Being outrun late in games",
+    "sessions": "Conditioning, two days after a match, one-match weeks only",
+    "focus": "Stamina (Natural Fitness can't really be trained)"
+   },
+   {
+    "problem": "Conceding chances in behind",
+    "sessions": "Line of Engagement, Out Of Possession Shape; Defensive Positioning pre-match",
+    "focus": "Positioning, Concentration, Pace"
+   }
   ]
  },
  "plans": [

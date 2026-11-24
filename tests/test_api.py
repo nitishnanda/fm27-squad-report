@@ -73,6 +73,24 @@ class ReportJson(unittest.TestCase):
         self.assertIn("changes", self.J["training_advice"])
         self.assertEqual(self.J["style"]["keys"], list(fm.STYLE_KEYS))
 
+    def test_training_mentoring_and_howto(self):   # one rule, one text: the web page and the feed share them
+        m = self.J["training_advice"]["mentoring"]
+        low, high = fm.mentoring_groups(self.R)
+        if m is None:
+            self.assertFalse(low and high)
+        else:
+            self.assertEqual([p["uid"] for p in m["young"]], [p["uid"] for p in low])
+            self.assertEqual([p["uid"] for p in m["seniors"]], [p["uid"] for p in high])
+            self.assertTrue(all(p["age"] <= 21 and p["determination"] <= 11 for p in m["young"]))
+            self.assertTrue(all(p["age"] >= 26 and p["determination"] >= 16 for p in m["seniors"]))
+            self.assertLessEqual(len(m["young"]), 8)
+            self.assertLessEqual(len(m["seniors"]), 4)
+        howto = self.J["training_howto"]
+        self.assertEqual(len(howto["steps"]), 7)
+        self.assertEqual(len(howto["cheat"]), len(fm.HOWTO_CHEAT))
+        page = fm.training_page(self.R)
+        self.assertIn(fm.HOWTO_STEPS[0][0], page)   # the web shows the same words
+
     def test_familiarity_is_words_not_numbers(self):   # FM shows these words; the /20 ratings stay hidden
         words = {w for _, w in fm.FAMILIARITY_WORD} | {"ineffective"}
         for p in self.J["players"]:

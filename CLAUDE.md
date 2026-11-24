@@ -173,7 +173,7 @@ LW (AML/ML) IF/WMF · AM SS/AM · RW (AMR/MR) IW/WMF · ST CFD/CFD. `STYLE_KEYS`
   `com.squadreport.mac`.
 
 - Next for the Mac app: **Phase 6 in mac/PLAN.md** (web features it doesn't have yet: position filter, mentoring,
-  "Doing it yourself", removing scouting targets, picker filters, a status key; 3D XIs only if he wants).
+  "Doing it yourself", removing scouting targets, picker filters, a status key, the 3D XIs and all six looks; he asked for both).
 - Home page "Mac app" section (`mac_section()`, `MAC_SHOTS`, `MAC_FACTS`): appears only once `assets/mac-home.jpg` etc. exist.
   Those screenshots must come from the app's demo mode (`-demoReport mac/Fixtures/report.json`), never his real save,
   because the demo site is public. `.jpg` is in `ASSET_TYPES`; `_jpeg_size()` gives the img width/height.

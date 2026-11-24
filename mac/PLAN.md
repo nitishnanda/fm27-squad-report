@@ -161,11 +161,22 @@ Every web page has a native Mac page now, but these web features have no Mac ver
 6. **A status key.** The web app has a "Key" popover with every badge (transfer in/out, loan in/out, arranged, short and
    long injury, suspended, contract ending) and the N/A/C/X letters. The Mac app explains things on hover and Positions
    has its own key, but there's nowhere to see them all. A Help menu item or toolbar popover would do.
-7. Optional, ask him first: **Best XIs 3D view** (the web Flat/3D switch with the draggable `pitch3d()` pitch) and the
-   **Home hero pitch with an "Open best XIs" button**. The Mac Best XIs are flat only and the Mac Home hero has no pitch.
+7. **Best XIs 3D view (he wants it).** The web Flat/3D switch: two `pitch3d()` pitches you can drag to tilt and turn,
+   cards standing on the pitch. Add a Flat / 3D segmented control to Best XIs (remember the choice only when he clicks it,
+   like the web), and the same 3D pitch with an **"Open best XIs" button** in the Home hero (web `overview()`, "Your best
+   XI. Drag to rotate"). SwiftUI: `rotation3DEffect` + a drag gesture, with a sensible clamp on the angles; flat when
+   Reduce Motion is on.
+8. **All the web looks (he wants them).** The Mac app has Original + E (Glass + scoreboard). Add A Matchday programme,
+   B Floodlit glass, C Scoreboard and D Sticker album as `Theme`s, built from the web looks so they match:
+   `THEME_A`, `B_FRAME`/`B_DATA`/`B_PITCH`/`THEME_B_TOKENS`, `C_FRAME`/`C_DATA`/`THEME_C_TOKENS`, `THEME_D`, plus
+   `LIGHT_FIX` and `kit_on_light()` for the light ones (A and D: readable inks on paper, the club colour darkened for
+   paper). Fonts are the OFL files in `assets/font-*.woff2` (license in `assets/FONTS-LICENSE.txt`): Archivo,
+   Newsreader, Martian Mono (A), Bricolage, Hanken, JetBrains Mono (B), Geist, Geist Mono, Doto (C), Big Shoulders,
+   Schibsted Grotesk (D). Settings › Look lists all six with the web's names and one-line descriptions (`THEMES`), and
+   ⌘L / ⇧⌘L cycles like the web's L key. Check every page in each look at 900×600 and full screen (light looks in dark
+   mode too: they stay light), and keep the Doto decimal fix and the status colours distinct in every look.
 
-Left out on purpose (don't add): looks A–D (he picked Original + Glass for the Mac), the web home page / About, the
-`L` look shortcut, the Positions "U21" tag (the age column shows it), and the training "Focus" options (dropped idea).
+Left out on purpose (don't add): the web home page / About, the Positions "U21" tag (the age column shows it), and the training "Focus" options (dropped idea).
 When a part is done: screenshots in demo mode or the real save (never the Phone settings), tests, commit and push.
 
 ## What he does once

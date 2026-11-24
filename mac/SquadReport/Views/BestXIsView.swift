@@ -4,6 +4,9 @@ import SwiftUI
 /// Click a player for his card.
 struct BestXIsView: View {
     let report: Report
+    /// "3d" (the web's default) or "flat". Written only when he clicks the switch, like the web.
+    @AppStorage("xisView") private var view = "3d"
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         // Both pitches shrink to fit the window, so the whole XI is always on screen without scrolling.
@@ -12,13 +15,25 @@ struct BestXIsView: View {
             let tall = geo.size.height - pad * 2 - header - pitchTitle
             let width = max(220, min(tall * 0.68, (geo.size.width - pad * 2 - gap) / 2))
             VStack(alignment: .leading, spacing: 12) {
-                SectionTitle("Best XIs", sub: "\(report.formation.title) · rated for your roles in and out of possession · click a player for his card")
-                    .frame(height: header - 12, alignment: .bottomLeading)
-                HStack(alignment: .top, spacing: gap) {
-                    XIPitch(report: report, title: "Best XI", sub: "fully fit squad", xi: report.xi1).frame(width: width)
-                    XIPitch(report: report, title: "Second XI", sub: "from who's left", xi: report.xi2).frame(width: width)
+                HStack(alignment: .bottom) {
+                    SectionTitle("Best XIs", sub: "\(report.formation.title) · rated for your roles in and out of possession · click a player for his card")
+                    Spacer(minLength: 12)
+                    Picker("View", selection: $view) {
+                        Text("3D").tag("3d")
+                        Text("Flat").tag("flat")
+                    }
+                    .pickerStyle(.segmented).labelsHidden().fixedSize()
+                    .help(reduceMotion ? "3D lies flat while Reduce Motion is on" : "3D: drag a pitch to turn it. Flat shows every badge.")
                 }
-                .frame(maxWidth: .infinity, alignment: .center)
+                .frame(height: header - 12, alignment: .bottomLeading)
+                let threeD = view == "3d"
+                // the 3D pitches use the full half of the window; the flat ones keep the pitch's shape
+                let w = threeD ? (geo.size.width - pad * 2 - gap) / 2 : width
+                HStack(alignment: .top, spacing: gap) {
+                    XIPitch(report: report, title: "Best XI", sub: "fully fit squad", xi: report.xi1, threeD: threeD).frame(width: w)
+                    XIPitch(report: report, title: "Second XI", sub: "from who's left", xi: report.xi2, threeD: threeD).frame(width: w)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             }
             .padding(pad)
         }
@@ -30,6 +45,7 @@ private struct XIPitch: View {
     let title: String
     let sub: String
     let xi: [XISlot]
+    var threeD = false
 
     var body: some View {
         let rows = report.formation.rows
@@ -46,6 +62,10 @@ private struct XIPitch: View {
                         .help("Average of the eleven, empty slots count as 0")
                 }
             }
+            if threeD {
+                Pitch3D(report: report, xi: xi)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else {
             Pitch { size in
                 ForEach(Array(rows.enumerated()), id: \.offset) { i, row in
                     let slot = i < xi.count ? xi[i] : nil
@@ -53,6 +73,7 @@ private struct XIPitch: View {
                         .scaleEffect(min(1, size.width / 470))
                         .position(x: size.width * (row.x ?? 50) / 100, y: size.height * (row.y ?? 50) / 100)
                 }
+            }
             }
         }
         .accessibilityElement(children: .contain)
@@ -111,12 +132,13 @@ private struct PitchMarkings: View {
     }
 }
 
-/// One player on the pitch: slot, surname, stars. Click for his card.
-private struct PitchPlayer: View {
+/// One player on the pitch: slot, surname, stars. Click for his card (unless `interactive` is off, as on Home).
+struct PitchPlayer: View {
     let report: Report
     let row: Int
     let rowInfo: Formation.Row
     let player: Player?
+    var interactive = true
     @State private var showCard = false
     @Environment(\.theme) private var theme
 
@@ -125,7 +147,7 @@ private struct PitchPlayer: View {
         let rating = player?.rating(row: row)
         let statuses = player.map { PlayerStatus.of($0, today: report.gameDate) } ?? []
         Button {
-            if player != nil { showCard = true }
+            if player != nil && interactive { showCard = true }
         } label: {
             VStack(spacing: 3) {
                 Text(label)

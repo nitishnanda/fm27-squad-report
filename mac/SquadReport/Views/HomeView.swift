@@ -25,14 +25,21 @@ struct HomeView: View {
 private struct Hero: View {
     let report: Report
     @Environment(\.theme) private var theme
+    @Environment(AppModel.self) private var model
 
     var body: some View {
         let kit = Color(hex: report.club.kit)
         let ink = Color(hex: report.club.ink)
         let shape = RoundedRectangle(cornerRadius: theme.isGlass ? 26 : 14, style: .continuous)
+        // wide: the club on the left, your best XI on a 3D pitch on the right (the web's home band); narrower: no pitch
         ViewThatFits(in: .horizontal) {
-            HStack(alignment: .bottom, spacing: 32) { identity; Spacer(minLength: 0); league }
-            VStack(alignment: .leading, spacing: 24) { identity; league }
+            HStack(alignment: .center, spacing: 32) {
+                VStack(alignment: .leading, spacing: 22) { identity; league; openButton }
+                Spacer(minLength: 0)
+                heroPitch
+            }
+            HStack(alignment: .bottom, spacing: 32) { identity; Spacer(minLength: 0); VStack(alignment: .leading, spacing: 14) { league; openButton } }
+            VStack(alignment: .leading, spacing: 24) { identity; league; openButton }
         }
         .foregroundStyle(theme.isGlass ? Color.primary : ink)
         .padding(32)
@@ -57,6 +64,29 @@ private struct Hero: View {
         .clipShape(shape)
         .overlay(shape.strokeBorder(theme.isGlass ? Color.white.opacity(0.12) : .clear))
         .shadow(color: .black.opacity(theme.isGlass ? 0.5 : 0), radius: 40, y: 30)
+    }
+
+    private var openButton: some View {
+        Button {
+            model.go(.xis)
+        } label: {
+            Label("Open best XIs", systemImage: "arrow.right")
+                .labelStyle(.titleAndIcon)
+                .font(.callout.weight(.semibold))
+                .padding(.horizontal, 14).padding(.vertical, 7)
+                .background(.white.opacity(theme.isGlass ? 0.1 : 0.18), in: Capsule())
+                .overlay(Capsule().strokeBorder(.white.opacity(0.25)))
+                .contentShape(Capsule())
+        }
+        .buttonStyle(.plain)
+    }
+
+    private var heroPitch: some View {
+        VStack(spacing: 6) {
+            Pitch3D(report: report, xi: report.xi1, compact: true)
+                .frame(width: 460, height: 320)
+            Text("Your best XI. Drag to rotate.").font(.caption).opacity(0.8)
+        }
     }
 
     private var identity: some View {

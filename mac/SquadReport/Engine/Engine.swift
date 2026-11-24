@@ -65,6 +65,13 @@ final class Engine {
         if let source { start(source) }
     }
 
+    /// Try again, possibly from somewhere new (the project folder moved, say).
+    func retry(with source: Source) {
+        crashes.removeAll()
+        if case .failed = phase { phase = .idle }
+        if source != self.source { switchSource(to: source) } else { start(source) }
+    }
+
     /// Start ours again (a setting it reads at start changed). Someone else's engine is left alone.
     func restart() {
         guard source != nil, let process, process.isRunning else { return }
@@ -91,7 +98,13 @@ final class Engine {
     private func launch() async {
         guard let source, !launching, process?.isRunning != true else { return }
         launching = true
-        defer { launching = false }
+        await launch(source)
+        launching = false
+        // switched in Settings while that one was still getting ready: start the new one now
+        if self.source != source, process?.isRunning != true, !quitting { await launch() }
+    }
+
+    private func launch(_ source: Source) async {
         if (try? await client.status(timeout: 1.5)) != nil {
             phase = .attached
             return
@@ -105,6 +118,7 @@ final class Engine {
                 return
             }
             let python = await BundledEngine.prepare(root: root, importFrom: importFrom, report: progress)
+            guard self.source == source else { return }   // switched while getting ready
             spawn(python: python, script: BundledEngine.script(root), directory: BundledEngine.home,
                   environment: BundledEngine.environment())
         case .folder(let folder):
@@ -115,6 +129,7 @@ final class Engine {
                 phase = .failed(error.plainWords)
                 return
             }
+            guard self.source == source else { return }   // switched while getting ready
             let script = folder.appending(path: "fm27_squad_report.py")
             guard FileManager.default.fileExists(atPath: script.path) else {
                 phase = .failed("fm27_squad_report.py isn't in \(folder.lastPathComponent) any more. Choose the folder again (File › Choose Project Folder…).")

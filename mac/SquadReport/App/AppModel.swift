@@ -44,7 +44,20 @@ final class AppModel {
     func useFolderEngine(_ on: Bool) {
         UserDefaults.standard.set(on, forKey: Self.folderEngineKey)
         usesBundledEngine = BundledEngine.isAvailable && !on
+        refreshFolder()
         if let source = engineSource { engine.switchSource(to: source) }
+    }
+
+    /// "Try again": looks for a moved project folder first.
+    func retryEngine() {
+        refreshFolder()
+        if let source = engineSource { engine.retry(with: source) } else { engine.retry() }
+    }
+
+    /// The folder was moved or renamed since launch: follow the bookmark to where it is now.
+    func refreshFolder() {
+        if let folder, FileManager.default.fileExists(atPath: folder.appending(path: "fm27_squad_report.py").path) { return }
+        folder = Self.restoreFolder()
     }
 
     // MARK: - navigation

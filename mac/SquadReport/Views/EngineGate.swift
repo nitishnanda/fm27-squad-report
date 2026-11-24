@@ -10,7 +10,7 @@ struct EngineGate: View {
         switch model.engine.phase {
         case .failed(let why):
             ProblemView(title: "The engine isn't running", message: why,
-                        action: ("Try again", { model.engine.retry() }))
+                        action: ("Try again", { model.retryEngine() }))
         case .preparing(let text):
             Working(title: "Setting up", detail: text,
                     note: "The app keeps its own copy of the save reader, so this only takes a while the first time.")

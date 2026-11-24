@@ -86,6 +86,7 @@ private struct GeneralSettings: View {
             }
         }
         .formStyle(.grouped)
+        .onAppear { model.refreshFolder() }
         .task { await refreshNotifications() }
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
             Task { await refreshNotifications() }   // back from System Settings

@@ -117,7 +117,7 @@ private struct Banner: View {
                 Image(systemName: "exclamationmark.triangle.fill").foregroundStyle(Palette.verdict("amber"))
                 Text("Showing your last report. \(why)").lineLimit(2)
                 Spacer()
-                Button("Try again") { model.engine.retry() }
+                Button("Try again") { model.retryEngine() }
             }
             .font(.callout)
             .padding(.horizontal, 16).padding(.vertical, 7)

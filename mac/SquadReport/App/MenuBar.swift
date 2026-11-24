@@ -21,7 +21,7 @@ struct MenuBarMenu: View {
         .keyboardShortcut("o")
         Button("Reload Report") { model.store.reload() }
         if case .failed = model.engine.phase {
-            Button("Start the Engine Again") { model.engine.retry() }
+            Button("Start the Engine Again") { model.retryEngine() }
         }
         Divider()
         SettingsLink { Text("Settings…") }

@@ -5,6 +5,7 @@ tabbed HTML report. Everything is in `fm27_squad_report.py` (one file, ~5,300 li
 session; these notes carry that context over.
 
 ## How it runs
+- The project lives in `~/fm27-squad-report` (out of ~/Downloads, which macOS guards; the Mac app follows it by bookmark).
 - `Run Squad Report.command` creates `.venv`, installs/upgrades `fmsave` (PyPI, reads FM26/27 saves), runs the script.
 - Default is **live mode**: a server on `http://localhost:8027`. A watcher rebuilds when a newer save
   appears (waits `LIVE_SETTLE_SECONDS` after the save is written) and **restarts itself when this script changes**

@@ -1,0 +1,43 @@
+<svg xmlns="http://w3.org" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <linearGradient id="boardFill" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.24" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.06" />
+    </linearGradient>
+    <linearGradient id="boardRim" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.72" />
+      <stop offset="50%" stop-color="#FFFFFF" stop-opacity="0.20" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.45" />
+    </linearGradient>
+  </defs>
+
+  <g transform="rotate(-5 512 532)">
+    <!-- Main Rounded Glass Clipboard Slab -->
+    <rect
+      x="244" y="216"
+      width="536" height="636"
+      rx="72"
+      fill="url(#boardFill)"
+      stroke="url(#boardRim)"
+      stroke-width="7"
+    />
+
+    <!-- Subtle Recessed Pitch Halfway Line & Circle -->
+    <line
+      x1="284" y1="544"
+      x2="740" y2="544"
+      stroke="#FFFFFF"
+      stroke-opacity="0.22"
+      stroke-width="8"
+      stroke-linecap="round"
+    />
+    <circle
+      cx="512" cy="544"
+      r="76"
+      fill="none"
+      stroke="#FFFFFF"
+      stroke-opacity="0.22"
+      stroke-width="8"
+    />
+  </g>
+</svg>

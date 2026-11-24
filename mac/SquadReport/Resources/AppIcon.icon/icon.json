@@ -9,17 +9,12 @@
     {
       "layers" : [
         {
-          "image-name" : "SVG Image 17.svg",
-          "name" : "SVG Image 17"
+          "image-name" : "SVG Image 31.svg",
+          "name" : "SVG Image 31"
         },
         {
-          "image-name" : "SVG Image 13.svg",
-          "name" : "SVG Image 13"
-        },
-        {
-          "fill" : "automatic",
-          "image-name" : "SVG Image 12.svg",
-          "name" : "SVG Image 12"
+          "image-name" : "SVG Image 29.svg",
+          "name" : "SVG Image 29"
         }
       ],
       "shadow" : {

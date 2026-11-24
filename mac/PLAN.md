@@ -137,6 +137,37 @@ a search sheet that adds them via `POST /scouting`, Swift port of the Hungarian 
 - Settings › General › Engine: "Run the engine from a project folder instead" switches back to the old way (the folder's
   script and .venv), for working on the script. The .command still works and still uses the project folder's files.
 
+## Phase 6: match the web app (from a code comparison of the web app and the Mac app, 24 Nov 2026)
+
+Every web page has a native Mac page now, but these web features have no Mac version yet. Checked against
+`fm27_squad_report.py` (the web app) and `mac/SquadReport`. In order of how much he'd notice:
+
+1. **Squad list: filter by position.** The web squad list has position chips (GK, LB, CB, …, ST) with "any of these" /
+   "all of these" and "Clear filters", on top of the status filters and search. The Mac squad list has status filters
+   and search only. Use `positions.natural` + `positions.accomplished` from the feed.
+2. **Training: Mentoring.** Web `training_page()` (`tr-mentor`): when the squad has young players (≤21) with
+   Determination ≤11 and senior pros (26+, not youth) with Determination ≥16, it names both groups (up to 8 and 4) and says
+   how to set up a mentoring group (Training → Mentoring → Create New Mentoring Group). Determination is visible, so it's
+   allowed. Add it to the feed (`training_advice.mentoring`) so the rule lives in Python once, and show it as its own part.
+3. **Training: "Doing it yourself next time".** Web `tr-howto`: a folded explainer, "how the advice above is worked out
+   · seven steps and a cheat sheet" (symptom → which weeks/sessions → which attributes). Static text: send it in the feed
+   (`training_howto`) rather than copying it, so the two can't drift. Show it folded (DisclosureGroup).
+4. **Sandbox: remove a scouting target.** The web Sandbox has a × on targets that came from scouting.txt ("Remove from
+   scouting.txt"), which POSTs `/scouting` `{"action": "remove", "name": …}`. The Mac app can add targets but not remove
+   them. Targets from FM's Squad Planner can't be removed this way (the save controls those), same as the web.
+5. **Sandbox player search: position and age filters.** The web picker has a position and an age filter (`GET /players`
+   takes `pos` and `age`). The Mac search is name/club only. Keep his rule: public facts only (age, positions, club),
+   ordered by name match, never by quality.
+6. **A status key.** The web app has a "Key" popover with every badge (transfer in/out, loan in/out, arranged, short and
+   long injury, suspended, contract ending) and the N/A/C/X letters. The Mac app explains things on hover and Positions
+   has its own key, but there's nowhere to see them all. A Help menu item or toolbar popover would do.
+7. Optional, ask him first: **Best XIs 3D view** (the web Flat/3D switch with the draggable `pitch3d()` pitch) and the
+   **Home hero pitch with an "Open best XIs" button**. The Mac Best XIs are flat only and the Mac Home hero has no pitch.
+
+Left out on purpose (don't add): looks A–D (he picked Original + Glass for the Mac), the web home page / About, the
+`L` look shortcut, the Positions "U21" tag (the age column shows it), and the training "Focus" options (dropped idea).
+When a part is done: screenshots in demo mode or the real save (never the Phone settings), tests, commit and push.
+
 ## What he does once
 
 1. Install Xcode, then sign into his Apple ID (Xcode → Settings → Accounts).

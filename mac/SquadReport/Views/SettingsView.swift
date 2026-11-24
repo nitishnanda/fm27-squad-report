@@ -120,7 +120,7 @@ private struct LookSettings: View {
 
     var body: some View {
         Form {
-            Picker("Look", selection: $lookName) {
+            Picker("Look", selection: $lookName.animation(Motion.look)) {   // fades instead of snapping
                 ForEach(Look.allCases) { look in
                     VStack(alignment: .leading, spacing: 2) {
                         Text(look.title)

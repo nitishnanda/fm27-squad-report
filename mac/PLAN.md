@@ -185,7 +185,15 @@ Every web page has a native Mac page now, but these web features have no Mac ver
 Left out on purpose (don't add): the web home page / About, the Positions "U21" tag (the age column shows it), and the training "Focus" options (dropped idea).
 When a part is done: screenshots in demo mode or the real save (never the Phone settings), tests, commit and push.
 
-## Phase 7: motion (after Phase 6, so the looks and 3D pitch exist)
+## Phase 7 ✅ done: motion (after Phase 6, so the looks and 3D pitch exist)
+
+Done: all durations in `Motion` (Views/Components/Motion.swift), all off with Reduce Motion. 1 `PageEntrance`: a new page
+fades in and rises 10 pt over 0.25 s (on appear, so the old page never lingers on top) · 2 the squad table animates on any
+filter change · 3 `LoaderBody`: pitch lines draw in, a scan line sweeps, the current step's arc spins, done steps pop a
+tick; `ClubWipe` slides the club colour away when the first report arrives · 4 `PulseDot` on the status pill while a save is
+read · 5 looks fade (Settings, ⌘L / ⇧⌘L, and `Themed` animates on the look) · 6 Back / Forward toolbar buttons and ⌘[ / ⌘]
+(page history in AppModel); previous/next page in a section moved to ⌥⌘[ / ⌥⌘]. Checking motion: launch with
+`-slowMotion 10` (everything 10x slower), `-demoLoader YES` (plays the loader and the wipe in demo mode), `-demoWipe YES`.
 
 The web app animates a lot more than the Mac app, which only animates the Sandbox and "Show all" on Positions and
 Tactical fit. Port these, kept quick and subtle (a Mac app should feel calmer than a website), and turn every one off

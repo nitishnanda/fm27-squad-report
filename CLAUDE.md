@@ -161,6 +161,9 @@ LW (AML/ML) IF/WMF · AM SS/AM · RW (AMR/MR) IW/WMF · ST CFD/CFD. `STYLE_KEYS`
   macOS draws category labels above each horizontal bar, so StatsView hides the y axis and labels bars itself with
   `.annotation(position: .top, alignment: .leading)`. Attribute dictionaries may come back camelCased from the decoder:
   use `Report.label/abbr` and `Player.attribute`, which try both spellings.
+  Phase 7: motion lives in `Motion` (durations, `-slowMotion N` stretches them for checking) and is off with Reduce Motion;
+  the page entrance is an on-appear fade (`PageEntrance`), not a transition, so pages never overlap. Demo switches for the
+  loader: `-demoLoader YES`, `-demoWipe YES`. A `-look X` launch argument overrides the saved look (⌘L can't change it then).
   Phase 6: all six web looks are `Look` cases (original, programme A, floodlit B, scoreboard C, sticker D, glass E; the
   stored value "glass" kept its meaning). `Theme` describes a look from the web tokens: `scheme` (A/D light, B/C/E dark),
   `panelStyle`, `heroStyle`, `page` background (D wraps every page in a white sticker sheet on the mown pitch), fonts per

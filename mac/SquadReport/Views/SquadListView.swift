@@ -103,6 +103,12 @@ struct SquadListView: View {
     nonisolated static let filterPositions = ["GK", "LB", "LWB", "CB", "RB", "RWB", "DM", "CM", "LM", "RM", "AM", "LW", "RW", "ST"]
     @State private var positions: Set<String> = []
     @State private var allPositions = false     // "all of these" instead of "any of these"
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    /// Changes whenever any filter does, so the table animates rows in and out instead of jumping.
+    private var filterSignature: String {
+        "\(show.rawValue)|\(positions.sorted())|\(allPositions)|\(youth)|\(search)"
+    }
     @AppStorage("showPotential") private var showPotential = true
     @State private var show: Show = .all
     @State private var youth = false
@@ -154,6 +160,7 @@ struct SquadListView: View {
                 }
             } else {
                 table(shown)
+                    .animation(reduceMotion ? nil : Motion.filter, value: filterSignature)
             }
         }
         .searchable(text: $search, placement: .toolbar, prompt: "Search the squad")
@@ -212,7 +219,7 @@ struct SquadListView: View {
                 ForEach(Self.filterPositions, id: \.self) { pos in
                     let on = positions.contains(pos)
                     Button {
-                        withAnimation(.snappy) { if on { positions.remove(pos) } else { positions.insert(pos) } }
+                        if on { positions.remove(pos) } else { positions.insert(pos) }
                     } label: {
                         Text(pos).font(.caption.weight(.semibold)).monospaced()
                             .padding(.horizontal, 8).padding(.vertical, 3)
@@ -234,7 +241,7 @@ struct SquadListView: View {
             .disabled(positions.count < 2)
             .help("With two or more positions chosen: players who can play any of them, or all of them")
             if isFiltering {
-                Button("Clear filters") { withAnimation(.snappy) { clearFilters() } }
+                Button("Clear filters") { clearFilters() }
             }
         }
     }

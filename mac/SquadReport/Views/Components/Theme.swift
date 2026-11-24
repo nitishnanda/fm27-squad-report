@@ -295,6 +295,7 @@ extension EnvironmentValues {
 struct Themed: ViewModifier {
     @AppStorage("look") private var lookName = Look.original.rawValue
     @Environment(AppModel.self) private var model: AppModel?
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     func body(content: Content) -> some View {
         var theme = Theme(look: Look(rawValue: lookName) ?? .original)
@@ -304,6 +305,7 @@ struct Themed: ViewModifier {
             .tint(theme.accent)
             .preferredColorScheme(theme.scheme)
             .font(theme.bodyFont)
+            .animation(reduceMotion ? nil : Motion.look, value: lookName)   // a new look fades in (also from ⌘L)
     }
 }
 

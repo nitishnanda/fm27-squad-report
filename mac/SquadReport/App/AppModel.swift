@@ -64,9 +64,34 @@ final class AppModel {
 
     // MARK: - navigation
 
+    /// Pages you've been on, for Back and Forward (like Finder or Safari).
+    private(set) var backStack: [Route] = []
+    private(set) var forwardStack: [Route] = []
+
     func go(_ route: Route) {
         lastPage[route.section] = route
+        guard route != self.route else { return }
+        backStack.append(self.route)
+        if backStack.count > 50 { backStack.removeFirst() }
+        forwardStack.removeAll()
         self.route = route
+    }
+
+    var canGoBack: Bool { !backStack.isEmpty }
+    var canGoForward: Bool { !forwardStack.isEmpty }
+
+    func goBack() {
+        guard let previous = backStack.popLast() else { return }
+        forwardStack.append(route)
+        lastPage[previous.section] = previous
+        route = previous
+    }
+
+    func goForward() {
+        guard let next = forwardStack.popLast() else { return }
+        backStack.append(route)
+        lastPage[next.section] = next
+        route = next
     }
 
     func go(_ section: AppSection) {

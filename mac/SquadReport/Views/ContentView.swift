@@ -14,7 +14,18 @@ struct ContentView: View {
                 Detail()
             }
             .toolbar {
-                ToolbarItem(placement: .navigation) { ClubChip() }
+                ToolbarItemGroup(placement: .navigation) {
+                    ControlGroup {
+                        Button { model.goBack() } label: { Label("Back", systemImage: "chevron.left") }
+                            .disabled(!model.canGoBack)
+                            .help("Back (⌘[)")
+                        Button { model.goForward() } label: { Label("Forward", systemImage: "chevron.right") }
+                            .disabled(!model.canGoForward)
+                            .help("Forward (⌘])")
+                    }
+                    .controlGroupStyle(.navigation)
+                    ClubChip()
+                }
                 ToolbarItemGroup(placement: .primaryAction) {
                     EngineStatusPill()
                     Button {
@@ -78,10 +89,38 @@ private struct Sidebar: View {
 
 private struct Detail: View {
     @Environment(AppModel.self) private var model
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    /// The club panel that slides away when the first report arrives.
+    @State private var wipe: Club?
+    /// `-demoLoader YES` with a demo report: play the loader's eight steps, then the wipe (for checking the motion).
+    @State private var demoStep: Int? = UserDefaults.standard.bool(forKey: "demoLoader") && ReportStore.demoPath != nil ? -1 : nil
 
     var body: some View {
-        if let report = model.store.report {
+        content
+            .overlay { if let club = wipe { ClubWipe(club: club) { wipe = nil } } }
+            .onChange(of: model.store.report == nil) { wasEmpty, isEmpty in
+                if wasEmpty, !isEmpty, !reduceMotion, let club = model.store.report?.club { wipe = club }
+            }
+            .task {
+                if UserDefaults.standard.bool(forKey: "demoWipe"), let club = model.store.report?.club { wipe = club; return }
+                guard demoStep != nil else { return }
+                for i in -1..<ReportStore.defaultSteps.count {
+                    demoStep = i
+                    try? await Task.sleep(for: .seconds(1.1 * Motion.slow))
+                }
+                demoStep = nil
+                if !reduceMotion, let club = model.store.report?.club { wipe = club }
+            }
+    }
+
+    @ViewBuilder
+    private var content: some View {
+        if let step = demoStep {
+            LoaderBody(steps: ReportStore.defaultSteps, current: step)
+        } else if let report = model.store.report {
             page(report)
+                .modifier(PageEntrance())
+                .id(model.route)            // a fresh page (and a fresh entrance) per route; the old one goes at once
                 .safeAreaInset(edge: .top, spacing: 0) { Banner() }
                 .pageBackground()
         } else if let problem = model.store.problem {
@@ -169,7 +208,7 @@ struct EngineStatusPill: View {
         let (text, color, busy) = state
         HStack(spacing: 6) {
             if busy {
-                ProgressView().controlSize(.mini)
+                PulseDot(color: .orange)      // the web's .ah-live.busy: an amber dot that pulses while a save is read
             } else {
                 Circle().fill(color).frame(width: 8, height: 8)
             }
@@ -218,5 +257,28 @@ struct ProblemView: View {
         } actions: {
             if let action { Button(action.title, action: action.run).buttonStyle(.borderedProminent) }
         }
+    }
+}
+
+/// A dot with a ring that grows and fades, over and over (the web's `lpulse`). Still with Reduce Motion on.
+struct PulseDot: View {
+    let color: Color
+    @State private var out = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    var body: some View {
+        Circle().fill(color).frame(width: 8, height: 8)
+            .background {
+                if !reduceMotion {
+                    Circle().stroke(color, lineWidth: 2)
+                        .scaleEffect(out ? 2.4 : 1)
+                        .opacity(out ? 0 : 0.7)
+                }
+            }
+            .onAppear {
+                guard !reduceMotion else { return }
+                withAnimation(.easeOut(duration: 1.4 * Motion.slow).repeatForever(autoreverses: false)) { out = true }
+            }
+            .accessibilityHidden(true)
     }
 }

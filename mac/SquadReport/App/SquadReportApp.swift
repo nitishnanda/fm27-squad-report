@@ -80,9 +80,9 @@ struct AppCommands: Commands {
                 .keyboardShortcut("o", modifiers: [.command, .shift])
             Divider()
             // like the web app's L / Shift+L
-            Button("Next Look") { withAnimation(.easeInOut(duration: 0.3)) { LookCycle.step(1) } }
+            Button("Next Look") { withAnimation(Motion.look) { LookCycle.step(1) } }
                 .keyboardShortcut("l", modifiers: .command)
-            Button("Previous Look") { withAnimation(.easeInOut(duration: 0.3)) { LookCycle.step(-1) } }
+            Button("Previous Look") { withAnimation(Motion.look) { LookCycle.step(-1) } }
                 .keyboardShortcut("l", modifiers: [.command, .shift])
             Divider()
         }
@@ -93,10 +93,17 @@ struct AppCommands: Commands {
                     .keyboardShortcut(KeyEquivalent(Character("\(section.rawValue + 1)")), modifiers: .command)
             }
             Divider()
-            Button("Previous Page in Section") { model.step(-1) }
+            Button("Back") { model.goBack() }
                 .keyboardShortcut("[", modifiers: .command)
-            Button("Next Page in Section") { model.step(1) }
+                .disabled(!model.canGoBack)
+            Button("Forward") { model.goForward() }
                 .keyboardShortcut("]", modifiers: .command)
+                .disabled(!model.canGoForward)
+            Divider()
+            Button("Previous Page in Section") { model.step(-1) }
+                .keyboardShortcut("[", modifiers: [.command, .option])
+            Button("Next Page in Section") { model.step(1) }
+                .keyboardShortcut("]", modifiers: [.command, .option])
         }
     }
 }

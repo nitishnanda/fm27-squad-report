@@ -179,6 +179,32 @@ Every web page has a native Mac page now, but these web features have no Mac ver
 Left out on purpose (don't add): the web home page / About, the Positions "U21" tag (the age column shows it), and the training "Focus" options (dropped idea).
 When a part is done: screenshots in demo mode or the real save (never the Phone settings), tests, commit and push.
 
+## Phase 7: motion (after Phase 6, so the looks and 3D pitch exist)
+
+The web app animates a lot more than the Mac app, which only animates the Sandbox and "Show all" on Positions and
+Tactical fit. Port these, kept quick and subtle (a Mac app should feel calmer than a website), and turn every one off
+when Reduce Motion is on (`@Environment(\.accessibilityReduceMotion)`):
+
+1. **Page changes.** Web `show()` in APP_JS: the new page fades in and rises 14px over 0.38s. On Mac, when the sidebar
+   selection changes, fade the detail view in with a small rise (~0.25s), not a slide.
+2. **Squad list filters.** Web uses GSAP Flip: rows glide to their new places and new rows fade in. On Mac, change the
+   filter state inside `withAnimation(.snappy)` so rows move instead of jumping (if `Table` won't animate rows, a short
+   cross-fade of the table is fine).
+3. **The loader.** Web `boot_html()` / `BOOT_CSS` / `BOOT_JS`: the pitch lines draw themselves in (`bdraw`), a scan line
+   sweeps the pitch while it waits (`bscan`), the current step's circle spins, done steps tick, and on launch a
+   club-colour panel with the crest slides up and away. The Mac `EngineGate` loader is a plain progress view: give it
+   the drawn pitch (`.trim` on the pitch shapes), the scan line and the step circles, and the club panel wipe when the
+   report is ready. It should wear the current look like the web loader does (`BOOT_LOOKS`).
+4. **The live status pill.** Web `.ah-live.busy` pulses amber (`lpulse`) while a save is being read. Pulse the Mac
+   pill's dot the same way while `/api/status` says building; still when up to date.
+5. **Changing looks.** The web cross-fades the whole page (View Transitions). On Mac, animate the look change
+   (`withAnimation(.easeInOut(duration: 0.3))` around the `@AppStorage("look")` change) so it fades instead of snapping.
+6. **Back and forward.** The web gets browser history for free. Give the Mac app a page history: Back/Forward
+   toolbar buttons and ⌘[ / ⌘] (moving previous/next section to another shortcut if needed), like Finder or Safari.
+
+Left out on purpose: sideways slides between Tactical fit / Training parts (feels webby on a Mac) and the scrolling
+news ticker (the Mac "Latest" list on Home replaces it). The 3D pitch tilt-in is part of Phase 6, item 7.
+
 ## What he does once
 
 1. Install Xcode, then sign into his Apple ID (Xcode → Settings → Accounts).

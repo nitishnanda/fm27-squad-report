@@ -37,8 +37,8 @@ private struct XIPitch: View {
         let average = ratings.isEmpty ? nil : ratings.reduce(0, +) / Double(rows.count)
         VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .firstTextBaseline) {
-                Text(title).displayFont(22)
-                Text(sub).foregroundStyle(.secondary)
+                Text(title).displayFont(22).fixedSize()
+                Text(sub).foregroundStyle(.secondary).lineLimit(1).truncationMode(.tail)
                 Spacer()
                 if let average {
                     StarsView(value: average, size: 12)

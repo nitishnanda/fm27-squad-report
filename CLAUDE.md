@@ -134,7 +134,11 @@ LW (AML/ML) IF/WMF · AM SS/AM · RW (AMR/MR) IW/WMF · ST CFD/CFD. `STYLE_KEYS`
 - Tests: `python3 -m unittest discover -s tests -v` (feed contents, his rules, and the real server in headless mode).
 - Phase 1 is built (`mac/`, see PLAN.md): SwiftUI, macOS 15+, Swift 6 strict concurrency, no packages, not sandboxed,
   ad-hoc signed. Project generated from `mac/project.yml` (XcodeGen; the .xcodeproj, `mac/build/` and Info.plist are
-  gitignored). Build/test with `mac/build.sh` / `mac/build.sh test`. First launch asks for the project folder (bookmark in
+  gitignored). Build/test with `mac/build.sh` / `mac/build.sh test`; `mac/build.sh install` puts a Release build in
+  `/Applications` (his everyday copy). Builds go to `mac/build/DerivedData.noindex` so Spotlight doesn't list dev copies.
+  Phase 5 checked every page at 900×600 (the min) and full screen, light/dark/Glass: keep narrow layouts working
+  (`ViewThatFits`, adaptive grids) when adding to a page. Test light mode without touching his system setting by
+  launching with `--args -NSRequiresAquaSystemAppearance YES`, and a window size with `"-NSWindow Frame main" "x y w h ..."`. First launch asks for the project folder (bookmark in
   UserDefaults `projectFolderBookmark`, domain `com.squadreport.mac`); `Engine` attaches to a running engine on 8027 or
   runs `PythonSetup` (find Python 3.12+, `.venv`, fmsave, upgrade once a day) and starts `--headless`, restarting it up to
   3 times in 2 minutes; quitting the app stops only an engine it started. `ReportStore` polls /api/status (1 s busy, 3 s

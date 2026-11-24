@@ -30,10 +30,10 @@ private struct SandboxPage: View {
                         .frame(width: max(300, width))
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
-                .frame(minWidth: 380)
+                .frame(minWidth: 300)
                 Divider()
                 Roster(model: model)
-                    .frame(minWidth: 360, idealWidth: 440, maxWidth: 520)
+                    .frame(minWidth: 330, idealWidth: 440, maxWidth: 520)
             }
         }
     }
@@ -48,35 +48,49 @@ private struct ScoreBar: View {
         let level = model.report.xiLevel ?? 0
         let avg = model.average
         let diff = ((avg - level) * 10).rounded() / 10 + 0.0    // + 0.0 turns -0.0 into 0.0
-        HStack(alignment: .center, spacing: 20) {
-            VStack(alignment: .leading, spacing: 2) {
-                Text("Your XI").font(.caption.weight(.semibold)).foregroundStyle(.secondary)
-                HStack(spacing: 6) {
-                    StarsView(value: avg, size: 15)
-                    NumberText(String(format: "%.1f", avg), size: 26)
-                }
-                Text("\(diff >= 0 ? "+" : "")\(String(format: "%.1f", diff))★ vs best XI (\(String(format: "%.1f", level))) · \(model.changes) change\(model.changes == 1 ? "" : "s")")
-                    .font(.caption).foregroundStyle(.secondary)
+        let score = VStack(alignment: .leading, spacing: 2) {
+            Text("Your XI").font(.caption.weight(.semibold)).foregroundStyle(.secondary)
+            HStack(spacing: 6) {
+                StarsView(value: avg, size: 15)
+                NumberText(String(format: "%.1f", avg), size: 26)
             }
-            Divider().frame(height: 44)
-            VStack(alignment: .leading, spacing: 3) {
-                if model.emptySlots > 0 {
-                    Text("\(model.emptySlots) empty slot\(model.emptySlots == 1 ? "" : "s")").foregroundStyle(Palette.injuryLong).fontWeight(.semibold)
-                }
-                if !model.outOfPosition.isEmpty { Text("Playing out of position: \(model.outOfPosition.joined(separator: ", "))") }
-                if !model.ruledOut.isEmpty { Text("Ruled out: \(model.ruledOut.joined(separator: ", "))") }
-                if !model.signed.isEmpty { Text("Signed: \(model.signed.joined(separator: ", "))").foregroundStyle(Palette.star) }
-                if model.emptySlots == 0 && model.outOfPosition.isEmpty && model.ruledOut.isEmpty && model.signed.isEmpty {
-                    Text("Full-strength XI. Change someone's status, or drag a player onto the pitch.").foregroundStyle(.secondary)
-                }
+            Text("\(diff >= 0 ? "+" : "")\(String(format: "%.1f", diff))★ vs best XI (\(String(format: "%.1f", level))) · \(model.changes) change\(model.changes == 1 ? "" : "s")")
+                .font(.caption).foregroundStyle(.secondary)
+        }
+        .fixedSize()
+        let notes = VStack(alignment: .leading, spacing: 3) {
+            if model.emptySlots > 0 {
+                Text("\(model.emptySlots) empty slot\(model.emptySlots == 1 ? "" : "s")").foregroundStyle(Palette.injuryLong).fontWeight(.semibold)
             }
-            .font(.callout)
-            .lineLimit(2)
-            Spacer()
+            if !model.outOfPosition.isEmpty { Text("Playing out of position: \(model.outOfPosition.joined(separator: ", "))") }
+            if !model.ruledOut.isEmpty { Text("Ruled out: \(model.ruledOut.joined(separator: ", "))") }
+            if !model.signed.isEmpty { Text("Signed: \(model.signed.joined(separator: ", "))").foregroundStyle(Palette.star) }
+            if model.emptySlots == 0 && model.outOfPosition.isEmpty && model.ruledOut.isEmpty && model.signed.isEmpty {
+                Text("Full-strength XI. Change someone's status, or drag a player onto the pitch.").foregroundStyle(.secondary)
+            }
+        }
+        .font(.callout)
+        .lineLimit(2)
+        .frame(minWidth: 200, idealWidth: 300, maxWidth: .infinity, alignment: .leading)
+        let buttons = HStack(spacing: 10) {
             Text(model.auto ? "auto-picking" : "your own picks").font(.caption).foregroundStyle(.secondary)
             Button("Auto-pick best XI") { withAnimation(.snappy) { model.autoPick() } }
                 .buttonStyle(.borderedProminent)
             Button("Reset all changes") { withAnimation(.snappy) { model.reset() } }
+        }
+        .fixedSize()
+        // one row on a wide window; on a narrow one the notes drop under the score
+        ViewThatFits(in: .horizontal) {
+            HStack(alignment: .center, spacing: 20) {
+                score
+                Divider().frame(height: 44)
+                notes
+                buttons
+            }
+            VStack(alignment: .leading, spacing: 8) {
+                HStack(alignment: .center, spacing: 16) { score; Spacer(minLength: 0); buttons }
+                notes
+            }
         }
         .padding(.horizontal, 20).padding(.vertical, 12)
         .accessibilityElement(children: .contain)
@@ -143,6 +157,7 @@ private struct SlotCard: View {
                 .padding(.bottom, 5)
             }
             .frame(width: 112)
+            .accessibilityElement(children: .ignore)
             .background(theme.cardFill)
             .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
             .overlay(RoundedRectangle(cornerRadius: 6, style: .continuous)
@@ -162,6 +177,8 @@ private struct SlotCard: View {
             return true
         } isTargeted: { targeted = $0 }
         .accessibilityLabel("\(info.label ?? info.slot): \(player?.name ?? "empty")")
+        .accessibilityValue(rating.map { "\(Fmt.stars($0.stars)) stars, \(FamiliarityBadge.words($0.fam))" } ?? "")
+        .accessibilityHint("Pick who plays here")
     }
 
     /// Everyone available, best first, grouped by how well they know the slot.
@@ -350,19 +367,24 @@ private struct FindPlayers: View {
                 .onChange(of: query) { _, _ in Task { await search() } }
             Text(message).font(.caption).foregroundStyle(.secondary)
             List(results) { r in
-                HStack {
-                    Image(systemName: picked.contains(r.uid) ? "checkmark.square.fill" : "square")
-                        .foregroundStyle(picked.contains(r.uid) ? Palette.brandHigh : .secondary)
-                    VStack(alignment: .leading) {
-                        Text(r.n).fontWeight(.semibold)
-                        Text("\(r.a.map(String.init) ?? "–") · \(r.p) · \(r.c)").font(.caption).foregroundStyle(.secondary)
+                let already = have.contains(r.uid)
+                Toggle(isOn: Binding(
+                    get: { already || picked.contains(r.uid) },
+                    set: { on in if on { picked.insert(r.uid) } else { picked.remove(r.uid) } }
+                )) {
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text(r.n).fontWeight(.semibold)
+                            Text("\(r.a.map(String.init) ?? "–") · \(r.p) · \(r.c)").font(.caption).foregroundStyle(.secondary)
+                        }
+                        Spacer()
+                        if already { Text("already in the Sandbox").font(.caption).foregroundStyle(.secondary) }
                     }
-                    Spacer()
-                    if have.contains(r.uid) { Text("already in the Sandbox").font(.caption).foregroundStyle(.secondary) }
                 }
-                .contentShape(Rectangle())
-                .onTapGesture { if !have.contains(r.uid) { if picked.contains(r.uid) { picked.remove(r.uid) } else { picked.insert(r.uid) } } }
-                .opacity(have.contains(r.uid) ? 0.5 : 1)
+                .toggleStyle(.checkbox)
+                .disabled(already)
+                .accessibilityLabel("\(r.n), \(r.a.map { "age \($0)" } ?? "age unknown"), \(r.p), \(r.c)")
+                .accessibilityHint(already ? "Already in the Sandbox" : "")
             }
             .frame(minHeight: 260)
             HStack {

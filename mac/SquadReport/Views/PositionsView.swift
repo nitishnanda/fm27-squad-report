@@ -152,7 +152,7 @@ private struct PositionCardView: View {
                 } label: {
                     HStack(spacing: 4) {
                         Text(showAll ? "Show fewer" : moreLabel(shown))
-                        Image(systemName: showAll ? "chevron.up" : "chevron.down").font(.caption2.weight(.bold))
+                        Image(systemName: showAll ? "chevron.up" : "chevron.down").font(.caption2.weight(.bold)).accessibilityHidden(true)
                     }
                     .font(.callout.weight(.semibold))
                     .frame(maxWidth: .infinity, alignment: .leading)

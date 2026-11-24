@@ -42,7 +42,17 @@ struct FamiliarityBadge: View {
             .foregroundStyle(code == "N" ? Color(nsColor: .windowBackgroundColor) : .primary)
             .background(code == "N" ? Color.primary : .clear, in: RoundedRectangle(cornerRadius: 3))
             .overlay(RoundedRectangle(cornerRadius: 3).stroke(Color.primary.opacity(code == "N" ? 0 : 0.5), lineWidth: 1))
-            .help(code == "N" ? "Natural in this position" : code == "A" ? "Accomplished in this position" : "Can play here")
-            .accessibilityLabel(code == "N" ? "natural" : code == "A" ? "accomplished" : "can play")
+            .help(Self.words(code).prefix(1).uppercased() + Self.words(code).dropFirst())
+            .accessibilityLabel(Self.words(code))
+    }
+
+    static func words(_ code: String) -> String {
+        switch code {
+        case "N": "natural here"
+        case "A": "accomplished here"
+        case "C": "can play here, not ideal"
+        case "X": "out of position"
+        default: "can play here"
+        }
     }
 }

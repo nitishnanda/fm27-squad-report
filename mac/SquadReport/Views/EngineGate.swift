@@ -87,7 +87,9 @@ private struct Loader: View {
                             }
                         }
                         .frame(width: 18)
+                        .accessibilityHidden(true)
                         Text(label).foregroundStyle(i == current ? .primary : .secondary)
+                            .accessibilityValue(current < 0 || i > current ? "to do" : i < current ? "done" : "in progress")
                             .fontWeight(i == current ? .semibold : .regular)
                     }
                     .accessibilityElement(children: .combine)

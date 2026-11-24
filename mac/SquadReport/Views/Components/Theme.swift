@@ -197,8 +197,8 @@ enum Fonts {
             Bundle.main.url(forResource: $0, withExtension: "woff2")
         }
         guard !urls.isEmpty else { return }
-        // the synchronous call, so the fonts exist before the first frame is drawn
-        CTFontManagerRegisterFontsForURLs(urls as CFArray, .process, nil)
+        // one synchronous call per font, so they exist before the first frame is drawn
+        for url in urls { CTFontManagerRegisterFontsForURL(url as CFURL, .process, nil) }
     }
 }
 

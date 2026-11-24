@@ -11,24 +11,44 @@ struct TacticalFitView: View {
     }
     @State private var part: Part = .going
 
+    private var partPicker: some View {
+        Picker("Part", selection: $part) {
+            ForEach(Part.allCases) { p in
+                Text(p == .style ? (report.style?.name ?? "Style") : p.rawValue).tag(p)
+            }
+        }
+        .pickerStyle(.segmented)
+        .labelsHidden()
+        .fixedSize()
+    }
+
+    /// "Gegenpress asks for" and its key attributes: label above the chips next to the picker, beside them under it.
+    @ViewBuilder private func styleChips(stacked: Bool) -> some View {
+        if let style = report.style {
+            let label = Text("\(style.name) asks for").font(.callout).foregroundStyle(.secondary).fixedSize()
+            let chips = FlowRow(spacing: 4) {
+                ForEach(style.keys, id: \.self) { KeyChip(text: report.label($0), kind: .style) }
+            }
+            if stacked {
+                VStack(alignment: .trailing, spacing: 4) { label; chips }
+            } else {
+                HStack(alignment: .firstTextBaseline, spacing: 8) { label; chips }
+            }
+        }
+    }
+
     var body: some View {
         VStack(spacing: 0) {
-            HStack(spacing: 14) {
-                Picker("Part", selection: $part) {
-                    ForEach(Part.allCases) { p in
-                        Text(p == .style ? (report.style?.name ?? "Style") : p.rawValue).tag(p)
-                    }
+            // side by side on a wide window; on a narrow one the style chips go under the picker
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: 14) {
+                    partPicker
+                    Spacer()
+                    styleChips(stacked: true).frame(width: 420, alignment: .trailing)
                 }
-                .pickerStyle(.segmented)
-                .labelsHidden()
-                .fixedSize()
-                Spacer()
-                if let style = report.style {
-                    Text("\(style.name) asks for").font(.callout).foregroundStyle(.secondary)
-                    FlowRow(spacing: 4) {
-                        ForEach(style.keys, id: \.self) { KeyChip(text: report.label($0), kind: .style) }
-                    }
-                    .frame(maxWidth: 560, alignment: .trailing)
+                VStack(alignment: .leading, spacing: 8) {
+                    partPicker
+                    styleChips(stacked: false)
                 }
             }
             .padding(.horizontal, 24).padding(.vertical, 12)

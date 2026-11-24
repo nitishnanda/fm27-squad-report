@@ -39,7 +39,7 @@ developer account is needed for his own use.
 
 Build and run: `mac/build.sh` (generates the project with XcodeGen, builds Debug, opens the app). `mac/build.sh test` runs the
 Swift tests (fixture decoding, his-rules checks on statuses, formats that match the web app); `mac/build.sh release` builds
-into `mac/build/Release/`. Signed "to run locally", so no Apple ID is needed to build it.
+Release, and `mac/build.sh install` puts it in `/Applications` and opens it. Signed "to run locally", so no Apple ID is needed to build it.
 
 What's in it (`mac/SquadReport/`): `Engine/` (Python setup like the .command, the engine process, the API client),
 `Report/` (feed models, `ReportStore` with the on-disk cache, formats), `App/` (model, routes, menus), `Views/`.
@@ -107,11 +107,20 @@ a search sheet that adds them via `POST /scouting`, Swift port of the Hungarian 
 - Looks: Original plus A to E as SwiftUI themes, with the same OFL fonts bundled.
 - Sandbox: drag players onto the pitch, with a Swift port of the Hungarian algorithm. Last, because it's the biggest screen.
 
-## Phase 5: finish
+## Phase 5: finish ✅ done
 
-- Check every screen in light and dark, at small and large window sizes, with VoiceOver labels and keyboard only.
-- Archive it into `/Applications` so it's a normal app in Launchpad and Spotlight.
-- Later, if wanted: bundle Python inside the app so it no longer needs the project folder.
+- Every page checked in light and dark (and Glass), at the smallest window (900×600) and full screen (1920×1050).
+  Fixed for narrow windows: Squad list key figures wrap (5 → 3 + 2) and its status filter becomes a pop-up; Tactical fit
+  puts the style chips under the part picker; Sandbox's score bar goes onto two rows and its columns shrink; the Best XIs
+  "Second XI" title no longer wraps.
+- VoiceOver: each Sandbox pitch slot is one element ("ST: Isak", "4.5 stars, natural here", "Pick who plays here");
+  scouting search results are real checkboxes instead of tap-only rows; decorative chevrons are hidden; the startup
+  checklist says done / in progress / to do. Keyboard: everything is a button, menu or picker, plus ⌘1–6 and ⌘[ ⌘].
+- Notifications: Settings asks again while macOS hasn't decided, links to System Settings when they're off, and has a
+  Send Test Notification button.
+- Installed: `mac/build.sh install` builds Release into `/Applications/Squad Report.app` (Launchpad, Spotlight, open at
+  login). Dev builds live in `mac/build/DerivedData.noindex` so Spotlight only shows the installed copy.
+- Not done (only if wanted): bundle Python inside the app so it no longer needs the project folder.
 
 ## What he does once
 
@@ -119,8 +128,8 @@ a search sheet that adds them via `POST /scouting`, Swift port of the Hungarian 
 2. `brew install xcodegen`.
 3. Connect the Mac to a Claude Code session (Remote Control) so builds and test runs happen there.
 
-## Open questions
+## Open questions (answered)
 
-- Keep the Dock icon, or live only in the menu bar until he opens the window?
-- Which looks should the app carry: all six, or just his favourite?
-- Keep `Run Squad Report.command` as a backup, or retire it once the app works?
+- Dock icon or menu bar only? Both.
+- Which looks? Original + E (Glass + scoreboard).
+- Keep `Run Squad Report.command`? Yes, as a backup.

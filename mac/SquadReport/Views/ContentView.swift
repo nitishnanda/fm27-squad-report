@@ -94,7 +94,6 @@ private struct Detail: View {
         case .transfers: TransfersView(report: report)
         case .stats: StatsView(report: report)
         case .sandbox: SandboxView(report: report)
-        default: NotYetView(route: model.route)
         }
     }
 }
@@ -193,23 +192,6 @@ struct EngineStatusPill: View {
         case .running: "The app's engine is watching your FM27 saves"
         case .failed(let why), .restarting(let why): why
         default: "Squad Report engine"
-        }
-    }
-}
-
-/// Pages the app doesn't draw yet: they open in the web app, which has them all.
-private struct NotYetView: View {
-    @Environment(AppModel.self) private var model
-    let route: Route
-
-    var body: some View {
-        ContentUnavailableView {
-            Label(route.title, systemImage: route.symbol)
-        } description: {
-            Text("This page comes to the Mac app in a later update. Until then it's in the web app, with your latest save.")
-        } actions: {
-            Button("Open \(route.title) in Browser") { model.openInBrowser(route) }
-                .buttonStyle(.borderedProminent)
         }
     }
 }

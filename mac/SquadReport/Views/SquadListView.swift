@@ -107,6 +107,13 @@ struct SquadListView: View {
     @AppStorage("squadColumns") private var savedColumns = Data()
     @State private var columns = TableColumnCustomization<SquadRow>()
 
+    private var showPicker: some View {
+        Picker("Show", selection: $show) {
+            ForEach(Show.allCases) { Text($0.rawValue).tag($0) }
+        }
+        .labelsHidden()
+    }
+
     var body: some View {
         let all = SquadGroups.rows(report)
         let shown = filtered(all)
@@ -114,12 +121,10 @@ struct SquadListView: View {
             Summary(report: report, rows: all, show: $show)
                 .padding(.horizontal, 20).padding(.top, 16).padding(.bottom, 10)
             HStack(spacing: 12) {
-                Picker("Show", selection: $show) {
-                    ForEach(Show.allCases) { Text($0.rawValue).tag($0) }
+                ViewThatFits(in: .horizontal) {
+                    showPicker.pickerStyle(.segmented).fixedSize()
+                    showPicker.pickerStyle(.menu).fixedSize()      // narrow window: a pop-up instead of six segments
                 }
-                .pickerStyle(.segmented)
-                .labelsHidden()
-                .fixedSize()
                 Toggle("Youth teams", isOn: $youth)
                 Spacer()
                 let filtering = show != .all || !search.trimmingCharacters(in: .whitespaces).isEmpty
@@ -299,7 +304,8 @@ private struct Summary: View {
         let coming = report.players.filter { p in p.status.moves.contains { ["deal_in", "loan_in_arr"].contains($0.kind) } }.count
         let going = report.players.filter { p in p.status.moves.contains { ["deal_out", "loan_out_arr"].contains($0.kind) } }.count
 
-        HStack(spacing: 10) {
+        // five across on a wide window, wrapping to rows of three or two on a narrow one
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 190), spacing: 10, alignment: .top)], spacing: 10) {
             figure("First team", "\(first.count)", unit: "players",
                    sub: "avg age \(ages.isEmpty ? "–" : String(format: "%.1f", Double(ages.reduce(0, +)) / Double(ages.count))) · \(youthCount) in the youth teams")
             figure("First-team value", Fmt.money(Double(worth)), sub: "FM's transfer values")
@@ -316,7 +322,7 @@ private struct Summary: View {
                 NumberText(value, size: 28)
                 if let unit { Text(unit).foregroundStyle(.secondary) }
             }
-            Text(sub).font(.caption).foregroundStyle(.secondary).lineLimit(1)
+            Text(sub).font(.caption).foregroundStyle(.secondary).lineLimit(1).minimumScaleFactor(0.85)
         }
         .padding(12)
         .frame(maxWidth: .infinity, alignment: .leading)

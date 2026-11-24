@@ -2,7 +2,9 @@
 # Build Squad Report for Mac and open it.
 #   ./build.sh          build (Debug) and open
 #   ./build.sh test     run the tests
-#   ./build.sh release  build Release into mac/build/Release/Squad Report.app
+#   ./build.sh release  build Release (left in mac/build/DerivedData.noindex/Build/Products/Release)
+#   ./build.sh install  build Release, put it in /Applications and open it
+# Builds live in a ".noindex" folder so Spotlight and Launchpad only ever show the copy in /Applications.
 set -euo pipefail
 cd "$(dirname "$0")"
 
@@ -11,22 +13,35 @@ if ! command -v xcodegen >/dev/null; then
 fi
 xcodegen generate --quiet
 
+DERIVED=build/DerivedData.noindex
+RELEASE_APP="$DERIVED/Build/Products/Release/Squad Report.app"
+
+release() {
+    xcodebuild -project SquadReport.xcodeproj -scheme SquadReport -configuration Release \
+      -derivedDataPath "$DERIVED" -quiet build
+}
+
 case "${1:-}" in
   test)
     xcodebuild -project SquadReport.xcodeproj -scheme SquadReport -destination 'platform=macOS' \
-      -derivedDataPath build/DerivedData -quiet test
+      -derivedDataPath "$DERIVED" -quiet test
     ;;
   release)
-    xcodebuild -project SquadReport.xcodeproj -scheme SquadReport -configuration Release \
-      -derivedDataPath build/DerivedData -quiet build
-    mkdir -p build/Release
-    rm -rf "build/Release/Squad Report.app"
-    cp -R "build/DerivedData/Build/Products/Release/Squad Report.app" build/Release/
-    echo "Built mac/build/Release/Squad Report.app"
+    release
+    echo "Built mac/$RELEASE_APP"
+    ;;
+  install)
+    release
+    osascript -e 'quit app id "com.squadreport.mac"' 2>/dev/null || true
+    sleep 2
+    rm -rf "/Applications/Squad Report.app"
+    cp -R "$RELEASE_APP" /Applications/
+    open "/Applications/Squad Report.app"
+    echo "Installed /Applications/Squad Report.app"
     ;;
   *)
     xcodebuild -project SquadReport.xcodeproj -scheme SquadReport -configuration Debug \
-      -derivedDataPath build/DerivedData -quiet build
-    open "build/DerivedData/Build/Products/Debug/Squad Report.app"
+      -derivedDataPath "$DERIVED" -quiet build
+    open "$DERIVED/Build/Products/Debug/Squad Report.app"
     ;;
 esac

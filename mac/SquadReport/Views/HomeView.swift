@@ -292,7 +292,7 @@ private struct News: View {
                         HStack(spacing: 10) {
                             NewsTag(item: item).frame(minWidth: 86, alignment: .leading)
                             Text(item.text).frame(maxWidth: .infinity, alignment: .leading)
-                            Image(systemName: "chevron.right").font(.caption).foregroundStyle(.tertiary)
+                            Image(systemName: "chevron.right").font(.caption).foregroundStyle(.tertiary).accessibilityHidden(true)
                         }
                         .padding(.vertical, 8).padding(.horizontal, 12)
                         .contentShape(Rectangle())

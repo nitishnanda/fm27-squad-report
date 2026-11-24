@@ -12,6 +12,8 @@ if ! command -v xcodegen >/dev/null; then
   echo "XcodeGen is missing: brew install xcodegen"; exit 1
 fi
 xcodegen generate --quiet
+# the Python that ships inside the app (once; delete mac/build/vendor/python to make it again)
+[ -x build/vendor/python/bin/python3 ] || ./vendor_python.sh
 
 DERIVED=build/DerivedData.noindex
 RELEASE_APP="$DERIVED/Build/Products/Release/Squad Report.app"

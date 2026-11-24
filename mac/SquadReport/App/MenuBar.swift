@@ -55,7 +55,7 @@ struct MenuBarState {
         } else if case .failed = model.engine.phase {
             title = "Engine problem: open the app to see why"
             symbol = "exclamationmark.triangle"
-        } else if model.folder == nil {
+        } else if model.needsFolder {
             title = "Choose your Squad Report folder to start"
             symbol = "sportscourt"
         } else if store.unseenUpdate {

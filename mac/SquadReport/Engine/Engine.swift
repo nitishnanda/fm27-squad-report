@@ -2,8 +2,10 @@ import Foundation
 import Observation
 
 /// Starts and stops the Python engine (`fm27_squad_report.py --headless`) with the app, restarts it if it crashes,
-/// and says what went wrong in plain words. If an engine is already running (the .command in Terminal, or one
-/// left over from before), the app uses that one instead of starting a second.
+/// and says what went wrong in plain words. The engine normally ships inside the app (`BundledEngine`); for working
+/// on the script it can run from a project folder instead, with that folder's .venv, like the .command.
+/// If an engine is already running (the .command in Terminal, or one left over from before), the app uses that one
+/// instead of starting a second.
 @MainActor @Observable
 final class Engine {
     enum Phase: Equatable {
@@ -17,11 +19,17 @@ final class Engine {
         case stopped
     }
 
+    /// Where the engine comes from.
+    enum Source: Equatable {
+        case bundled(importFrom: URL?)   // inside the app; the folder is only where your old files get copied from
+        case folder(URL)
+    }
+
     private(set) var phase: Phase = .idle
     private(set) var recentOutput: [String] = []
     let client = EngineClient()
 
-    private var folder: URL?
+    private(set) var source: Source?
     private var process: Process?
     private var pipe: Pipe?
     private var partialLine = ""
@@ -33,34 +41,33 @@ final class Engine {
 
     var isUp: Bool { phase == .running || phase == .attached }
 
-    func start(folder: URL) {
-        self.folder = folder
+    func start(_ source: Source) {
+        self.source = source
         quitting = false
         Task { await launch() }
     }
 
-    /// Another project folder: stop the engine we started (if any), then start from the new folder.
-    func switchFolder(to url: URL) {
-        folder = url
+    /// Another source (or another project folder): stop the engine we started (if any), then start the new one.
+    func switchSource(to source: Source) {
+        self.source = source
         if let process, process.isRunning {
             startAfterExit = true
             quitting = true
             process.terminate()
         } else {
-            start(folder: url)
+            start(source)
         }
     }
 
     func retry() {
         crashes.removeAll()
         if case .failed = phase { phase = .idle }
-        if let folder { start(folder: folder) }
+        if let source { start(source) }
     }
 
     /// Start ours again (a setting it reads at start changed). Someone else's engine is left alone.
     func restart() {
-        guard let folder, let process, process.isRunning else { return }
-        self.folder = folder
+        guard source != nil, let process, process.isRunning else { return }
         startAfterExit = true
         quitting = true
         process.terminate()
@@ -82,7 +89,7 @@ final class Engine {
     // MARK: - starting
 
     private func launch() async {
-        guard let folder, !launching, process?.isRunning != true else { return }
+        guard let source, !launching, process?.isRunning != true else { return }
         launching = true
         defer { launching = false }
         if (try? await client.status(timeout: 1.5)) != nil {
@@ -90,31 +97,41 @@ final class Engine {
             return
         }
         phase = .preparing("Getting ready…")
-        let python: URL
-        do {
-            python = try await PythonSetup.prepare(folder: folder) { [weak self] text in
-                self?.phase = .preparing(text)
+        let progress: PythonSetup.Progress = { [weak self] text in self?.phase = .preparing(text) }
+        switch source {
+        case .bundled(let importFrom):
+            guard let root = BundledEngine.root else {
+                phase = .failed("This copy of the app doesn't have the engine inside it. Rebuild it with mac/build.sh, or choose a project folder in Settings.")
+                return
             }
-        } catch {
-            phase = .failed(error.plainWords)
-            return
+            let python = await BundledEngine.prepare(root: root, importFrom: importFrom, report: progress)
+            spawn(python: python, script: BundledEngine.script(root), directory: BundledEngine.home,
+                  environment: BundledEngine.environment())
+        case .folder(let folder):
+            let python: URL
+            do {
+                python = try await PythonSetup.prepare(folder: folder, report: progress)
+            } catch {
+                phase = .failed(error.plainWords)
+                return
+            }
+            let script = folder.appending(path: "fm27_squad_report.py")
+            guard FileManager.default.fileExists(atPath: script.path) else {
+                phase = .failed("fm27_squad_report.py isn't in \(folder.lastPathComponent) any more. Choose the folder again (File › Choose Project Folder…).")
+                return
+            }
+            spawn(python: python, script: script, directory: folder, environment: ProcessInfo.processInfo.environment)
         }
-        spawn(python: python, folder: folder)
     }
 
-    private func spawn(python: URL, folder: URL) {
-        let script = folder.appending(path: "fm27_squad_report.py")
-        guard FileManager.default.fileExists(atPath: script.path) else {
-            phase = .failed("fm27_squad_report.py isn't in \(folder.lastPathComponent) any more. Choose the folder again (File › Choose Project Folder…).")
-            return
-        }
+    private func spawn(python: URL, script: URL, directory: URL, environment: [String: String]) {
         let process = Process()
         process.executableURL = python
         // phone access off: the engine only listens to this Mac
         let phone = UserDefaults.standard.object(forKey: "phoneAccess") as? Bool ?? true
-        process.arguments = [script.path, "--headless"] + (phone ? [] : ["--mac-only"])
-        process.currentDirectoryURL = folder
-        var env = ProcessInfo.processInfo.environment
+        process.arguments = [script.path(percentEncoded: false), "--headless"] + (phone ? [] : ["--mac-only"])
+        process.currentDirectoryURL = directory
+        var env = environment
         env["PYTHONUNBUFFERED"] = "1"
         env["FM27_NO_OPEN"] = "1"
         process.environment = env

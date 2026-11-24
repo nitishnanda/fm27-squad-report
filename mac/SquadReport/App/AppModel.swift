@@ -2,7 +2,7 @@ import AppKit
 import Foundation
 import Observation
 
-/// Everything the window and the menus share: the project folder, the engine, the report and where you are.
+/// Everything the window and the menus share: the engine (and where it comes from), the report and where you are.
 @MainActor @Observable
 final class AppModel {
     let engine = Engine()
@@ -15,16 +15,36 @@ final class AppModel {
     private var lastPage: [AppSection: Route] = [:]
 
     private static let bookmarkKey = "projectFolderBookmark"
+    static let folderEngineKey = "useProjectFolderEngine"
+
+    /// The engine inside the app, unless this build has none or you asked for a project folder's (Settings › General).
+    private(set) var usesBundledEngine: Bool
+
+    /// The welcome screen: only when the engine has to come from a project folder and none is chosen.
+    var needsFolder: Bool { !usesBundledEngine && folder == nil }
 
     init() {
         folder = Self.restoreFolder()
+        usesBundledEngine = BundledEngine.isAvailable && !UserDefaults.standard.bool(forKey: Self.folderEngineKey)
         if let demo = ReportStore.demoPath {
             folder = folder ?? URL(filePath: demo).deletingLastPathComponent()
             store.showDemo(demo)
             return
         }
         store.follow(engine)
-        if let folder { engine.start(folder: folder) }
+        if let source = engineSource { engine.start(source) }
+    }
+
+    private var engineSource: Engine.Source? {
+        if usesBundledEngine { return .bundled(importFrom: folder) }
+        return folder.map { .folder($0) }
+    }
+
+    /// Settings: run the engine from a project folder (to work on the script) or the one inside the app.
+    func useFolderEngine(_ on: Bool) {
+        UserDefaults.standard.set(on, forKey: Self.folderEngineKey)
+        usesBundledEngine = BundledEngine.isAvailable && !on
+        if let source = engineSource { engine.switchSource(to: source) }
     }
 
     // MARK: - navigation
@@ -52,7 +72,8 @@ final class AppModel {
     // MARK: - project folder
 
     /// The folder with fm27_squad_report.py in it (where Run Squad Report.command lives). Kept as a bookmark,
-    /// so it's still found if the folder is moved or renamed.
+    /// so it's still found if the folder is moved or renamed. With the engine inside the app it's only used once,
+    /// to copy your star history, phone key and scouting list over.
     func choose(folder url: URL) {
         guard FileManager.default.fileExists(atPath: url.appending(path: "fm27_squad_report.py").path) else {
             folderProblem = "That folder doesn't have fm27_squad_report.py in it. Pick the one with Run Squad Report.command."
@@ -64,7 +85,8 @@ final class AppModel {
         }
         let changed = folder != url
         folder = url
-        if changed { engine.switchFolder(to: url) } else { engine.start(folder: url) }
+        guard !usesBundledEngine else { return }   // the app's own engine doesn't need it
+        if changed { engine.switchSource(to: .folder(url)) } else { engine.start(.folder(url)) }
     }
 
     private static func restoreFolder() -> URL? {

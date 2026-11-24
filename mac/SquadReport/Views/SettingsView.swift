@@ -3,7 +3,7 @@ import ServiceManagement
 import SwiftUI
 import UserNotifications
 
-/// Settings: the project folder, open at login, the look, potential stars, and phone access with QR codes.
+/// Settings: where the engine runs from, open at login, the look, potential stars, and phone access with QR codes.
 struct SettingsView: View {
     var body: some View {
         TabView {
@@ -27,12 +27,29 @@ private struct GeneralSettings: View {
 
     var body: some View {
         Form {
-            Section("Project folder") {
-                LabeledContent("Folder") {
-                    Text(model.folder?.path(percentEncoded: false) ?? "Not chosen yet").lineLimit(2).truncationMode(.middle)
-                        .textSelection(.enabled)
+            Section("Engine") {
+                if BundledEngine.isAvailable {
+                    LabeledContent("Runs from", value: model.usesBundledEngine ? "Inside the app" : "Your project folder")
+                    Text(model.usesBundledEngine
+                         ? "Python and the save reader come with the app. Your star history, phone key and scouting list are kept in Application Support."
+                         : "Uses fm27_squad_report.py and .venv from the folder below, like Run Squad Report.command. Handy when you're changing the script.")
+                        .font(.caption).foregroundStyle(.secondary)
+                    if model.usesBundledEngine {
+                        Button("Show the App's Files in Finder") {
+                            NSWorkspace.shared.activateFileViewerSelecting([BundledEngine.home])
+                        }
+                    }
+                    Toggle("Run the engine from a project folder instead", isOn: Binding(
+                        get: { !model.usesBundledEngine },
+                        set: { model.useFolderEngine($0) }))
                 }
-                Button("Choose Another Folder…") { chooseProjectFolder(model) }
+                if !model.usesBundledEngine {
+                    LabeledContent("Folder") {
+                        Text(model.folder?.path(percentEncoded: false) ?? "Not chosen yet").lineLimit(2).truncationMode(.middle)
+                            .textSelection(.enabled)
+                    }
+                    Button("Choose Another Folder…") { chooseProjectFolder(model) }
+                }
             }
             Section("Starting up") {
                 Toggle("Open Squad Report when you log in", isOn: $loginItem)

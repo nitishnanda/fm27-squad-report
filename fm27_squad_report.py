@@ -125,15 +125,18 @@ STAR_TOP = 4.75             # your 3rd best senior player gets this many stars .
 STAR_MID = 3.0              # ... and your median senior player gets this many (like FM, stars are squad-relative)
 LOW_MATCH_RATING, HIGH_MATCH_RATING = 6.85, 7.20   # season-stats colouring
 
-APP_DIR = Path(__file__).resolve().parent
-REPORT_DIR = APP_DIR / "Reports"
-HISTORY_FILE = APP_DIR / "data" / "history.json"
+APP_DIR = Path(__file__).resolve().parent   # the script and its assets (read-only when it runs inside the Mac app)
+# Where it writes: Reports/, data/ (star history, club, phone key) and scouting.txt. Next to the script, unless the
+# Mac app (which ships this script inside itself) points it at ~/Library/Application Support/Squad Report.
+HOME_DIR = Path(os.environ["SQUAD_REPORT_HOME"]).expanduser() if os.environ.get("SQUAD_REPORT_HOME") else APP_DIR
+REPORT_DIR = HOME_DIR / "Reports"
+HISTORY_FILE = HOME_DIR / "data" / "history.json"
 LIVE_PORT = 8027            # the report lives at http://localhost:8027 while the window is open
 LIVE_POLL_SECONDS = 4       # how often it checks for a new save
 LIVE_SETTLE_SECONDS = 4     # waits this long after a save is written before reading it
 PHONE_ACCESS = True         # your phone can open the live app over your home Wi-Fi through a private link (the phone
                             # icon in the app shows it as a QR code). False, or starting with --mac-only, keeps it to this Mac
-PHONE_FILE = APP_DIR / "data" / "phone.json"   # the private part of that link; delete it to make a new one
+PHONE_FILE = HOME_DIR / "data" / "phone.json"   # the private part of that link; delete it to make a new one
 
 # Visible-attribute rating model from fmsave's _scouting_v1.json ("visible": no CA/PA, no hidden
 # attributes). i = intercept, w = weight per attribute on the 1-20 scale.
@@ -1236,7 +1239,7 @@ def player_performance(season_rows, by_uid, my: int, league_clubs: set, played: 
 # =============================================================================================
 # Scouting targets: players from your FM squad planner + names you list in scouting.txt
 # =============================================================================================
-SCOUTING_FILE = APP_DIR / "scouting.txt"
+SCOUTING_FILE = HOME_DIR / "scouting.txt"
 SCOUTING_HELP = """# Players you're scouting. One per line, e.g.
 #   Fabian Mrozek
 #   Joshua Kimmich, Bayern     <- add the club after a comma if the name isn't unique
@@ -3240,7 +3243,7 @@ CLUB_COLOURS = {
     "roma": "#8E1F2F", "ajax": "#D2122E", "benfica": "#E83030", "porto": "#1F5FB0", "celtic": "#018749", "rangers": "#1B458F",
 }
 CLUB_CRESTS = {"liverpool": ("liverbird-red.svg", "liverbird-white.svg")}   # (on dark, on club colour / pitch)
-CLUB_FILE = APP_DIR / "data" / "club.json"   # last club read, so the loader can wear its colours before a save is read
+CLUB_FILE = HOME_DIR / "data" / "club.json"   # last club read, so the loader can wear its colours before a save is read
 
 
 def _norm_club(name: str) -> str:
@@ -5897,6 +5900,7 @@ def make_report(save_path: Path) -> tuple[Path, str]:
     except OSError:
         pass
     REPORT_DIR.mkdir(parents=True, exist_ok=True)
+    link_assets()
     out = REPORT_DIR / f"{report['club']} {report['game_date']:%Y-%m-%d}.html"
     page = render(report)
     out.write_text(page, encoding="utf-8")
@@ -5938,6 +5942,20 @@ background:#0f1411;color:#e8ece6;font:16px/1.5 -apple-system,system-ui,sans-seri
 <h1 style="font-size:22px;line-height:1.25;margin:0 0 8px">This page needs the code from the Mac</h1>
 <p style="margin:0;color:#aab3a8">Squad Report runs on a Mac on this Wi-Fi. On that Mac, open the app, click the phone icon at the top and
 scan the QR code with this phone.</p></main></body></html>"""
+
+
+def link_assets() -> None:
+    """Saved reports load ../assets/. When they're written away from the script (the Mac app), link that folder in."""
+    if HOME_DIR == APP_DIR:
+        return
+    link = HOME_DIR / "assets"
+    try:
+        if link.is_symlink() and link.resolve() != (APP_DIR / "assets").resolve():
+            link.unlink()   # the app moved
+        if not link.exists():
+            link.symlink_to(APP_DIR / "assets")
+    except OSError:
+        pass
 
 
 def phone_key() -> str:

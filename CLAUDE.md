@@ -136,6 +136,13 @@ LW (AML/ML) IF/WMF · AM SS/AM · RW (AMR/MR) IW/WMF · ST CFD/CFD. `STYLE_KEYS`
   ad-hoc signed. Project generated from `mac/project.yml` (XcodeGen; the .xcodeproj, `mac/build/` and Info.plist are
   gitignored). Build/test with `mac/build.sh` / `mac/build.sh test`; `mac/build.sh install` puts a Release build in
   `/Applications` (his everyday copy). Builds go to `mac/build/DerivedData.noindex` so Spotlight doesn't list dev copies.
+  The app ships its own engine (`BundledEngine`, `Contents/Resources/Engine`: standalone Python 3.13 + fmsave +
+  backports-zstd, plus the script and assets, copied in by `mac/bundle_engine.sh` from `mac/build/vendor/python`, which
+  `mac/vendor_python.sh` makes). Script changes reach the installed app only through `mac/build.sh install`; to test
+  script edits live, use Settings › Engine › "Run the engine from a project folder instead" (or the .command). The bundled
+  engine runs with `SQUAD_REPORT_HOME` = `~/Library/Application Support/Squad Report`: the engine writes data/,
+  scouting.txt and Reports/ there instead of next to the script (`HOME_DIR`; assets still come from `APP_DIR`).
+  Never let it write into the app bundle (PYTHONDONTWRITEBYTECODE; .pyc files are compiled at vendoring time).
   Phase 5 checked every page at 900×600 (the min) and full screen, light/dark/Glass: keep narrow layouts working
   (`ViewThatFits`, adaptive grids) when adding to a page. Test light mode without touching his system setting by
   launching with `--args -NSRequiresAquaSystemAppearance YES`, and a window size with `"-NSWindow Frame main" "x y w h ..."`. First launch asks for the project folder (bookmark in

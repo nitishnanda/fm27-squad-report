@@ -31,13 +31,14 @@ struct ProcessResult: Sendable {
 
 enum ProcessRunner {
     /// Runs a program to the end (or until `timeout`) and returns its exit status and combined output.
+    /// `environment` replaces the app's own (the bundled Python gets a clean one); nil inherits it.
     static func run(_ executable: URL, _ arguments: [String], in directory: URL? = nil,
-                    timeout: Duration? = nil) async -> ProcessResult {
+                    environment: [String: String]? = nil, timeout: Duration? = nil) async -> ProcessResult {
         let process = Process()
         process.executableURL = executable
         process.arguments = arguments
         process.currentDirectoryURL = directory
-        var env = ProcessInfo.processInfo.environment
+        var env = environment ?? ProcessInfo.processInfo.environment
         env["PIP_DISABLE_PIP_VERSION_CHECK"] = "1"
         env["PYTHONUNBUFFERED"] = "1"
         process.environment = env

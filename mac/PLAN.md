@@ -120,7 +120,22 @@ a search sheet that adds them via `POST /scouting`, Swift port of the Hungarian 
   Send Test Notification button.
 - Installed: `mac/build.sh install` builds Release into `/Applications/Squad Report.app` (Launchpad, Spotlight, open at
   login). Dev builds live in `mac/build/DerivedData.noindex` so Spotlight only shows the installed copy.
-- Not done (only if wanted): bundle Python inside the app so it no longer needs the project folder.
+- Python bundled: the app carries its own engine (below), so it no longer needs the project folder.
+
+## Python inside the app ✅ done
+
+- `Contents/Resources/Engine/python`: a relocatable python-build-standalone CPython 3.13 (trimmed: no Tk, IDLE,
+  headers), with fmsave and backports-zstd (fmsave needs it before 3.14). `Engine/engine`: fm27_squad_report.py + assets.
+  ~70 MB app. `mac/vendor_python.sh` prepares `mac/build/vendor/python` once (from uv's local copy of 3.13, fmsave from
+  the project's .venv, the backports-zstd wheel kept in `mac/build/vendor/wheels`); the "Bundle the engine" build phase
+  (`mac/bundle_engine.sh`) copies it and the current script into every build before signing.
+- The engine writes to `~/Library/Application Support/Squad Report` (`SQUAD_REPORT_HOME`): data/ (star history, club,
+  phone key), scouting.txt, Reports/ (with an `assets` link so saved pages still render). The first launch copies
+  history, club, phone key and scouting list over from the project folder, once, never overwriting.
+- fmsave: the app's copy works offline; once a day the app asks PyPI for the latest version and, if newer, installs it
+  into `Application Support/Squad Report/python-packages` (first on the import path; dropped if it won't import).
+- Settings › General › Engine: "Run the engine from a project folder instead" switches back to the old way (the folder's
+  script and .venv), for working on the script. The .command still works and still uses the project folder's files.
 
 ## What he does once
 

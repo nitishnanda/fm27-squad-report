@@ -4,7 +4,7 @@ struct ContentView: View {
     @Environment(AppModel.self) private var model
 
     var body: some View {
-        if model.folder == nil {
+        if model.needsFolder {
             WelcomeView()
         } else {
             NavigationSplitView {

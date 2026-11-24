@@ -239,3 +239,32 @@ struct FormatTests {
         #expect(Route.training.section == .tactics)
     }
 }
+
+@Suite("The engine inside the app")
+struct BundledEngineTests {
+    @Test func comparesFmsaveVersionsNumberByNumber() {
+        #expect(BundledEngine.isNewer("0.15.0", than: "0.14.3"))
+        #expect(BundledEngine.isNewer("0.14.10", than: "0.14.9"))
+        #expect(BundledEngine.isNewer("1.0", than: "0.99.9"))
+        #expect(!BundledEngine.isNewer("0.14.3", than: "0.14.3"))
+        #expect(!BundledEngine.isNewer("0.14.2", than: "0.14.3"))
+    }
+
+    @Test func runsPythonInACleanEnvironment() {
+        let env = BundledEngine.environment(packages: nil)
+        #expect(env["PYTHONHOME"] == nil)
+        #expect(env["VIRTUAL_ENV"] == nil)
+        #expect(env["PYTHONPATH"] == nil)
+        #expect(env["PYTHONDONTWRITEBYTECODE"] == "1")      // never writes into the signed app
+        #expect(env["PYTHONNOUSERSITE"] == "1")
+        #expect(env["SQUAD_REPORT_HOME"]?.hasSuffix("Application Support/Squad Report/") == true
+                || env["SQUAD_REPORT_HOME"]?.hasSuffix("Application Support/Squad Report") == true)
+    }
+
+    @Test func shipsInsideThisBuild() {
+        // the test host is the app; a build made with mac/build.sh carries the engine
+        guard let root = BundledEngine.root else { return }
+        #expect(FileManager.default.isExecutableFile(atPath: BundledEngine.python(root).path))
+        #expect(FileManager.default.fileExists(atPath: root.appending(path: "engine/assets").path))
+    }
+}

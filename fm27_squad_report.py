@@ -3515,8 +3515,54 @@ body.mini{pointer-events:none;padding-bottom:0}
 """
 
 
+# The home page's Mac app section. Its screenshots must come from the made-up save (the demo site is public), taken with
+# the app's demo mode: open "Squad Report.app" --args -demoReport mac/Fixtures/report.json. Saved as assets/mac-*.jpg;
+# the section only appears once the first one is there.
+MAC_SHOTS = [("mac-home.jpg", "Home", "The Mac app's Home page: the club banner, club snapshot and the positions that need work"),
+             ("mac-squad.jpg", "Squad list", "The Mac app's squad list: a sortable table grouped by position, with status badges"),
+             ("mac-xis.jpg", "Best XIs", "The Mac app's Best XIs: both XIs on pitches in the 4-2-3-1"),
+             ("mac-sandbox.jpg", "Sandbox", "The Mac app's Sandbox: the XI on a pitch beside the squad, ready to drag players in")]
+MAC_FACTS = [("Menu bar", "“Reading your save, step 3 of 8”, then “Up to date”."),
+             ("Notifications", "One when a new save has been read while you're playing."),
+             ("Real tables", "Sort, resize and hide the squad list's columns."),
+             ("Nothing to install", "Python and the save reader come inside the app.")]
+
+
+def _jpeg_size(path: Path) -> tuple[int, int] | None:
+    """Width and height from a JPEG's frame header, so the page can reserve the space before the image loads."""
+    try:
+        data = path.read_bytes()
+    except OSError:
+        return None
+    i = 2
+    while i + 9 < len(data) and data[i] == 0xFF:
+        marker, size = data[i + 1], int.from_bytes(data[i + 2:i + 4], "big")
+        if marker in (0xC0, 0xC1, 0xC2):
+            return int.from_bytes(data[i + 7:i + 9], "big"), int.from_bytes(data[i + 5:i + 7], "big")
+        i += 2 + size
+    return None
+
+
+def mac_section() -> tuple[str, str]:
+    """(nav link, section) for the home page, or empty strings until the demo screenshots exist."""
+    shots = [(f, cap, alt, _jpeg_size(APP_DIR / "assets" / f)) for f, cap, alt in MAC_SHOTS if (APP_DIR / "assets" / f).is_file()]
+    if not shots:
+        return "", ""
+    figs = "".join(f'<figure class="rv"><img src="{asset(f)}" alt="{E(alt)}" loading="lazy" decoding="async"'
+                   + (f' width="{wh[0]}" height="{wh[1]}"' if wh else "") + f'><figcaption>{E(cap)}</figcaption></figure>'
+                   for f, cap, alt, wh in shots)
+    facts = "".join(f'<li class="rv"><b>{E(t)}</b>{E(x)}</li>' for t, x in MAC_FACTS)
+    return ('<a href="#mac">Mac app</a>',
+            f'<section class="mac" id="mac" aria-label="The Mac app"><div class="how mac-head"><h2>Also a Mac app</h2></div>'
+            f'<p class="mac-lede">The same report in its own Mac window: a sidebar instead of tabs, tables you can sort, and a menu bar '
+            f'item that tells you when your latest save has been read. Every page works the same as here, with the same rules.</p>'
+            f'<div class="mac-shots">{figs}</div><ul class="mac-facts">{facts}</ul>'
+            f'<p class="mac-note">Screenshots use the made-up demo save, like the rest of this page.</p></section>')
+
+
 def landing_page() -> str:
     lfc = club_identity("Liverpool")
+    mac_link, mac_html = mac_section()
     hero_cards = [(s, n, r, "") for s, n, r in DEMO_XI]
     steps = [
         ("Best XIs", "Your strongest XI and a second XI from who's left, rated for your tactic in and out of possession."),
@@ -3543,7 +3589,7 @@ def landing_page() -> str:
 <body class="landing">
 <a class="skip" href="#top">Skip to content</a>
 <header class="lnav"><a class="lbrand" href="#top">{APP_LOGO_SVG}<span>FM27 {APP_NAME}</span></a>
- <nav aria-label="Page"><a href="#inside">What's inside</a><a href="#wont">What it won't do</a><a href="#how">How it works</a></nav>
+ <nav aria-label="Page"><a href="#inside">What's inside</a><a href="#wont">What it won't do</a><a href="#how">How it works</a>{mac_link}</nav>
  <button class="look-btn ah-look" type="button" popovertarget="lookpop" aria-label="Change the look">Look<span class="lk-cur">: <b id="lookCur">Original</b></span></button>
  <a class="btn sm" href="/app" data-launch>Launch the app</a></header>
 <main id="top">
@@ -3574,6 +3620,7 @@ def landing_page() -> str:
   <li class="rv"><b>2</b><h3>It rebuilds itself</h3><p>About 30 seconds after you save, the report is ready.</p></li>
   <li class="rv"><b>3</b><h3>Refresh and read</h3><p>Open the app, or refresh it if it's already open.</p></li></ol>
 </section>
+{mac_html}
 <section class="cta"><h2>Your save is waiting.</h2><a class="btn inv" href="/app" data-launch>Launch the app</a>
  <p>Opens at localhost:8027/app on this Mac.</p></section>
 </main>
@@ -3588,6 +3635,18 @@ def landing_page() -> str:
 
 
 LANDING_CSS = r"""
+.mac{padding:0 var(--gut) 120px}
+.mac .mac-head{padding:0}
+.mac-lede{max-width:62ch;margin:-20px 0 44px;font-size:18px;line-height:1.55;color:var(--text2)}
+.mac-shots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
+.mac-shots figure{margin:0}
+.mac-shots figure:first-child{grid-column:1/-1}
+.mac-shots img{display:block;width:100%;height:auto;border-radius:12px;box-shadow:0 34px 70px -34px rgba(0,0,0,.75),0 0 0 1px rgba(127,127,127,.28)}
+.mac-shots figcaption{margin-top:10px;font-size:14px;color:var(--text2)}
+.mac-facts{list-style:none;margin:48px 0 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}
+.mac-facts li{border-top:2px solid var(--text);padding-top:14px;font-size:15px;line-height:1.45;color:var(--text2)}
+.mac-facts b{display:block;margin-bottom:4px;font-size:17px;color:var(--text)}
+.mac-note{margin:32px 0 0;font-size:13px;color:var(--text2)}
 :root{--bg:#0e1512;--panel:#16201b;--panel2:#1d2923;--line:#2a3a32;--text:#eef1e8;--text2:#c3cbc0;--muted:#8d9a91;
  --brand:#1C7F46;--brand-ink:#fff;--brand-hi:#4FC77F;--kit:#1C7F46;--kit-ink:#fff;--gold:#e9b949;
  --display:"Archivo","Arial Narrow",system-ui,sans-serif;--gut:clamp(20px,5vw,72px)}
@@ -3680,6 +3739,7 @@ h1,h2,h3{font-family:var(--display);margin:0}
  .frame{transform:none}
  .cols{grid-template-columns:1fr}.cols>div,.cols>div+div{padding:0;border:0}.cols>div+div{margin-top:40px}
  .how ol{grid-template-columns:1fr}
+ .mac-shots{grid-template-columns:1fr}.mac-facts{grid-template-columns:1fr 1fr}
 }
 @media (prefers-reduced-motion:reduce){.btn{transition:none}}
 """
@@ -6262,6 +6322,7 @@ def loader_page() -> str:
 
 
 ASSET_TYPES = {".js": "text/javascript; charset=utf-8", ".svg": "image/svg+xml", ".css": "text/css; charset=utf-8", ".woff2": "font/woff2",
+               ".jpg": "image/jpeg",
                ".png": "image/png", ".webmanifest": "application/manifest+json"}
 
 

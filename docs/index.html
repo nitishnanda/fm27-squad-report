@@ -35,6 +35,18 @@
 .p3-card.inj-long{border-color:#ef4444}.p3-card.inj-short{border-color:#facc15}.p3-card.deal-in{border-color:#22c55e}.p3-card.loan-in{border-color:#3b82f6}
 @media (max-width:700px){.p3{--pw:min(70vw,320px)}.p3-card{width:70px;left:-35px}.p3-card .nm{font-size:12px}}
 
+.mac{padding:0 var(--gut) 120px}
+.mac .mac-head{padding:0}
+.mac-lede{max-width:62ch;margin:-20px 0 44px;font-size:18px;line-height:1.55;color:var(--text2)}
+.mac-shots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
+.mac-shots figure{margin:0}
+.mac-shots figure:first-child{grid-column:1/-1}
+.mac-shots img{display:block;width:100%;height:auto;border-radius:12px;box-shadow:0 34px 70px -34px rgba(0,0,0,.75),0 0 0 1px rgba(127,127,127,.28)}
+.mac-shots figcaption{margin-top:10px;font-size:14px;color:var(--text2)}
+.mac-facts{list-style:none;margin:48px 0 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}
+.mac-facts li{border-top:2px solid var(--text);padding-top:14px;font-size:15px;line-height:1.45;color:var(--text2)}
+.mac-facts b{display:block;margin-bottom:4px;font-size:17px;color:var(--text)}
+.mac-note{margin:32px 0 0;font-size:13px;color:var(--text2)}
 :root{--bg:#0e1512;--panel:#16201b;--panel2:#1d2923;--line:#2a3a32;--text:#eef1e8;--text2:#c3cbc0;--muted:#8d9a91;
  --brand:#1C7F46;--brand-ink:#fff;--brand-hi:#4FC77F;--kit:#1C7F46;--kit-ink:#fff;--gold:#e9b949;
  --display:"Archivo","Arial Narrow",system-ui,sans-serif;--gut:clamp(20px,5vw,72px)}
@@ -127,6 +139,7 @@ h1,h2,h3{font-family:var(--display);margin:0}
  .frame{transform:none}
  .cols{grid-template-columns:1fr}.cols>div,.cols>div+div{padding:0;border:0}.cols>div+div{margin-top:40px}
  .how ol{grid-template-columns:1fr}
+ .mac-shots{grid-template-columns:1fr}.mac-facts{grid-template-columns:1fr 1fr}
 }
 @media (prefers-reduced-motion:reduce){.btn{transition:none}}
 
@@ -2952,6 +2965,7 @@ body.mini{pointer-events:none;padding-bottom:0}
   <li class="rv"><b>2</b><h3>It rebuilds itself</h3><p>About 30 seconds after you save, the report is ready.</p></li>
   <li class="rv"><b>3</b><h3>Refresh and read</h3><p>Open the app, or refresh it if it's already open.</p></li></ol>
 </section>
+
 <section class="cta"><h2>Your save is waiting.</h2><a class="btn inv" href="app/" data-launch>Launch the app</a>
  <p>Opens at localhost:8027/app on this Mac.</p></section>
 </main>

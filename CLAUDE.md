@@ -172,6 +172,10 @@ LW (AML/ML) IF/WMF · AM SS/AM · RW (AMR/MR) IW/WMF · ST CFD/CFD. `STYLE_KEYS`
   Testing UI: the shell can't screenshot windows (no Screen Recording grant); use computer-use `app_screenshot` on
   `com.squadreport.mac`.
 
+- Home page "Mac app" section (`mac_section()`, `MAC_SHOTS`, `MAC_FACTS`): appears only once `assets/mac-home.jpg` etc. exist.
+  Those screenshots must come from the app's demo mode (`-demoReport mac/Fixtures/report.json`), never his real save,
+  because the demo site is public. `.jpg` is in `ASSET_TYPES`; `_jpeg_size()` gives the img width/height.
+
 ## Hosted demo
 - `python3 demo/build_site.py` builds `docs/` from `demo/fake_save.py` (a made-up save: Liverpool names with invented ratings,
   injuries and moves; also handy for testing every tab without his save): home page at the root, app in `app/`, `assets/` copied

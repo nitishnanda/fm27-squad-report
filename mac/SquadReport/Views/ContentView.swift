@@ -88,6 +88,10 @@ private struct Detail: View {
         case .xis: BestXIsView(report: report)
         case .positions: PositionsView(report: report)
         case .squad: SquadListView(report: report)
+        case .fit: TacticalFitView(report: report)
+        case .training: TrainingView(report: report)
+        case .transfers: TransfersView(report: report)
+        case .stats: StatsView(report: report)
         default: NotYetView(route: model.route)
         }
     }

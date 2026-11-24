@@ -139,12 +139,16 @@ LW (AML/ML) IF/WMF · AM SS/AM · RW (AMR/MR) IW/WMF · ST CFD/CFD. `STYLE_KEYS`
   runs `PythonSetup` (find Python 3.12+, `.venv`, fmsave, upgrade once a day) and starts `--headless`, restarting it up to
   3 times in 2 minutes; quitting the app stops only an engine it started. `ReportStore` polls /api/status (1 s busy, 3 s
   idle), fetches /api/report on a new version and caches it in `~/Library/Application Support/Squad Report/last-report.json`.
-  Native pages so far: Home, Best XIs, Positions and Squad list (`Route.isNative`; Phase 2 in PLAN.md); the rest show "Open in Browser". Statuses use
+  Native pages: everything except Sandbox (`Route.isNative`; Phases 2–3 in PLAN.md); the rest show "Open in Browser". Statuses use
   `PlayerStatus` + `StatusBadge` (colour + SF Symbol + word, dashed for arranged/contract ending). The feed's
   `formation.style` ("Gegenpress") was added for the Home hero; no schema bump (new field, same meanings).
   Positions logic lives in `PositionCards.build` (mirrors `position_cards()`: rated here, or `played_many`+ games at
   the card via `open_rows`; loans out last; best `youth_per_card` youth; "Not listed" half-phase note from
   `familiarity`). `PlayerCard` is the shared popover. Squad list columns persist in `@AppStorage("squadColumns")`.
+  Tactical fit and Training use a segmented control for their parts instead of one long scroll. Swift Charts on this
+  macOS draws category labels above each horizontal bar, so StatsView hides the y axis and labels bars itself with
+  `.annotation(position: .top, alignment: .leading)`. Attribute dictionaries may come back camelCased from the decoder:
+  use `Report.label/abbr` and `Player.attribute`, which try both spellings.
   Demo mode: `open "…/Squad Report.app" --args -demoReport <path>/mac/Fixtures/report.json` (no engine).
   Testing UI: the shell can't screenshot windows (no Screen Recording grant); use computer-use `app_screenshot` on
   `com.squadreport.mac`.

@@ -23,6 +23,25 @@ struct Report: Decodable, Sendable {
     let performance: Performance
     let news: [NewsItem]
     let notes: [String]
+    let teamNames: [String: String]?
+    let fit: TacticalFit?
+    let style: Style?
+    let attributeLabels: [String: String]?
+    let attributeAbbr: [String: String]?
+    let training: [TrainingTeam]?
+    let trainingAdvice: TrainingAdvice?
+    let plans: [TrainingPlan]?
+
+    /// "Work Rate" for "work_rate". Dictionary keys may come back camelCased by the decoder, so both are tried.
+    func label(_ attribute: String) -> String {
+        attributeLabels?[attribute] ?? attributeLabels?[attribute.camelCased]
+            ?? attribute.replacingOccurrences(of: "_", with: " ").capitalized
+    }
+
+    /// "Wor" for "work_rate", for tight table headers.
+    func abbr(_ attribute: String) -> String {
+        attributeAbbr?[attribute] ?? attributeAbbr?[attribute.camelCased] ?? String(label(attribute).prefix(3))
+    }
 
     static func decode(_ data: Data) throws -> Report {
         let decoder = JSONDecoder()
@@ -62,6 +81,8 @@ struct Formation: Decodable, Sendable {
         let oopRoleName: String?
         let x: Double?            // where he stands on the pitch, % from the left
         let y: Double?            // % from the top (your goal at the bottom)
+        let ipKeys: [String]?     // the key attributes of the in-possession role
+        let oopKeys: [String]?
     }
     let name: String
     let style: String?
@@ -136,10 +157,159 @@ struct Performance: Decodable, Sendable {
         let home: Bool
         let date: String?
     }
+    struct Metric: Decodable, Sendable, Identifiable {
+        let key: String
+        let label: String
+        let value: Double
+        let unit: String
+        let rank: Int
+        let of: Int
+        let avg: Double
+        let good: String
+        let bad: String
+        let higher: Bool?
+        let above: Bool?
+        let valueText: String?
+        let avgText: String?
+        var id: String { key }
+    }
+    struct PlayerItem: Decodable, Sendable {
+        let key: String
+        let label: String
+        let value: Double
+        let pctl: Double
+        let press: Bool?
+        let valueText: String?
+    }
+    struct PlayerNumbers: Decodable, Sendable {
+        let group: String?
+        let groupName: String?
+        let good: [PlayerItem]
+        let bad: [PlayerItem]
+        let minutes: Int
+        let avg: Double?
+        let peers: Int?
+    }
     let record: Record?
     let form: [Result]
+    let metrics: [Metric]?
+    let matches: Int?
     let leagueName: String?
     let leagueSize: Int?
+    let insights: [String]?
+    let minMinutes: Int?
+    let players: [String: PlayerNumbers]?
+}
+
+/// Role-by-role fit: key attributes of each role (in and out of possession) blended with the style's attributes.
+struct TacticalFit: Decodable, Sendable {
+    struct Weak: Decodable, Sendable, Hashable {
+        let value: Int
+        let attribute: String
+    }
+    struct Entry: Decodable, Sendable, Identifiable {
+        let uid: Int
+        let xi: Bool
+        let fit: Double?
+        let ip: Double?
+        let oop: Double?
+        let style: Double?
+        let weak: [Weak]
+        let styleWeak: [Weak]
+        var id: Int { uid }
+    }
+    struct Row: Decodable, Sendable, Identifiable {
+        let label: String
+        let slot: String
+        let ipRole: String
+        let oopRole: String
+        let entries: [Entry]
+        var id: String { label }
+    }
+    struct Misfit: Decodable, Sendable, Identifiable {
+        let uid: Int
+        let why: String
+        let bestRow: String?
+        let best: Entry?
+        var id: Int { uid }
+    }
+    let rows: [Row]
+    let misfits: [Misfit]
+}
+
+struct Style: Decodable, Sendable {
+    let name: String
+    let keys: [String]
+}
+
+struct TrainingTeam: Decodable, Sendable, Identifiable {
+    struct Day: Decodable, Sendable {
+        let day: String
+        let sessions: [Int?]
+    }
+    struct Session: Decodable, Sendable {
+        let name: String
+        let family: String
+        let kind: String      // tac, prep, dev, phys, rest, match, extra
+        let exact: Bool
+    }
+    let slot: Int?
+    let name: String
+    let current: String?
+    let week: String?
+    let upcoming: [[String]]?
+    let rotation: [String: Int]?
+    let recentWeeks: Int?
+    let grid: [Day]?
+    let sessions: [String: Session]?
+    var id: String { name }
+
+    func session(_ code: Int) -> Session? { sessions?[String(code)] }
+}
+
+struct TrainingAdvice: Decodable, Sendable {
+    struct Change: Decodable, Sendable, Identifiable {
+        let title: String
+        let why: String
+        let `do`: String
+        let safe: String
+        var id: String { title }
+    }
+    let changes: [Change]
+    let keep: [String]
+}
+
+struct TrainingPlan: Decodable, Sendable, Identifiable {
+    struct Work: Decodable, Sendable, Hashable {
+        let code: String
+        let phase: String
+        let word: String
+        let how: String
+    }
+    struct Attr: Decodable, Sendable, Hashable {
+        let attribute: String
+        let value: Int
+    }
+    let uid: Int
+    let label: String
+    let ipRole: String
+    let oopRole: String
+    let inXi: Bool
+    let positionWork: [Work]
+    let focus: Attr?
+    let then: Attr?
+    let why: String
+    let fixed: [Attr]
+    var id: Int { uid }
+}
+
+extension String {
+    /// "work_rate" -> "workRate", the way JSONDecoder's snake-case strategy spells keys.
+    var camelCased: String {
+        let parts = split(separator: "_")
+        guard let first = parts.first else { return self }
+        return String(first) + parts.dropFirst().map { $0.prefix(1).uppercased() + $0.dropFirst() }.joined()
+    }
 }
 
 struct Rating: Decodable, Sendable, Hashable {
@@ -166,6 +336,7 @@ struct Player: Decodable, Sendable, Identifiable {
         let cs: Int?
         let y: Int?
         let r: Int?
+        let team: Int?
     }
     struct Status: Decodable, Sendable {
         struct Injury: Decodable, Sendable {
@@ -209,12 +380,17 @@ struct Player: Decodable, Sendable, Identifiable {
     let played: [String: Int]?
     /// Per card: FM's words for how well he knows the in- and out-of-possession positions. Missing = ineffective.
     let familiarity: [String: [String]]?
+    /// Visible attributes only (the engine drops hidden ones before they reach the app).
+    let attributes: [String: Int?]?
+    let youthStats: [SeasonStats]?
 
     var id: Int { uid }
 
+    func attribute(_ key: String) -> Int? { (attributes?[key] ?? attributes?[key.camelCased]) ?? nil }
+
     private enum CodingKeys: String, CodingKey {
         case uid, name, age, youth, value, wage, contractEnd, expiring, positions, best, system, abilityBest
-        case potential, trend, stats, status, rows, openRows, played, familiarity
+        case potential, trend, stats, status, rows, openRows, played, familiarity, attributes, youthStats
         case location = "where"
     }
 

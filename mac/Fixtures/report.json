@@ -24,7 +24,27 @@
     "ip_role_name": "Ball-Playing Goalkeeper",
     "oop_role_name": "Sweeper Keeper",
     "x": 50,
-    "y": 89
+    "y": 89,
+    "ip_keys": [
+     "one_on_ones",
+     "reflexes",
+     "kicking",
+     "passing",
+     "first_touch",
+     "composure",
+     "decisions",
+     "vision"
+    ],
+    "oop_keys": [
+     "command_of_area",
+     "one_on_ones",
+     "reflexes",
+     "rushing_out",
+     "anticipation",
+     "concentration",
+     "positioning",
+     "acceleration"
+    ]
    },
    {
     "slot": "LB",
@@ -36,7 +56,25 @@
     "ip_role_name": "Full-Back",
     "oop_role_name": "Full-Back",
     "x": 14,
-    "y": 69
+    "y": 69,
+    "ip_keys": [
+     "crossing",
+     "marking",
+     "tackling",
+     "positioning",
+     "teamwork",
+     "work_rate",
+     "pace",
+     "stamina"
+    ],
+    "oop_keys": [
+     "marking",
+     "tackling",
+     "positioning",
+     "concentration",
+     "anticipation",
+     "decisions"
+    ]
    },
    {
     "slot": "CB",
@@ -48,7 +86,25 @@
     "ip_role_name": "Centre-Back",
     "oop_role_name": "Centre-Back",
     "x": 37,
-    "y": 75
+    "y": 75,
+    "ip_keys": [
+     "heading",
+     "marking",
+     "tackling",
+     "anticipation",
+     "positioning",
+     "jumping_reach",
+     "strength"
+    ],
+    "oop_keys": [
+     "heading",
+     "marking",
+     "tackling",
+     "anticipation",
+     "positioning",
+     "jumping_reach",
+     "strength"
+    ]
    },
    {
     "slot": "CB",
@@ -60,7 +116,27 @@
     "ip_role_name": "Ball-Playing Centre-Back",
     "oop_role_name": "Centre-Back",
     "x": 63,
-    "y": 75
+    "y": 75,
+    "ip_keys": [
+     "heading",
+     "marking",
+     "passing",
+     "tackling",
+     "anticipation",
+     "composure",
+     "positioning",
+     "jumping_reach",
+     "strength"
+    ],
+    "oop_keys": [
+     "heading",
+     "marking",
+     "tackling",
+     "anticipation",
+     "positioning",
+     "jumping_reach",
+     "strength"
+    ]
    },
    {
     "slot": "RB",
@@ -72,7 +148,25 @@
     "ip_role_name": "Wing-Back",
     "oop_role_name": "Full-Back",
     "x": 86,
-    "y": 69
+    "y": 69,
+    "ip_keys": [
+     "crossing",
+     "marking",
+     "tackling",
+     "teamwork",
+     "work_rate",
+     "acceleration",
+     "pace",
+     "stamina"
+    ],
+    "oop_keys": [
+     "marking",
+     "tackling",
+     "positioning",
+     "concentration",
+     "anticipation",
+     "decisions"
+    ]
    },
    {
     "slot": "DM",
@@ -84,7 +178,25 @@
     "ip_role_name": "Deep-Lying Playmaker",
     "oop_role_name": "Pressing Defensive Midfielder",
     "x": 36,
-    "y": 54
+    "y": 54,
+    "ip_keys": [
+     "first_touch",
+     "passing",
+     "technique",
+     "composure",
+     "decisions",
+     "teamwork",
+     "vision"
+    ],
+    "oop_keys": [
+     "tackling",
+     "aggression",
+     "work_rate",
+     "stamina",
+     "anticipation",
+     "teamwork",
+     "acceleration"
+    ]
    },
    {
     "slot": "DM",
@@ -96,7 +208,21 @@
     "ip_role_name": "Defensive Midfielder",
     "oop_role_name": "Defensive Midfielder",
     "x": 64,
-    "y": 54
+    "y": 54,
+    "ip_keys": [
+     "tackling",
+     "anticipation",
+     "concentration",
+     "positioning",
+     "teamwork"
+    ],
+    "oop_keys": [
+     "tackling",
+     "anticipation",
+     "concentration",
+     "positioning",
+     "teamwork"
+    ]
    },
    {
     "slot": "LW",
@@ -108,7 +234,24 @@
     "ip_role_name": "Inside Forward",
     "oop_role_name": "Wide Midfielder",
     "x": 16,
-    "y": 30
+    "y": 30,
+    "ip_keys": [
+     "dribbling",
+     "finishing",
+     "first_touch",
+     "technique",
+     "off_the_ball",
+     "acceleration",
+     "agility"
+    ],
+    "oop_keys": [
+     "work_rate",
+     "teamwork",
+     "stamina",
+     "tackling",
+     "positioning",
+     "decisions"
+    ]
    },
    {
     "slot": "AM",
@@ -120,7 +263,23 @@
     "ip_role_name": "Second Striker",
     "oop_role_name": "Attacking Midfielder",
     "x": 50,
-    "y": 37
+    "y": 37,
+    "ip_keys": [
+     "dribbling",
+     "finishing",
+     "first_touch",
+     "anticipation",
+     "composure",
+     "off_the_ball",
+     "acceleration"
+    ],
+    "oop_keys": [
+     "work_rate",
+     "teamwork",
+     "stamina",
+     "anticipation",
+     "decisions"
+    ]
    },
    {
     "slot": "RW",
@@ -132,7 +291,24 @@
     "ip_role_name": "Inside Winger",
     "oop_role_name": "Wide Midfielder",
     "x": 84,
-    "y": 30
+    "y": 30,
+    "ip_keys": [
+     "dribbling",
+     "passing",
+     "technique",
+     "vision",
+     "decisions",
+     "acceleration",
+     "agility"
+    ],
+    "oop_keys": [
+     "work_rate",
+     "teamwork",
+     "stamina",
+     "tackling",
+     "positioning",
+     "decisions"
+    ]
    },
    {
     "slot": "ST",
@@ -144,7 +320,22 @@
     "ip_role_name": "Centre Forward",
     "oop_role_name": "Centre Forward",
     "x": 50,
-    "y": 13
+    "y": 13,
+    "ip_keys": [
+     "finishing",
+     "off_the_ball",
+     "composure",
+     "acceleration",
+     "first_touch",
+     "anticipation"
+    ],
+    "oop_keys": [
+     "work_rate",
+     "stamina",
+     "teamwork",
+     "aggression",
+     "acceleration"
+    ]
    }
   ]
  },
@@ -7620,7 +7811,9 @@
     "good": "you're scoring freely",
     "bad": "goals are drying up",
     "higher": true,
-    "above": true
+    "above": true,
+    "value_text": "2.54",
+    "avg_text": "1.38"
    },
    {
     "key": "ga",
@@ -7633,7 +7826,9 @@
     "good": "hard to score against",
     "bad": "leaking goals",
     "higher": false,
-    "above": true
+    "above": true,
+    "value_text": "0.31",
+    "avg_text": "1.38"
    },
    {
     "key": "xg",
@@ -7646,7 +7841,9 @@
     "good": "creating big chances",
     "bad": "not creating enough good chances",
     "higher": true,
-    "above": true
+    "above": true,
+    "value_text": "1.81",
+    "avg_text": "1.27"
    },
    {
     "key": "xga",
@@ -7659,7 +7856,9 @@
     "good": "opponents barely get a sniff",
     "bad": "opponents get good chances",
     "higher": false,
-    "above": true
+    "above": true,
+    "value_text": "0.82",
+    "avg_text": "1.27"
    },
    {
     "key": "shots",
@@ -7672,7 +7871,9 @@
     "good": "constant pressure on goal",
     "bad": "not many shots",
     "higher": true,
-    "above": true
+    "above": true,
+    "value_text": "17.5",
+    "avg_text": "12.3"
    },
    {
     "key": "ccc",
@@ -7685,7 +7886,9 @@
     "good": "carving teams open",
     "bad": "few clear-cut chances",
     "higher": true,
-    "above": true
+    "above": true,
+    "value_text": "1.73",
+    "avg_text": "1.32"
    },
    {
     "key": "ccc_ag",
@@ -7698,7 +7901,9 @@
     "good": "rarely opened up",
     "bad": "getting opened up",
     "higher": false,
-    "above": true
+    "above": true,
+    "value_text": "0.85",
+    "avg_text": "1.32"
    },
    {
     "key": "poss",
@@ -7711,7 +7916,9 @@
     "good": "dominating the ball",
     "bad": "losing the ball battle",
     "higher": true,
-    "above": true
+    "above": true,
+    "value_text": "59%",
+    "avg_text": "50%"
    },
    {
     "key": "pass_pct",
@@ -7724,7 +7931,9 @@
     "good": "keeping the ball well",
     "bad": "sloppy in possession",
     "higher": true,
-    "above": true
+    "above": true,
+    "value_text": "89%",
+    "avg_text": "83%"
    },
    {
     "key": "prog",
@@ -7737,7 +7946,9 @@
     "good": "moving the ball forward quickly",
     "bad": "struggling to progress the ball",
     "higher": true,
-    "above": true
+    "above": true,
+    "value_text": "57.5",
+    "avg_text": "44.3"
    },
    {
     "key": "final3",
@@ -7750,7 +7961,9 @@
     "good": "living in the final third",
     "bad": "not getting into the final third",
     "higher": true,
-    "above": true
+    "above": true,
+    "value_text": "129.6",
+    "avg_text": "101.3"
    },
    {
     "key": "opp_pass_pct",
@@ -7763,7 +7976,9 @@
     "good": "the press is biting — they can't keep the ball",
     "bad": "opponents pass through your press too easily",
     "higher": false,
-    "above": true
+    "above": true,
+    "value_text": "78%",
+    "avg_text": "83%"
    },
    {
     "key": "opp_final3",
@@ -7776,7 +7991,9 @@
     "good": "keeping teams pinned back",
     "bad": "opponents get into your final third a lot",
     "higher": false,
-    "above": true
+    "above": true,
+    "value_text": "72.2",
+    "avg_text": "101.3"
    },
    {
     "key": "tackle_pct",
@@ -7789,7 +8006,9 @@
     "good": "winning the ball back",
     "bad": "losing too many tackles",
     "higher": true,
-    "above": false
+    "above": false,
+    "value_text": "66%",
+    "avg_text": "68%"
    },
    {
     "key": "aerial_pct",
@@ -7802,7 +8021,9 @@
     "good": "strong in the air",
     "bad": "losing headers",
     "higher": true,
-    "above": true
+    "above": true,
+    "value_text": "57%",
+    "avg_text": "52%"
    },
    {
     "key": "dist",
@@ -7815,7 +8036,9 @@
     "good": "outrunning teams",
     "bad": "being outrun",
     "higher": true,
-    "above": true
+    "above": true,
+    "value_text": "113.2 km",
+    "avg_text": "113.0 km"
    },
    {
     "key": "dist_diff",
@@ -7828,7 +8051,9 @@
     "good": "outworking opponents",
     "bad": "opponents run more than you",
     "higher": true,
-    "above": true
+    "above": true,
+    "value_text": "+0.6 km",
+    "avg_text": "-0.0 km"
    },
    {
     "key": "cross_pct",
@@ -7841,7 +8066,9 @@
     "good": "crosses are finding people",
     "bad": "crosses aren't landing",
     "higher": true,
-    "above": false
+    "above": false,
+    "value_text": "29%",
+    "avg_text": "30%"
    },
    {
     "key": "finishing",
@@ -7854,7 +8081,9 @@
     "good": "finishing above expectation",
     "bad": "wasting chances",
     "higher": true,
-    "above": true
+    "above": true,
+    "value_text": "+0.73",
+    "avg_text": "+0.11"
    },
    {
     "key": "keeping",
@@ -7867,7 +8096,9 @@
     "good": "keeper and defence beat expectation",
     "bad": "conceding more than the chances deserve",
     "higher": true,
-    "above": true
+    "above": true,
+    "value_text": "+0.51",
+    "avg_text": "-0.11"
    },
    {
     "key": "fouls",
@@ -7880,12 +8111,16 @@
     "good": "disciplined",
     "bad": "giving away a lot of fouls",
     "higher": false,
-    "above": false
+    "above": false,
+    "value_text": "11.7",
+    "avg_text": "11.4"
    }
   ],
   "matches": 13,
   "league_name": "Premier League",
   "league_size": 20,
+  "insights": [],
+  "min_minutes": 450,
   "players": {
    "1018": {
     "group": "AM",
@@ -7896,7 +8131,8 @@
       "value": 0.5986,
       "pctl": 97.0588,
       "press": false,
-      "higher": true
+      "higher": true,
+      "value_text": "0.60/90"
      },
      {
       "key": "xa90",
@@ -7904,7 +8140,8 @@
       "value": 0.5563,
       "pctl": 85.2941,
       "press": false,
-      "higher": true
+      "higher": true,
+      "value_text": "0.56/90"
      },
      {
       "key": "lost90",
@@ -7912,7 +8149,8 @@
       "value": 0.2574,
       "pctl": 85.2941,
       "press": false,
-      "higher": false
+      "higher": false,
+      "value_text": "0.26/90"
      }
     ],
     "bad": [
@@ -7922,7 +8160,8 @@
       "value": 0.268,
       "pctl": 8.8235,
       "press": false,
-      "higher": true
+      "higher": true,
+      "value_text": "0.27/90"
      },
      {
       "key": "dist90",
@@ -7930,12 +8169,14 @@
       "value": 0.2281,
       "pctl": 8.8235,
       "press": true,
-      "higher": true
+      "higher": true,
+      "value_text": "0.2 km/90"
      }
     ],
     "minutes": 1105,
     "avg": 6.67,
-    "peers": 17
+    "peers": 17,
+    "group_name": "attacking midfielders"
    },
    "1006": {
     "group": "CB",
@@ -7946,7 +8187,8 @@
       "value": 0.5913,
       "pctl": 98.4848,
       "press": true,
-      "higher": true
+      "higher": true,
+      "value_text": "0.59/90"
      }
     ],
     "bad": [
@@ -7956,12 +8198,14 @@
       "value": 78.1719,
       "pctl": 19.697,
       "press": false,
-      "higher": true
+      "higher": true,
+      "value_text": "78%"
      }
     ],
     "minutes": 1105,
     "avg": 6.66,
-    "peers": 33
+    "peers": 33,
+    "group_name": "centre backs"
    },
    "1014": {
     "group": "CM",
@@ -7972,7 +8216,8 @@
       "value": 0.571,
       "pctl": 87.037,
       "press": false,
-      "higher": true
+      "higher": true,
+      "value_text": "0.57/90"
      },
      {
       "key": "won90",
@@ -7980,7 +8225,8 @@
       "value": 0.5009,
       "pctl": 79.6296,
       "press": true,
-      "higher": true
+      "higher": true,
+      "value_text": "0.50/90"
      },
      {
       "key": "pass_pct",
@@ -7988,7 +8234,8 @@
       "value": 135.1351,
       "pctl": 75.9259,
       "press": false,
-      "higher": true
+      "higher": true,
+      "value_text": "135%"
      },
      {
       "key": "lost90",
@@ -7996,7 +8243,8 @@
       "value": 0.3005,
       "pctl": 75.9259,
       "press": false,
-      "higher": false
+      "higher": false,
+      "value_text": "0.30/90"
      }
     ],
     "bad": [
@@ -8006,7 +8254,8 @@
       "value": 0.2509,
       "pctl": 5.5556,
       "press": false,
-      "higher": true
+      "higher": true,
+      "value_text": "0.25/90"
      },
      {
       "key": "dist90",
@@ -8014,12 +8263,14 @@
       "value": 0.294,
       "pctl": 12.963,
       "press": true,
-      "higher": true
+      "higher": true,
+      "value_text": "0.3 km/90"
      }
     ],
     "minutes": 1105,
     "avg": 6.79,
-    "peers": 27
+    "peers": 27,
+    "group_name": "central midfielders"
    },
    "1013": {
     "group": "DM",
@@ -8030,7 +8281,8 @@
       "value": 189.2593,
       "pctl": 92.1053,
       "press": false,
-      "higher": true
+      "higher": true,
+      "value_text": "189%"
      },
      {
       "key": "dist90",
@@ -8038,7 +8290,8 @@
       "value": 0.5685,
       "pctl": 86.8421,
       "press": true,
-      "higher": true
+      "higher": true,
+      "value_text": "0.6 km/90"
      },
      {
       "key": "tackle_pct",
@@ -8046,7 +8299,8 @@
       "value": 105.5556,
       "pctl": 76.3158,
       "press": true,
-      "higher": true
+      "higher": true,
+      "value_text": "106%"
      }
     ],
     "bad": [
@@ -8056,7 +8310,8 @@
       "value": 0.2134,
       "pctl": 2.6316,
       "press": true,
-      "higher": true
+      "higher": true,
+      "value_text": "0.21/90"
      },
      {
       "key": "int90",
@@ -8064,7 +8319,8 @@
       "value": 0.3339,
       "pctl": 23.6842,
       "press": true,
-      "higher": true
+      "higher": true,
+      "value_text": "0.33/90"
      },
      {
       "key": "tackles90",
@@ -8072,12 +8328,14 @@
       "value": 0.2476,
       "pctl": 23.6842,
       "press": true,
-      "higher": true
+      "higher": true,
+      "value_text": "0.25/90"
      }
     ],
     "minutes": 1105,
     "avg": 6.68,
-    "peers": 19
+    "peers": 19,
+    "group_name": "defensive midfielders"
    },
    "1015": {
     "group": "DM",
@@ -8088,7 +8346,8 @@
       "value": 0.5595,
       "pctl": 92.1053,
       "press": false,
-      "higher": true
+      "higher": true,
+      "value_text": "0.56/90"
      },
      {
       "key": "lost90",
@@ -8096,7 +8355,8 @@
       "value": 0.2378,
       "pctl": 86.8421,
       "press": false,
-      "higher": false
+      "higher": false,
+      "value_text": "0.24/90"
      },
      {
       "key": "kp90",
@@ -8104,7 +8364,8 @@
       "value": 0.5335,
       "pctl": 81.5789,
       "press": false,
-      "higher": true
+      "higher": true,
+      "value_text": "0.53/90"
      },
      {
       "key": "tackles90",
@@ -8112,13 +8373,15 @@
       "value": 0.4276,
       "pctl": 76.3158,
       "press": true,
-      "higher": true
+      "higher": true,
+      "value_text": "0.43/90"
      }
     ],
     "bad": [],
     "minutes": 1105,
     "avg": 7.42,
-    "peers": 19
+    "peers": 19,
+    "group_name": "defensive midfielders"
    },
    "1004": {
     "group": "FB/WB",
@@ -8129,7 +8392,8 @@
       "value": 0.2069,
       "pctl": 98.8889,
       "press": false,
-      "higher": false
+      "higher": false,
+      "value_text": "0.21/90"
      },
      {
       "key": "won90",
@@ -8137,7 +8401,8 @@
       "value": 0.5864,
       "pctl": 96.6667,
       "press": true,
-      "higher": true
+      "higher": true,
+      "value_text": "0.59/90"
      },
      {
       "key": "prog90",
@@ -8145,7 +8410,8 @@
       "value": 0.5905,
       "pctl": 93.3333,
       "press": false,
-      "higher": true
+      "higher": true,
+      "value_text": "0.59/90"
      },
      {
       "key": "kp90",
@@ -8153,7 +8419,8 @@
       "value": 0.4911,
       "pctl": 76.6667,
       "press": false,
-      "higher": true
+      "higher": true,
+      "value_text": "0.49/90"
      }
     ],
     "bad": [
@@ -8163,7 +8430,8 @@
       "value": 0.2142,
       "pctl": 5.5556,
       "press": true,
-      "higher": true
+      "higher": true,
+      "value_text": "0.21/90"
      },
      {
       "key": "dist90",
@@ -8171,7 +8439,8 @@
       "value": 0.2729,
       "pctl": 18.8889,
       "press": true,
-      "higher": true
+      "higher": true,
+      "value_text": "0.3 km/90"
      },
      {
       "key": "xa90",
@@ -8179,12 +8448,14 @@
       "value": 0.2794,
       "pctl": 21.1111,
       "press": false,
-      "higher": true
+      "higher": true,
+      "value_text": "0.28/90"
      }
     ],
     "minutes": 1105,
     "avg": 7.46,
-    "peers": 45
+    "peers": 45,
+    "group_name": "full-backs"
    },
    "1024": {
     "group": "ST",
@@ -8195,7 +8466,8 @@
       "value": 0.237,
       "pctl": 94.6429,
       "press": false,
-      "higher": false
+      "higher": false,
+      "value_text": "0.24/90"
      },
      {
       "key": "finish",
@@ -8203,7 +8475,8 @@
       "value": 0.0358,
       "pctl": 76.7857,
       "press": false,
-      "higher": true
+      "higher": true,
+      "value_text": "+0.04/90"
      },
      {
       "key": "xa90",
@@ -8211,7 +8484,8 @@
       "value": 0.4903,
       "pctl": 76.7857,
       "press": false,
-      "higher": true
+      "higher": true,
+      "value_text": "0.49/90"
      }
     ],
     "bad": [
@@ -8221,7 +8495,8 @@
       "value": 0.2085,
       "pctl": 1.7857,
       "press": false,
-      "higher": true
+      "higher": true,
+      "value_text": "0.21/90"
      },
      {
       "key": "sprints90",
@@ -8229,7 +8504,8 @@
       "value": 0.2729,
       "pctl": 8.9286,
       "press": true,
-      "higher": true
+      "higher": true,
+      "value_text": "0.27/90"
      },
      {
       "key": "won90",
@@ -8237,12 +8513,14 @@
       "value": 0.2769,
       "pctl": 19.6429,
       "press": true,
-      "higher": true
+      "higher": true,
+      "value_text": "0.28/90"
      }
     ],
     "minutes": 1105,
     "avg": 6.74,
-    "peers": 28
+    "peers": 28,
+    "group_name": "strikers"
    },
    "1002": {
     "group": "GK",
@@ -8254,7 +8532,8 @@
       "value": 0.2411,
       "pctl": 12.5,
       "press": false,
-      "higher": true
+      "higher": true,
+      "value_text": "0.24/90"
      },
      {
       "key": "mistakes",
@@ -8262,12 +8541,14 @@
       "value": 6.66,
       "pctl": 22.5,
       "press": false,
-      "higher": false
+      "higher": false,
+      "value_text": "6 this season"
      }
     ],
     "minutes": 1105,
     "avg": 6.82,
-    "peers": 20
+    "peers": 20,
+    "group_name": "goalkeepers"
    },
    "1023": {
     "group": "ST",
@@ -8278,7 +8559,8 @@
       "value": 0.5473,
       "pctl": 83.9286,
       "press": false,
-      "higher": true
+      "higher": true,
+      "value_text": "0.55/90"
      }
     ],
     "bad": [
@@ -8288,7 +8570,8 @@
       "value": 0.2207,
       "pctl": 12.5,
       "press": true,
-      "higher": true
+      "higher": true,
+      "value_text": "0.22/90"
      },
      {
       "key": "sot_pct",
@@ -8296,7 +8579,8 @@
       "value": 58.631,
       "pctl": 16.0714,
       "press": false,
-      "higher": true
+      "higher": true,
+      "value_text": "59%"
      },
      {
       "key": "npxg90",
@@ -8304,12 +8588,14 @@
       "value": 0.2541,
       "pctl": 19.6429,
       "press": false,
-      "higher": true
+      "higher": true,
+      "value_text": "0.25/90"
      }
     ],
     "minutes": 1105,
     "avg": 6.84,
-    "peers": 28
+    "peers": 28,
+    "group_name": "strikers"
    },
    "1001": {
     "group": "GK",
@@ -8320,7 +8606,8 @@
       "value": 0.5579,
       "pctl": 87.5,
       "press": false,
-      "higher": true
+      "higher": true,
+      "value_text": "0.56/90"
      }
     ],
     "bad": [
@@ -8330,12 +8617,14 @@
       "value": 7.32,
       "pctl": 2.5,
       "press": false,
-      "higher": false
+      "higher": false,
+      "value_text": "7 this season"
      }
     ],
     "minutes": 1105,
     "avg": 6.82,
-    "peers": 20
+    "peers": 20,
+    "group_name": "goalkeepers"
    },
    "1020": {
     "group": "WIDE",
@@ -8346,7 +8635,8 @@
       "value": 0.0676,
       "pctl": 98.3871,
       "press": false,
-      "higher": true
+      "higher": true,
+      "value_text": "+0.07/90"
      },
      {
       "key": "ccc90",
@@ -8354,7 +8644,8 @@
       "value": 0.5335,
       "pctl": 85.4839,
       "press": false,
-      "higher": true
+      "higher": true,
+      "value_text": "0.53/90"
      }
     ],
     "bad": [
@@ -8364,7 +8655,8 @@
       "value": 0.2069,
       "pctl": 4.8387,
       "press": true,
-      "higher": true
+      "higher": true,
+      "value_text": "0.21/90"
      },
      {
       "key": "kp90",
@@ -8372,15 +8664,873 @@
       "value": 0.2199,
       "pctl": 8.0645,
       "press": false,
-      "higher": true
+      "higher": true,
+      "value_text": "0.22/90"
      }
     ],
     "minutes": 1105,
     "avg": 7.25,
-    "peers": 31
+    "peers": 31,
+    "group_name": "wingers"
    }
   }
  },
+ "style": {
+  "name": "Gegenpress",
+  "keys": [
+   "work_rate",
+   "teamwork",
+   "determination",
+   "stamina",
+   "natural_fitness",
+   "aggression",
+   "anticipation",
+   "acceleration",
+   "pace"
+  ]
+ },
+ "attribute_labels": {
+  "acceleration": "Acceleration",
+  "aerial_reach": "Aerial Reach",
+  "aggression": "Aggression",
+  "agility": "Agility",
+  "anticipation": "Anticipation",
+  "balance": "Balance",
+  "bravery": "Bravery",
+  "command_of_area": "Command of Area",
+  "communication": "Communication",
+  "composure": "Composure",
+  "concentration": "Concentration",
+  "corners": "Corners",
+  "crossing": "Crossing",
+  "decisions": "Decisions",
+  "determination": "Determination",
+  "dribbling": "Dribbling",
+  "eccentricity": "Eccentricity",
+  "finishing": "Finishing",
+  "first_touch": "First Touch",
+  "flair": "Flair",
+  "free_kick_taking": "Free Kicks",
+  "handling": "Handling",
+  "heading": "Heading",
+  "jumping_reach": "Jumping Reach",
+  "kicking": "Kicking",
+  "leadership": "Leadership",
+  "long_shots": "Long Shots",
+  "long_throws": "Long Throws",
+  "marking": "Marking",
+  "natural_fitness": "Natural Fitness",
+  "off_the_ball": "Off the Ball",
+  "one_on_ones": "One on Ones",
+  "pace": "Pace",
+  "passing": "Passing",
+  "penalty_taking": "Penalties",
+  "positioning": "Positioning",
+  "punching": "Punching",
+  "reflexes": "Reflexes",
+  "rushing_out": "Rushing Out",
+  "stamina": "Stamina",
+  "strength": "Strength",
+  "tackling": "Tackling",
+  "teamwork": "Teamwork",
+  "technique": "Technique",
+  "throwing": "Throwing",
+  "vision": "Vision",
+  "work_rate": "Work Rate"
+ },
+ "attribute_abbr": {
+  "corners": "Cor",
+  "crossing": "Cro",
+  "dribbling": "Dri",
+  "finishing": "Fin",
+  "first_touch": "Fir",
+  "free_kick_taking": "Fre",
+  "heading": "Hea",
+  "long_shots": "Lon",
+  "long_throws": "LTh",
+  "marking": "Mar",
+  "passing": "Pas",
+  "penalty_taking": "Pen",
+  "tackling": "Tck",
+  "technique": "Tec",
+  "aggression": "Agg",
+  "anticipation": "Ant",
+  "bravery": "Bra",
+  "composure": "Cmp",
+  "concentration": "Cnt",
+  "decisions": "Dec",
+  "determination": "Det",
+  "flair": "Fla",
+  "leadership": "Ldr",
+  "off_the_ball": "OtB",
+  "positioning": "Pos",
+  "teamwork": "Tea",
+  "vision": "Vis",
+  "work_rate": "Wor",
+  "acceleration": "Acc",
+  "agility": "Agi",
+  "balance": "Bal",
+  "jumping_reach": "Jum",
+  "natural_fitness": "Nat",
+  "pace": "Pac",
+  "stamina": "Sta",
+  "strength": "Str",
+  "aerial_reach": "Aer",
+  "command_of_area": "Cmd",
+  "communication": "Com",
+  "eccentricity": "Ecc",
+  "handling": "Han",
+  "kicking": "Kic",
+  "one_on_ones": "1v1",
+  "reflexes": "Ref",
+  "rushing_out": "TRO",
+  "punching": "Pun",
+  "throwing": "Thr"
+ },
+ "training_advice": {
+  "changes": [
+   {
+    "title": "Train the press more: more Out Of Possession weeks",
+    "why": "For a gegenpress side the press is the identity, but your press isn't biting hard enough: tackles won 14th of 20; this season you've run In Possession weeks 0×, Out Of Possession 0× and Balanced 5×, so Pressing Intensity and Pressing Trap come round about 6.0× a week.",
+    "do": "Alternate Tactical Focus – In Possession and Tactical Focus – Out Of Possession week to week (or use Balanced in weeks with two matches), so Pressing Intensity, Pressing Trap and Out Of Possession Shape come up every week.",
+    "safe": "It swaps which tactical sessions you do, not how many — same three sessions a day, same match rhythm, same load. You keep In Possession every other week, so the attacking work isn't dropped."
+   }
+  ],
+  "keep": [
+   "Aggression is low across your XI (13.7), but you're already 13th of 20 for fouls — training it team-wide would add fouls and cards. Only give it as an individual focus to players who are also poor at winning the ball back.",
+   "Shots (2nd of 20): constant pressure on goal — don't take out the sessions behind it.",
+   "Opponents' final-third passes (1st of 20): keeping teams pinned back — don't take out the sessions behind it.",
+   "xG against (3rd of 20): opponents barely get a sniff — don't take out the sessions behind it.",
+   "Goals conceded (1st of 20): hard to score against — don't take out the sessions behind it."
+  ]
+ },
+ "plans": [
+  {
+   "uid": 1001,
+   "label": "GK",
+   "ip_role": "Ball-Playing Goalkeeper",
+   "oop_role": "Sweeper Keeper",
+   "in_xi": true,
+   "position_work": [],
+   "focus": {
+    "attribute": "first_touch",
+    "value": 12
+   },
+   "then": {
+    "attribute": "vision",
+    "value": 13
+   },
+   "why": "First Touch (12) is his weakest key attribute as a Ball-Playing Goalkeeper.",
+   "fixed": []
+  },
+  {
+   "uid": 1002,
+   "label": "GK",
+   "ip_role": "Ball-Playing Goalkeeper",
+   "oop_role": "Sweeper Keeper",
+   "in_xi": false,
+   "position_work": [],
+   "focus": {
+    "attribute": "composure",
+    "value": 11
+   },
+   "then": {
+    "attribute": "passing",
+    "value": 11
+   },
+   "why": "He's in the bottom 22% of league goalkeepers for mistakes leading to goals, and Composure (11) is one of the attributes behind it.",
+   "fixed": []
+  },
+  {
+   "uid": 1003,
+   "label": "GK",
+   "ip_role": "Ball-Playing Goalkeeper",
+   "oop_role": "Sweeper Keeper",
+   "in_xi": false,
+   "position_work": [],
+   "focus": {
+    "attribute": "first_touch",
+    "value": 8
+   },
+   "then": {
+    "attribute": "passing",
+    "value": 8
+   },
+   "why": "First Touch (8) is his weakest key attribute as a Ball-Playing Goalkeeper.",
+   "fixed": [
+    {
+     "attribute": "natural_fitness",
+     "value": 7
+    }
+   ]
+  },
+  {
+   "uid": 1004,
+   "label": "LB",
+   "ip_role": "Full-Back",
+   "oop_role": "Full-Back",
+   "in_xi": true,
+   "position_work": [],
+   "focus": {
+    "attribute": "anticipation",
+    "value": 11
+   },
+   "then": {
+    "attribute": "teamwork",
+    "value": 11
+   },
+   "why": "Anticipation (11) is a key attribute for his role and for gegenpress, and it's his lowest.",
+   "fixed": []
+  },
+  {
+   "uid": 1005,
+   "label": "LB",
+   "ip_role": "Full-Back",
+   "oop_role": "Full-Back",
+   "in_xi": false,
+   "position_work": [],
+   "focus": {
+    "attribute": "positioning",
+    "value": 9
+   },
+   "then": {
+    "attribute": "teamwork",
+    "value": 10
+   },
+   "why": "Positioning (9) is his weakest key attribute as a Full-Back.",
+   "fixed": []
+  },
+  {
+   "uid": 1006,
+   "label": "LCB",
+   "ip_role": "Centre-Back",
+   "oop_role": "Centre-Back",
+   "in_xi": true,
+   "position_work": [],
+   "focus": {
+    "attribute": "first_touch",
+    "value": 13
+   },
+   "then": {
+    "attribute": "passing",
+    "value": 13
+   },
+   "why": "He's in the bottom 20% of league centre backs for pass completion, and First Touch (13) is one of the attributes behind it.",
+   "fixed": []
+  },
+  {
+   "uid": 1007,
+   "label": "RCB",
+   "ip_role": "Ball-Playing Centre-Back",
+   "oop_role": "Centre-Back",
+   "in_xi": true,
+   "position_work": [],
+   "focus": {
+    "attribute": "acceleration",
+    "value": 11
+   },
+   "then": {
+    "attribute": "stamina",
+    "value": 12
+   },
+   "why": "Acceleration (11) is his weakest gegenpress attribute.",
+   "fixed": []
+  },
+  {
+   "uid": 1008,
+   "label": "RCB",
+   "ip_role": "Ball-Playing Centre-Back",
+   "oop_role": "Centre-Back",
+   "in_xi": false,
+   "position_work": [],
+   "focus": {
+    "attribute": "aggression",
+    "value": 11
+   },
+   "then": {
+    "attribute": "pace",
+    "value": 11
+   },
+   "why": "Aggression (11) is his weakest gegenpress attribute.",
+   "fixed": [
+    {
+     "attribute": "natural_fitness",
+     "value": 10
+    }
+   ]
+  },
+  {
+   "uid": 1009,
+   "label": "LCB",
+   "ip_role": "Centre-Back",
+   "oop_role": "Centre-Back",
+   "in_xi": false,
+   "position_work": [],
+   "focus": {
+    "attribute": "acceleration",
+    "value": 9
+   },
+   "then": {
+    "attribute": "pace",
+    "value": 11
+   },
+   "why": "Acceleration (9) is his weakest gegenpress attribute.",
+   "fixed": [
+    {
+     "attribute": "natural_fitness",
+     "value": 10
+    }
+   ]
+  },
+  {
+   "uid": 1010,
+   "label": "RB",
+   "ip_role": "Wing-Back",
+   "oop_role": "Full-Back",
+   "in_xi": true,
+   "position_work": [
+    {
+     "code": "RWB",
+     "phase": "in possession",
+     "word": "competent",
+     "how": "Position/Role"
+    }
+   ],
+   "focus": {
+    "attribute": "decisions",
+    "value": 11
+   },
+   "then": {
+    "attribute": "positioning",
+    "value": 11
+   },
+   "why": "Decisions (11) is his weakest key attribute as a Full-Back.",
+   "fixed": []
+  },
+  {
+   "uid": 1011,
+   "label": "RB",
+   "ip_role": "Wing-Back",
+   "oop_role": "Full-Back",
+   "in_xi": false,
+   "position_work": [],
+   "focus": {
+    "attribute": "anticipation",
+    "value": 11
+   },
+   "then": {
+    "attribute": "teamwork",
+    "value": 11
+   },
+   "why": "Anticipation (11) is a key attribute for his role and for gegenpress, and it's his lowest.",
+   "fixed": [
+    {
+     "attribute": "natural_fitness",
+     "value": 10
+    }
+   ]
+  },
+  {
+   "uid": 1012,
+   "label": "RB",
+   "ip_role": "Wing-Back",
+   "oop_role": "Full-Back",
+   "in_xi": false,
+   "position_work": [
+    {
+     "code": "RWB",
+     "phase": "in possession",
+     "word": "unconvincing",
+     "how": "Position/Role"
+    }
+   ],
+   "focus": {
+    "attribute": "teamwork",
+    "value": 9
+   },
+   "then": {
+    "attribute": "aggression",
+    "value": 9
+   },
+   "why": "Teamwork (9) is a key attribute for his role and for gegenpress, and it's his lowest.",
+   "fixed": [
+    {
+     "attribute": "determination",
+     "value": 9
+    }
+   ]
+  },
+  {
+   "uid": 1013,
+   "label": "RDM",
+   "ip_role": "Defensive Midfielder",
+   "oop_role": "Defensive Midfielder",
+   "in_xi": true,
+   "position_work": [],
+   "focus": {
+    "attribute": "acceleration",
+    "value": 12
+   },
+   "then": null,
+   "why": "Acceleration (12) is his weakest gegenpress attribute.",
+   "fixed": []
+  },
+  {
+   "uid": 1014,
+   "label": "AM",
+   "ip_role": "Second Striker",
+   "oop_role": "Attacking Midfielder",
+   "in_xi": true,
+   "position_work": [],
+   "focus": {
+    "attribute": "aggression",
+    "value": 12
+   },
+   "then": {
+    "attribute": "finishing",
+    "value": 12
+   },
+   "why": "Aggression (12) is his weakest gegenpress attribute.",
+   "fixed": []
+  },
+  {
+   "uid": 1015,
+   "label": "LDM",
+   "ip_role": "Deep-Lying Playmaker",
+   "oop_role": "Pressing Defensive Midfielder",
+   "in_xi": true,
+   "position_work": [],
+   "focus": {
+    "attribute": "pace",
+    "value": 12
+   },
+   "then": null,
+   "why": "Pace (12) is his weakest gegenpress attribute.",
+   "fixed": []
+  },
+  {
+   "uid": 1016,
+   "label": "LDM",
+   "ip_role": "Deep-Lying Playmaker",
+   "oop_role": "Pressing Defensive Midfielder",
+   "in_xi": false,
+   "position_work": [],
+   "focus": {
+    "attribute": "first_touch",
+    "value": 9
+   },
+   "then": {
+    "attribute": "acceleration",
+    "value": 10
+   },
+   "why": "First Touch (9) is his weakest key attribute as a Deep-Lying Playmaker.",
+   "fixed": [
+    {
+     "attribute": "determination",
+     "value": 10
+    }
+   ]
+  },
+  {
+   "uid": 1018,
+   "label": "AM",
+   "ip_role": "Second Striker",
+   "oop_role": "Attacking Midfielder",
+   "in_xi": false,
+   "position_work": [],
+   "focus": {
+    "attribute": "anticipation",
+    "value": 13
+   },
+   "then": null,
+   "why": "He's in the bottom 9% of league attacking midfielders for non-penalty xG, and Anticipation (13) is one of the attributes behind it.",
+   "fixed": []
+  },
+  {
+   "uid": 1019,
+   "label": "LW",
+   "ip_role": "Inside Forward",
+   "oop_role": "Wide Midfielder",
+   "in_xi": false,
+   "position_work": [
+    {
+     "code": "LM",
+     "phase": "out of possession",
+     "word": "unconvincing",
+     "how": "Individual Out of Possession Training"
+    }
+   ],
+   "focus": {
+    "attribute": "stamina",
+    "value": 10
+   },
+   "then": {
+    "attribute": "work_rate",
+    "value": 10
+   },
+   "why": "Stamina (10) is a key attribute for his role and for gegenpress, and it's his lowest.",
+   "fixed": []
+  },
+  {
+   "uid": 1020,
+   "label": "LW",
+   "ip_role": "Inside Forward",
+   "oop_role": "Wide Midfielder",
+   "in_xi": true,
+   "position_work": [
+    {
+     "code": "LM",
+     "phase": "out of possession",
+     "word": "unconvincing",
+     "how": "Individual Out of Possession Training"
+    }
+   ],
+   "focus": {
+    "attribute": "passing",
+    "value": 12
+   },
+   "then": {
+    "attribute": "teamwork",
+    "value": 11
+   },
+   "why": "He's in the bottom 8% of league wingers for key passes, and Passing (12) is one of the attributes behind it.",
+   "fixed": []
+  },
+  {
+   "uid": 1021,
+   "label": "RW",
+   "ip_role": "Inside Winger",
+   "oop_role": "Wide Midfielder",
+   "in_xi": true,
+   "position_work": [
+    {
+     "code": "RM",
+     "phase": "out of possession",
+     "word": "unconvincing",
+     "how": "Individual Out of Possession Training"
+    }
+   ],
+   "focus": {
+    "attribute": "aggression",
+    "value": 11
+   },
+   "then": {
+    "attribute": "passing",
+    "value": 11
+   },
+   "why": "Aggression (11) is his weakest gegenpress attribute.",
+   "fixed": []
+  },
+  {
+   "uid": 1022,
+   "label": "RW",
+   "ip_role": "Inside Winger",
+   "oop_role": "Wide Midfielder",
+   "in_xi": false,
+   "position_work": [
+    {
+     "code": "RM",
+     "phase": "out of possession",
+     "word": "unconvincing",
+     "how": "Individual Out of Possession Training"
+    }
+   ],
+   "focus": {
+    "attribute": "aggression",
+    "value": 10
+   },
+   "then": {
+    "attribute": "passing",
+    "value": 10
+   },
+   "why": "Aggression (10) is his weakest gegenpress attribute.",
+   "fixed": [
+    {
+     "attribute": "determination",
+     "value": 10
+    }
+   ]
+  },
+  {
+   "uid": 1023,
+   "label": "ST",
+   "ip_role": "Centre Forward",
+   "oop_role": "Centre Forward",
+   "in_xi": true,
+   "position_work": [],
+   "focus": {
+    "attribute": "work_rate",
+    "value": 13
+   },
+   "then": {
+    "attribute": "stamina",
+    "value": 12
+   },
+   "why": "He's in the bottom 12% of league strikers for possession won, and Work Rate (13) is one of the attributes behind it.",
+   "fixed": []
+  },
+  {
+   "uid": 1024,
+   "label": "ST",
+   "ip_role": "Centre Forward",
+   "oop_role": "Centre Forward",
+   "in_xi": false,
+   "position_work": [],
+   "focus": {
+    "attribute": "work_rate",
+    "value": 11
+   },
+   "then": {
+    "attribute": "tackling",
+    "value": 12
+   },
+   "why": "He's in the bottom 20% of league strikers for possession won, and Work Rate (11) is one of the attributes behind it.",
+   "fixed": []
+  },
+  {
+   "uid": 1026,
+   "label": "ST",
+   "ip_role": "Centre Forward",
+   "oop_role": "Centre Forward",
+   "in_xi": false,
+   "position_work": [],
+   "focus": {
+    "attribute": "work_rate",
+    "value": 7
+   },
+   "then": {
+    "attribute": "stamina",
+    "value": 8
+   },
+   "why": "Work Rate (7) is a key attribute for his role and for gegenpress, and it's his lowest.",
+   "fixed": [
+    {
+     "attribute": "natural_fitness",
+     "value": 10
+    }
+   ]
+  },
+  {
+   "uid": 1027,
+   "label": "RCB",
+   "ip_role": "Ball-Playing Centre-Back",
+   "oop_role": "Centre-Back",
+   "in_xi": false,
+   "position_work": [],
+   "focus": {
+    "attribute": "teamwork",
+    "value": 7
+   },
+   "then": {
+    "attribute": "composure",
+    "value": 8
+   },
+   "why": "Teamwork (7) is his weakest gegenpress attribute.",
+   "fixed": [
+    {
+     "attribute": "determination",
+     "value": 8
+    }
+   ]
+  },
+  {
+   "uid": 1028,
+   "label": "RW",
+   "ip_role": "Inside Winger",
+   "oop_role": "Wide Midfielder",
+   "in_xi": false,
+   "position_work": [
+    {
+     "code": "RM",
+     "phase": "out of possession",
+     "word": "unconvincing",
+     "how": "Individual Out of Possession Training"
+    }
+   ],
+   "focus": {
+    "attribute": "work_rate",
+    "value": 7
+   },
+   "then": {
+    "attribute": "passing",
+    "value": 7
+   },
+   "why": "Work Rate (7) is a key attribute for his role and for gegenpress, and it's his lowest.",
+   "fixed": [
+    {
+     "attribute": "determination",
+     "value": 9
+    },
+    {
+     "attribute": "natural_fitness",
+     "value": 9
+    }
+   ]
+  },
+  {
+   "uid": 1029,
+   "label": "AM",
+   "ip_role": "Second Striker",
+   "oop_role": "Attacking Midfielder",
+   "in_xi": false,
+   "position_work": [],
+   "focus": {
+    "attribute": "acceleration",
+    "value": 6
+   },
+   "then": {
+    "attribute": "teamwork",
+    "value": 6
+   },
+   "why": "Acceleration (6) is a key attribute for his role and for gegenpress, and it's his lowest.",
+   "fixed": [
+    {
+     "attribute": "natural_fitness",
+     "value": 6
+    },
+    {
+     "attribute": "determination",
+     "value": 10
+    }
+   ]
+  },
+  {
+   "uid": 1030,
+   "label": "LB",
+   "ip_role": "Full-Back",
+   "oop_role": "Full-Back",
+   "in_xi": false,
+   "position_work": [],
+   "focus": {
+    "attribute": "aggression",
+    "value": 6
+   },
+   "then": {
+    "attribute": "positioning",
+    "value": 7
+   },
+   "why": "Aggression (6) is his weakest gegenpress attribute.",
+   "fixed": [
+    {
+     "attribute": "determination",
+     "value": 7
+    },
+    {
+     "attribute": "natural_fitness",
+     "value": 8
+    }
+   ]
+  },
+  {
+   "uid": 1031,
+   "label": "GK",
+   "ip_role": "Ball-Playing Goalkeeper",
+   "oop_role": "Sweeper Keeper",
+   "in_xi": false,
+   "position_work": [],
+   "focus": {
+    "attribute": "composure",
+    "value": 8
+   },
+   "then": {
+    "attribute": "vision",
+    "value": 9
+   },
+   "why": "Composure (8) is his weakest key attribute as a Ball-Playing Goalkeeper.",
+   "fixed": [
+    {
+     "attribute": "determination",
+     "value": 8
+    }
+   ]
+  },
+  {
+   "uid": 1032,
+   "label": "RW",
+   "ip_role": "Inside Winger",
+   "oop_role": "Wide Midfielder",
+   "in_xi": false,
+   "position_work": [
+    {
+     "code": "RM",
+     "phase": "out of possession",
+     "word": "unconvincing",
+     "how": "Individual Out of Possession Training"
+    }
+   ],
+   "focus": {
+    "attribute": "stamina",
+    "value": 11
+   },
+   "then": {
+    "attribute": "positioning",
+    "value": 10
+   },
+   "why": "Stamina (11) is a key attribute for his role and for gegenpress, and it's his lowest.",
+   "fixed": []
+  },
+  {
+   "uid": 1033,
+   "label": "LDM",
+   "ip_role": "Deep-Lying Playmaker",
+   "oop_role": "Pressing Defensive Midfielder",
+   "in_xi": false,
+   "position_work": [],
+   "focus": {
+    "attribute": "first_touch",
+    "value": 9
+   },
+   "then": {
+    "attribute": "pace",
+    "value": 10
+   },
+   "why": "First Touch (9) is his weakest key attribute as a Deep-Lying Playmaker.",
+   "fixed": [
+    {
+     "attribute": "determination",
+     "value": 9
+    },
+    {
+     "attribute": "natural_fitness",
+     "value": 10
+    }
+   ]
+  },
+  {
+   "uid": 1034,
+   "label": "RW",
+   "ip_role": "Inside Winger",
+   "oop_role": "Wide Midfielder",
+   "in_xi": false,
+   "position_work": [
+    {
+     "code": "RM",
+     "phase": "out of possession",
+     "word": "unconvincing",
+     "how": "Individual Out of Possession Training"
+    }
+   ],
+   "focus": {
+    "attribute": "work_rate",
+    "value": 10
+   },
+   "then": {
+    "attribute": "positioning",
+    "value": 9
+   },
+   "why": "Work Rate (10) is a key attribute for his role and for gegenpress, and it's his lowest.",
+   "fixed": [
+    {
+     "attribute": "determination",
+     "value": 9
+    },
+    {
+     "attribute": "natural_fitness",
+     "value": 9
+    }
+   ]
+  }
+ ],
  "training": [
   {
    "slot": 0,
@@ -8481,7 +9631,63 @@
       300
      ]
     }
-   ]
+   ],
+   "sessions": {
+    "0": {
+     "name": "Passing Style",
+     "family": "Tactical Understanding",
+     "kind": "tac",
+     "exact": true
+    },
+    "1": {
+     "name": "Build Up",
+     "family": "Tactical Understanding",
+     "kind": "tac",
+     "exact": true
+    },
+    "2": {
+     "name": "Chance Creation",
+     "family": "Tactical Understanding",
+     "kind": "tac",
+     "exact": true
+    },
+    "5": {
+     "name": "Pressing Intensity",
+     "family": "Tactical Understanding",
+     "kind": "tac",
+     "exact": true
+    },
+    "6": {
+     "name": "Pressing Trap",
+     "family": "Tactical Understanding",
+     "kind": "tac",
+     "exact": true
+    },
+    "300": {
+     "name": "Rest",
+     "family": "Physical & Recovery",
+     "kind": "rest",
+     "exact": true
+    },
+    "301": {
+     "name": "Recovery",
+     "family": "Physical & Recovery",
+     "kind": "rest",
+     "exact": true
+    },
+    "402": {
+     "name": "Travel",
+     "family": "Travel / extra-curricular",
+     "kind": "extra",
+     "exact": true
+    },
+    "500": {
+     "name": "Match",
+     "family": "Match",
+     "kind": "match",
+     "exact": true
+    }
+   }
   },
   {
    "slot": 1,
@@ -8582,7 +9788,63 @@
       300
      ]
     }
-   ]
+   ],
+   "sessions": {
+    "0": {
+     "name": "Passing Style",
+     "family": "Tactical Understanding",
+     "kind": "tac",
+     "exact": true
+    },
+    "1": {
+     "name": "Build Up",
+     "family": "Tactical Understanding",
+     "kind": "tac",
+     "exact": true
+    },
+    "2": {
+     "name": "Chance Creation",
+     "family": "Tactical Understanding",
+     "kind": "tac",
+     "exact": true
+    },
+    "5": {
+     "name": "Pressing Intensity",
+     "family": "Tactical Understanding",
+     "kind": "tac",
+     "exact": true
+    },
+    "6": {
+     "name": "Pressing Trap",
+     "family": "Tactical Understanding",
+     "kind": "tac",
+     "exact": true
+    },
+    "300": {
+     "name": "Rest",
+     "family": "Physical & Recovery",
+     "kind": "rest",
+     "exact": true
+    },
+    "301": {
+     "name": "Recovery",
+     "family": "Physical & Recovery",
+     "kind": "rest",
+     "exact": true
+    },
+    "402": {
+     "name": "Travel",
+     "family": "Travel / extra-curricular",
+     "kind": "extra",
+     "exact": true
+    },
+    "500": {
+     "name": "Match",
+     "family": "Match",
+     "kind": "match",
+     "exact": true
+    }
+   }
   }
  ],
  "news": [

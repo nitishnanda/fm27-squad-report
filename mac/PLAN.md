@@ -72,7 +72,15 @@ youth_per_card, shown) and per-player `familiarity` (FM's words per card, never 
 - Positions: the depth chart, red/amber positions first, status markers as SF Symbols plus colour.
 - Squad list: a native `Table`: sort by any column, resize and hide columns, search, status filters, folding groups.
 
-## Phase 3: Tactics, Transfers, Stats
+## Phase 3: Tactics, Transfers, Stats ✅ done
+
+Tactical fit (How it's going with league-rank strips and "Putting it together", player by player, the style breakdown,
+who doesn't fit, role by role as a pitch picker), Training (the week as a schedule grid, next weeks, what to change,
+individual plans, prospects), Transfers (the "Coming up" timeline and the move/loan columns) and Stats (season leaders,
+two Swift Charts and sortable tables). Only Sandbox still opens in the web app. The feed gained formatted metric
+values, `insights`, per-player `group_name`/`value_text`, role key attributes, `style`, attribute labels/abbreviations,
+session names per training calendar, `training_advice` and `plans` (FM's words for position work, never numbers).
+
 
 - Tactical fit with the league-rank strips; role by role as a pitch picker.
 - Training: the week as a schedule grid.

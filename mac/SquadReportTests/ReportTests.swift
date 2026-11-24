@@ -94,6 +94,51 @@ struct TeamPageTests {
     }
 }
 
+@Suite("Tactics, Transfers, Stats")
+struct PhaseThreeTests {
+    @Test func tacticsDataDecodes() throws {
+        let report = try Report.decode(try fixture())
+        let metrics = try #require(report.performance.metrics)
+        #expect(!metrics.isEmpty)
+        #expect(metrics.allSatisfy { $0.valueText != nil && $0.rank >= 1 && $0.rank <= $0.of })
+        #expect(report.fit?.rows.count == report.formation.rows.count)
+        #expect(report.style?.keys.isEmpty == false)
+        #expect(report.label("work_rate") == "Work Rate")
+        #expect(report.formation.rows.allSatisfy { !($0.ipKeys ?? []).isEmpty })
+    }
+
+    @Test func trainingHasNamedSessions() throws {
+        let report = try Report.decode(try fixture())
+        let first = try #require(report.training?.first)
+        for day in first.grid ?? [] {
+            for code in day.sessions.compactMap({ $0 }) { #expect(first.session(code) != nil) }
+        }
+        #expect(report.plans?.isEmpty == false)
+        // position work speaks in FM's words only
+        let words: Set<String> = ["natural", "accomplished", "competent", "unconvincing", "awkward", "ineffective"]
+        for plan in report.plans ?? [] { for w in plan.positionWork { #expect(words.contains(w.word)) } }
+    }
+
+    @Test func timelineGroupsTheSameDay() throws {
+        let report = try Report.decode(try fixture())
+        let months = TransferTimeline.months(report)
+        #expect(!months.isEmpty)
+        #expect(months.map(\.start) == months.map(\.start).sorted())
+        for m in months {
+            let people = m.events.reduce(0) { $0 + $1.names.count }
+            #expect(people == m.count)        // nobody lost when a day is grouped
+        }
+    }
+
+    @Test func statsRowsMatchThePlayers() throws {
+        let report = try Report.decode(try fixture())
+        let rows = StatRow.firstTeam(report)
+        #expect(rows.count == report.players.filter { ($0.stats?.apps ?? 0) > 0 }.count)
+        #expect(rows.map(\.apps) == rows.map(\.apps).sorted(by: >))
+        #expect(rows.filter { !["GK", "LB", "CB", "RB"].contains($0.pos) }.allSatisfy { $0.cleanSheets == -1 })
+    }
+}
+
 @Suite("Formats match the web app")
 struct FormatTests {
     @Test func money() {

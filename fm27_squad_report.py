@@ -5753,6 +5753,69 @@ def _familiarity(p: dict) -> dict:
     return out
 
 
+def _metric_json(m: dict) -> dict:
+    out = _plain(m)
+    out["value_text"] = fmt_team(m["key"], m["value"], m["unit"])
+    out["avg_text"] = fmt_team(m["key"], m["avg"], m["unit"])
+    return out
+
+
+def _perf_player_json(v: dict) -> dict:
+    out = _plain(v)
+    out["group_name"] = PERF_GROUP_NAME.get(v.get("group"), v.get("group"))
+    for side in ("good", "bad"):
+        for item, raw in zip(out.get(side, []), v.get(side, [])):
+            item["value_text"] = fmt_player(raw["key"], raw["value"])
+    return out
+
+
+def _session_names(t: dict) -> dict:
+    """Code -> name and category, for every session the calendar shows (named ones exactly, the rest by category)."""
+    codes = {c for g in t.get("grid") or [] for c in g.get("sessions", []) if c is not None}
+    codes |= {int(c) for c in (t.get("recent_codes") or {})}
+    out = {}
+    for code in sorted(codes):
+        kind, family = session_family(code)
+        out[str(code)] = {"name": SESSION_NAME.get(code, family), "family": family, "kind": kind,
+                          "exact": code in SESSION_NAME}
+    return out
+
+
+def _training_advice_json(R: dict) -> dict:
+    T = R.get("training") or []
+    first = next((t for t in T if t["name"] == "First team"), T[0] if T else None)
+    try:
+        recs, keep = team_training_advice(R, first)
+    except Exception:  # noqa: BLE001 - the rest of the report still works without it
+        recs, keep = [], []
+    return {"changes": [{k: r.get(k) for k in ("title", "why", "do", "safe")} for r in recs], "keep": list(keep)}
+
+
+def _plans_json(R: dict) -> list:
+    """Individual training plans: first team (best XI first) and prospects. FM's words for position familiarity only."""
+    out = []
+    for p in R["players"]:
+        if p["where"] not in ("squad", "loan_out") or LEAVING & p.keys():
+            continue
+        if p["youth"] and not p.get("potential"):
+            continue
+        try:
+            plan = individual_plan(R, p)
+        except Exception:  # noqa: BLE001
+            plan = None
+        if not plan:
+            continue
+        out.append({"uid": p["uid"], "label": plan["label"], "ip_role": plan["ip_role"], "oop_role": plan["oop_role"],
+                    "in_xi": bool(plan["in_xi"]),
+                    "position_work": [{"code": w["code"], "phase": w["phase"], "word": w["word"], "how": w["how"]}
+                                      for w in plan["pos_work"]],
+                    "focus": {"attribute": plan["focus"][0], "value": plan["focus"][1]} if plan["focus"] else None,
+                    "then": {"attribute": plan["second"][0], "value": plan["second"][1]} if plan["second"] else None,
+                    "why": plan["why"],
+                    "fixed": [{"attribute": k, "value": v} for v, k in plan["untrain"]]})
+    return out
+
+
 def _fit_entry(e: dict) -> dict:
     return {"uid": e["p"]["uid"], "xi": bool(e.get("xi")), "fit": _plain(e.get("fit")), "ip": _plain(e.get("ip")),
             "oop": _plain(e.get("oop")), "style": _plain(e.get("style")), "suit": _plain(e.get("suit")),
@@ -5770,7 +5833,8 @@ def report_json(R: dict) -> dict:
         "save_name": R.get("save_name"), "game_date": _plain(R.get("game_date")), "last_run": _plain(R.get("last_run")),
         "formation": {"name": FORMATION_NAME, "style": TACTICAL_STYLE,
                       "rows": [{"slot": s, "label": lab, "ip": ip, "oop": oop, "ip_role": ipr, "oop_role": oopr,
-                                "ip_role_name": ROLES["IP"][ipr][0], "oop_role_name": ROLES["OOP"][oopr][0], "x": x, "y": y}
+                                "ip_role_name": ROLES["IP"][ipr][0], "oop_role_name": ROLES["OOP"][oopr][0], "x": x, "y": y,
+                                "ip_keys": list(ROLES["IP"][ipr][1]), "oop_keys": list(ROLES["OOP"][oopr][1])}
                                for (s, ip, oop, ipr, oopr), lab, (x, y) in zip(FORMATION, row_labels(), PITCH_XY)]},
         # the Positions page: one card per position, in this order, and what each plays with and without the ball
         "positions": {"cards": [{"slot": slot, "name": SLOT_NAMES.get(slot, slot),
@@ -5792,11 +5856,19 @@ def report_json(R: dict) -> dict:
                              "best": _fit_entry(m["best"][0]) if m.get("best") else None}
                             for m in (R.get("fit") or {}).get("misfits", [])]},
         "performance": {"record": _plain(perf.get("record")), "form": _plain(perf.get("form") or []),
-                        "metrics": _plain(perf.get("metrics") or []), "matches": perf.get("reports"),
+                        "metrics": [_metric_json(m) for m in perf.get("metrics") or []], "matches": perf.get("reports"),
                         "league_name": perf.get("league_name"), "league_size": len(perf.get("league_clubs") or ()),
-                        "players": {str(uid): _plain(v) for uid, v in (perf.get("players") or {}).items()}},
-        "training": [{k: _plain(t.get(k)) for k in ("slot", "name", "current", "week", "upcoming", "rotation", "recent_codes",
-                                                     "recent_weeks", "grid")} for t in R.get("training") or []],
+                        "insights": team_insights({m["key"]: m for m in perf.get("metrics") or []}),
+                        "min_minutes": PERF_MIN_MINUTES,
+                        "players": {str(uid): _perf_player_json(v) for uid, v in (perf.get("players") or {}).items()}},
+        "style": {"name": TACTICAL_STYLE, "keys": list(STYLE_KEYS)},
+        "attribute_labels": {k: attr_label(k) for k in sorted(NEEDED_ATTRS) if k not in HIDDEN_ATTRS},
+        "attribute_abbr": {k: v for k, v in ATTR_ABBR.items() if k not in HIDDEN_ATTRS},
+        "training_advice": _training_advice_json(R),
+        "plans": _plans_json(R),
+        "training": [{**{k: _plain(t.get(k)) for k in ("slot", "name", "current", "week", "upcoming", "rotation", "recent_codes",
+                                                        "recent_weeks", "grid")}, "sessions": _session_names(t)}
+                     for t in R.get("training") or []],
         "news": [{"kind": c, "tag": t, "text": x, "route": r} for c, t, x, r in ticker_items(R)],
         "notes": list(R.get("notes") or []),
     }

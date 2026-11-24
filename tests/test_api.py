@@ -61,6 +61,18 @@ class ReportJson(unittest.TestCase):
             self.assertNotIn(f'"ca": {p["ca"]}', text)
             self.assertNotIn(f'"pa": {p["pa"]}', text)
 
+    def test_plans_have_no_position_numbers(self):   # position work says "unconvincing", never 11/20
+        for plan in self.J["plans"]:
+            for w in plan["position_work"]:
+                self.assertNotIn("fam", w)
+                self.assertIsInstance(w["word"], str)
+
+    def test_tactics_pages_have_their_data(self):
+        self.assertTrue(all("value_text" in m for m in self.J["performance"]["metrics"]))
+        self.assertTrue(self.J["training"] and all("sessions" in t for t in self.J["training"]))
+        self.assertIn("changes", self.J["training_advice"])
+        self.assertEqual(self.J["style"]["keys"], list(fm.STYLE_KEYS))
+
     def test_familiarity_is_words_not_numbers(self):   # FM shows these words; the /20 ratings stay hidden
         words = {w for _, w in fm.FAMILIARITY_WORD} | {"ineffective"}
         for p in self.J["players"]:

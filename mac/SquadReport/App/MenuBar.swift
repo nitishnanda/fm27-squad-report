@@ -73,20 +73,40 @@ struct MenuBarState {
 
 /// "Report updated: 22 Nov 2026" when a new save has been read while you're in FM.
 enum Notifier {
-    private static let askedKey = "askedForNotifications"
-
+    /// Asks macOS for permission whenever it hasn't decided yet (a "no" is respected: it isn't asked again).
     @MainActor
     static func askOnce() {
-        guard !UserDefaults.standard.bool(forKey: askedKey) else { return }
-        UserDefaults.standard.set(true, forKey: askedKey)
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { _, _ in }
+        Task {
+            let center = UNUserNotificationCenter.current()
+            if await center.notificationSettings().authorizationStatus == .notDetermined {
+                _ = try? await center.requestAuthorization(options: [.alert, .sound])
+            }
+        }
     }
 
     static func reportUpdated(club: String, gameDate: String?) {
-        let content = UNMutableNotificationContent()
-        content.title = "Report updated: \(Fmt.day(gameDate))"
-        content.body = "\(club): your latest save has been read. Open Squad Report to see it."
-        let request = UNNotificationRequest(identifier: "report-updated", content: content, trigger: nil)
-        UNUserNotificationCenter.current().add(request)
+        post(title: "Report updated: \(Fmt.day(gameDate))",
+             body: "\(club): your latest save has been read. Open Squad Report to see it.", id: "report-updated")
     }
+
+    /// From Settings, so you can see what they look like.
+    static func test(club: String?, gameDate: String?) {
+        post(title: "Report updated: \(Fmt.day(gameDate))",
+             body: "\(club ?? "Your club"): your latest save has been read. Open Squad Report to see it. (This one's a test.)", id: "test")
+    }
+
+    private static func post(title: String, body: String, id: String) {
+        let content = UNMutableNotificationContent()
+        content.title = title
+        content.body = body
+        content.sound = .default
+        UNUserNotificationCenter.current().add(UNNotificationRequest(identifier: id, content: content, trigger: nil))
+    }
+}
+
+/// Shows banners even while the app is in front (only the test button posts then).
+final class NotificationPresenter: NSObject, UNUserNotificationCenterDelegate, @unchecked Sendable {
+    static let shared = NotificationPresenter()
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification) async
+        -> UNNotificationPresentationOptions { [.banner, .sound] }
 }

@@ -42,6 +42,25 @@ private struct GeneralSettings: View {
                 }
                 LabeledContent("Notifications", value: notifications)
                 Text("You get one when a new save has been read while you're in FM.").font(.caption).foregroundStyle(.secondary)
+                if notifications == "Not asked yet" {
+                    Button("Turn On Notifications…") {
+                        Task {
+                            _ = try? await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound])
+                            await refreshNotifications()
+                        }
+                    }
+                } else if notifications.hasPrefix("Off") {
+                    Button("Open Notification Settings…") {
+                        let id = Bundle.main.bundleIdentifier ?? "com.squadreport.mac"
+                        if let url = URL(string: "x-apple.systempreferences:com.apple.Notifications-Settings.extension?id=\(id)") {
+                            NSWorkspace.shared.open(url)
+                        }
+                    }
+                } else if notifications == "On" {
+                    Button("Send Test Notification") {
+                        Notifier.test(club: model.store.report?.club.name, gameDate: model.store.report?.gameDate)
+                    }
+                }
             }
             Section("Ratings") {
                 Toggle("Show potential stars", isOn: $showPotential)
@@ -50,13 +69,18 @@ private struct GeneralSettings: View {
             }
         }
         .formStyle(.grouped)
-        .task {
-            let s = await UNUserNotificationCenter.current().notificationSettings()
-            notifications = switch s.authorizationStatus {
-            case .authorized, .provisional: "On"
-            case .denied: "Off (turn them on in System Settings › Notifications)"
-            default: "Not asked yet"
-            }
+        .task { await refreshNotifications() }
+        .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
+            Task { await refreshNotifications() }   // back from System Settings
+        }
+    }
+
+    private func refreshNotifications() async {
+        let s = await UNUserNotificationCenter.current().notificationSettings()
+        notifications = switch s.authorizationStatus {
+        case .authorized, .provisional: "On"
+        case .denied: "Off (turn them on in System Settings › Notifications)"
+        default: "Not asked yet"
         }
     }
 

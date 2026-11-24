@@ -313,7 +313,7 @@ private struct Summary: View {
         VStack(alignment: .leading, spacing: 4) {
             Text(label).font(.callout).foregroundStyle(.secondary)
             HStack(alignment: .firstTextBaseline, spacing: 5) {
-                Text(value).numberFont(28)
+                NumberText(value, size: 28)
                 if let unit { Text(unit).foregroundStyle(.secondary) }
             }
             Text(sub).font(.caption).foregroundStyle(.secondary).lineLimit(1)

@@ -201,3 +201,31 @@ enum Fonts {
         CTFontManagerRegisterFontsForURLs(urls as CFArray, .process, nil)
     }
 }
+
+/// A big number in the look's number face. In glass that's Doto, whose dotted full stop sits low and reads like a comma
+/// ("£5,17m"), so the "." is drawn in Geist Mono and sits where a decimal point should.
+struct NumberText: View {
+    let text: String
+    let size: CGFloat
+    @Environment(\.theme) private var theme
+
+    init(_ text: String, size: CGFloat) {
+        self.text = text
+        self.size = size
+    }
+
+    var body: some View {
+        if theme.isGlass {
+            let parts = text.split(separator: ".", omittingEmptySubsequences: false).map(String.init)
+            parts.enumerated().reduce(Text("")) { acc, item in
+                let piece = Text(item.element).font(theme.number(size))
+                return item.offset == 0 ? acc + piece
+                    : acc + Text(".").font(.custom("GeistMono-Bold", size: size * 0.9)) + piece
+            }
+            .monospacedDigit()
+            .accessibilityLabel(text)
+        } else {
+            Text(text).font(theme.number(size)).monospacedDigit()
+        }
+    }
+}

@@ -163,7 +163,7 @@ private struct Tile<Extra: View>: View {
         VStack(alignment: .leading, spacing: 6) {
             Text(label).font(.callout).foregroundStyle(.secondary)
             HStack(alignment: .firstTextBaseline, spacing: 6) {
-                Text(value).numberFont(34)
+                NumberText(value, size: 34)
                 if let unit { Text(unit).foregroundStyle(.secondary) }
             }
             extra()

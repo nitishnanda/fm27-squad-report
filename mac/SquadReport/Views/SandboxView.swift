@@ -53,7 +53,7 @@ private struct ScoreBar: View {
                 Text("Your XI").font(.caption.weight(.semibold)).foregroundStyle(.secondary)
                 HStack(spacing: 6) {
                     StarsView(value: avg, size: 15)
-                    Text(String(format: "%.1f", avg)).numberFont(26)
+                    NumberText(String(format: "%.1f", avg), size: 26)
                 }
                 Text("\(diff >= 0 ? "+" : "")\(String(format: "%.1f", diff))★ vs best XI (\(String(format: "%.1f", level))) · \(model.changes) change\(model.changes == 1 ? "" : "s")")
                     .font(.caption).foregroundStyle(.secondary)
@@ -133,10 +133,12 @@ private struct SlotCard: View {
                         StarsView(value: rating.stars, size: 9)
                         FamiliarityBadge(code: rating.fam).colorScheme(.dark)
                     }
-                    Text(delta == 0 ? "=" : "\(delta > 0 ? "+" : "−")\(Fmt.stars(abs(delta)))★")
-                        .font(.system(size: 9, weight: .heavy))
-                        .foregroundStyle(delta > 0 ? Palette.transferIn : delta < 0 ? Palette.injuryLong : .secondary)
-                        .help("Against your best XI in this slot")
+                    if delta != 0 {   // only when it differs from your best XI in this slot
+                        Text("\(delta > 0 ? "↑" : "↓")\(Fmt.stars(abs(delta)))★")
+                            .font(.system(size: 9, weight: .heavy))
+                            .foregroundStyle(delta > 0 ? Palette.transferIn : Palette.injuryLong)
+                            .help("\(delta > 0 ? "Better" : "Worse") than your best XI in this slot by \(Fmt.stars(abs(delta)))★")
+                    }
                 }
                 .padding(.bottom, 5)
             }

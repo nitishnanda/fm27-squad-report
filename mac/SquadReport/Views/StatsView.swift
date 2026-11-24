@@ -125,7 +125,7 @@ private struct Leaders: View {
         let fmt: (Double) -> String = { decimals ? String(format: "%.2f", $0) : String(Int($0)) }
         return VStack(alignment: .leading, spacing: 4) {
             Text(label).font(.callout).foregroundStyle(.secondary)
-            Text(top > 0 ? fmt(top) : "–").numberFont(34)
+            NumberText(top > 0 ? fmt(top) : "–", size: 34)
             Text(top > 0 ? (leaders.count == 2 ? "\(surname(leaders[0].name)) & \(surname(leaders[1].name))"
                             : leaders.count > 2 ? "\(leaders[0].name) +\(leaders.count - 1) more" : leaders.first?.name ?? "")
                          : "Nobody yet")

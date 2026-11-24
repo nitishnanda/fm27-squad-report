@@ -5819,6 +5819,10 @@ def player_json(p: dict) -> dict:
         "stats": _plain(p.get("stats")), "youth_stats": _plain(p.get("ystats") or []), "played": _plain(p.get("played") or {}),
         "attributes": {k: v for k, v in (p.get("attrs") or {}).items() if k not in HIDDEN_ATTRS},
         "status": status,
+        # scouting targets only: where he came from (only scouting-list ones can be removed by the app) and his club
+        "target_source": ({"squad planner": "squad_planner"}.get(p.get("source"), "scouting_list")
+                          if p.get("where") == "target" else None),
+        "target_club": p.get("club") if p.get("where") == "target" else None,
     }
 
 

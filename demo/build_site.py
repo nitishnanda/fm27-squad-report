@@ -7,6 +7,7 @@ docs/ is self-contained (assets copied in, links relative), so it works from any
 (https://<user>.github.io/<repo>/), Vercel, or `python3 -m http.server -d docs`.
 """
 import json
+from types import SimpleNamespace
 import shutil
 import sys
 import tempfile
@@ -35,7 +36,15 @@ def main() -> None:
     (out / "app").mkdir(parents=True)
     with tempfile.TemporaryDirectory() as tmp:
         fm.HISTORY_FILE = Path(tmp) / "history.json"   # never touch your real star history
-        report = fm.build(FakeSave(), Path("Demo career.fm"))
+        save = FakeSave()
+        # two made-up scouting targets, so the Sandbox shows both kinds: one from scouting.txt (removable in the app)
+        # and one from FM's Squad Planner (the save controls that one)
+        others = [p for p in save.players_ if p.club_uid != 1 and p.team_slot == 0 and not p.on_loan and p.age and p.age <= 27]
+        listed, planned = others[3], others[11]
+        fm.SCOUTING_FILE = Path(tmp) / "scouting.txt"   # never touch your real scouting list
+        fm.SCOUTING_FILE.write_text(f"{listed.name}, {listed.club_name} [{listed.uid}]\n", encoding="utf-8")
+        save.squad_planner = lambda: [SimpleNamespace(player_uids=[planned.uid])]
+        report = fm.build(save, Path("Demo career.fm"))
     (out / "app" / "index.html").write_text(relative_links(fm.render(report), at_root=False), encoding="utf-8")
     (out / "index.html").write_text(relative_links(fm.landing_page(), at_root=True), encoding="utf-8")
     # the same made-up report as JSON, for the Mac app's previews and tests

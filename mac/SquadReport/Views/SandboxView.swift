@@ -349,6 +349,9 @@ private struct RosterRow: View {
     let model: SandboxModel
     let player: Player
     let inXI: Bool
+    @Environment(AppModel.self) private var app
+    @State private var removing = false
+    @State private var removeProblem: String?
 
     var body: some View {
         let status = model.status(player.uid)
@@ -364,6 +367,11 @@ private struct RosterRow: View {
                 HStack(spacing: 5) {
                     Text(player.name).fontWeight(.semibold).lineLimit(1)
                     if inXI { XITag() }
+                    if player.targetSource == "squad_planner" {
+                        Image(systemName: "list.clipboard").font(.caption).foregroundStyle(.secondary)
+                            .help("From FM's Squad Planner: remove him there, in the game")
+                            .accessibilityLabel("From FM's Squad Planner")
+                    }
                 }
                 Text(subtitle).font(.caption).foregroundStyle(.secondary).lineLimit(1)
                 if slots.isEmpty {
@@ -378,6 +386,17 @@ private struct RosterRow: View {
                 }
             }
             Spacer(minLength: 4)
+            if player.targetSource == "scouting_list" {
+                Button {
+                    Task { await remove() }
+                } label: {
+                    Image(systemName: removing ? "hourglass" : "xmark.circle.fill").foregroundStyle(.secondary)
+                }
+                .buttonStyle(.borderless)
+                .disabled(removing)
+                .help(removeProblem ?? "Remove from your scouting list")
+                .accessibilityLabel("Remove \(player.name) from your scouting list")
+            }
             Picker("Status", selection: Binding(get: { status }, set: { new in withAnimation(.snappy) { model.setStatus(player.uid, new) } })) {
                 ForEach(choices, id: \.self) { Text($0.title).tag($0) }
             }
@@ -401,8 +420,21 @@ private struct RosterRow: View {
         }
     }
 
+    /// Takes him off scouting.txt; the engine rebuilds and he drops out of the next report (~30 s).
+    private func remove() async {
+        removing = true
+        do {
+            try await app.engine.client.removeTarget(name: player.name)
+            removeProblem = "Removed. He goes when the report updates (about 30 seconds)."
+        } catch {
+            removing = false
+            removeProblem = "Couldn't remove him: \(error.localizedDescription)"
+        }
+    }
+
     private var subtitle: String {
         var bits = [player.positions.natural.joined(separator: " ")]
+        if let club = player.targetClub { bits.append(club) }
         if let age = player.age { bits.append("\(age)") }
         if let move = player.status.moves.first {
             switch move.kind {

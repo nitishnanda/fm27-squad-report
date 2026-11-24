@@ -543,7 +543,9 @@
      "expiring"
     ],
     "moves": []
-   }
+   },
+   "target_source": null,
+   "target_club": null
   },
   {
    "uid": 1002,
@@ -670,7 +672,9 @@
      "expiring"
     ],
     "moves": []
-   }
+   },
+   "target_source": null,
+   "target_club": null
   },
   {
    "uid": 1003,
@@ -784,7 +788,9 @@
    "status": {
     "tokens": [],
     "moves": []
-   }
+   },
+   "target_source": null,
+   "target_club": null
   },
   {
    "uid": 1004,
@@ -952,7 +958,9 @@
    "status": {
     "tokens": [],
     "moves": []
-   }
+   },
+   "target_source": null,
+   "target_club": null
   },
   {
    "uid": 1005,
@@ -1111,7 +1119,9 @@
      "expiring"
     ],
     "moves": []
-   }
+   },
+   "target_source": null,
+   "target_club": null
   },
   {
    "uid": 1006,
@@ -1280,7 +1290,9 @@
    "status": {
     "tokens": [],
     "moves": []
-   }
+   },
+   "target_source": null,
+   "target_club": null
   },
   {
    "uid": 1007,
@@ -1438,7 +1450,9 @@
    "status": {
     "tokens": [],
     "moves": []
-   }
+   },
+   "target_source": null,
+   "target_club": null
   },
   {
    "uid": 1008,
@@ -1626,7 +1640,9 @@
      "long": false
     },
     "moves": []
-   }
+   },
+   "target_source": null,
+   "target_club": null
   },
   {
    "uid": 1009,
@@ -1784,7 +1800,9 @@
    "status": {
     "tokens": [],
     "moves": []
-   }
+   },
+   "target_source": null,
+   "target_club": null
   },
   {
    "uid": 1010,
@@ -1958,7 +1976,9 @@
    "status": {
     "tokens": [],
     "moves": []
-   }
+   },
+   "target_source": null,
+   "target_club": null
   },
   {
    "uid": 1011,
@@ -2127,7 +2147,9 @@
    "status": {
     "tokens": [],
     "moves": []
-   }
+   },
+   "target_source": null,
+   "target_club": null
   },
   {
    "uid": 1012,
@@ -2281,7 +2303,9 @@
    "status": {
     "tokens": [],
     "moves": []
-   }
+   },
+   "target_source": null,
+   "target_club": null
   },
   {
    "uid": 1013,
@@ -2466,7 +2490,9 @@
    "status": {
     "tokens": [],
     "moves": []
-   }
+   },
+   "target_source": null,
+   "target_club": null
   },
   {
    "uid": 1014,
@@ -2667,7 +2693,9 @@
    "status": {
     "tokens": [],
     "moves": []
-   }
+   },
+   "target_source": null,
+   "target_club": null
   },
   {
    "uid": 1015,
@@ -2852,7 +2880,9 @@
    "status": {
     "tokens": [],
     "moves": []
-   }
+   },
+   "target_source": null,
+   "target_club": null
   },
   {
    "uid": 1016,
@@ -3033,7 +3063,9 @@
     ],
     "suspended_matches": 1,
     "moves": []
-   }
+   },
+   "target_source": null,
+   "target_club": null
   },
   {
    "uid": 1017,
@@ -3211,7 +3243,9 @@
       "date": "2027-01-02"
      }
     ]
-   }
+   },
+   "target_source": null,
+   "target_club": null
   },
   {
    "uid": 1018,
@@ -3387,7 +3421,9 @@
    "status": {
     "tokens": [],
     "moves": []
-   }
+   },
+   "target_source": null,
+   "target_club": null
   },
   {
    "uid": 1019,
@@ -3545,7 +3581,9 @@
    "status": {
     "tokens": [],
     "moves": []
-   }
+   },
+   "target_source": null,
+   "target_club": null
   },
   {
    "uid": 1020,
@@ -3732,7 +3770,9 @@
      "expiring"
     ],
     "moves": []
-   }
+   },
+   "target_source": null,
+   "target_club": null
   },
   {
    "uid": 1021,
@@ -3902,7 +3942,9 @@
    "status": {
     "tokens": [],
     "moves": []
-   }
+   },
+   "target_source": null,
+   "target_club": null
   },
   {
    "uid": 1022,
@@ -4071,7 +4113,9 @@
      "long": true
     },
     "moves": []
-   }
+   },
+   "target_source": null,
+   "target_club": null
   },
   {
    "uid": 1023,
@@ -4236,7 +4280,9 @@
    "status": {
     "tokens": [],
     "moves": []
-   }
+   },
+   "target_source": null,
+   "target_club": null
   },
   {
    "uid": 1024,
@@ -4408,7 +4454,9 @@
    "status": {
     "tokens": [],
     "moves": []
-   }
+   },
+   "target_source": null,
+   "target_club": null
   },
   {
    "uid": 1025,
@@ -4570,7 +4618,9 @@
       "date": "2027-01-02"
      }
     ]
-   }
+   },
+   "target_source": null,
+   "target_club": null
   },
   {
    "uid": 1026,
@@ -4724,7 +4774,9 @@
    "status": {
     "tokens": [],
     "moves": []
-   }
+   },
+   "target_source": null,
+   "target_club": null
   },
   {
    "uid": 1027,
@@ -4882,7 +4934,9 @@
    "status": {
     "tokens": [],
     "moves": []
-   }
+   },
+   "target_source": null,
+   "target_club": null
   },
   {
    "uid": 1028,
@@ -5042,7 +5096,9 @@
      "expiring"
     ],
     "moves": []
-   }
+   },
+   "target_source": null,
+   "target_club": null
   },
   {
    "uid": 1029,
@@ -5204,7 +5260,9 @@
    "status": {
     "tokens": [],
     "moves": []
-   }
+   },
+   "target_source": null,
+   "target_club": null
   },
   {
    "uid": 1030,
@@ -5358,7 +5416,9 @@
    "status": {
     "tokens": [],
     "moves": []
-   }
+   },
+   "target_source": null,
+   "target_club": null
   },
   {
    "uid": 1031,
@@ -5480,7 +5540,9 @@
       "date": "2027-06-30"
      }
     ]
-   }
+   },
+   "target_source": null,
+   "target_club": null
   },
   {
    "uid": 1032,
@@ -5666,7 +5728,9 @@
       "date": "2027-06-30"
      }
     ]
-   }
+   },
+   "target_source": null,
+   "target_club": null
   },
   {
    "uid": 1033,
@@ -5836,7 +5900,9 @@
       "date": "2027-06-30"
      }
     ]
-   }
+   },
+   "target_source": null,
+   "target_club": null
   },
   {
    "uid": 1034,
@@ -6002,7 +6068,9 @@
       "date": "2027-06-30"
      }
     ]
-   }
+   },
+   "target_source": null,
+   "target_club": null
   },
   {
    "uid": 1091,
@@ -6164,7 +6232,9 @@
       "date": "2027-01-02"
      }
     ]
-   }
+   },
+   "target_source": null,
+   "target_club": null
   },
   {
    "uid": 1111,
@@ -6330,10 +6400,324 @@
       "date": "2027-01-02"
      }
     ]
-   }
+   },
+   "target_source": null,
+   "target_club": null
   }
  ],
- "targets": [],
+ "targets": [
+  {
+   "uid": 1047,
+   "name": "Ars Player 13",
+   "age": 24,
+   "where": "target",
+   "youth": false,
+   "value": 40850143,
+   "wage": 114981,
+   "contract_end": "2028-06-30",
+   "expiring": false,
+   "positions": {
+    "natural": [
+     "CM"
+    ],
+    "accomplished": [],
+    "can_play": [
+     "CM"
+    ],
+    "groups": [
+     "CM"
+    ]
+   },
+   "best": {
+    "slot": "CM",
+    "stars": 3.1892,
+    "fam": "N"
+   },
+   "system": {
+    "CM": {
+     "stars": 3.1892,
+     "fam": "N"
+    }
+   },
+   "ability": {
+    "CM": 3.121
+   },
+   "ability_best": 3.121,
+   "potential": null,
+   "rows": {},
+   "open_rows": {
+    "1": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "2": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "3": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "4": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "5": {
+     "stars": 0.5,
+     "fam": "C"
+    },
+    "6": {
+     "stars": 0.5,
+     "fam": "C"
+    },
+    "7": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "8": {
+     "stars": 0.534,
+     "fam": "C"
+    },
+    "9": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "10": {
+     "stars": 0.5,
+     "fam": "X"
+    }
+   },
+   "trend": 0,
+   "familiarity": {
+    "DM": [
+     "unconvincing",
+     "unconvincing"
+    ],
+    "CM": [
+     "natural",
+     "natural"
+    ],
+    "AM": [
+     "unconvincing",
+     "unconvincing"
+    ]
+   },
+   "stats": null,
+   "youth_stats": [],
+   "played": {},
+   "attributes": {
+    "acceleration": 14,
+    "aerial_reach": 4,
+    "aggression": 15,
+    "agility": 15,
+    "anticipation": 15,
+    "balance": 14,
+    "bravery": 12,
+    "command_of_area": 3,
+    "communication": 4,
+    "composure": 15,
+    "concentration": 12,
+    "corners": 14,
+    "crossing": 11,
+    "decisions": 17,
+    "determination": 14,
+    "dribbling": 13,
+    "eccentricity": 4,
+    "finishing": 13,
+    "first_touch": 20,
+    "flair": 13,
+    "free_kick_taking": 12,
+    "handling": 3,
+    "heading": 14,
+    "jumping_reach": 12,
+    "kicking": 4,
+    "leadership": 12,
+    "long_shots": 15,
+    "long_throws": 14,
+    "marking": 14,
+    "natural_fitness": 15,
+    "off_the_ball": 12,
+    "one_on_ones": 2,
+    "pace": 14,
+    "passing": 17,
+    "penalty_taking": 15,
+    "positioning": 12,
+    "punching": 5,
+    "reflexes": 2,
+    "rushing_out": 5,
+    "stamina": 19,
+    "strength": 11,
+    "tackling": 12,
+    "teamwork": 11,
+    "technique": 18,
+    "throwing": 6,
+    "vision": 17,
+    "work_rate": 17
+   },
+   "status": {
+    "tokens": [],
+    "moves": []
+   },
+   "target_source": "squad_planner",
+   "target_club": "Arsenal"
+  },
+  {
+   "uid": 1038,
+   "name": "Ars Player 4",
+   "age": 21,
+   "where": "target",
+   "youth": false,
+   "value": 28593842,
+   "wage": 141942,
+   "contract_end": "2027-06-30",
+   "expiring": false,
+   "positions": {
+    "natural": [
+     "LB"
+    ],
+    "accomplished": [],
+    "can_play": [
+     "LB"
+    ],
+    "groups": [
+     "FB/WB"
+    ]
+   },
+   "best": {
+    "slot": "LB",
+    "stars": 3.8349,
+    "fam": "N"
+   },
+   "system": {
+    "LB": {
+     "stars": 3.8349,
+     "fam": "N"
+    }
+   },
+   "ability": {
+    "LB": 3.4534
+   },
+   "ability_best": 3.4534,
+   "potential": null,
+   "rows": {
+    "1": {
+     "stars": 3.8349,
+     "fam": "N"
+    }
+   },
+   "open_rows": {
+    "1": {
+     "stars": 3.8349,
+     "fam": "N"
+    },
+    "2": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "3": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "4": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "5": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "6": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "7": {
+     "stars": 0.5,
+     "fam": "C"
+    },
+    "8": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "9": {
+     "stars": 0.5,
+     "fam": "X"
+    },
+    "10": {
+     "stars": 0.5,
+     "fam": "X"
+    }
+   },
+   "trend": 0,
+   "familiarity": {
+    "LB": [
+     "natural",
+     "natural"
+    ],
+    "LW": [
+     "ineffective",
+     "competent"
+    ]
+   },
+   "stats": null,
+   "youth_stats": [],
+   "played": {},
+   "attributes": {
+    "acceleration": 18,
+    "aerial_reach": 5,
+    "aggression": 11,
+    "agility": 15,
+    "anticipation": 13,
+    "balance": 11,
+    "bravery": 14,
+    "command_of_area": 5,
+    "communication": 6,
+    "composure": 11,
+    "concentration": 12,
+    "corners": 12,
+    "crossing": 15,
+    "decisions": 13,
+    "determination": 11,
+    "dribbling": 10,
+    "eccentricity": 2,
+    "finishing": 14,
+    "first_touch": 14,
+    "flair": 13,
+    "free_kick_taking": 13,
+    "handling": 4,
+    "heading": 13,
+    "jumping_reach": 13,
+    "kicking": 6,
+    "leadership": 12,
+    "long_shots": 13,
+    "long_throws": 10,
+    "marking": 19,
+    "natural_fitness": 15,
+    "off_the_ball": 12,
+    "one_on_ones": 3,
+    "pace": 17,
+    "passing": 10,
+    "penalty_taking": 10,
+    "positioning": 14,
+    "punching": 6,
+    "reflexes": 4,
+    "rushing_out": 3,
+    "stamina": 17,
+    "strength": 11,
+    "tackling": 16,
+    "teamwork": 14,
+    "technique": 12,
+    "throwing": 5,
+    "vision": 13,
+    "work_rate": 17
+   },
+   "status": {
+    "tokens": [],
+    "moves": []
+   },
+   "target_source": "scouting_list",
+   "target_club": "Arsenal"
+  }
+ ],
  "xi1": [
   {
    "slot": "GK",

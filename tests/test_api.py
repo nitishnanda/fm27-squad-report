@@ -73,6 +73,13 @@ class ReportJson(unittest.TestCase):
         self.assertIn("changes", self.J["training_advice"])
         self.assertEqual(self.J["style"]["keys"], list(fm.STYLE_KEYS))
 
+    def test_targets_say_where_they_came_from(self):   # only scouting-list targets can be removed from the app
+        for p in self.J["players"]:
+            self.assertIsNone(p["target_source"])
+        for p in self.J["targets"]:
+            self.assertIn(p["target_source"], ("scouting_list", "squad_planner"))
+            self.assertIsNone(p["potential"])
+
     def test_training_mentoring_and_howto(self):   # one rule, one text: the web page and the feed share them
         m = self.J["training_advice"]["mentoring"]
         low, high = fm.mentoring_groups(self.R)

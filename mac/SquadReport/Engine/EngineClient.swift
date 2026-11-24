@@ -89,6 +89,18 @@ struct EngineClient: Sendable {
         if !answer.ok { throw NSError(domain: "SquadReport", code: 1, userInfo: [NSLocalizedDescriptionKey: answer.error ?? "failed"]) }
     }
 
+    /// Take a player off scouting.txt (by name, like the web's ×). Squad Planner targets can't be removed this way.
+    func removeTarget(name: String) async throws {
+        var request = URLRequest(url: base.appending(path: "scouting"))
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try JSONSerialization.data(withJSONObject: ["action": "remove", "name": name])
+        let (data, _) = try await fetch(request)
+        struct Answer: Decodable { let ok: Bool; let error: String? }
+        let answer = try JSONDecoder().decode(Answer.self, from: data)
+        if !answer.ok { throw NSError(domain: "SquadReport", code: 1, userInfo: [NSLocalizedDescriptionKey: answer.error ?? "failed"]) }
+    }
+
     /// The web app, for pages the Mac app doesn't draw yet.
     func webURL(route: String) -> URL {
         URL(string: "http://localhost:\(EngineClient.port)/app#\(route)")!

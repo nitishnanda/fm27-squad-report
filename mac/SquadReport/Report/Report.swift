@@ -398,6 +398,9 @@ struct Player: Decodable, Sendable, Identifiable {
     let trend: Double?
     let stats: SeasonStats?
     let status: Status
+    /// Scouting targets only: "scouting_list" (the app can remove these) or "squad_planner" (FM's, the save controls it).
+    let targetSource: String?
+    let targetClub: String?
     /// Per formation row ("0"…"10"): his rating in that exact slot, and the same for anyone (open rows, Sandbox-style).
     let rows: [String: Rating?]?
     let openRows: [String: Rating?]?
@@ -416,6 +419,7 @@ struct Player: Decodable, Sendable, Identifiable {
     private enum CodingKeys: String, CodingKey {
         case uid, name, age, youth, value, wage, contractEnd, expiring, positions, best, system, abilityBest
         case potential, trend, stats, status, rows, openRows, played, familiarity, attributes, youthStats
+        case targetSource, targetClub
         case location = "where"
     }
 

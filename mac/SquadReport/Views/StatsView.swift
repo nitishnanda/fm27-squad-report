@@ -125,7 +125,7 @@ private struct Leaders: View {
         let fmt: (Double) -> String = { decimals ? String(format: "%.2f", $0) : String(Int($0)) }
         return VStack(alignment: .leading, spacing: 4) {
             Text(label).font(.callout).foregroundStyle(.secondary)
-            Text(top > 0 ? fmt(top) : "–").font(.system(size: 34, weight: .heavy).width(.condensed)).monospacedDigit()
+            Text(top > 0 ? fmt(top) : "–").numberFont(34)
             Text(top > 0 ? (leaders.count == 2 ? "\(surname(leaders[0].name)) & \(surname(leaders[1].name))"
                             : leaders.count > 2 ? "\(leaders[0].name) +\(leaders.count - 1) more" : leaders.first?.name ?? "")
                          : "Nobody yet")
@@ -135,7 +135,7 @@ private struct Leaders: View {
         }
         .padding(14)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 10))
+        .panel(10)
         .accessibilityElement(children: .combine)
     }
 }
@@ -174,7 +174,7 @@ private struct ContributionsChart: View {
         }
         .padding(14)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.quaternary.opacity(0.45), in: RoundedRectangle(cornerRadius: 10))
+        .panel(10)
     }
 }
 
@@ -222,7 +222,7 @@ private struct RatingsChart: View {
         }
         .padding(14)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.quaternary.opacity(0.45), in: RoundedRectangle(cornerRadius: 10))
+        .panel(10)
     }
 }
 

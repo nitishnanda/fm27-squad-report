@@ -84,5 +84,5 @@ enum Route: String, CaseIterable, Identifiable, Hashable, Sendable {
     }
 
     /// Pages drawn natively so far; the others open in the web app until their phase lands.
-    var isNative: Bool { self != .sandbox }
+    var isNative: Bool { true }
 }

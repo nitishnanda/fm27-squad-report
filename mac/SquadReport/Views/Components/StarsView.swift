@@ -4,13 +4,14 @@ import SwiftUI
 struct StarsView: View {
     let value: Double
     var size: CGFloat = 11
-    var tint: Color = Palette.star
+    var tint: Color? = nil          // nil = the look's star colour (gold, or green in glass)
+    @Environment(\.theme) private var theme
 
     var body: some View {
         let shown = Fmt.half(min(5, max(0, value)))
         row(Palette.starEmpty)
             .overlay(alignment: .leading) {
-                row(tint).mask(alignment: .leading) {
+                row(tint ?? theme.star).mask(alignment: .leading) {
                     GeometryReader { geo in
                         Rectangle().frame(width: geo.size.width * shown / 5)
                     }

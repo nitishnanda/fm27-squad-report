@@ -87,7 +87,19 @@ session names per training calendar, `training_advice` and `plans` (FM's words f
 - Transfers: the "Coming up" timeline.
 - Stats: Swift Charts plus sortable tables.
 
-## Phase 4: Mac extras
+## Phase 4: Mac extras ✅ done
+
+His answers: keep the Dock icon *and* add the menu bar item; carry Original + E (Glass + scoreboard) only; keep
+`Run Squad Report.command` as a backup. Built: one main `Window` (closing it keeps the app in the Dock and menu bar),
+`MenuBarExtra` with Up to date / Reading your save, step n of 8 / New report ready / Engine problem and Open, Reload,
+Settings, Quit; a notification when a *new save* has been read while the app isn't in front (the save stamp is the first
+part of the engine version, so restarts and app updates don't count); Settings (project folder, open at login via
+`SMAppService`, notifications status, potential stars on/off, look, phone access on/off with QR codes from the new
+loopback-only `GET /api/phone`; turning phone access off restarts our engine with `--mac-only`); the Glass + scoreboard
+look (`Theme`, `.themed()`, `.panel()`, font roles; the four OFL woff2 fonts ship in the app and are registered before
+the first window); and the native Sandbox (drag players onto the pitch or click a slot, statuses, scouting targets with
+a search sheet that adds them via `POST /scouting`, Swift port of the Hungarian algorithm, saved per save).
+
 
 - Menu bar item: "Up to date" / "Reading your save, step 3 of 8" / "New report ready", with Open and Quit.
 - Notification when a new save has been read ("Report updated: 22 Nov 2026").

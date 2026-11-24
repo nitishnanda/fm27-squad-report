@@ -139,7 +139,7 @@ LW (AML/ML) IF/WMF · AM SS/AM · RW (AMR/MR) IW/WMF · ST CFD/CFD. `STYLE_KEYS`
   runs `PythonSetup` (find Python 3.12+, `.venv`, fmsave, upgrade once a day) and starts `--headless`, restarting it up to
   3 times in 2 minutes; quitting the app stops only an engine it started. `ReportStore` polls /api/status (1 s busy, 3 s
   idle), fetches /api/report on a new version and caches it in `~/Library/Application Support/Squad Report/last-report.json`.
-  Native pages: everything except Sandbox (`Route.isNative`; Phases 2–3 in PLAN.md); the rest show "Open in Browser". Statuses use
+  Every page is native now (Phases 2–4 in PLAN.md); the rest show "Open in Browser". Statuses use
   `PlayerStatus` + `StatusBadge` (colour + SF Symbol + word, dashed for arranged/contract ending). The feed's
   `formation.style` ("Gegenpress") was added for the Home hero; no schema bump (new field, same meanings).
   Positions logic lives in `PositionCards.build` (mirrors `position_cards()`: rated here, or `played_many`+ games at
@@ -149,6 +149,13 @@ LW (AML/ML) IF/WMF · AM SS/AM · RW (AMR/MR) IW/WMF · ST CFD/CFD. `STYLE_KEYS`
   macOS draws category labels above each horizontal bar, so StatsView hides the y axis and labels bars itself with
   `.annotation(position: .top, alignment: .leading)`. Attribute dictionaries may come back camelCased from the decoder:
   use `Report.label/abbr` and `Player.attribute`, which try both spellings.
+  Phase 4: looks are `Theme` in Views/Components/Theme.swift (Original + Glass, `@AppStorage("look")`); use `.panel()` /
+  `.panelFill()` for cards and the font roles (`.displayFont`, `.numberFont`, `.positionFont`, `.heroFont`, `.slotFont`,
+  `.dataFont`) instead of hard-coded condensed system fonts, and `theme.star` / `theme.pitchStripes` / `theme.cardFill`.
+  The glass fonts must be registered synchronously in `SquadReportApp.init()` (SwiftUI caches a failed lookup).
+  Settings keys: `showPotential`, `phoneAccess`, `look`. Sandbox state: `SandboxModel` (Report/Sandbox.swift), saved in
+  UserDefaults `sandbox1:<club>:<save>`. Never commit a screenshot of the Phone settings: its QR codes hold the phone key.
+  Background UI tools can't drag from Sandbox roster rows or open pop-up menus; test those by hand.
   Demo mode: `open "…/Squad Report.app" --args -demoReport <path>/mac/Fixtures/report.json` (no engine).
   Testing UI: the shell can't screenshot windows (no Screen Recording grant); use computer-use `app_screenshot` on
   `com.squadreport.mac`.

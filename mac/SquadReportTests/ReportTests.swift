@@ -139,6 +139,50 @@ struct PhaseThreeTests {
     }
 }
 
+@Suite("Sandbox")
+@MainActor
+struct SandboxTests {
+    @Test func hungarianFindsTheCheapestAssignment() {
+        // row 0 is cheapest at column 1, row 1 at column 0, row 2 must take column 2
+        let pick = Hungarian.solve([[4, 1, 3], [2, 0, 5], [3, 2, 2]])
+        #expect(pick == [1, 0, 2])
+        #expect(Hungarian.solve([[1, 9, 9, 9], [9, 9, 1, 9]]) == [0, 2])   // more columns than rows
+    }
+
+    @Test func autoPickUsesEveryoneOnceAndFillsTheXI() throws {
+        let report = try Report.decode(try fixture())
+        UserDefaults.standard.removeObject(forKey: "sandbox1:\(report.club.name):\(report.saveName ?? "")")
+        let model = SandboxModel(report: report)
+        let picked = model.lineup.compactMap { $0 }
+        #expect(picked.count == model.rows.count)
+        #expect(Set(picked).count == picked.count)
+        #expect(picked.allSatisfy { model.isAvailable($0) })
+        #expect(model.average > 0)
+    }
+
+    @Test func ruledOutPlayersLeaveTheXI() throws {
+        let report = try Report.decode(try fixture())
+        UserDefaults.standard.removeObject(forKey: "sandbox1:\(report.club.name):\(report.saveName ?? "")")
+        let model = SandboxModel(report: report)
+        let star = try #require(model.lineup[0])
+        model.setStatus(star, .injured)
+        #expect(!model.lineup.contains(star))
+        #expect(model.ruledOut.contains(surname(model.player(star)!.name)))
+        model.reset()
+        #expect(model.status(star) == model.startingStatus(model.player(star)!))
+    }
+
+    @Test func placingSwapsSlots() throws {
+        let report = try Report.decode(try fixture())
+        UserDefaults.standard.removeObject(forKey: "sandbox1:\(report.club.name):\(report.saveName ?? "")")
+        let model = SandboxModel(report: report)
+        let a = model.lineup[0], b = model.lineup[1]
+        model.place(b, at: 0)
+        #expect(model.lineup[0] == b && model.lineup[1] == a)
+        #expect(!model.auto)
+    }
+}
+
 @Suite("Formats match the web app")
 struct FormatTests {
     @Test func money() {

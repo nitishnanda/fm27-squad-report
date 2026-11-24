@@ -57,6 +57,15 @@ final class Engine {
         if let folder { start(folder: folder) }
     }
 
+    /// Start ours again (a setting it reads at start changed). Someone else's engine is left alone.
+    func restart() {
+        guard let folder, let process, process.isRunning else { return }
+        self.folder = folder
+        startAfterExit = true
+        quitting = true
+        process.terminate()
+    }
+
     /// The store couldn't reach the engine for a while. If it was someone else's, start our own.
     func lostContact() {
         guard phase == .attached, !quitting else { return }
@@ -101,7 +110,9 @@ final class Engine {
         }
         let process = Process()
         process.executableURL = python
-        process.arguments = [script.path, "--headless"]
+        // phone access off: the engine only listens to this Mac
+        let phone = UserDefaults.standard.object(forKey: "phoneAccess") as? Bool ?? true
+        process.arguments = [script.path, "--headless"] + (phone ? [] : ["--mac-only"])
         process.currentDirectoryURL = folder
         var env = ProcessInfo.processInfo.environment
         env["PYTHONUNBUFFERED"] = "1"

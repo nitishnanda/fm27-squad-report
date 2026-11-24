@@ -24,32 +24,46 @@ struct HomeView: View {
 
 private struct Hero: View {
     let report: Report
+    @Environment(\.theme) private var theme
 
     var body: some View {
         let kit = Color(hex: report.club.kit)
         let ink = Color(hex: report.club.ink)
+        let shape = RoundedRectangle(cornerRadius: theme.isGlass ? 26 : 14, style: .continuous)
         ViewThatFits(in: .horizontal) {
             HStack(alignment: .bottom, spacing: 32) { identity; Spacer(minLength: 0); league }
             VStack(alignment: .leading, spacing: 24) { identity; league }
         }
-        .foregroundStyle(ink)
+        .foregroundStyle(theme.isGlass ? Color.primary : ink)
         .padding(32)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background {
-            ZStack {
-                kit
-                LinearGradient(colors: [.white.opacity(0.08), .clear, .black.opacity(0.22)], startPoint: .topLeading, endPoint: .bottomTrailing)
+            if theme.isGlass {
+                // glass with the club colour glowing in from the corner, like the web app's look E
+                ZStack {
+                    LinearGradient(colors: [.white.opacity(0.08), .white.opacity(0.02)], startPoint: .top, endPoint: .bottom)
+                    RadialGradient(colors: [kit.opacity(0.5), .clear], center: .topLeading, startRadius: 0, endRadius: 620)
+                }
+            } else {
+                ZStack {
+                    kit
+                    LinearGradient(colors: [.white.opacity(0.08), .clear, .black.opacity(0.22)], startPoint: .topLeading, endPoint: .bottomTrailing)
+                }
             }
         }
-        .overlay(alignment: .bottom) { Rectangle().fill(Palette.brand).frame(height: 5) }
-        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+        .overlay(alignment: .bottom) {
+            if !theme.isGlass { Rectangle().fill(Palette.brand).frame(height: 5) }
+        }
+        .clipShape(shape)
+        .overlay(shape.strokeBorder(theme.isGlass ? Color.white.opacity(0.12) : .clear))
+        .shadow(color: .black.opacity(theme.isGlass ? 0.5 : 0), radius: 40, y: 30)
     }
 
     private var identity: some View {
         VStack(alignment: .leading, spacing: 14) {
             Text("FM27 squad report").font(.headline).opacity(0.8)
             Text(report.club.name.uppercased())
-                .font(.system(size: 64, weight: .black).width(.compressed).italic())
+                .heroFont(64)
                 .lineLimit(1)
                 .minimumScaleFactor(0.5)
             Grid(alignment: .leading, horizontalSpacing: 28, verticalSpacing: 4) {
@@ -59,8 +73,8 @@ private struct Hero: View {
                     Text("Save").font(.caption).opacity(0.75)
                 }
                 GridRow {
-                    Text(Fmt.day(report.gameDate)).font(.title3.weight(.bold).width(.condensed))
-                    Text(report.formation.title).font(.title3.weight(.bold).width(.condensed))
+                    Text(Fmt.day(report.gameDate)).displayFont(18, .bold)
+                    Text(report.formation.title).displayFont(18, .bold)
                     Text(report.saveName ?? "–").font(.callout).lineLimit(1)
                 }
             }
@@ -73,7 +87,9 @@ private struct Hero: View {
             VStack(alignment: .leading, spacing: 8) {
                 HStack(alignment: .firstTextBaseline, spacing: 10) {
                     Text(Fmt.ordinal(rec.pos))
-                        .font(.system(size: 60, weight: .black).width(.compressed).italic())
+                        .positionFont(60)
+                        .foregroundStyle(theme.isGlass ? Palette.brandHigh : Color(hex: report.club.ink))
+                        .shadow(color: theme.isGlass ? Palette.brandHigh.opacity(0.45) : .clear, radius: 12)
                     VStack(alignment: .leading, spacing: 1) {
                         Text("of \(rec.of)\(report.performance.leagueName.map { " · \($0)" } ?? "")")
                         Text("\(rec.pts) pts · P\(rec.p) W\(rec.w) D\(rec.d) L\(rec.l) · \(rec.gf)–\(rec.ga)")
@@ -147,7 +163,7 @@ private struct Tile<Extra: View>: View {
         VStack(alignment: .leading, spacing: 6) {
             Text(label).font(.callout).foregroundStyle(.secondary)
             HStack(alignment: .firstTextBaseline, spacing: 6) {
-                Text(value).font(.system(size: 34, weight: .heavy).width(.condensed)).monospacedDigit()
+                Text(value).numberFont(34)
                 if let unit { Text(unit).foregroundStyle(.secondary) }
             }
             extra()
@@ -155,7 +171,7 @@ private struct Tile<Extra: View>: View {
         }
         .padding(16)
         .frame(maxWidth: .infinity, minHeight: 118, alignment: .topLeading)
-        .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .panel(10)
         .accessibilityElement(children: .combine)
     }
 }
@@ -189,13 +205,13 @@ private struct NeedsWork: View {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 240), spacing: 8, alignment: .top)], spacing: 8) {
                     ForEach(fine) { v in
                         HStack(alignment: .firstTextBaseline, spacing: 8) {
-                            Text(v.slot).font(.headline.width(.condensed).italic())
+                            Text(v.slot).slotFont(15)
                             Text(v.title).font(.caption.weight(.bold)).foregroundStyle(Palette.verdict(v.level))
                             Text(v.text).font(.caption).foregroundStyle(.secondary).lineLimit(2)
                         }
                         .padding(10)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 8))
+                        .panel(8)
                         .overlay(alignment: .leading) {
                             Rectangle().fill(Palette.verdict(v.level)).frame(width: 3)
                         }
@@ -219,8 +235,8 @@ private struct VerdictCard: View {
             HStack(spacing: 10) {
                 Text("\(rank)").font(.caption.weight(.bold)).frame(width: 22, height: 22)
                     .background(.quaternary, in: Circle())
-                Text(verdict.slot).font(.title2.weight(.heavy).width(.condensed).italic())
-                Text(verdict.title).font(.headline.width(.condensed)).foregroundStyle(color)
+                Text(verdict.slot).slotFont(22)
+                Text(verdict.title).displayFont(15, .bold).foregroundStyle(color)
             }
             Text(verdict.text).fixedSize(horizontal: false, vertical: true)
             people("Starter", "Starters", report.xi1)
@@ -228,7 +244,7 @@ private struct VerdictCard: View {
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.quaternary.opacity(0.5))
+        .panelFill()
         .overlay(alignment: .leading) { Rectangle().fill(color).frame(width: 4) }
         .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
         .accessibilityElement(children: .combine)
@@ -285,7 +301,7 @@ private struct News: View {
                     if i < items.count - 1 { Divider().padding(.leading, 12) }
                 }
             }
-            .background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+            .panel(10)
         }
     }
 }
@@ -315,7 +331,7 @@ struct SectionTitle: View {
 
     var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: 12) {
-            Text(title).font(.system(size: 26, weight: .heavy).width(.condensed))
+            Text(title).displayFont(26)
                 .accessibilityAddTraits(.isHeader)
             if let sub { Text(sub).font(.callout).foregroundStyle(.secondary) }
         }

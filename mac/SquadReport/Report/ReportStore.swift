@@ -1,3 +1,4 @@
+import AppKit
 import Foundation
 import Observation
 
@@ -12,6 +13,14 @@ final class ReportStore {
     private(set) var fromCache = false
     /// A report the app can't read (a newer feed, or a broken file), in plain words.
     private(set) var problem: String?
+    /// A newer save was read while you weren't looking (the menu bar says "New report ready").
+    private(set) var unseenUpdate = false
+
+    func markSeen() { unseenUpdate = false }
+
+    /// The save behind each report is the first part of the engine's version ("<save time>-<script time>-<n>"),
+    /// so a restart or an app update doesn't count as a new report.
+    private static let lastSaveKey = "lastSaveStamp"
 
     private var loadedVersion: String?
     private var failures = 0
@@ -95,6 +104,15 @@ final class ReportStore {
         if use(data) {
             loadedVersion = version
             fromCache = false
+            let stamp = String(version.split(separator: "-").first ?? "")
+            let last = UserDefaults.standard.string(forKey: Self.lastSaveKey)
+            if let last, !stamp.isEmpty, stamp != last, let report {
+                if !NSApplication.shared.isActive {
+                    unseenUpdate = true
+                    Notifier.reportUpdated(club: report.club.name, gameDate: report.gameDate)
+                }
+            }
+            if !stamp.isEmpty { UserDefaults.standard.set(stamp, forKey: Self.lastSaveKey) }
             let url = Self.cacheURL
             Task.detached(priority: .utility) { try? data.write(to: url, options: .atomic) }
         }

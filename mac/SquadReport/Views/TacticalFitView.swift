@@ -66,7 +66,7 @@ private struct HowItsGoing: View {
             } else {
                 if let rec = perf.record {
                     HStack(alignment: .firstTextBaseline, spacing: 12) {
-                        Text(Fmt.ordinal(rec.pos)).font(.system(size: 44, weight: .black).width(.compressed).italic())
+                        Text(Fmt.ordinal(rec.pos)).positionFont(44)
                         Text("of \(rec.of) · P\(rec.p) W\(rec.w) D\(rec.d) L\(rec.l) · \(rec.pts) pts · \(rec.gf)–\(rec.ga) goals")
                             .foregroundStyle(.secondary)
                         HStack(spacing: 4) {
@@ -85,12 +85,12 @@ private struct HowItsGoing: View {
                 let weakest = metrics.sorted { $0.rank > $1.rank }.prefix(3)
                 HStack(alignment: .top, spacing: 16) {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("What's working").font(.title3.weight(.heavy).width(.condensed)).foregroundStyle(Palette.transferIn)
+                        Text("What's working").displayFont(20).foregroundStyle(Palette.transferIn)
                         if working.isEmpty { Text("Nothing in the top quarter of the league yet.").foregroundStyle(.secondary) }
                         ForEach(Array(working)) { MetricCard(metric: $0, good: true) }
                     }
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("What's not working").font(.title3.weight(.heavy).width(.condensed)).foregroundStyle(Palette.injuryLong)
+                        Text("What's not working").displayFont(20).foregroundStyle(Palette.injuryLong)
                         if failing.isEmpty {
                             Text("Nothing is below the league average. Your weakest areas:").foregroundStyle(.secondary)
                             ForEach(Array(weakest)) { MetricCard(metric: $0, good: false) }
@@ -107,7 +107,7 @@ private struct HowItsGoing: View {
                     }
                     .padding(14)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(.quaternary.opacity(0.45), in: RoundedRectangle(cornerRadius: 10))
+                    .panel(10)
                 }
             }
         }
@@ -134,7 +134,7 @@ private struct MetricCard: View {
         }
         .padding(12)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.quaternary.opacity(0.45))
+        .panelFill()
         .overlay(alignment: .leading) { Rectangle().fill(good ? Palette.transferIn : Palette.injuryLong).frame(width: 3) }
         .clipShape(RoundedRectangle(cornerRadius: 8))
         .accessibilityElement(children: .combine)
@@ -191,7 +191,7 @@ private struct PerfCard: View {
         }
         .padding(12)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.quaternary.opacity(0.45), in: RoundedRectangle(cornerRadius: 8))
+        .panel(8)
     }
 
     private func row(_ title: String, _ items: [Performance.PlayerItem], good: Bool) -> some View {
@@ -346,7 +346,7 @@ private struct Misfits: View {
                         }
                         .padding(14)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(.quaternary.opacity(0.45))
+                        .panelFill()
                         .overlay(alignment: .leading) { Rectangle().fill(Palette.verdict("amber")).frame(width: 4) }
                         .clipShape(RoundedRectangle(cornerRadius: 10))
                     }
@@ -361,6 +361,7 @@ private struct Misfits: View {
 private struct RoleByRole: View {
     let report: Report
     @State private var picked: Int?
+    @Environment(\.theme) private var theme
 
     var body: some View {
         let rows = report.formation.rows
@@ -397,7 +398,7 @@ private struct RoleByRole: View {
                 let fit = xiFit[i]
                 Button { picked = i } label: {
                     VStack(spacing: 1) {
-                        Text(row.label ?? row.slot).font(.system(size: 11, weight: .heavy).width(.condensed).italic())
+                        Text(row.label ?? row.slot).slotFont(11)
                             .foregroundStyle(i == current ? Palette.star : .secondary)
                         Text(fit.map { String(format: "%.1f", $0) } ?? "–").font(.system(size: 15, weight: .heavy)).monospacedDigit()
                             .foregroundStyle(fit.map { $0 >= 14 ? Palette.transferIn : $0 >= 12 ? Color.white : Palette.injuryLong } ?? .secondary)
@@ -405,7 +406,7 @@ private struct RoleByRole: View {
                             .lineLimit(1)
                     }
                     .frame(width: 74).padding(.vertical, 5)
-                    .background(Color(hex: "#0E1512").opacity(0.94), in: RoundedRectangle(cornerRadius: 7))
+                    .background(theme.cardFill, in: RoundedRectangle(cornerRadius: 7))
                     .overlay(RoundedRectangle(cornerRadius: 7).stroke(i == current ? Palette.star : .clear, lineWidth: 2))
                     .contentShape(Rectangle())
                 }
@@ -436,7 +437,7 @@ private struct RoleCard: View {
         let keys = (ip + oop).reduce(into: [String]()) { if !$0.contains($1) { $0.append($1) } }
         VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .firstTextBaseline, spacing: 10) {
-                Text(row.label ?? row.slot).font(.system(size: 24, weight: .heavy).width(.condensed).italic())
+                Text(row.label ?? row.slot).slotFont(24)
                 Text(row.ipRoleName ?? fit.ipRole).fontWeight(.semibold)
                 Text("in possession ·").foregroundStyle(.secondary)
                 Text(row.oopRoleName ?? fit.oopRole).fontWeight(.semibold)
@@ -479,7 +480,7 @@ private struct RoleCard: View {
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.quaternary.opacity(0.45), in: RoundedRectangle(cornerRadius: 10))
+        .panel(10)
     }
 }
 

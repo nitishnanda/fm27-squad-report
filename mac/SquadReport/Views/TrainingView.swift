@@ -11,11 +11,14 @@ struct TrainingView: View {
         var id: String { rawValue }
     }
     @State private var part: Part = .schedule
+    @AppStorage("showPotential") private var showPotential = true
 
     var body: some View {
         VStack(spacing: 0) {
             HStack {
-                Picker("Part", selection: $part) { ForEach(Part.allCases) { Text($0.rawValue).tag($0) } }
+                Picker("Part", selection: $part) {
+                    ForEach(Part.allCases.filter { showPotential || $0 != .prospects }) { Text($0.rawValue).tag($0) }
+                }
                     .pickerStyle(.segmented).labelsHidden().fixedSize()
                 Spacer()
             }
@@ -62,7 +65,7 @@ private struct TeamSchedule: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(alignment: .firstTextBaseline) {
                 Text(team.name).font(.headline)
-                Text(team.current ?? "–").font(.system(size: 22, weight: .heavy).width(.condensed))
+                Text(team.current ?? "–").displayFont(22)
                 Spacer()
                 Text("this week").font(.caption).foregroundStyle(.secondary)
             }
@@ -100,7 +103,7 @@ private struct TeamSchedule: View {
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.quaternary.opacity(0.45), in: RoundedRectangle(cornerRadius: 10))
+        .panel(10)
     }
 }
 
@@ -190,7 +193,7 @@ private struct Changes: View {
                     }
                     .padding(14)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(.quaternary.opacity(0.45))
+                    .panelFill()
                     .overlay(alignment: .leading) { Rectangle().fill(Palette.star).frame(width: 3) }
                     .clipShape(RoundedRectangle(cornerRadius: 10))
                 }
@@ -202,7 +205,7 @@ private struct Changes: View {
                 }
                 .padding(14)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(.quaternary.opacity(0.45), in: RoundedRectangle(cornerRadius: 10))
+                .panel(10)
             }
         }
     }

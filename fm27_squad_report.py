@@ -6322,6 +6322,10 @@ def serve_live(argv: list[str]) -> None:
                 return self.send(json.dumps({"schema": REPORT_SCHEMA, "version": snap["version"], "building": snap["building"],
                                              "step": snap["step"], "steps": BUILD_STEPS, "error": snap["error"],
                                              "ready": snap["json"] is not None}), "application/json")
+            if path == "/api/phone":   # the Mac app's Settings draws these links as QR codes for his iPhone
+                links = phone_links(key) if phone_on else []
+                return self.send(json.dumps({"on": bool(phone_on), "links": [{"kind": k, "url": u} for k, u in links]}),
+                                 "application/json")
             if path == "/api/report":
                 if snap["json"] is None:
                     return self.send(json.dumps({"ready": False, "building": snap["building"], "error": snap["error"]}),

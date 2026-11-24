@@ -74,6 +74,7 @@ private struct Detail: View {
         if let report = model.store.report {
             page(report)
                 .safeAreaInset(edge: .top, spacing: 0) { Banner() }
+                .pageBackground()
         } else if let problem = model.store.problem {
             ProblemView(title: "Can't show the report", message: problem)
         } else {
@@ -92,6 +93,7 @@ private struct Detail: View {
         case .training: TrainingView(report: report)
         case .transfers: TransfersView(report: report)
         case .stats: StatsView(report: report)
+        case .sandbox: SandboxView(report: report)
         default: NotYetView(route: model.route)
         }
     }

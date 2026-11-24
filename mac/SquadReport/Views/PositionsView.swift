@@ -109,7 +109,7 @@ private struct PositionCardView: View {
         let visible = showAll ? card.entries : Array(card.entries.prefix(shown))
         VStack(alignment: .leading, spacing: 0) {
             HStack(alignment: .firstTextBaseline, spacing: 8) {
-                Text(card.info.slot).font(.system(size: 22, weight: .heavy).width(.condensed).italic())
+                Text(card.info.slot).slotFont(22)
                 Text(card.info.name).foregroundStyle(.secondary)
                 Spacer()
                 if let v = card.verdict {
@@ -163,7 +163,7 @@ private struct PositionCardView: View {
                 .foregroundStyle(.secondary)
             }
         }
-        .background(.quaternary.opacity(0.45))
+        .panelFill()
         .overlay(alignment: .top) { Rectangle().fill(color).frame(height: 3) }
         .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
         .accessibilityElement(children: .contain)
@@ -183,6 +183,7 @@ private struct PositionRow: View {
     let card: PositionCard
     let report: Report
     @State private var showCard = false
+    @AppStorage("showPotential") private var showPotential = true
 
     var body: some View {
         let p = entry.player
@@ -203,7 +204,7 @@ private struct PositionRow: View {
                         .help("Weak in one phase: your \(card.info.slot) plays \(card.info.ip) with the ball and \(card.info.oop) without it, and he's only \(entry.weak.joined(separator: ", ")).")
                         .accessibilityLabel("Weak in one phase: \(entry.weak.joined(separator: ", "))")
                 }
-                if let pot = p.potential {
+                if showPotential, let pot = p.potential {
                     Text("pot \(Fmt.stars(pot))★")
                         .font(.system(size: 10, weight: .bold))
                         .foregroundStyle(Palette.potential)

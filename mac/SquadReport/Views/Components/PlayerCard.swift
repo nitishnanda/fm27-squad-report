@@ -9,6 +9,7 @@ struct PlayerCard: View {
     var card: String?
     var row: Int?
     var report: Report?
+    @AppStorage("showPotential") private var showPotential = true
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -34,7 +35,7 @@ struct PlayerCard: View {
                         StarsView(value: ability).help("How good he is at his best position in general, ignoring your tactic")
                     }
                 }
-                if let pot = player.potential {
+                if showPotential, let pot = player.potential {
                     GridRow {
                         Text("Potential").foregroundStyle(.secondary)
                         StarsView(value: pot, tint: Palette.potential).help("From FM's hidden potential (players 23 and under)")
@@ -108,7 +109,7 @@ struct PlayerCard: View {
         }
         .padding(10)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.quaternary.opacity(0.6), in: RoundedRectangle(cornerRadius: 8))
+        .panel(8)
     }
 
     private var others: [(String, Rating)] {

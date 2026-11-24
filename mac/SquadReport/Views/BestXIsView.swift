@@ -37,7 +37,7 @@ private struct XIPitch: View {
         let average = ratings.isEmpty ? nil : ratings.reduce(0, +) / Double(rows.count)
         VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .firstTextBaseline) {
-                Text(title).font(.system(size: 22, weight: .heavy).width(.condensed))
+                Text(title).displayFont(22)
                 Text(sub).foregroundStyle(.secondary)
                 Spacer()
                 if let average {
@@ -63,6 +63,7 @@ private struct XIPitch: View {
 /// A pitch seen from above, your goal at the bottom. `players` gets the pitch size to place cards by percentage.
 struct Pitch<Players: View>: View {
     @ViewBuilder var players: (CGSize) -> Players
+    @Environment(\.theme) private var theme
 
     var body: some View {
         GeometryReader { geo in
@@ -75,13 +76,13 @@ struct Pitch<Players: View>: View {
         .background(
             LinearGradient(stops: stripes, startPoint: .top, endPoint: .bottom)
         )
-        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(Color(hex: "#275A37"), lineWidth: 1))
+        .clipShape(RoundedRectangle(cornerRadius: theme.isGlass ? 22 : 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: theme.isGlass ? 22 : 12, style: .continuous).stroke(theme.pitchEdge, lineWidth: 1))
     }
 
     /// Mown stripes, ten of them.
     private var stripes: [Gradient.Stop] {
-        let a = Color(hex: "#22603A"), b = Color(hex: "#1C5432")
+        let (a, b) = theme.pitchStripes
         return (0..<10).flatMap { i -> [Gradient.Stop] in
             let c = i.isMultiple(of: 2) ? a : b
             return [.init(color: c, location: Double(i) / 10), .init(color: c, location: Double(i + 1) / 10)]
@@ -117,6 +118,7 @@ private struct PitchPlayer: View {
     let rowInfo: Formation.Row
     let player: Player?
     @State private var showCard = false
+    @Environment(\.theme) private var theme
 
     var body: some View {
         let label = rowInfo.label ?? rowInfo.slot
@@ -127,7 +129,7 @@ private struct PitchPlayer: View {
         } label: {
             VStack(spacing: 3) {
                 Text(label)
-                    .font(.system(size: 11, weight: .heavy).width(.condensed).italic())
+                    .slotFont(11)
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 2)
@@ -155,7 +157,7 @@ private struct PitchPlayer: View {
                 }
             }
             .frame(width: 104)
-            .background(Color(hex: "#0E1512").opacity(0.94))
+            .background(theme.cardFill)
             .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
             .shadow(color: .black.opacity(0.45), radius: 8, y: 6)
             .contentShape(Rectangle())

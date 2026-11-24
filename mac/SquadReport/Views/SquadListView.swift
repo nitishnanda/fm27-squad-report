@@ -96,6 +96,7 @@ struct SquadListView: View {
     }
 
     @State private var search = ""
+    @AppStorage("showPotential") private var showPotential = true
     @State private var show: Show = .all
     @State private var youth = false
     @State private var sortOrder = [KeyPathComparator(\SquadRow.system, order: .reverse)]
@@ -213,7 +214,7 @@ struct SquadListView: View {
             .width(min: 70, ideal: 76)
             .customizationID("ability")
             TableColumn("Potential ★", value: \.potential) { row in
-                if row.potential >= 0 {
+                if showPotential && row.potential >= 0 {
                     StarsView(value: row.potential, tint: Palette.potential)
                         .help("Potential, from FM's hidden potential (players 23 and under)")
                 } else {
@@ -312,14 +313,14 @@ private struct Summary: View {
         VStack(alignment: .leading, spacing: 4) {
             Text(label).font(.callout).foregroundStyle(.secondary)
             HStack(alignment: .firstTextBaseline, spacing: 5) {
-                Text(value).font(.system(size: 28, weight: .heavy).width(.condensed)).monospacedDigit()
+                Text(value).numberFont(28)
                 if let unit { Text(unit).foregroundStyle(.secondary) }
             }
             Text(sub).font(.caption).foregroundStyle(.secondary).lineLimit(1)
         }
         .padding(12)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .panel(10)
         .accessibilityElement(children: .combine)
     }
 

@@ -180,6 +180,12 @@ class Server(unittest.TestCase):
         self.assertTrue(s["ready"])
         self.assertEqual(len(s["steps"]), len(fm.BUILD_STEPS))
 
+    def test_phone_links_for_the_mac_only(self):
+        code, body = self.get("/api/phone")
+        self.assertEqual(code, 200)
+        self.assertIn("links", json.loads(body))
+        self.assertEqual(self.get("/api/phone", host="evil.example:18027")[0], 403)
+
     def test_refuses_a_renamed_address(self):   # a web page pretending to be this Mac (DNS rebinding)
         self.assertEqual(self.get("/api/report", host="evil.example:18027")[0], 403)
 

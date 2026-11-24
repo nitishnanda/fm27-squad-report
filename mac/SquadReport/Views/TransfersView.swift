@@ -116,7 +116,7 @@ private struct ComingUp: View {
         let months = TransferTimeline.months(report)
         VStack(alignment: .leading, spacing: 12) {
             HStack(alignment: .firstTextBaseline, spacing: 10) {
-                Text("Coming up").font(.title3.weight(.heavy).width(.condensed))
+                Text("Coming up").displayFont(20)
                 Text("arranged moves, loans starting and ending, contracts running out · by month").foregroundStyle(.secondary)
             }
             if months.isEmpty {
@@ -125,7 +125,7 @@ private struct ComingUp: View {
             // one row per year, so January 2028 can never read as if it came before May 2027
             ForEach(Self.years(months), id: \.year) { group in
                 HStack(alignment: .firstTextBaseline, spacing: 8) {
-                    Text(String(group.year)).font(.system(size: 26, weight: .heavy).width(.condensed))
+                    Text(String(group.year)).displayFont(26)
                     Rectangle().fill(.quaternary).frame(height: 1)
                 }
                 .padding(.top, 6)
@@ -138,7 +138,7 @@ private struct ComingUp: View {
                             Circle().fill(Palette.brandHigh).frame(width: 11, height: 11)
                         }
                         HStack(alignment: .firstTextBaseline, spacing: 8) {
-                            Text(Self.monthFormat.string(from: month.start)).font(.title3.weight(.heavy).width(.condensed))
+                            Text(Self.monthFormat.string(from: month.start)).displayFont(20)
                             Text("\(month.count) \(month.count == 1 ? "thing" : "things")").font(.caption).foregroundStyle(.secondary)
                         }
                         ForEach(month.events) { e in event(e) }
@@ -183,7 +183,7 @@ private struct ComingUp: View {
         .font(.callout)
         .padding(9)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.quaternary.opacity(0.45), in: RoundedRectangle(cornerRadius: 8))
+        .panel(8)
         .accessibilityElement(children: .combine)
     }
 }
@@ -210,7 +210,7 @@ private struct MoveColumns: View {
     private func group(_ title: String, _ sub: String?, _ cols: [(String, String, PlayerStatus.Kind, String, String)]) -> some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .firstTextBaseline, spacing: 10) {
-                Text(title).font(.title3.weight(.heavy).width(.condensed))
+                Text(title).displayFont(20)
                 if let sub { Text(sub).foregroundStyle(.secondary) }
             }
             HStack(alignment: .top, spacing: 12) {
@@ -225,7 +225,7 @@ private struct MoveColumns: View {
         let dashed = [.loanInArranged, .loanOutArranged].contains(kind)
         return VStack(alignment: .leading, spacing: 0) {
             HStack {
-                Label(title, systemImage: kind.symbol).font(.headline.width(.condensed)).foregroundStyle(kind.color)
+                Label(title, systemImage: kind.symbol).displayFont(15, .bold).foregroundStyle(kind.color)
                 Spacer()
                 Text("\(items.count)").font(.caption.weight(.bold)).monospacedDigit()
                     .padding(.horizontal, 7).background(.quaternary, in: Capsule())
@@ -252,7 +252,7 @@ private struct MoveColumns: View {
             }
         }
         .frame(maxWidth: .infinity, alignment: .topLeading)
-        .background(.quaternary.opacity(0.35))
+        .panelFill()
         .clipShape(RoundedRectangle(cornerRadius: 8))
         .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(kind.color.opacity(0.35), style: StrokeStyle(lineWidth: 1, dash: dashed ? [4, 3] : [])))
     }

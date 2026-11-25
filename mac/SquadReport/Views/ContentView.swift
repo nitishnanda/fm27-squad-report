@@ -79,7 +79,6 @@ private struct InspectorPanel: View {
 
 private struct Sidebar: View {
     @Environment(AppModel.self) private var model
-    @Environment(\.theme) private var theme
 
     var body: some View {
         @Bindable var model = model
@@ -94,9 +93,6 @@ private struct Sidebar: View {
             }
         }
         .listStyle(.sidebar)
-        // the sidebar shares the page's surface where the look has a flat one (never lighter than the canvas)
-        .scrollContentBackground(theme.canvas == nil ? .automatic : .hidden)
-        .background(theme.canvas ?? .clear)
         .tint(Palette.brand)     // the app's own green for the selection, white text on it, like a system accent
     }
 

@@ -48,8 +48,8 @@ struct Theme: Sendable {
     var scheme: ColorScheme? {
         switch look {
         case .original: nil
-        case .programme, .sticker: .light
-        case .floodlit, .scoreboard, .glass: .dark
+        case .sticker: .light
+        case .programme, .floodlit, .scoreboard, .glass: .dark   // the programme is printed on dark stock now
         }
     }
     var panelStyle: Panel {
@@ -219,23 +219,15 @@ struct Theme: Sendable {
     var star: Color {
         switch look {
         case .original: Palette.star
-        case .programme: kitOnLight
+        case .programme: Palette.star
         case .floodlit: Color(hex: "#F4C95D")
         case .scoreboard, .glass: Palette.star        // ratings are gold, never the "good" green (DESIGN.md)
         case .sticker: Color(hex: "#111111")
         }
     }
-    /// The page background as a colour, where the look has a flat one: the sidebar uses it too (one surface, like Linear).
-    var canvas: Color? {
-        switch look {
-        case .scoreboard: DS.Surface.canvas
-        case .floodlit, .glass: Color(hex: "#06110C")
-        default: nil
-        }
-    }
     var accent: Color {
         switch look {
-        case .programme, .sticker: kitOnLight
+        case .sticker: kitOnLight
         default: Palette.brandHigh
         }
     }
@@ -261,7 +253,7 @@ struct Theme: Sendable {
         switch look {
         case .original: (Color(hex: "#22603A"), Color(hex: "#1C5432"))
         case .floodlit, .glass: (Color(hex: "#0F2B1B"), Color(hex: "#123220"))
-        case .programme: (Color(hex: "#E7E7E0"), Color(hex: "#DFDFD7"))       // a printed pitch
+        case .programme: (Color(hex: "#1B1B19"), Color(hex: "#171715"))       // a pitch printed on dark stock
         case .scoreboard: (Color(hex: "#0E1411"), Color(hex: "#0C120F"))
         case .sticker: (Color(hex: "#2E9A57"), Color(hex: "#27904F"))
         }
@@ -269,7 +261,7 @@ struct Theme: Sendable {
     /// Lines on the pitch: dark ink on the paper pitch, white elsewhere.
     var pitchLine: Color {
         switch look {
-        case .programme: Color(hex: "#151512").opacity(0.5)
+        case .programme: Color(hex: "#EDEDE6").opacity(0.35)
         case .scoreboard: Color(hex: "#4FC77F").opacity(0.5)
         default: .white.opacity(0.28)
         }
@@ -277,7 +269,7 @@ struct Theme: Sendable {
     var pitchEdge: Color {
         switch look {
         case .original: Color(hex: "#275A37")
-        case .programme: Color(hex: "#1A1A17")
+        case .programme: Color(hex: "#3A3A36")
         case .scoreboard: DS.Surface.hairline
         case .sticker: Color(hex: "#111111")
         default: .white.opacity(0.1)
@@ -287,7 +279,7 @@ struct Theme: Sendable {
         switch look {
         case .original: Color(hex: "#0E1512").opacity(0.94)
         case .floodlit, .glass: Color(hex: "#09160F").opacity(0.86)
-        case .programme: Color(hex: "#151512")
+        case .programme: Color(hex: "#202020")
         case .scoreboard: DS.Surface.panel
         case .sticker: Color(hex: "#111111")
         }
@@ -368,7 +360,7 @@ private struct PanelModifier: ViewModifier {
             if clip { content.background(.quaternary.opacity(0.45), in: shape) } else { content.background(.quaternary.opacity(0.45)) }
         case .rule:
             // the programme: no box, a printed rule across the top
-            content.overlay(alignment: .top) { Rectangle().fill(Color(hex: "#1A1A17")).frame(height: 1).allowsHitTesting(false) }
+            content.overlay(alignment: .top) { Rectangle().fill(Color(hex: "#EDEDE6").opacity(0.8)).frame(height: 1).allowsHitTesting(false) }
         case .board:
             let fill = DS.Surface.panel
             if clip {
@@ -427,7 +419,7 @@ private struct PageBackground: ViewModifier {
                 .ignoresSafeArea()
             }
         case .paper:
-            content.background(Color(hex: "#F4F4F0").ignoresSafeArea())
+            content.background(Color(hex: "#121211").ignoresSafeArea())   // dark newsprint
         case .board:
             content.background(DS.Surface.canvas.ignoresSafeArea())
         case .mown:

@@ -69,7 +69,7 @@ private struct Hero: View {
         .overlay(alignment: .bottom) {
             switch style {
             case .kit: Rectangle().fill(Palette.brand).frame(height: 5)
-            case .paper: Rectangle().fill(Color(hex: "#1A1A17")).frame(height: 4)   // the programme's heavy rule
+            case .paper: Rectangle().fill(Color(hex: "#EDEDE6")).frame(height: 4)   // the programme's heavy rule, light on dark stock
             case .board: Rectangle().fill(Color(hex: "#4FC77F")).frame(height: 2)   // the scoreboard's one signal green
             default: EmptyView()
             }

@@ -11,7 +11,8 @@ display faces** through these tokens. They may **not** change the spacing scale,
 template.
 
 Colour tokens below are for the dark looks (Original in dark mode, B Floodlit, C Scoreboard, E Glass + scoreboard).
-The light looks (A Programme, D Sticker) keep their own colour values but follow every other section.
+The light look (D Sticker) keeps its own colour values but follows every other section. A Programme is dark now
+(dark newsprint `#121211`, light print rules `#EDEDE6`).
 
 ---
 
@@ -20,7 +21,7 @@ The light looks (A Programme, D Sticker) keep their own colour values but follow
 ### Surfaces: neutral, no tint, ~× 1.8 luminance per step
 | Token | Hex | Use |
 |---|---|---|
-| `surface.canvas` | `#0B0B0D` | window background **and the sidebar** (one surface, like Linear) |
+| `surface.canvas` | `#0B0B0D` | window background. The sidebar keeps the system's grey sidebar material (his choice, 25 Nov 2026) |
 | `surface.panel` | `#151517` | cards, tiles, the hero, the table body |
 | `surface.raised` | `#1E1E21` | group headers, table header, hover on a card or row |
 | `surface.selected` | `#26282B` | selected row (no accent), meter track, pressed |
@@ -177,7 +178,6 @@ Anything past three per row moves into the hover text or the player card.
 ## 7. Don'ts
 
 - **No tinted surfaces.** Surfaces are neutral grey; colour goes in content, not in the canvas.
-- **No sidebar lighter than the canvas.**
 - **No borders thicker than 1 pt**, and no border plus a shadow plus a fill on one card.
 - **No zebra stronger than ΔY 0.005**, and no zebra outside tables.
 - **No filled pills for facts.** Only level-1 badges get a fill.

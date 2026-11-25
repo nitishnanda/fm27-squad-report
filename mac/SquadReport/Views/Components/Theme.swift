@@ -111,7 +111,6 @@ struct Theme: Sendable {
         .medium: "MartianMono-SemiExpandedRegular_Medium", .semibold: "MartianMono-SemiExpandedRegular_SemiBold",
         .bold: "MartianMono-SemiExpandedRegular_Bold", .heavy: "MartianMono-SemiExpandedRegular_ExtraBold",
         .black: "MartianMono-SemiExpandedRegular_ExtraBold"]
-    static let newsreaderItalic = "Newsreader16pt-Italic"
 
     private func font(_ face: Face, _ size: CGFloat, _ weight: Font.Weight) -> Font {
         switch face {
@@ -211,8 +210,6 @@ struct Theme: Sendable {
         }
     }
 
-    /// Notes under titles: Newsreader italic in the programme look, like the web's serif notes.
-    var noteFont: Font? { look == .programme ? .custom(Self.newsreaderItalic, size: 15) : nil }
 
     // MARK: colour
 

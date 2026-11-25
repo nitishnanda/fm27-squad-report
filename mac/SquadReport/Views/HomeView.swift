@@ -404,7 +404,7 @@ struct SectionTitle: View {
         HStack(alignment: .firstTextBaseline, spacing: 12) {
             Text(title).displayFont(page ? 28 : 20)
                 .accessibilityAddTraits(.isHeader)
-            if let sub { Text(sub).font(theme.noteFont ?? .system(size: 13)).foregroundStyle(.secondary) }
+            if let sub { Text(sub).font(.system(size: 13)).foregroundStyle(.secondary) }
         }
     }
 }

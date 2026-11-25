@@ -232,3 +232,15 @@ Load the matching skills before touching the site's look or behaviour (name them
 - Testing: Playwright browser tools (check every page, console errors, reduced motion, mobile)
 Skip the React Native / Reanimated / Skia / Next.js / Vercel / monorepo skills: this is one Python file serving vanilla HTML/JS.
 GSAP 3.15.1 (+ScrollTrigger, SplitText, Flip) and Lenis 1.3.27 live in `assets/` so the site works offline.
+
+## Mac app (`mac/`): which skill does which task
+Load the skill (Skill tool) **before** starting a task in its row, and say which one you loaded. A task can match two rows: load both.
+| When the task is… | Load |
+|---|---|
+| Writing or changing any SwiftUI view, state (`@Observable`, `@State`, `@Bindable`), identity, layout, `Table`/`List`/lazy-stack scrolling, toolbars, inspectors, a custom `Layout`, or a SwiftUI rendering/state bug | `swiftui` |
+| macOS specifics: windows and scenes, menu bar extras, commands and shortcuts, AppKit bridging (`NSViewRepresentable`, `NSWindow`), sandbox/entitlements, notifications, Dock badge, macOS 26/27 APIs, a code or UI review of the Mac app | `macos-development` |
+| Design language: Liquid Glass, SF Symbols, typography, motion and feedback (haptics, number transitions, symbol effects), UX writing, design-system rules, colour and corner radii | `design` |
+| A polish or review pass on how a screen looks and feels: spacing, alignment, optical balance, hover/focus/press states, shadows and radius, "make it feel professional", building a new component | `design-engineer` |
+| Web UI (the Python-served site) | the web skills listed above, not these |
+
+Also: use the Xcode tools (`BuildProject`, `GetBuildLog`, `RenderPreview`, …) when they're connected; `mac/build.sh` is the fallback. Screenshots of the running app go through computer-use `app_screenshot` (it fails while the Mac is locked). Peekaboo isn't installed here.

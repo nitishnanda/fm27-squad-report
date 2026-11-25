@@ -50,12 +50,6 @@ struct ContentView: View {
                     .popover(isPresented: Binding(get: { model.showKey }, set: { model.showKey = $0 }), arrowEdge: .bottom) {
                         StatusKey()
                     }
-                    Button {
-                        model.openInBrowser()
-                    } label: {
-                        Label("Open in Browser", systemImage: "safari")
-                    }
-                    .help("Open this page in the web app (⇧⌘O)")
                 }
             }
             .navigationTitle(model.route.title)

@@ -39,6 +39,8 @@ struct ContentView: View {
                         .help("Search pages, players and actions (⌘K)")
                     Button { openWindow(id: "matchday") } label: { Label("Matchday", systemImage: "pin") }
                         .help("A small window that floats over FM (⇧⌘M)")
+                    SettingsLink { Label("Settings", systemImage: "gearshape") }
+                        .help("Look, folder, notifications, phone access (⌘,)")
                     Button { model.showInspector.toggle() } label: { Label("Side Panel", systemImage: "sidebar.trailing") }
                         .help("A player's card beside the page (⌥⌘I)")
                     Button {

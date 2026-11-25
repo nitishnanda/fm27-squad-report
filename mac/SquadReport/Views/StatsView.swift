@@ -128,24 +128,26 @@ private struct Leaders: View {
         let leaders = ranked.filter { value($0) == top }
         let next = ranked.filter { value($0) != top }.prefix(2)
         let fmt: (Double) -> String = { decimals ? String(format: "%.2f", $0) : String(Int($0)) }
+        // Every size and gap here is measured off his Figma (pt from the top rule: label cap 17, value cap 41, name cap
+        // 80, sub 99), so a few (14, 6, 4) sit off the DESIGN.md scale on purpose.
         return VStack(alignment: .leading, spacing: 0) {
-            Text(label).font(.system(size: 12)).foregroundStyle(.secondary).lineLimit(1)
+            Text(label).font(.system(size: 13)).foregroundStyle(.secondary).lineLimit(1)
             NumberText(top > 0 ? fmt(top) : "–", size: 34)
-                .padding(.top, DS.Space.xs)
+                .padding(.top, DS.Space.xxs)
             Text(top > 0 ? (leaders.count == 2 ? "\(surname(leaders[0].name)) & \(surname(leaders[1].name))"
                             : leaders.count > 2 ? "\(leaders[0].name) +\(leaders.count - 1) more" : leaders.first?.name ?? "")
                          : "Nobody yet")
                 .font(.system(size: 13, weight: .bold)).lineLimit(1)
-                .padding(.top, DS.Space.xs)
+                .padding(.top, 6)
             Text(next.isEmpty || top == 0 ? " " : "then " + next.map { "\(surname($0.name)) \(fmt(value($0)))" }.joined(separator: " · "))
                 .font(.system(size: 11)).foregroundStyle(.secondary).lineLimit(1)
-                .padding(.top, DS.Space.xs)
+                .padding(.top, 6)
         }
-        .padding(.horizontal, DS.Space.s).padding(.top, DS.Space.m).padding(.bottom, DS.Space.xs)
+        .padding(.horizontal, 14).padding(.top, DS.Space.m).padding(.bottom, DS.Space.m)
         .frame(maxWidth: .infinity, alignment: .leading)
-        // His Figma tiles: no box, just a 1 pt rule across the top. Primary at 22 % reads as a light rule on the dark
-        // looks and a grey one on the light looks, like the Figma's.
-        .overlay(alignment: .top) { Rectangle().fill(Color.primary.opacity(0.22)).frame(height: 1) }
+        // The Figma's rule is bright (#BFBFB9 on #131312), not a hairline: that is #EDEDE6 at 80 % (the programme print rule); primary at 80 % gives it on the dark looks
+        // and a matching dark rule on the light ones.
+        .overlay(alignment: .top) { Rectangle().fill(Color.primary.opacity(0.8)).frame(height: 1) }
         .accessibilityElement(children: .combine)
     }
 }

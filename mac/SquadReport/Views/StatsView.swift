@@ -123,10 +123,11 @@ private struct Leaders: View {
     }
 
     private func card(_ label: String, _ pool: [StatRow], decimals: Bool = false, _ value: (StatRow) -> Double) -> some View {
-        let ranked = pool.sorted { value($0) > value($1) }
+        // His Figma: one leader by name, then the next two with their numbers, even when they're level with the leader
+        // (no "A & B" or "+10 more"). Level players are ordered by games played, then name, so it doesn't jump around.
+        let ranked = pool.sorted { (value($0), $0.apps, $1.name) > (value($1), $1.apps, $0.name) }
         let top = ranked.first.map(value) ?? 0
-        let leaders = ranked.filter { value($0) == top }
-        let next = ranked.filter { value($0) != top }.prefix(2)
+        let next = ranked.dropFirst().filter { value($0) > 0 }.prefix(2)
         let fmt: (Double) -> String = { decimals ? String(format: "%.2f", $0) : String(Int($0)) }
         // Every size and gap here is measured off his Figma (pt from the top rule: label cap 17, value cap 41, name cap
         // 80, sub 99), so a few (14, 6, 4) sit off the DESIGN.md scale on purpose.
@@ -134,9 +135,7 @@ private struct Leaders: View {
             Text(label).font(.system(size: 13)).foregroundStyle(.secondary).lineLimit(1)
             NumberText(top > 0 ? fmt(top) : "–", size: 34)
                 .padding(.top, DS.Space.xxs)
-            Text(top > 0 ? (leaders.count == 2 ? "\(surname(leaders[0].name)) & \(surname(leaders[1].name))"
-                            : leaders.count > 2 ? "\(leaders[0].name) +\(leaders.count - 1) more" : leaders.first?.name ?? "")
-                         : "Nobody yet")
+            Text(top > 0 ? ranked[0].name : "Nobody yet")
                 .font(.system(size: 13, weight: .bold)).lineLimit(1)
                 .padding(.top, 6)
             Text(next.isEmpty || top == 0 ? " " : "then " + next.map { "\(surname($0.name)) \(fmt(value($0)))" }.joined(separator: " · "))

@@ -15,7 +15,8 @@ struct CareerView: View {
 
     var body: some View {
         let career = report.career
-        let matches = career?.matches ?? []
+        // friendlies don't count towards your record, like FM's own manager history
+        let matches = (career?.matches ?? []).filter { !$0.friendly }
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
                 HubHeader(title: "Career stats", sub: subtitle(career))
@@ -47,7 +48,7 @@ struct CareerView: View {
     private func totals(_ r: Record) -> some View {
         // two even rows of four, like the Home snapshot
         LazyVGrid(columns: Array(repeating: GridItem(.flexible(minimum: 150), spacing: 12, alignment: .top), count: 4), spacing: 12) {
-            Stat(label: "Matches", value: "\(r.p)", sub: "all competitions")
+            Stat(label: "Matches", value: "\(r.p)", sub: "competitive, friendlies left out")
             Stat(label: "Won", value: "\(r.w)", sub: String(format: "%.0f%% of matches", r.winPct), tint: DS.Delta.up)
             Stat(label: "Drawn", value: "\(r.d)", sub: r.p > 0 ? String(format: "%.0f%%", 100 * Double(r.d) / Double(r.p)) : "–")
             Stat(label: "Lost", value: "\(r.l)", sub: r.p > 0 ? String(format: "%.0f%%", 100 * Double(r.l) / Double(r.p)) : "–",

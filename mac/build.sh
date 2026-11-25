@@ -35,7 +35,11 @@ case "${1:-}" in
   install)
     release
     osascript -e 'quit app id "com.squadreport.mac"' 2>/dev/null || true
-    sleep 2
+    # wait for it (and the engine it started) to really be gone, or `open` below just brings the old copy forward
+    for _ in $(seq 1 20); do
+      pgrep -f "/Applications/FM27 Companion.app/Contents/MacOS/" >/dev/null || break
+      sleep 0.5
+    done
     rm -rf "/Applications/Squad Report.app" "/Applications/FM27 Companion.app"
     cp -R "$RELEASE_APP" /Applications/
     open "/Applications/FM27 Companion.app"

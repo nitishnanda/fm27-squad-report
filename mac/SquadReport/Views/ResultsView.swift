@@ -32,7 +32,7 @@ struct ResultsView: View {
         let seasons = Array(Set(matches.map(\.season))).sorted(by: >)
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
-                HubHeader(title: "Results", sub: "Every first-team result since you took the job, by season") {
+                HubHeader(title: "Results", sub: "Every first-team result since you took the job, by season · friendlies shown but not counted") {
                     if seasons.count > 1 { pills(["All"] + seasons) }
                 }
                 if matches.isEmpty {
@@ -75,7 +75,7 @@ private struct SeasonBlock: View {
     let matches: [Career.Match]   // newest first
 
     var body: some View {
-        let rec = Record(matches)
+        let rec = Record(matches.filter { !$0.friendly })   // the season's record leaves friendlies out
         let clubs = Array(Set(matches.map(\.club))).sorted().joined(separator: " & ")
         VStack(alignment: .leading, spacing: 12) {
             HStack(alignment: .firstTextBaseline, spacing: 12) {
@@ -103,7 +103,7 @@ private struct ResultRow: View {
         HStack(spacing: 12) {
             Text(Fmt.day(match.date)).font(.system(size: 12)).monospacedDigit().foregroundStyle(.secondary)
                 .frame(width: 92, alignment: .leading)
-            Text(match.comp).font(.system(size: 11.5)).foregroundStyle(.tertiary).lineLimit(1)
+            Text(match.friendly ? "Friendly" : match.comp).font(.system(size: 11.5)).foregroundStyle(.tertiary).lineLimit(1)
                 .frame(width: 140, alignment: .leading)
             Text(match.home ? "H" : "A").font(.system(size: 11, weight: .semibold)).foregroundStyle(.secondary)
                 .frame(width: 16)
@@ -119,6 +119,7 @@ private struct ResultRow: View {
         }
         .padding(.horizontal, 14)
         .frame(height: 40)
+        .opacity(match.friendly ? 0.6 : 1)   // shown, but quieter: friendlies don't count
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(Fmt.day(match.date)), \(match.comp), \(match.home ? "home to" : "away at") \(match.opp), \(match.res == "W" ? "won" : match.res == "L" ? "lost" : "drew") \(match.gf)–\(match.ga)")
     }

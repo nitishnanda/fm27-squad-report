@@ -445,12 +445,15 @@ struct Career: Decodable, Sendable {
         let season: String
         let club: String
         let comp: String
+        /// league, europe, cup or friendly (the save has no competition names, so the engine tells them apart by shape)
+        let kind: String?
         let opp: String
         let home: Bool
         let gf: Int
         let ga: Int
         var id: String { "\(date)|\(opp)|\(comp)" }
         var res: String { gf > ga ? "W" : gf < ga ? "L" : "D" }
+        var friendly: Bool { kind == "friendly" }
         var year: String { String(date.prefix(4)) }
     }
     struct Money: Decodable, Sendable {

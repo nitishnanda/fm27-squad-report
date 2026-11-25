@@ -44,6 +44,7 @@ def seed_career(path: Path) -> None:
         gf, ga = rnd.choice([0, 1, 1, 2, 2, 3, 4]), rnd.choice([0, 0, 1, 1, 2, 3])
         key = f"{day.isoformat()}|9{i}|8{i}|{comp}"
         matches[key] = {"date": day.isoformat(), "season": "2025/26", "club": "Brighton", "club_uid": 9001, "comp": comp,
+                        "kind": "league" if comp == "Premier League" else "cup",
                         "opp": opps[i % len(opps)], "home": i % 2 == 0, "gf": gf, "ga": ga}
         day += timedelta(days=rnd.choice([6, 7, 7, 8]))
     money = {f"9001|{m}": {"club": "Brighton", "month": m, "net": n} for m, n in

@@ -238,7 +238,9 @@ GSAP 3.15.1 (+ScrollTrigger, SplitText, Flip) and Lenis 1.3.27 live in `assets/`
   exactly; any value outside it needs a code comment saying why. `REFERENCE_AUDIT.md` explains where it comes from.
 - **After every UI edit in `mac/`, before saying it's done, installing or committing:**
   1. Build: `mac/build.sh` (or the Xcode `BuildProject` tool). Fix every error.
-  2. Launch the dev build in demo mode: `open -n "mac/build/DerivedData.noindex/Build/Products/Debug/FM27 Companion.app"
+  2. Quit only the dev copy (`pkill -f "DerivedData.noindex/Build/Products/Debug/FM27 Companion.app"`), never
+     `pkill -x "FM27 Companion"`: that also kills his installed app and used to orphan its engine (stale code, broken
+     pipe, career pages empty). Launch the dev build in demo mode: `open -n "mac/build/DerivedData.noindex/Build/Products/Debug/FM27 Companion.app"
      --args -demoReport "$PWD/mac/Fixtures/report.json" -look <look>` (quit the running copy first).
   3. Visually inspect it through Computer Use: `app_screenshot` (bundle `com.squadreport.mac`) of **every page the edit
      touches**, in the look he uses (`defaults read com.squadreport.mac look`) and in one light look when colours or

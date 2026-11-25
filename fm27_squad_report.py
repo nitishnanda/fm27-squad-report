@@ -751,6 +751,33 @@ def build(save, save_path: Path) -> dict:
                 players=players, xi1=xi1, xi2=xi2, xi_level=xi_level, verdicts=verdicts, fit=fit, notes=notes)
 
 
+class QuietStream:
+    """stdout / stderr that keep working after the reader has gone (a closed pipe just drops the text)."""
+
+    def __init__(self, stream):
+        self.stream = stream
+        self.closed_pipe = False
+
+    def write(self, text):
+        if self.closed_pipe:
+            return len(text)
+        try:
+            return self.stream.write(text)
+        except (BrokenPipeError, OSError, ValueError):
+            self.closed_pipe = True
+            return len(text)
+
+    def flush(self):
+        if not self.closed_pipe:
+            try:
+                self.stream.flush()
+            except (BrokenPipeError, OSError, ValueError):
+                self.closed_pipe = True
+
+    def __getattr__(self, name):
+        return getattr(self.stream, name)
+
+
 def season_label(d: date) -> str:
     """FM seasons run July to June: 14 Mar 2027 is in 2026/27."""
     y = d.year if d.month >= 7 else d.year - 1
@@ -776,17 +803,35 @@ def update_career(save, history: dict, today: date, club_uid: int, club_name: st
     clubs = list(save.clubs())
     team_name = {t.team_id: (getattr(c, "short_name", None) or c.name) for c in clubs for t in c.teams}
     comps = {c.id: c.name for c in save.competitions()}
-    for f in save.fixtures():
-        if not f.played or not f.date or f.home_goals is None or f.away_goals is None:
-            continue
-        if first_team_id not in (f.home_team_id, f.away_team_id) or f.date > today or (start and f.date < start):
-            continue
+    mine = [f for f in save.fixtures()
+            if f.played and f.date and f.home_goals is not None and f.away_goals is not None
+            and first_team_id in (f.home_team_id, f.away_team_id) and f.date <= today and not (start and f.date < start)]
+    # The save holds no competition names, so tell them apart by shape: the league is the table competition with the
+    # most of your games; another table competition is a European league phase; a competition with no table whose games
+    # all came before your first league game is pre-season friendlies; anything else is a cup.
+    tabled = {t.competition_id for t in save.league_tables() if any(r.team_id == first_team_id for r in t.rows)}
+    games = Counter(f.competition_id for f in mine)
+    league = max((c for c in games if c in tabled), key=lambda c: games[c], default=None)
+    league_start = min((f.date for f in mine if f.competition_id == league), default=None)
+
+    def kind_of(cid) -> str:
+        if cid == league:
+            return "league"
+        if cid in tabled:
+            return "europe"
+        dates = [f.date for f in mine if f.competition_id == cid]
+        if league_start and dates and max(dates) < league_start:
+            return "friendly"
+        return "cup"
+    label = {"league": "League", "europe": "Europe", "friendly": "Friendly", "cup": "Cup"}
+    for f in mine:
         home = f.home_team_id == first_team_id
         opp = f.away_team_id if home else f.home_team_id
         key = f"{f.date.isoformat()}|{f.home_team_id}|{f.away_team_id}|{f.competition_id}"
         car["matches"][key] = {
             "date": f.date.isoformat(), "season": season_label(f.date), "club": club_name, "club_uid": club_uid,
-            "comp": getattr(f, "competition_name", None) or comps.get(f.competition_id) or "Match",
+            "kind": kind_of(f.competition_id),
+            "comp": getattr(f, "competition_name", None) or comps.get(f.competition_id) or label[kind_of(f.competition_id)],
             "opp": team_name.get(opp) or "?", "home": home,
             "gf": f.home_goals if home else f.away_goals, "ga": f.away_goals if home else f.home_goals}
     for m in save.finances():
@@ -6463,6 +6508,11 @@ def serve_live(argv: list[str]) -> None:
     state = {"html": None, "json": None, "version": "", "building": False, "error": "", "built": None, "n": 0, "step": -1,
              "checked": None}   # when the watcher last looked at the newest save (epoch seconds), for the Mac app
     headless = "--headless" in argv
+    if headless:
+        # The Mac app reads our output through a pipe. If the app goes away (quit, reinstalled, killed), that pipe
+        # closes and every print would raise BrokenPipeError, which used to fail each rebuild. Keep going quietly.
+        sys.stdout, sys.stderr = QuietStream(sys.stdout), QuietStream(sys.stderr)
+        parent = os.getppid()
     lock = threading.Lock()
     landing = landing_page()
 
@@ -6624,6 +6674,12 @@ def serve_live(argv: list[str]) -> None:
         nonlocal script_mtime
         attempted = None
         while True:
+            # headless means the Mac app started us: when it's gone (we're re-parented), stop, so a reinstalled app
+            # never attaches to a stale engine running old code
+            if headless and os.getppid() != parent:
+                print("  The app that started this engine has closed. Stopping.")
+                server.shutdown()
+                return
             # a new version of this tool? restart into it (only once the file is complete and valid)
             try:
                 m = script.stat().st_mtime

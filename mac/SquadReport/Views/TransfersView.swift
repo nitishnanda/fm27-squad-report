@@ -6,14 +6,16 @@ struct TransfersView: View {
     let report: Report
 
     var body: some View {
+        // Laid out from his Figma Make design (TransfersView.tsx): month cards, then the moves and loans as cards.
         ScrollView {
-            VStack(alignment: .leading, spacing: 22) {
-                SectionTitle("Deals & loans", page: true)
+            VStack(alignment: .leading, spacing: 24) {
+                SectionTitle("Deals & loans", sub: "Arranged permanent moves, loans starting and ending, and contracts running out, by month", page: true)
                 ComingUp(report: report)
                 MoveColumns(report: report)
             }
-            .padding(24)
-            .frame(maxWidth: .infinity, alignment: .leading)
+            .frame(maxWidth: 1172, alignment: .leading)
+            .padding(.horizontal, 24).padding(.vertical, 20)
+            .frame(maxWidth: .infinity)
         }
     }
 }
@@ -114,39 +116,40 @@ private struct ComingUp: View {
 
     var body: some View {
         let months = TransferTimeline.months(report)
-        VStack(alignment: .leading, spacing: 12) {
-            HStack(alignment: .firstTextBaseline, spacing: 10) {
-                Text("Coming up").displayFont(20)
-                Text("arranged moves, loans starting and ending, contracts running out · by month").foregroundStyle(.secondary)
-            }
+        VStack(alignment: .leading, spacing: 20) {
             if months.isEmpty {
-                Text("Nothing arranged, and no loans or contracts ending in the next year.").foregroundStyle(.secondary)
+                Text("Nothing arranged, and no loans or contracts ending in the next year.").font(.system(size: 12.5)).foregroundStyle(.secondary)
             }
-            // one row per year, so January 2028 can never read as if it came before May 2027
+            // one block per year, so January 2028 can never read as if it came before May 2027
             ForEach(Self.years(months), id: \.year) { group in
-                HStack(alignment: .firstTextBaseline, spacing: 8) {
-                    Text(String(group.year)).displayFont(26)
-                    Rectangle().fill(.quaternary).frame(height: 1)
+                VStack(alignment: .leading, spacing: 12) {
+                    SectionTitle("\(String(group.year)) horizon", sub: "What changes in your squad, month by month")
+                    CardGrid(items: group.months, minWidth: 420, maxColumns: 2, spacing: 16) { month in monthCard(month) }
                 }
-                .padding(.top, 6)
-                .accessibilityAddTraits(.isHeader)
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 230), spacing: 14, alignment: .top)], spacing: 18) {
-                ForEach(group.months) { month in
-                    VStack(alignment: .leading, spacing: 8) {
-                        ZStack(alignment: .leading) {
-                            Rectangle().fill(.quaternary).frame(height: 2)
-                            Circle().fill(Palette.brandHigh).frame(width: 11, height: 11)
-                        }
-                        HStack(alignment: .firstTextBaseline, spacing: 8) {
-                            Text(Self.monthFormat.string(from: month.start)).displayFont(20)
-                            Text("\(month.count) \(month.count == 1 ? "thing" : "things")").font(.caption).foregroundStyle(.secondary)
-                        }
-                        ForEach(month.events) { e in event(e) }
-                    }
-                }
-            }
             }
         }
+    }
+
+    /// The design's month card: a dot, the month, how many things; a rule; one row per move.
+    private func monthCard(_ month: TransferTimeline.Month) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
+            HStack(spacing: 8) {
+                Circle().fill(Palette.brandHigh).frame(width: 8, height: 8)
+                Text(Self.monthFormat.string(from: month.start)).font(.system(size: 15, weight: .bold))
+                Spacer()
+                Text("\(month.count) \(month.count == 1 ? "thing" : "things")").font(.system(size: 11.5)).monospacedDigit().foregroundStyle(.secondary)
+            }
+            .padding(.bottom, 10)
+            .overlay(alignment: .bottom) { Rectangle().fill(Color.primary.opacity(0.06)).frame(height: 1) }
+            ForEach(Array(month.events.enumerated()), id: \.element.id) { i, e in
+                if i > 0 { Rectangle().fill(Color.primary.opacity(0.05)).frame(height: 1) }
+                event(e)
+            }
+            Spacer(minLength: 0)
+        }
+        .padding(16)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .hubCard()
     }
 
     private struct Year { let year: Int; let months: [TransferTimeline.Month] }
@@ -159,32 +162,43 @@ private struct ComingUp: View {
     }
 
     private func event(_ e: TimelineEvent) -> some View {
-        HStack(alignment: .top, spacing: 8) {
-            Label(e.tag, systemImage: e.kind.symbol)
-                .labelStyle(.titleAndIcon)
-                .font(.caption.weight(.bold))
-                .foregroundStyle(e.kind.color)
-                .padding(.horizontal, 6).padding(.vertical, 2)
-                .background(e.kind.color.opacity(0.14), in: Capsule())
-                .overlay(Capsule().strokeBorder(e.kind.color.opacity(0.55),
-                                                style: StrokeStyle(lineWidth: 1, dash: [.expiring, .loanInArranged, .loanOutArranged].contains(e.kind) ? [3, 2] : [])))
-                .fixedSize()
-            VStack(alignment: .leading, spacing: 2) {
-                if e.grouped {
-                    Text("\(e.detail) · \(Self.dayFormat.string(from: e.date))").fontWeight(.semibold)
-                    Text(e.names.joined(separator: ", ")).font(.caption).foregroundStyle(.secondary)
-                        .fixedSize(horizontal: false, vertical: true)
-                } else {
-                    Text(e.names.first ?? "").fontWeight(.semibold)
-                    Text("\(e.detail) · \(Self.dayFormat.string(from: e.date))").font(.caption).foregroundStyle(.secondary)
+        VStack(alignment: .leading, spacing: 4) {
+            HStack(spacing: 10) {
+                KindPill(kind: e.kind, label: e.tag)
+                Text(e.grouped ? "\(e.detail) · \(Self.dayFormat.string(from: e.date))" : (e.names.first ?? ""))
+                    .font(.system(size: 12.5, weight: .medium)).lineLimit(1)
+                Spacer(minLength: 8)
+                if !e.grouped {
+                    Text("\(e.detail) · \(Self.dayFormat.string(from: e.date))").font(.system(size: 11.5)).monospacedDigit()
+                        .foregroundStyle(.secondary).lineLimit(1)
                 }
             }
+            if e.grouped {
+                Text(e.names.joined(separator: ", ")).font(.system(size: 11.5)).foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true).padding(.leading, 4)
+            }
         }
-        .font(.callout)
-        .padding(9)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .panel(10)
+        .padding(.vertical, 8)
         .accessibilityElement(children: .combine)
+    }
+}
+
+/// A status as the design's pill, in the status's own colour and symbol; arranged moves and contracts keep the dashed
+/// edge (his rule: every status stays visually distinct).
+private struct KindPill: View {
+    let kind: PlayerStatus.Kind
+    let label: String
+
+    var body: some View {
+        let dashed = [.expiring, .loanInArranged, .loanOutArranged].contains(kind)
+        Label(label, systemImage: kind.symbol)
+            .labelStyle(.titleAndIcon)
+            .font(.system(size: 11, weight: .medium))
+            .foregroundStyle(kind.color)
+            .padding(.horizontal, 8).padding(.vertical, 2)
+            .background(kind.color.opacity(dashed ? 0.06 : 0.12), in: Capsule())
+            .overlay(Capsule().strokeBorder(kind.color.opacity(dashed ? 0.55 : 0.25), style: StrokeStyle(lineWidth: 1, dash: dashed ? [3, 2] : [])))
+            .fixedSize()
     }
 }
 
@@ -208,52 +222,51 @@ private struct MoveColumns: View {
     }
 
     private func group(_ title: String, _ sub: String?, _ cols: [(String, String, PlayerStatus.Kind, String, String)]) -> some View {
-        VStack(alignment: .leading, spacing: 10) {
-            HStack(alignment: .firstTextBaseline, spacing: 10) {
-                Text(title).displayFont(20)
-                if let sub { Text(sub).foregroundStyle(.secondary) }
-            }
-            HStack(alignment: .top, spacing: 12) {
+        VStack(alignment: .leading, spacing: 12) {
+            SectionTitle(title, sub: sub)
+            HStack(alignment: .top, spacing: 16) {
                 ForEach(cols, id: \.1) { col in column(col) }
             }
         }
     }
 
+    /// The design's move card: a 2 pt edge in the status colour, the kind and count on top, then one line per player.
     private func column(_ col: (String, String, PlayerStatus.Kind, String, String)) -> some View {
         let (title, key, kind, prep, when) = col
         let items = report.players.compactMap { p in p.status.moves.first { $0.kind == key }.map { (p, $0) } }
-        let dashed = [.loanInArranged, .loanOutArranged].contains(kind)
         return VStack(alignment: .leading, spacing: 0) {
             HStack {
-                Label(title, systemImage: kind.symbol).displayFont(15, .bold).foregroundStyle(kind.color)
+                Label(title, systemImage: kind.symbol).font(.system(size: 12, weight: .semibold)).foregroundStyle(kind.color)
                 Spacer()
-                Text("\(items.count)").font(.caption.weight(.bold)).monospacedDigit()
-                    .padding(.horizontal, 7).background(.quaternary, in: Capsule())
+                Text("\(items.count)").font(.system(size: 12, weight: .semibold)).monospacedDigit().foregroundStyle(kind.color)
             }
-            .padding(10)
-            .background(kind.color.opacity(dashed ? 0.06 : 0.16))
+            .padding(.bottom, 10)
             if items.isEmpty {
-                Text("None right now").foregroundStyle(.secondary).padding(10)
+                Text("None right now").font(.system(size: 12)).foregroundStyle(.secondary)
             }
-            ForEach(items, id: \.0.uid) { p, m in
-                HStack(alignment: .top) {
+            ForEach(Array(items.enumerated()), id: \.element.0.uid) { i, item in
+                let (p, m) = item
+                if i > 0 { Rectangle().fill(Color.primary.opacity(0.05)).frame(height: 1) }
+                HStack(alignment: .center) {
                     VStack(alignment: .leading, spacing: 2) {
-                        Text(p.name).fontWeight(.semibold)
-                        Text("\(p.positions.natural.joined(separator: " ")) · \(p.age.map(String.init) ?? "")").font(.caption).foregroundStyle(.secondary)
+                        Text(p.name).font(.system(size: 14, weight: .semibold))
+                        Text("\(p.positions.natural.joined(separator: " / ")) · Age \(p.age.map(String.init) ?? "–")")
+                            .font(.system(size: 11.5)).monospacedDigit().foregroundStyle(.secondary)
                     }
                     Spacer()
                     VStack(alignment: .trailing, spacing: 2) {
-                        (Text("\(prep) ") + Text(m.club).fontWeight(.semibold)).font(.caption)
-                        Text("\(when) \(Fmt.day(m.date))").font(.caption).foregroundStyle(.secondary)
+                        Text("\(prep) \(m.club)").foregroundStyle(.secondary)
+                        Text("\(when) \(Fmt.day(m.date))").foregroundStyle(.tertiary)
                     }
+                    .font(.system(size: 11.5)).monospacedDigit()
                 }
-                .padding(.horizontal, 10).padding(.vertical, 7)
-                Divider().opacity(0.5)
+                .padding(.vertical, 8)
             }
+            Spacer(minLength: 0)
         }
-        .frame(maxWidth: .infinity, alignment: .topLeading)
-        .panelFill()
-        .clipShape(RoundedRectangle(cornerRadius: 6))
-        .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(kind.color.opacity(0.35), style: StrokeStyle(lineWidth: 1, dash: dashed ? [4, 3] : [])))
+        .padding(16)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .overlay(alignment: .leading) { Rectangle().fill(kind.color).frame(width: 2) }
+        .hubCard()
     }
 }

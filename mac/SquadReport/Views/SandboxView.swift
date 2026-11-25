@@ -25,30 +25,32 @@ private struct SandboxPage: View {
     static let rosterWidth: CGFloat = 420
 
     var body: some View {
-        // the pitch is 68 wide for every 100 tall, so a short window shrinks it as much as a narrow one
-        let sideBySidePitch = min(area.width - Self.rosterWidth - 40, (area.height - 40) * 0.68)
-        VStack(spacing: 0) {
+        // Laid out from his Figma Make design (SandboxView.tsx): the score bar in a card, then the pitch and the squad
+        // side by side, each in its own card. The pitch is 68 wide for every 100 tall, so a short window shrinks it too.
+        let sideBySidePitch = min(area.width - Self.rosterWidth - 16 - 40, (area.height - 40) * 0.68)
+        VStack(spacing: 16) {
             ScoreBar(model: model)
-            Divider()
             Group {
                 if sideBySidePitch >= Self.minPitch {
-                    HStack(alignment: .top, spacing: 0) {
+                    HStack(alignment: .top, spacing: 16) {
                         SandboxPitch(model: model)
                             .frame(width: sideBySidePitch)
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        Divider()
+                            .hubCard()
                         Roster(model: model, stacked: false)
                             .frame(width: Self.rosterWidth)
+                            .frame(maxHeight: .infinity)
+                            .hubCard()
                     }
                 } else {
                     // small window: the pitch at a readable size, the squad underneath, one scroll for both
                     ScrollView {
-                        VStack(spacing: 0) {
+                        VStack(spacing: 16) {
                             SandboxPitch(model: model)
                                 .frame(width: min(area.width - 40, 520))
                                 .frame(maxWidth: .infinity)
-                            Divider()
-                            Roster(model: model, stacked: true)
+                                .hubCard()
+                            Roster(model: model, stacked: true).hubCard()
                         }
                     }
                 }
@@ -56,6 +58,9 @@ private struct SandboxPage: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .onGeometryChange(for: CGSize.self) { $0.size } action: { area = $0 }
         }
+        .frame(maxWidth: 1172)
+        .padding(.horizontal, 24).padding(.vertical, 20)
+        .frame(maxWidth: .infinity)
     }
 }
 
@@ -69,13 +74,13 @@ private struct ScoreBar: View {
         let avg = model.average
         let diff = ((avg - level) * 10).rounded() / 10 + 0.0    // + 0.0 turns -0.0 into 0.0
         let score = VStack(alignment: .leading, spacing: 2) {
-            Text("Your XI").font(.caption.weight(.semibold)).foregroundStyle(.secondary)
-            HStack(spacing: 6) {
-                StarsView(value: avg, size: 15)
-                NumberText(String(format: "%.1f", avg), size: 26)
+            Text("Your XI level").font(.system(size: 11, weight: .medium)).foregroundStyle(.secondary)
+            HStack(spacing: 8) {
+                StarsView(value: avg, size: 14)
+                NumberText(String(format: "%.1f", avg), size: 22)
             }
-            Text("\(diff >= 0 ? "+" : "")\(String(format: "%.1f", diff))★ vs best XI (\(String(format: "%.1f", level))) · \(model.changes) change\(model.changes == 1 ? "" : "s")")
-                .font(.caption).foregroundStyle(.secondary)
+            Text("\(diff >= 0 ? "+" : "")\(String(format: "%.1f", diff))★ vs best XI \(String(format: "%.1f", level))★ · \(model.changes) change\(model.changes == 1 ? "" : "s")")
+                .font(.system(size: 11)).monospacedDigit().foregroundStyle(.tertiary)
         }
         .fixedSize()
         let notes = VStack(alignment: .leading, spacing: 3) {
@@ -89,21 +94,24 @@ private struct ScoreBar: View {
                 Text("Full-strength XI. Change someone's status, or drag a player onto the pitch.").foregroundStyle(.secondary)
             }
         }
-        .font(.callout)
+        .font(.system(size: 12.5))
+        .foregroundStyle(.secondary)
         .lineLimit(2)
         .frame(minWidth: 200, idealWidth: 300, maxWidth: .infinity, alignment: .leading)
-        let buttons = HStack(spacing: 10) {
-            Text(model.auto ? "auto-picking" : "your own picks").font(.caption).foregroundStyle(.secondary)
-            Button("Auto-pick best XI") { withAnimation(.snappy) { model.autoPick() } }
-                .buttonStyle(.borderedProminent)
-            Button("Reset all changes") { withAnimation(.snappy) { model.reset() } }
+        let buttons = HStack(spacing: 8) {
+            Text(model.auto ? "auto-picking" : "your own picks").font(.system(size: 11)).foregroundStyle(.tertiary)
+            // the design's two capsules: auto-pick in signal green, reset neutral
+            CapsuleAction(title: "Auto-pick best XI", symbol: "wand.and.stars") { withAnimation(.snappy) { model.autoPick() } }
+                .background(Palette.brandHigh.opacity(0.16), in: Capsule())
+            CapsuleAction(title: "Reset", symbol: "arrow.counterclockwise", tint: .secondary) { withAnimation(.snappy) { model.reset() } }
+                .help("Reset all changes")
         }
         .fixedSize()
         // one row on a wide window; on a narrow one the notes drop under the score
         ViewThatFits(in: .horizontal) {
             HStack(alignment: .center, spacing: 20) {
                 score
-                Divider().frame(height: 44)
+                Rectangle().fill(Color.primary.opacity(0.08)).frame(width: 1, height: 36)
                 notes
                 buttons
             }
@@ -112,7 +120,8 @@ private struct ScoreBar: View {
                 notes
             }
         }
-        .padding(.horizontal, 20).padding(.vertical, 12)
+        .padding(16)
+        .hubCard()
         .accessibilityElement(children: .contain)
     }
 }
@@ -255,11 +264,21 @@ private struct Roster: View {
         let away = squad.filter { $0.location == "loan_out" }
         let targets = model.report.targets.filter(match)
         VStack(alignment: .leading, spacing: 0) {
-            HStack {
-                TextField("Search players", text: $search).textFieldStyle(.roundedBorder)
-                Toggle("Youth teams", isOn: $youth)
+            // the design's roster head: a search capsule; a rule under
+            VStack(alignment: .leading, spacing: 8) {
+                HStack(spacing: 10) {
+                    HStack(spacing: 6) {
+                        Image(systemName: "magnifyingglass").font(.system(size: 11)).foregroundStyle(.tertiary)
+                        TextField("Search squad…", text: $search).textFieldStyle(.plain).font(.system(size: 12))
+                    }
+                    .padding(.horizontal, 12).frame(height: 32)
+                    .background(Color.black.opacity(0.25), in: Capsule())
+                    .overlay(Capsule().strokeBorder(Color.primary.opacity(search.isEmpty ? 0.08 : 0.2)))
+                    Toggle("Youth", isOn: $youth).toggleStyle(.checkbox).font(.system(size: 11.5))
+                }
             }
             .padding(12)
+            .overlay(alignment: .bottom) { Rectangle().fill(Color.primary.opacity(0.07)).frame(height: 1) }
             if stacked {
                 LazyVStack(alignment: .leading, spacing: 0) {
                     sections(here: here, arriving: arriving, away: away, targets: targets, inXI: inXI, searching: !q.isEmpty)

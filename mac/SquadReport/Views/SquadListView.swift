@@ -132,25 +132,21 @@ struct SquadListView: View {
     var body: some View {
         let all = SquadGroups.rows(report)
         let shown = filtered(all)
-        VStack(spacing: 0) {
+        // Laid out from his Figma Make design (SquadListView.tsx): KPI cards, status pills + search, "Can play" chips,
+        // then the table in a card. The table stays the native one (sorting, saved columns, folding groups).
+        VStack(alignment: .leading, spacing: 16) {
             Summary(report: report, rows: all, show: $show)
-                .padding(.horizontal, 20).padding(.top, 16).padding(.bottom, 10)
             HStack(spacing: 12) {
-                ViewThatFits(in: .horizontal) {
-                    showPicker.pickerStyle(.segmented).fixedSize()
-                    showPicker.pickerStyle(.menu).fixedSize()      // narrow window: a pop-up instead of six segments
-                }
-                Toggle("Youth teams", isOn: $youth)
-                Spacer()
+                statusPills
+                Toggle("Youth teams", isOn: $youth).toggleStyle(.checkbox).font(.system(size: 11.5))
+                Spacer(minLength: 8)
                 let away = isFiltering ? 0 : shown.filter { folded.contains($0.group) }.count
                 Text("\(shown.count) player\(shown.count == 1 ? "" : "s")" + (away > 0 ? " · \(away) folded away" : ""))
-                    .foregroundStyle(.secondary)
-                    .monospacedDigit()
+                    .font(.system(size: 11.5)).foregroundStyle(.tertiary).monospacedDigit()
                     .accessibilityLabel("\(shown.count) players" + (away > 0 ? ", \(away) in folded groups" : ""))
+                searchField
             }
-            .padding(.horizontal, 20).padding(.bottom, 8)
             positionFilter
-                .padding(.horizontal, 20).padding(.bottom, 10)
             if shown.isEmpty {
                 ContentUnavailableView {
                     Label("No players match", systemImage: "magnifyingglass")
@@ -160,12 +156,15 @@ struct SquadListView: View {
                 } actions: {
                     Button("Clear filters") { clearFilters() }
                 }
+                .frame(maxHeight: .infinity)
             } else {
                 table(shown)
+                    .scrollContentBackground(.hidden)
+                    .hubCard()
                     .animation(reduceMotion ? nil : Motion.filter, value: filterSignature)
             }
         }
-        .searchable(text: $search, placement: .toolbar, prompt: "Search the squad")
+        .padding(.horizontal, 24).padding(.vertical, 20)
         .onAppear {
             if let name = app.squadSearch { search = name; app.squadSearch = nil }
             if let saved = try? JSONDecoder().decode(TableColumnCustomization<SquadRow>.self, from: savedColumns) { columns = saved }
@@ -224,21 +223,64 @@ struct SquadListView: View {
         return bits.isEmpty ? "Nobody here right now." : "Nobody fits " + bits.joined(separator: ", ") + " right now."
     }
 
+    /// The design's status pills: the picked one in signal green. Narrow windows get a pop-up instead.
+    private var statusPills: some View {
+        ViewThatFits(in: .horizontal) {
+            HStack(spacing: 0) {
+                ForEach(Show.allCases) { option in
+                    let on = show == option
+                    Button { show = option } label: {
+                        Text(option.rawValue).font(.system(size: 11.5, weight: .medium))
+                            .foregroundStyle(on ? Palette.brandHigh : .secondary)
+                            .padding(.horizontal, 12).padding(.vertical, 4)
+                            .background(on ? Palette.brandHigh.opacity(0.2) : .clear, in: Capsule())
+                            .overlay(Capsule().strokeBorder(on ? Palette.brandHigh.opacity(0.3) : .clear))
+                            .contentShape(Capsule())
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityAddTraits(on ? .isSelected : [])
+                }
+            }
+            .padding(2)
+            .background(Color.primary.opacity(0.03), in: Capsule())
+            .overlay(Capsule().strokeBorder(Color.primary.opacity(0.08)))
+            .fixedSize()
+            showPicker.pickerStyle(.menu).fixedSize()      // narrow window: a pop-up instead of six pills
+        }
+        .animation(.easeOut(duration: 0.14), value: show)
+    }
+
+    /// The design's search: a 32 pt capsule with a magnifying glass, in the page instead of the toolbar.
+    private var searchField: some View {
+        HStack(spacing: 6) {
+            Image(systemName: "magnifyingglass").font(.system(size: 11)).foregroundStyle(.tertiary)
+            TextField("Filter players…", text: $search).textFieldStyle(.plain).font(.system(size: 12))
+            if !search.isEmpty {
+                Button { search = "" } label: { Image(systemName: "xmark.circle.fill").foregroundStyle(.tertiary) }
+                    .buttonStyle(.plain).accessibilityLabel("Clear search")
+            }
+        }
+        .padding(.horizontal, 12).frame(width: 240, height: 32)
+        .background(Color.primary.opacity(0.03), in: Capsule())
+        .overlay(Capsule().strokeBorder(Color.primary.opacity(search.isEmpty ? 0.08 : 0.22)))
+    }
+
     /// "Can play" chips (toggle any number), "any / all of these", and Clear filters when something is on.
     private var positionFilter: some View {
-        HStack(alignment: .top, spacing: 10) {
-            Text("Can play").font(.callout).foregroundStyle(.secondary).padding(.top, 3).fixedSize()
-            FlowRow(spacing: 5) {
+        HStack(alignment: .center, spacing: 10) {
+            Text("Can play:").font(.system(size: 11)).foregroundStyle(.tertiary).fixedSize()
+            FlowRow(spacing: 6) {
                 ForEach(Self.filterPositions, id: \.self) { pos in
                     let on = positions.contains(pos)
                     Button {
                         if on { positions.remove(pos) } else { positions.insert(pos) }
                     } label: {
-                        Text(pos).font(.caption.weight(.semibold)).monospaced()
-                            .padding(.horizontal, 8).padding(.vertical, 3)
-                            .background(on ? Palette.brand : Color.primary.opacity(0.07), in: Capsule())
-                            .foregroundStyle(on ? Color.white : Color.primary)
-                            .contentShape(Capsule())
+                        Text(pos).font(.system(size: 11, weight: .medium))
+                            .padding(.horizontal, 8).padding(.vertical, 2)
+                            .background(Color.primary.opacity(on ? 0.08 : 0.03), in: RoundedRectangle(cornerRadius: 5, style: .continuous))
+                            .overlay(RoundedRectangle(cornerRadius: 5, style: .continuous).strokeBorder(Color.primary.opacity(on ? 0.22 : 0.07)))
+                            .foregroundStyle(on ? .primary : .secondary)
+                            .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
                     .accessibilityLabel("Can play \(pos)")
@@ -246,12 +288,9 @@ struct SquadListView: View {
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            Picker("Match", selection: $allPositions) {
-                Text("any of these").tag(false)
-                Text("all of these").tag(true)
-            }
-            .pickerStyle(.segmented).labelsHidden().fixedSize()
-            .disabled(positions.count < 2)
+            PillPicker(options: [("any of these", false), ("all of these", true)], selection: $allPositions)
+                .disabled(positions.count < 2)
+                .opacity(positions.count < 2 ? 0.5 : 1)
             .help("With two or more positions chosen: players who can play any of them, or all of them")
             if isFiltering {
                 Button("Clear filters") { clearFilters() }
@@ -424,18 +463,19 @@ private struct Summary: View {
     }
 
     private func figure(_ label: String, _ value: String, unit: String? = nil, sub: String) -> some View {
-        VStack(alignment: .leading, spacing: DS.Space.xxs) {
-            Text(label).font(.system(size: 12)).foregroundStyle(.secondary)
+        // the design's KPI card: p-14, 11.5 label, 24 value with its unit, 11 sub
+        VStack(alignment: .leading, spacing: 4) {
+            Text(label).font(.system(size: 11.5)).foregroundStyle(.secondary)
             HStack(alignment: .firstTextBaseline, spacing: 5) {
-                NumberText(value, size: 28)
-                if let unit { Text(unit).foregroundStyle(.secondary) }
+                NumberText(value, size: 24)
+                if let unit { Text(unit).font(.system(size: 12)).foregroundStyle(.secondary) }
             }
             Text(sub).font(.system(size: 11)).foregroundStyle(.tertiary).lineLimit(1).minimumScaleFactor(0.85)
         }
-        .padding(DS.Space.s)
-        .frame(maxWidth: .infinity, minHeight: 86, alignment: .topLeading)
+        .padding(14)
+        .frame(maxWidth: .infinity, alignment: .topLeading)
         .frame(minWidth: 140)
-        .panel(10)
+        .hubCard()
         .accessibilityElement(children: .combine)
     }
 
@@ -445,15 +485,15 @@ private struct Summary: View {
             show = on ? .all : target
         } label: {
             figure(label, "\(n)", sub: sub)
-                .overlay(RoundedRectangle(cornerRadius: DS.Radius.card, style: .continuous)
-                    .strokeBorder(on ? Palette.brandHigh : .clear, lineWidth: 1))
+                .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .strokeBorder(on ? Palette.brandHigh.opacity(0.6) : .clear, lineWidth: 1))
                 .overlay(alignment: .topTrailing) {
                     Text(on ? "Showing" : "Filter")
-                        .font(.caption2.weight(.bold))
+                        .font(.system(size: 10))
                         .padding(.horizontal, 6).padding(.vertical, 1)
-                        .overlay(Capsule().stroke(.secondary.opacity(0.5)))
-                        .foregroundStyle(.secondary)
-                        .padding(10)
+                        .background(on ? Palette.brandHigh.opacity(0.16) : Color.primary.opacity(0.06), in: RoundedRectangle(cornerRadius: 4, style: .continuous))
+                        .foregroundStyle(on ? Palette.brandHigh : .secondary)
+                        .padding(12)
                 }
                 .contentShape(Rectangle())
         }

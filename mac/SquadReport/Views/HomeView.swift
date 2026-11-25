@@ -161,6 +161,35 @@ struct PillPicker<Value: Hashable>: View {
     }
 }
 
+/// The design's tab pills for a page's parts: a capsule track, the picked part in signal green.
+struct GreenTabs<Value: Hashable>: View {
+    let options: [(String, Value)]
+    @Binding var selection: Value
+
+    var body: some View {
+        HStack(spacing: 0) {
+            ForEach(Array(options.enumerated()), id: \.offset) { _, o in
+                let on = selection == o.1
+                Button { selection = o.1 } label: {
+                    Text(o.0).font(.system(size: 11.5, weight: .medium))
+                        .foregroundStyle(on ? Palette.brandHigh : .secondary)
+                        .padding(.horizontal, 12).padding(.vertical, 4)
+                        .background(on ? Palette.brandHigh.opacity(0.2) : .clear, in: Capsule())
+                        .overlay(Capsule().strokeBorder(on ? Palette.brandHigh.opacity(0.3) : .clear))
+                        .contentShape(Capsule())
+                }
+                .buttonStyle(.plain)
+                .accessibilityAddTraits(on ? .isSelected : [])
+            }
+        }
+        .padding(2)
+        .background(Color.primary.opacity(0.03), in: Capsule())
+        .overlay(Capsule().strokeBorder(Color.primary.opacity(0.08)))
+        .fixedSize()
+        .animation(.easeOut(duration: 0.14), value: selection)
+    }
+}
+
 /// The design's small capsule action (e.g. "Copy as Image"): 32 pt, card fill, 1 pt edge.
 struct CapsuleAction: View {
     let title: String

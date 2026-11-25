@@ -26,17 +26,10 @@ struct TrainingView: View {
     }
 
     var body: some View {
-        VStack(spacing: 0) {
-            HStack {
-                Picker("Part", selection: $part) {
-                    ForEach(parts) { Text($0.rawValue).tag($0) }
-                }
-                    .pickerStyle(.segmented).labelsHidden().fixedSize()
-                Spacer()
-            }
-            .padding(.horizontal, 24).padding(.vertical, 12)
-            Divider()
-            ScrollView {
+        // Laid out from his Figma Make design (TrainingView.tsx): tab pills, then each team's week in a card.
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                GreenTabs(options: parts.map { ($0.rawValue, $0) }, selection: $part)
                 Group {
                     switch part {
                     case .schedule: Schedules(report: report)
@@ -46,9 +39,11 @@ struct TrainingView: View {
                     case .mentoring: MentoringPart(report: report)
                     }
                 }
-                .padding(24)
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
+            .frame(maxWidth: 1172, alignment: .leading)
+            .padding(.horizontal, 24).padding(.vertical, 20)
+            .frame(maxWidth: .infinity)
         }
     }
 }
@@ -75,48 +70,61 @@ private struct TeamSchedule: View {
     let detailed: Bool
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack(alignment: .firstTextBaseline) {
-                Text(team.name).font(.headline)
-                Text(team.current ?? "–").displayFont(22)
+        VStack(alignment: .leading, spacing: 16) {
+            // the design's card head: team, the schedule in place (17 pt), and the week on the right
+            HStack(alignment: .center, spacing: 10) {
+                Text(team.name).font(.system(size: 12, weight: .medium)).foregroundStyle(.secondary)
+                Text(team.current ?? "–").displayFont(17, .bold)
                 Spacer()
-                Text("this week").font(.caption).foregroundStyle(.secondary)
+                Text("this week").font(.system(size: 11.5)).foregroundStyle(.tertiary)
             }
             if detailed, let grid = team.grid, !grid.isEmpty {
                 WeekGrid(team: team, grid: grid)
                 Text("Sessions without an exact name are shown by category: your Training screen has the exact session.")
-                    .font(.caption).foregroundStyle(.secondary)
+                    .font(.system(size: 11)).foregroundStyle(.tertiary)
             }
-            HStack(alignment: .top, spacing: 28) {
-                VStack(alignment: .leading, spacing: 6) {
-                    Text("Next weeks").font(.caption.weight(.heavy)).foregroundStyle(.secondary)
+            HStack(alignment: .top, spacing: 24) {
+                VStack(alignment: .leading, spacing: 8) {
+                    caps("Next weeks")
                     ForEach(Array((team.upcoming ?? []).enumerated()), id: \.offset) { i, item in
-                        HStack(spacing: 10) {
-                            Circle().fill(i == 0 ? Palette.brandHigh : Color.secondary.opacity(0.4)).frame(width: 8, height: 8)
-                            Text(Fmt.shortDay(item.first)).foregroundStyle(.secondary).monospacedDigit().frame(width: 48, alignment: .leading)
-                            Text(item.count > 1 ? item[1] : "–")
+                        HStack(spacing: 12) {
+                            Circle().fill(i == 0 ? DS.Delta.up : Color.secondary.opacity(0.5)).frame(width: 6, height: 6)
+                            Text(Fmt.shortDay(item.first)).foregroundStyle(.secondary).monospacedDigit().frame(width: 56, alignment: .leading)
+                            Text(item.count > 1 ? item[1] : "–").fontWeight(.medium)
                         }
-                        .font(.callout)
+                        .font(.system(size: 12))
                     }
                 }
-                VStack(alignment: .leading, spacing: 6) {
-                    Text("Used this season").font(.caption.weight(.heavy)).foregroundStyle(.secondary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                VStack(alignment: .leading, spacing: 8) {
+                    caps("Used this season")
                     let used = (team.rotation ?? [:]).sorted { $0.value > $1.value }
                     let most = Double(used.first?.value ?? 1)
                     ForEach(used, id: \.key) { name, n in
-                        HStack(spacing: 8) {
-                            Text(name).lineLimit(1).truncationMode(.middle).frame(minWidth: 280, alignment: .leading).help(name)
-                            Capsule().fill(Color(hex: "#D0102E")).frame(width: max(4, 80 * Double(n) / most), height: 6)
-                            Text("\(n)").monospacedDigit().foregroundStyle(.secondary)
+                        HStack(spacing: 12) {
+                            Text(name).lineLimit(1).truncationMode(.middle).help(name)
+                            Spacer(minLength: 8)
+                            HStack(spacing: 8) {
+                                Meter(value: Double(n), total: most, color: team.name == "First team" ? DS.Delta.down : DS.Delta.up)
+                                Text("\(n)").monospacedDigit().foregroundStyle(.secondary).frame(width: 18, alignment: .trailing)
+                            }
+                            .frame(width: 160)
                         }
-                        .font(.callout)
+                        .font(.system(size: 12))
                     }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
+            .padding(.top, 12)
+            .overlay(alignment: .top) { Rectangle().fill(Color.primary.opacity(0.06)).frame(height: 1) }
         }
-        .padding(16)
+        .padding(20)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .panel(10)
+        .hubCard()
+    }
+
+    private func caps(_ text: String) -> some View {
+        Text(text.uppercased()).font(.system(size: 11, weight: .semibold)).tracking(0.88).foregroundStyle(.tertiary)
     }
 }
 
@@ -126,10 +134,10 @@ private struct WeekGrid: View {
     let grid: [TrainingTeam.Day]
 
     var body: some View {
-        Grid(horizontalSpacing: 4, verticalSpacing: 4) {
+        Grid(horizontalSpacing: 8, verticalSpacing: 6) {
             GridRow {
                 ForEach(grid, id: \.day) { day in
-                    Text(dayLabel(day.day)).font(.caption.weight(.bold)).foregroundStyle(.secondary).frame(maxWidth: .infinity)
+                    Text(dayLabel(day.day)).font(.system(size: 11, weight: .medium)).monospacedDigit().foregroundStyle(.secondary).frame(maxWidth: .infinity)
                 }
             }
             ForEach(0..<3, id: \.self) { slot in
@@ -148,13 +156,18 @@ private struct WeekGrid: View {
     @ViewBuilder
     private func cell(_ code: Int?) -> some View {
         if let code, let s = team.session(code) {
+            // the design's session tiles: a tinted fill and edge in the category colour, light text
+            let c = color(s.kind)
+            let quiet = s.kind == "rest" || s.kind == "extra"
             Text(s.name)
-                .font(.system(size: 11, weight: s.kind == "match" ? .heavy : .medium))
+                .font(.system(size: 11, weight: s.kind == "match" ? .semibold : .regular))
                 .multilineTextAlignment(.center)
                 .lineLimit(2)
-                .foregroundStyle(s.kind == "extra" ? Color.secondary : .white)
+                .foregroundStyle(quiet ? AnyShapeStyle(.secondary) : AnyShapeStyle(c.mix(with: .white, by: 0.6)))
+                .padding(.horizontal, 8)
                 .frame(maxWidth: .infinity, minHeight: 34)
-                .background(color(s.kind), in: RoundedRectangle(cornerRadius: 6))
+                .background(quiet ? Color.primary.opacity(0.04) : c.opacity(s.kind == "match" ? 0.2 : 0.13), in: RoundedRectangle(cornerRadius: 6, style: .continuous))
+                .overlay(RoundedRectangle(cornerRadius: 6, style: .continuous).strokeBorder(quiet ? Color.primary.opacity(0.07) : c.opacity(s.kind == "match" ? 0.4 : 0.28)))
                 .help("\(s.name) · \(s.family)\(s.exact ? "" : " (category)")")
         } else {
             Color.clear.frame(maxWidth: .infinity, minHeight: 34)
@@ -163,11 +176,13 @@ private struct WeekGrid: View {
 
     private func color(_ kind: String) -> Color {
         switch kind {
-        case "tac": Color(hex: "#1E3A8A")
-        case "prep": Color(hex: "#5B21B6")
-        case "dev": Color(hex: "#166534")
-        case "phys": Color(hex: "#9A3412")
-        case "match": Color(hex: "#B91C1C")
+        // brighter category hues, since the tiles are now tints of them (blue tactics, violet prep, green development,
+        // amber physical, red match day)
+        case "tac": Color(hex: "#38BDF8")
+        case "prep": Color(hex: "#A78BFA")
+        case "dev": Color(hex: "#10B981")
+        case "phys": Color(hex: "#F59E0B")
+        case "match": Color(hex: "#F43F5E")
         case "rest": Color.secondary.opacity(0.35)
         default: Color.secondary.opacity(0.15)
         }

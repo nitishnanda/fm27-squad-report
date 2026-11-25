@@ -99,21 +99,26 @@ private struct Leaders: View {
     let rows: [StatRow]
 
     var body: some View {
-        let most = rows.map(\.apps).max() ?? 0
-        let floor = max(3, Int((Double(most) / 3).rounded()))
         VStack(alignment: .leading, spacing: 12) {
             SectionTitle("Season leaders", sub: "first team, all competitions")
             if rows.isEmpty {
                 Text("No first-team appearances yet this season.").foregroundStyle(.secondary)
             } else {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 200), spacing: 10)], spacing: 10) {
-                    card("Goals", rows) { Double($0.goals) }
-                    card("Assists", rows) { Double($0.assists) }
-                    card("Average rating · \(floor)+ apps", rows.filter { $0.avg >= 0 && $0.apps >= floor }, decimals: true) { $0.avg }
-                    card("Appearances", rows) { Double($0.apps) }
-                    card("Clean sheets · keepers", rows.filter(\.keeper)) { Double(max(0, $0.cleanSheets)) }
-                }
+                ViewThatFits(in: .horizontal) { cards(5); cards(3) }
             }
+        }
+    }
+
+    /// One row of five at full width; three per row when the window is narrow.
+    private func cards(_ perRow: Int) -> some View {
+        let floor = max(3, Int((Double(rows.map(\.apps).max() ?? 0) / 3).rounded()))
+        return LazyVGrid(columns: Array(repeating: GridItem(.flexible(minimum: 180), spacing: DS.Space.grid, alignment: .top), count: perRow),
+                         alignment: .leading, spacing: DS.Space.l) {
+            card("Goals", rows) { Double($0.goals) }
+            card("Assists", rows) { Double($0.assists) }
+            card("Average rating · \(floor)+ apps", rows.filter { $0.avg >= 0 && $0.apps >= floor }, decimals: true) { $0.avg }
+            card("Appearances", rows) { Double($0.apps) }
+            card("Clean sheets · keepers", rows.filter(\.keeper)) { Double(max(0, $0.cleanSheets)) }
         }
     }
 
@@ -123,19 +128,24 @@ private struct Leaders: View {
         let leaders = ranked.filter { value($0) == top }
         let next = ranked.filter { value($0) != top }.prefix(2)
         let fmt: (Double) -> String = { decimals ? String(format: "%.2f", $0) : String(Int($0)) }
-        return VStack(alignment: .leading, spacing: 4) {
-            Text(label).font(.callout).foregroundStyle(.secondary)
+        return VStack(alignment: .leading, spacing: 0) {
+            Text(label).font(.system(size: 12)).foregroundStyle(.secondary).lineLimit(1)
             NumberText(top > 0 ? fmt(top) : "–", size: 34)
+                .padding(.top, DS.Space.xs)
             Text(top > 0 ? (leaders.count == 2 ? "\(surname(leaders[0].name)) & \(surname(leaders[1].name))"
                             : leaders.count > 2 ? "\(leaders[0].name) +\(leaders.count - 1) more" : leaders.first?.name ?? "")
                          : "Nobody yet")
-                .fontWeight(.bold).lineLimit(1)
+                .font(.system(size: 13, weight: .bold)).lineLimit(1)
+                .padding(.top, DS.Space.xs)
             Text(next.isEmpty || top == 0 ? " " : "then " + next.map { "\(surname($0.name)) \(fmt(value($0)))" }.joined(separator: " · "))
-                .font(.caption).foregroundStyle(.secondary).lineLimit(1)
+                .font(.system(size: 11)).foregroundStyle(.secondary).lineLimit(1)
+                .padding(.top, DS.Space.xs)
         }
-        .padding(14)
+        .padding(.horizontal, DS.Space.s).padding(.top, DS.Space.m).padding(.bottom, DS.Space.xs)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .panel(10)
+        // His Figma tiles: no box, just a 1 pt rule across the top. Primary at 22 % reads as a light rule on the dark
+        // looks and a grey one on the light looks, like the Figma's.
+        .overlay(alignment: .top) { Rectangle().fill(Color.primary.opacity(0.22)).frame(height: 1) }
         .accessibilityElement(children: .combine)
     }
 }

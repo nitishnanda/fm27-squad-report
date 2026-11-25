@@ -1,3 +1,4 @@
+import AppKit
 import SwiftUI
 
 /// One row of the squad table, with plain sort keys (missing values sort last).
@@ -104,6 +105,7 @@ struct SquadListView: View {
     @State private var positions: Set<String> = []
     @State private var allPositions = false     // "all of these" instead of "any of these"
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(AppModel.self) private var app
 
     /// Changes whenever any filter does, so the table animates rows in and out instead of jumping.
     private var filterSignature: String {
@@ -165,6 +167,7 @@ struct SquadListView: View {
         }
         .searchable(text: $search, placement: .toolbar, prompt: "Search the squad")
         .onAppear {
+            if let name = app.squadSearch { search = name; app.squadSearch = nil }
             if let saved = try? JSONDecoder().decode(TableColumnCustomization<SquadRow>.self, from: savedColumns) { columns = saved }
         }
         .onChange(of: columns) { _, now in
@@ -362,6 +365,17 @@ struct SquadListView: View {
                     }
                 }
             }
+        }
+        .contextMenu(forSelectionType: SquadRow.ID.self) { ids in
+            if let uid = ids.first, let player = report.player(uid) {
+                Button("Show in Side Panel") { app.inspect(uid) }
+                Button("Copy Name") {
+                    NSPasteboard.general.clearContents()
+                    NSPasteboard.general.setString(player.name, forType: .string)
+                }
+            }
+        } primaryAction: { ids in
+            if let uid = ids.first { app.inspect(uid) }   // double-click
         }
     }
 }

@@ -234,6 +234,7 @@ private struct PositionRow: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        .playerActions(p)
         .popover(isPresented: $showCard, arrowEdge: .trailing) {
             PlayerCard(player: p, slotLabel: card.info.slot, card: card.info.slot, row: nil, report: report)
         }

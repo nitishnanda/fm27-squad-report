@@ -28,11 +28,19 @@ struct SquadReportApp: App {
         .windowResizability(.contentSize)
         .defaultPosition(.topTrailing)
 
+        Window("Matchday", id: "matchday") {
+            MatchdayView().themed().environment(delegate.model)
+        }
+        .windowResizability(.contentMinSize)
+        .defaultSize(width: 300, height: 640)
+        .defaultPosition(.topTrailing)
+
         MenuBarExtra {
-            MenuBarMenu().environment(delegate.model)
+            MenuBarMenu().themed().environment(delegate.model)
         } label: {
             MenuBarIcon().environment(delegate.model)
         }
+        .menuBarExtraStyle(.window)
 
         Settings {
             SettingsView().themed().environment(delegate.model)
@@ -67,6 +75,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
 struct AppCommands: Commands {
     let model: AppModel
+    @Environment(\.openWindow) private var openWindow
 
     var body: some Commands {
         // one window is enough: File › New becomes picking the project folder
@@ -78,6 +87,13 @@ struct AppCommands: Commands {
                 .keyboardShortcut("r")
             Button("Open in Browser") { model.openInBrowser() }
                 .keyboardShortcut("o", modifiers: [.command, .shift])
+            Divider()
+            Button("Quick Open…") { model.showQuickOpen = true }
+                .keyboardShortcut("k")
+            Button("Show Side Panel") { model.showInspector.toggle() }
+                .keyboardShortcut("i", modifiers: [.command, .option])
+            Button("Matchday Window") { openWindow(id: "matchday") }
+                .keyboardShortcut("m", modifiers: [.command, .shift])
             Divider()
             // like the web app's L / Shift+L
             Button("Next Look") { withAnimation(Motion.look) { LookCycle.step(1) } }

@@ -230,3 +230,9 @@ news ticker (the Mac "Latest" list on Home replaces it). The 3D pitch tilt-in is
 - Dock icon or menu bar only? Both.
 - Which looks? Original + E (Glass + scoreboard).
 - Keep `Run Squad Report.command`? Yes, as a backup.
+
+## Phase 8 ✅ done: Mac extras from the 50-app comparison (25 Nov 2026)
+⌘K Quick Open (pages, players, actions) · right-click and hover on players (side panel, Squad list, copy name; double-click a
+Squad list row) · side panel `.inspector` (⌥⌘I) · menu bar as a window (Coming up, Latest) · Dock "New" badge · numbers roll
+(`NumberText`) · Best XIs: Copy as Image, Liquid Glass 3D/Flat switch in dark schemes (macOS 26+) · Matchday floating window
+(⇧⌘M). Left out: Add to Sandbox in the menu, glass on the Sandbox score bar, Spotlight/App Intents, widget.

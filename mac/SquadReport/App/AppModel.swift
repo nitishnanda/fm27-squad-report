@@ -13,6 +13,12 @@ final class AppModel {
     var route: Route = .home
     /// The status key popover (toolbar button, Help › Status Key).
     var showKey = false
+    /// ⌘K Quick Open, and the player panel on the right (⌥⌘I).
+    var showQuickOpen = false
+    var showInspector = false
+    var inspected: Int?
+    /// A name for the Squad list to search for when you jump there from a player's menu.
+    var squadSearch: String?
     /// The last page you opened in each section, so ⌘2 goes back to the Team page you were on.
     private var lastPage: [AppSection: Route] = [:]
 
@@ -92,6 +98,17 @@ final class AppModel {
         backStack.append(route)
         lastPage[next.section] = next
         route = next
+    }
+
+    /// Shows a player in the side panel.
+    func inspect(_ uid: Int) {
+        inspected = uid
+        showInspector = true
+    }
+
+    func showInSquad(_ player: Player) {
+        squadSearch = player.name
+        go(.squad)
     }
 
     func go(_ section: AppSection) {

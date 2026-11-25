@@ -16,7 +16,10 @@ final class ReportStore {
     /// A newer save was read while you weren't looking (the menu bar says "New report ready").
     private(set) var unseenUpdate = false
 
-    func markSeen() { unseenUpdate = false }
+    func markSeen() {
+        unseenUpdate = false
+        NSApp.dockTile.badgeLabel = nil
+    }
 
     /// The save behind each report is the first part of the engine's version ("<save time>-<script time>-<n>"),
     /// so a restart or an app update doesn't count as a new report.
@@ -109,6 +112,8 @@ final class ReportStore {
             if let last, !stamp.isEmpty, stamp != last, let report {
                 if !NSApplication.shared.isActive {
                     unseenUpdate = true
+                    NSApp.dockTile.badgeLabel = "New"
+                    NSApp.requestUserAttention(.informationalRequest)
                     Notifier.reportUpdated(club: report.club.name, gameDate: report.gameDate)
                 }
             }

@@ -1,3 +1,4 @@
+import AppKit
 import SwiftUI
 
 /// Best XIs: your strongest XI, then a second XI from who's left, each on its own pitch in your formation.
@@ -7,6 +8,9 @@ struct BestXIsView: View {
     /// "3d" (the web's default) or "flat". Written only when he clicks the switch, like the web.
     @AppStorage("xisView") private var view = "3d"
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.colorScheme) private var scheme
+    @Environment(\.theme) private var theme
+    @State private var copied = false
 
     var body: some View {
         // Both pitches shrink to fit the window, so the whole XI is always on screen without scrolling.
@@ -18,12 +22,11 @@ struct BestXIsView: View {
                 HStack(alignment: .bottom) {
                     SectionTitle("Best XIs", sub: "\(report.formation.title) · rated for your roles in and out of possession · click a player for his card")
                     Spacer(minLength: 12)
-                    Picker("View", selection: $view) {
-                        Text("3D").tag("3d")
-                        Text("Flat").tag("flat")
+                    Button { copyImage() } label: {
+                        Label(copied ? "Copied" : "Copy as Image", systemImage: copied ? "checkmark" : "photo.on.rectangle")
                     }
-                    .pickerStyle(.segmented).labelsHidden().fixedSize()
-                    .help(reduceMotion ? "3D lies flat while Reduce Motion is on" : "3D: drag a pitch to turn it. Flat shows every badge.")
+                    .help("Copies your best XI as a picture")
+                    switcher
                 }
                 .frame(height: header - 12, alignment: .bottomLeading)
                 let threeD = view == "3d"
@@ -37,6 +40,76 @@ struct BestXIsView: View {
             }
             .padding(pad)
         }
+    }
+}
+
+extension BestXIsView {
+    /// Liquid Glass on the switch in the dark looks (macOS 26+); a plain segmented control everywhere else.
+    @ViewBuilder
+    fileprivate var switcher: some View {
+        if #available(macOS 26, *), scheme == .dark {
+            GlassEffectContainer {
+                HStack(spacing: 0) { segment("3D", "3d"); segment("Flat", "flat") }
+                    .glassEffect(.regular.interactive(), in: .capsule)
+            }
+            .help(reduceMotion ? "3D lies flat while Reduce Motion is on" : "3D: drag a pitch to turn it. Flat shows every badge.")
+        } else {
+            Picker("View", selection: $view) {
+                Text("3D").tag("3d")
+                Text("Flat").tag("flat")
+            }
+            .pickerStyle(.segmented).labelsHidden().fixedSize()
+            .help(reduceMotion ? "3D lies flat while Reduce Motion is on" : "3D: drag a pitch to turn it. Flat shows every badge.")
+        }
+    }
+
+    private func segment(_ title: String, _ tag: String) -> some View {
+        Button(title) { view = tag }
+            .buttonStyle(.plain)
+            .padding(.horizontal, 14).padding(.vertical, 5)
+            .background(view == tag ? Color.white.opacity(0.22) : .clear, in: .capsule)
+            .accessibilityAddTraits(view == tag ? .isSelected : [])
+    }
+
+    fileprivate func copyImage() {
+        let card = XICard(report: report, title: "Best XI", xi: report.xi1)
+            .environment(\.theme, theme)
+            .environment(\.colorScheme, scheme)
+        let renderer = ImageRenderer(content: card)
+        renderer.scale = 2
+        guard let image = renderer.nsImage else { return }
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.writeObjects([image])
+        copied = true
+        Task { try? await Task.sleep(for: .seconds(1.6)); copied = false }
+    }
+}
+
+/// What "Copy as Image" draws: the club, the date and the flat pitch.
+private struct XICard: View {
+    let report: Report
+    let title: String
+    let xi: [XISlot]
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack {
+                Circle().fill(Color(hex: report.club.kit)).frame(width: 12, height: 12)
+                Text("\(report.club.name) · \(title)").font(.headline)
+                Spacer()
+                Text("\(report.formation.title) · \(Fmt.day(report.gameDate))").font(.caption).foregroundStyle(.secondary)
+            }
+            Pitch { size in
+                ForEach(Array(report.formation.rows.enumerated()), id: \.offset) { i, row in
+                    PitchPlayer(report: report, row: i, rowInfo: row, player: report.player(i < xi.count ? xi[i].uid : nil), interactive: false)
+                        .scaleEffect(min(1, size.width / 470))
+                        .position(x: size.width * (row.x ?? 50) / 100, y: size.height * (row.y ?? 50) / 100)
+                }
+            }
+        }
+        .padding(16)
+        .frame(width: 460)
+        .background(Color(nsColor: .windowBackgroundColor))
     }
 }
 
@@ -188,6 +261,7 @@ struct PitchPlayer: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        .modifier(OptionalPlayerActions(player: interactive ? player : nil))
         .popover(isPresented: $showCard, arrowEdge: .trailing) {
             if let player {
                 PlayerCard(player: player, slotLabel: label, card: rowInfo.slot, row: row, report: report)
@@ -195,5 +269,12 @@ struct PitchPlayer: View {
         }
         .accessibilityLabel(player.map { "\(label): \($0.name), \(Fmt.stars(rating?.stars ?? 0)) stars" } ?? "\(label): nobody")
         .help(player.map { "\($0.name) — click for his card" } ?? "Nobody left for this slot")
+    }
+}
+
+private struct OptionalPlayerActions: ViewModifier {
+    let player: Player?
+    func body(content: Content) -> some View {
+        if let player { content.playerActions(player) } else { content }
     }
 }

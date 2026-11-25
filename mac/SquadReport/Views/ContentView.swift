@@ -2,8 +2,10 @@ import SwiftUI
 
 struct ContentView: View {
     @Environment(AppModel.self) private var model
+    @Environment(\.openWindow) private var openWindow
 
     var body: some View {
+        @Bindable var model = model
         if model.needsFolder {
             WelcomeView()
         } else {
@@ -13,6 +15,11 @@ struct ContentView: View {
             } detail: {
                 Detail()
             }
+            .inspector(isPresented: $model.showInspector) {
+                InspectorPanel()
+                    .inspectorColumnWidth(min: 300, ideal: 330, max: 420)
+            }
+            .sheet(isPresented: $model.showQuickOpen) { QuickOpen() }
             .toolbar {
                 ToolbarItemGroup(placement: .navigation) {
                     ControlGroup {
@@ -28,6 +35,12 @@ struct ContentView: View {
                 }
                 ToolbarItemGroup(placement: .primaryAction) {
                     EngineStatusPill()
+                    Button { model.showQuickOpen = true } label: { Label("Quick Open", systemImage: "magnifyingglass") }
+                        .help("Search pages, players and actions (⌘K)")
+                    Button { openWindow(id: "matchday") } label: { Label("Matchday", systemImage: "pin") }
+                        .help("A small window that floats over FM (⇧⌘M)")
+                    Button { model.showInspector.toggle() } label: { Label("Side Panel", systemImage: "sidebar.trailing") }
+                        .help("A player's card beside the page (⌥⌘I)")
                     Button {
                         model.showKey.toggle()
                     } label: {
@@ -46,6 +59,20 @@ struct ContentView: View {
                 }
             }
             .navigationTitle(model.route.title)
+        }
+    }
+}
+
+/// The side panel: the player you picked from ⌘K, a right-click menu or a double-click in the Squad list.
+private struct InspectorPanel: View {
+    @Environment(AppModel.self) private var model
+
+    var body: some View {
+        if let report = model.store.report, let player = report.player(model.inspected) {
+            ScrollView { PlayerCard(player: player, report: report, fixedWidth: false) }
+        } else {
+            ContentUnavailableView("Pick a player", systemImage: "person",
+                                   description: Text("Press ⌘K, right-click a player, or double-click one in the Squad list."))
         }
     }
 }

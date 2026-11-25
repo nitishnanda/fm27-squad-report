@@ -1,3 +1,4 @@
+import AppKit
 import SwiftUI
 
 /// A player's card, shown in a popover when you click him on a pitch or in a list. Visible facts only: his stars here,
@@ -9,6 +10,8 @@ struct PlayerCard: View {
     var card: String?
     var row: Int?
     var report: Report?
+    /// 300 pt in a popover; the side panel lets it fill the column.
+    var fixedWidth = true
     @AppStorage("showPotential") private var showPotential = true
 
     var body: some View {
@@ -70,7 +73,7 @@ struct PlayerCard: View {
             }
         }
         .padding(16)
-        .frame(width: 300, alignment: .leading)
+        .frame(minWidth: fixedWidth ? 300 : 240, maxWidth: fixedWidth ? 300 : .infinity, alignment: .leading)
     }
 
     private var identity: String {
@@ -125,4 +128,28 @@ struct PlayerCard: View {
         if let avg = s.avg { bits.append(String(format: "%.2f avg", avg)) }
         return bits.joined(separator: " · ")
     }
+}
+
+/// Right-click a player anywhere: the side panel, the Squad list, copy his name. Plus a pointing hand on hover.
+private struct PlayerActions: ViewModifier {
+    let player: Player
+    @Environment(AppModel.self) private var model
+
+    func body(content: Content) -> some View {
+        content
+            .pointerStyle(.link)
+            .contextMenu {
+                Button("Show in Side Panel") { model.inspect(player.uid) }
+                Button("Show in Squad List") { model.showInSquad(player) }
+                Divider()
+                Button("Copy Name") {
+                    NSPasteboard.general.clearContents()
+                    NSPasteboard.general.setString(player.name, forType: .string)
+                }
+            }
+    }
+}
+
+extension View {
+    func playerActions(_ player: Player) -> some View { modifier(PlayerActions(player: player)) }
 }

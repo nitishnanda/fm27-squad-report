@@ -466,6 +466,7 @@ struct NumberText: View {
     let text: String
     let size: CGFloat
     @Environment(\.theme) private var theme
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     init(_ text: String, size: CGFloat) {
         self.text = text
@@ -473,6 +474,13 @@ struct NumberText: View {
     }
 
     var body: some View {
+        digits
+            .contentTransition(.numericText())
+            .animation(reduceMotion ? nil : Motion.filter, value: text)   // figures roll to their new value
+    }
+
+    @ViewBuilder
+    private var digits: some View {
         if theme.numbersAreDoto {
             let parts = text.split(separator: ".", omittingEmptySubsequences: false).map(String.init)
             parts.enumerated().reduce(Text("")) { acc, item in

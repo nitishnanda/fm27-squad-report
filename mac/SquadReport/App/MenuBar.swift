@@ -2,32 +2,54 @@ import AppKit
 import SwiftUI
 import UserNotifications
 
-/// The menu bar item: how the engine is doing, in a word, plus Open, Reload, Settings and Quit.
+/// The menu bar item: status, what's coming up, the latest news, plus Open, Reload, Settings and Quit.
 struct MenuBarMenu: View {
     @Environment(AppModel.self) private var model
     @Environment(\.openWindow) private var openWindow
 
     var body: some View {
-        Text(MenuBarState(model: model).title)
-        if let report = model.store.report {
-            Text("\(report.club.name) · \(Fmt.day(report.gameDate))")
+        let state = MenuBarState(model: model)
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Image(systemName: state.symbol)
+                Text(state.title).fontWeight(.semibold)
+                Spacer()
+            }
+            if let report = model.store.report {
+                Text("\(report.club.name) · \(Fmt.day(report.gameDate))").font(.callout).foregroundStyle(.secondary)
+                let coming = report.news.filter { $0.kind.hasPrefix("deal") || $0.kind.hasPrefix("loan") }.prefix(3)
+                let latest = report.news.filter { !$0.kind.hasPrefix("deal") && !$0.kind.hasPrefix("loan") }.prefix(3)
+                if !coming.isEmpty { section("Coming up", Array(coming)) }
+                if !latest.isEmpty { section("Latest", Array(latest)) }
+            }
+            Divider()
+            HStack {
+                Button("Open") { open("main") }.keyboardShortcut("o")
+                Button("Matchday") { open("matchday") }
+                Button("Reload") { model.store.reload() }
+                if case .failed = model.engine.phase { Button("Start Again") { model.retryEngine() } }
+                Spacer()
+                SettingsLink { Image(systemName: "gearshape") }.help("Settings (⌘,)")
+                Button { NSApp.terminate(nil) } label: { Image(systemName: "power") }.help("Quit FM27 Companion")
+            }
         }
-        Divider()
-        Button("Open FM27 Companion") {
-            openWindow(id: "main")
-            NSApp.activate()
-            model.store.markSeen()
+        .padding(14)
+        .frame(width: 320)
+    }
+
+    private func section(_ title: String, _ items: [NewsItem]) -> some View {
+        VStack(alignment: .leading, spacing: 3) {
+            Text(title).font(.caption.weight(.semibold)).foregroundStyle(.secondary)
+            ForEach(Array(items.enumerated()), id: \.offset) { _, n in
+                Text(n.text).font(.callout).lineLimit(2)
+            }
         }
-        .keyboardShortcut("o")
-        Button("Reload Report") { model.store.reload() }
-        if case .failed = model.engine.phase {
-            Button("Start the Engine Again") { model.retryEngine() }
-        }
-        Divider()
-        SettingsLink { Text("Settings…") }
-            .keyboardShortcut(",")
-        Button("Quit FM27 Companion") { NSApp.terminate(nil) }
-            .keyboardShortcut("q")
+    }
+
+    private func open(_ id: String) {
+        openWindow(id: id)
+        NSApp.activate()
+        model.store.markSeen()
     }
 }
 
@@ -37,6 +59,7 @@ struct MenuBarIcon: View {
 
     var body: some View {
         Image(systemName: MenuBarState(model: model).symbol)
+            .symbolEffect(.bounce, value: MenuBarState(model: model).symbol)
             .accessibilityLabel("FM27 Companion: \(MenuBarState(model: model).title)")
     }
 }

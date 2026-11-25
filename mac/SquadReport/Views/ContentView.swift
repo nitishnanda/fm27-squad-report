@@ -4,6 +4,12 @@ struct ContentView: View {
     @Environment(AppModel.self) private var model
     @Environment(\.openWindow) private var openWindow
 
+    /// "Liverpool · 31 Dec 2026" under the page name, so the toolbar needn't repeat the club.
+    private var subtitle: String {
+        guard let report = model.store.report else { return "" }
+        return "\(report.club.name) · \(Fmt.day(report.gameDate))"
+    }
+
     var body: some View {
         @Bindable var model = model
         if model.needsFolder {
@@ -31,30 +37,20 @@ struct ContentView: View {
                             .help("Forward (⌘])")
                     }
                     .controlGroupStyle(.navigation)
-                    ClubChip()
                 }
                 ToolbarItemGroup(placement: .primaryAction) {
                     EngineStatusPill()
                     Button { model.showQuickOpen = true } label: { Label("Quick Open", systemImage: "magnifyingglass") }
                         .help("Search pages, players and actions (⌘K)")
                     Button { openWindow(id: "matchday") } label: { Label("Matchday", systemImage: "pin") }
+                        .labelStyle(.titleAndIcon)
                         .help("A small window that floats over FM (⇧⌘M)")
                     SettingsLink { Label("Settings", systemImage: "gearshape") }
                         .help("Look, folder, notifications, phone access (⌘,)")
-                    Button { model.showInspector.toggle() } label: { Label("Side Panel", systemImage: "sidebar.trailing") }
-                        .help("A player's card beside the page (⌥⌘I)")
-                    Button {
-                        model.showKey.toggle()
-                    } label: {
-                        Label("Key", systemImage: "questionmark.circle")
-                    }
-                    .help("What the badges and letters mean (Help › Status Key keeps it open in its own window, ⌘/)")
-                    .popover(isPresented: Binding(get: { model.showKey }, set: { model.showKey = $0 }), arrowEdge: .bottom) {
-                        StatusKey()
-                    }
                 }
             }
             .navigationTitle(model.route.title)
+            .navigationSubtitle(subtitle)
         }
     }
 }
@@ -65,7 +61,15 @@ private struct InspectorPanel: View {
 
     var body: some View {
         if let report = model.store.report, let player = report.player(model.inspected) {
-            ScrollView { PlayerCard(player: player, report: report, fixedWidth: false) }
+            VStack(spacing: 0) {
+                HStack {
+                    Spacer()
+                    Button { model.showInspector = false } label: { Image(systemName: "xmark.circle.fill") }
+                        .buttonStyle(.plain).foregroundStyle(.secondary).help("Close the side panel (⌥⌘I)")
+                }
+                .padding(.horizontal, 12).padding(.top, 8)
+                ScrollView { PlayerCard(player: player, report: report, fixedWidth: false) }
+            }
         } else {
             ContentUnavailableView("Pick a player", systemImage: "person",
                                    description: Text("Press ⌘K, right-click a player, or double-click one in the Squad list."))
@@ -89,6 +93,7 @@ private struct Sidebar: View {
             }
         }
         .listStyle(.sidebar)
+        .tint(Palette.brand)     // the app's own green for the selection, white text on it, like a system accent
     }
 
     @ViewBuilder
@@ -174,16 +179,7 @@ private struct Banner: View {
     @Environment(AppModel.self) private var model
 
     var body: some View {
-        if let step = model.store.buildStep {
-            HStack(spacing: 10) {
-                ProgressView(value: Double(step.index + 1), total: Double(step.of)).frame(width: 120)
-                Text("Reading your latest save · \(step.label) (\(step.index + 1) of \(step.of))")
-                Spacer()
-            }
-            .font(.callout)
-            .padding(.horizontal, 16).padding(.vertical, 7)
-            .background(.bar)
-        } else if case .failed(let why) = model.engine.phase {
+        if case .failed(let why) = model.engine.phase {
             HStack(spacing: 10) {
                 Image(systemName: "exclamationmark.triangle.fill").foregroundStyle(Palette.verdict("amber"))
                 Text("Showing your last report. \(why)").lineLimit(2)
@@ -193,32 +189,6 @@ private struct Banner: View {
             .font(.callout)
             .padding(.horizontal, 16).padding(.vertical, 7)
             .background(.bar)
-        } else if model.store.fromCache {
-            HStack(spacing: 8) {
-                ProgressView().controlSize(.small)
-                Text("Showing your last report while the engine starts…").foregroundStyle(.secondary)
-                Spacer()
-            }
-            .font(.callout)
-            .padding(.horizontal, 16).padding(.vertical, 6)
-            .background(.bar)
-        }
-    }
-}
-
-/// The club in the toolbar: its colour and name, so you know whose save this is.
-private struct ClubChip: View {
-    @Environment(AppModel.self) private var model
-
-    var body: some View {
-        if let club = model.store.report?.club {
-            HStack(spacing: 6) {
-                Circle().fill(Color(hex: club.kit)).frame(width: 10, height: 10)
-                    .overlay(Circle().stroke(.primary.opacity(0.2)))
-                Text(club.name).font(.headline)
-            }
-            .padding(.horizontal, 4)
-            .accessibilityElement(children: .combine)
         }
     }
 }
@@ -244,6 +214,7 @@ struct EngineStatusPill: View {
 
     private var state: (String, Color, Bool) {
         if ReportStore.demoPath != nil { return ("Demo report", .blue, false) }
+        if model.store.fromCache { return ("Opening your last report", .orange, true) }
         if let step = model.store.buildStep { return ("Reading save · \(step.index + 1) of \(step.of)", .orange, true) }
         switch model.engine.phase {
         case .preparing: return ("Setting up", .orange, true)

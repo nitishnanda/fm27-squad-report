@@ -79,9 +79,6 @@ struct Theme: Sendable {
         case .sticker: .mown
         }
     }
-    /// Doto's full stop sits low and reads like a comma, so NumberText swaps it for Geist Mono's.
-    var numbersAreDoto: Bool { look == .scoreboard || look == .glass }
-
     // MARK: type
 
     private enum Face {
@@ -140,7 +137,7 @@ struct Theme: Sendable {
         case .original: .system(width: .condensed, italic: false)
         case .programme: .system(width: .condensed, italic: true)        // the web's italic 900 figures
         case .floodlit: .custom(Self.bricolage)
-        case .scoreboard, .glass: .custom(Self.doto)
+        case .scoreboard, .glass: .custom(Self.geistMono)      // crisp figures; the dot-matrix face is kept for the one big ordinal
         case .sticker: .custom(Self.bigShoulders)
         }
     }
@@ -182,7 +179,11 @@ struct Theme: Sendable {
 
     /// Big ordinal like "7th".
     func position(_ size: CGFloat) -> Font {
-        look == .original ? .system(size: size, weight: .black).width(.compressed).italic() : number(size)
+        switch look {
+        case .original: .system(size: size, weight: .black).width(.compressed).italic()
+        case .scoreboard, .glass: font(.custom(Self.doto), size, .heavy)
+        default: number(size)
+        }
     }
 
     /// Slot names on cards (LW, CB).
@@ -235,7 +236,7 @@ struct Theme: Sendable {
         case .soft: 10
         case .glass: 12
         case .rule: 0
-        case .board: 4
+        case .board: 10
         case .sticker: 12
         }
     }
@@ -474,24 +475,8 @@ struct NumberText: View {
     }
 
     var body: some View {
-        digits
+        Text(text).font(theme.number(size)).monospacedDigit()
             .contentTransition(.numericText())
             .animation(reduceMotion ? nil : Motion.filter, value: text)   // figures roll to their new value
-    }
-
-    @ViewBuilder
-    private var digits: some View {
-        if theme.numbersAreDoto {
-            let parts = text.split(separator: ".", omittingEmptySubsequences: false).map(String.init)
-            parts.enumerated().reduce(Text("")) { acc, item in
-                let piece = Text(item.element).font(theme.number(size))
-                return item.offset == 0 ? acc + piece
-                    : acc + Text(".").font(.custom("GeistMono-Bold", size: size * 0.9)) + piece
-            }
-            .monospacedDigit()
-            .accessibilityLabel(text)
-        } else {
-            Text(text).font(theme.number(size)).monospacedDigit()
-        }
     }
 }

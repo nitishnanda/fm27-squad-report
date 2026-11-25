@@ -44,7 +44,7 @@ private struct Hero: View {
             VStack(alignment: .leading, spacing: 24) { identity; league; openButton }
         }
         .foregroundStyle(style == .kit ? ink : Color.primary)
-        .padding(32)
+        .padding(.horizontal, 20).padding(.vertical, 32)   // the same side inset as the cards below
         .frame(maxWidth: .infinity, alignment: .leading)
         .background {
             switch style {
@@ -175,32 +175,37 @@ private struct Snapshot: View {
     let report: Report
 
     var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            SectionTitle("Club snapshot")
+            // four across and filling the width on a wide window, two by two on a narrow one; every tile the same height
+            ViewThatFits(in: .horizontal) { tiles(4); tiles(2) }
+        }
+    }
+
+    private func tiles(_ across: Int) -> some View {
         let squad = report.players.filter { $0.location == "squad" }
         let injured = squad.filter(\.isInjured).count
         let suspended = squad.filter(\.isSuspended).count
         let f = report.finances
-        VStack(alignment: .leading, spacing: 12) {
-            SectionTitle("Club snapshot")
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 220), spacing: 12)], spacing: 12) {
-                if let left = f.transferLeft {
-                    Tile(label: "Transfer budget left", value: Fmt.money(left), sub: "as of \(Fmt.month(f.month)) month-end")
-                }
-                if let bill = f.wageBill, let budget = f.wageBudget, budget > 0 {
-                    let room = budget - bill
-                    Tile(label: "Wage bill / budget (p/w)", value: Fmt.wage(bill), unit: "/ \(Fmt.wage(budget))",
-                         sub: "\(Fmt.wage(abs(room)))/wk \(room >= 0 ? "room" : "over")") {
-                        ProgressView(value: min(bill, budget), total: budget)
-                            .tint(room >= 0 ? Palette.brandHigh : Palette.verdict("red"))
-                    }
-                }
-                if let level = report.xiLevel {
-                    Tile(label: "XI level", value: String(format: "%.1f", level), unit: "★ average", sub: "of your best XI") {
-                        StarsView(value: level, size: 14)
-                    }
-                }
-                Tile(label: "Unavailable now", value: "\(injured + suspended)", unit: "players",
-                     sub: "\(injured) injured · \(suspended) suspended")
+        return LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 12, alignment: .top), count: across), spacing: 12) {
+            if let left = f.transferLeft {
+                Tile(label: "Transfer budget left", value: Fmt.money(left), sub: "as of \(Fmt.month(f.month)) month-end")
             }
+            if let bill = f.wageBill, let budget = f.wageBudget, budget > 0 {
+                let room = budget - bill
+                Tile(label: "Wage bill / budget (p/w)", value: Fmt.wage(bill), unit: "/ \(Fmt.wage(budget))",
+                     sub: "\(Fmt.wage(abs(room)))/wk \(room >= 0 ? "room" : "over")") {
+                    ProgressView(value: min(bill, budget), total: budget)
+                        .tint(room >= 0 ? Palette.brandHigh : Palette.verdict("red"))
+                }
+            }
+            if let level = report.xiLevel {
+                Tile(label: "XI level", value: String(format: "%.1f", level), unit: "★ average", sub: "of your best XI") {
+                    StarsView(value: level, size: 14)
+                }
+            }
+            Tile(label: "Unavailable now", value: "\(injured + suspended)", unit: "players",
+                 sub: "\(injured) injured · \(suspended) suspended")
         }
     }
 }
@@ -222,8 +227,9 @@ private struct Tile<Extra: View>: View {
             extra()
             Text(sub).font(.caption).foregroundStyle(.secondary)
         }
-        .padding(16)
-        .frame(maxWidth: .infinity, minHeight: 118, alignment: .topLeading)
+        .padding(20)
+        .frame(maxWidth: .infinity, minHeight: 150, alignment: .topLeading)
+        .frame(minWidth: 180)
         .panel(10)
         .accessibilityElement(children: .combine)
     }
@@ -295,7 +301,7 @@ private struct VerdictCard: View {
             people("Starter", "Starters", report.xi1)
             people("Backup", "Backups", report.xi2)
         }
-        .padding(16)
+        .padding(20)
         .frame(maxWidth: .infinity, alignment: .leading)
         .panelFill()
         .overlay(alignment: .leading) { Rectangle().fill(color).frame(width: 4) }

@@ -171,7 +171,17 @@ struct SquadListView: View {
             if let saved = try? JSONDecoder().decode(TableColumnCustomization<SquadRow>.self, from: savedColumns) { columns = saved }
         }
         .onChange(of: columns) { _, now in
-            if let data = try? JSONEncoder().encode(now) { savedColumns = data }
+            if !app.showInspector, let data = try? JSONEncoder().encode(now) { savedColumns = data }
+        }
+        .onChange(of: app.showInspector) { _, open in
+            // the side panel takes a third of the width: the three least-needed columns step aside, and come back after
+            if open {
+                for id in ["ability", "potential", "wage"] { columns[visibility: id] = .hidden }
+            } else if let saved = try? JSONDecoder().decode(TableColumnCustomization<SquadRow>.self, from: savedColumns) {
+                columns = saved
+            } else {
+                for id in ["ability", "potential", "wage"] { columns[visibility: id] = .automatic }
+            }
         }
     }
 
@@ -387,6 +397,11 @@ private struct Summary: View {
     @Binding var show: SquadListView.Show
 
     var body: some View {
+        // five across whenever they fit (also beside the side panel), else three and two
+        ViewThatFits(in: .horizontal) { tiles(5); tiles(3) }
+    }
+
+    private func tiles(_ across: Int) -> some View {
         let first = report.players.filter { $0.location == "squad" && !$0.youth }
         let ages = first.compactMap(\.age)
         let youthCount = report.players.filter { $0.location == "squad" && $0.youth }.count
@@ -397,9 +412,7 @@ private struct Summary: View {
         let inn = report.players.filter { p in p.status.moves.contains { $0.kind == "loan_in" } }.count
         let coming = report.players.filter { p in p.status.moves.contains { ["deal_in", "loan_in_arr"].contains($0.kind) } }.count
         let going = report.players.filter { p in p.status.moves.contains { ["deal_out", "loan_out_arr"].contains($0.kind) } }.count
-
-        // five across on a wide window, wrapping to rows of three or two on a narrow one
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 190), spacing: 10, alignment: .top)], spacing: 10) {
+        return LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 10, alignment: .top), count: across), spacing: 10) {
             figure("First team", "\(first.count)", unit: "players",
                    sub: "avg age \(ages.isEmpty ? "–" : String(format: "%.1f", Double(ages.reduce(0, +)) / Double(ages.count))) · \(youthCount) in the youth teams")
             figure("First-team value", Fmt.money(Double(worth)), sub: "FM's transfer values")
@@ -419,7 +432,8 @@ private struct Summary: View {
             Text(sub).font(.caption).foregroundStyle(.secondary).lineLimit(1).minimumScaleFactor(0.85)
         }
         .padding(12)
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(maxWidth: .infinity, minHeight: 86, alignment: .topLeading)
+        .frame(minWidth: 140)
         .panel(10)
         .accessibilityElement(children: .combine)
     }

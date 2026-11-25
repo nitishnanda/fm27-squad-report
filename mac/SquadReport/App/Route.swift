@@ -51,7 +51,7 @@ enum Route: String, CaseIterable, Identifiable, Hashable, Sendable {
         case .home: "house"
         case .xis: "sportscourt"
         case .positions: "square.grid.3x3"
-        case .squad: "person.3"
+        case .squad: "person.2"
         case .fit: "chart.bar.xaxis"
         case .training: "figure.run"
         case .sandbox: "slider.horizontal.3"

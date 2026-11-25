@@ -136,7 +136,7 @@ private struct XIPitch: View {
                 }
             }
             if threeD {
-                Pitch3D(report: report, xi: xi)
+                Pitch3D(report: report, xi: xi, startTilt: 38)   // flatter than the Home hero's, so the tall window is filled
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
             Pitch { size in

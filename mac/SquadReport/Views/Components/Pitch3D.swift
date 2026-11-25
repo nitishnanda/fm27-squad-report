@@ -10,11 +10,18 @@ struct Pitch3D: View {
     var compact = false
 
     @State private var turn: Double = -14          // web --rz
-    @State private var tilt: Double = 54           // web --rx
+    @State private var tilt: Double           // web --rx (54)
     @State private var dragFrom: (turn: Double, tilt: Double)?
     @State private var touched = false             // the sway stops for good once he moves it
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.theme) private var theme
+
+    init(report: Report, xi: [XISlot], compact: Bool = false, startTilt: Double = 54) {
+        self.report = report
+        self.xi = xi
+        self.compact = compact
+        _tilt = State(initialValue: startTilt)
+    }
 
     static let turnRange: ClosedRange<Double> = -55...55
     static let tiltRange: ClosedRange<Double> = 24...70

@@ -13,32 +13,36 @@ struct BestXIsView: View {
     @State private var copied = false
 
     var body: some View {
-        // Both pitches shrink to fit the window, so the whole XI is always on screen without scrolling.
+        // Laid out from his Figma Make design (BestXIsView.tsx): page header with Copy as Image and a 3D / Flat pill
+        // switch, then the two XIs side by side, each in a card. Both pitches shrink to fit the window.
         GeometryReader { geo in
-            let gap: CGFloat = 20, pad: CGFloat = 24, header: CGFloat = 46, pitchTitle: CGFloat = 38
-            let tall = geo.size.height - pad * 2 - header - pitchTitle
-            let width = max(220, min(tall * 0.68, (geo.size.width - pad * 2 - gap) / 2))
-            VStack(alignment: .leading, spacing: 12) {
-                HStack(alignment: .bottom) {
-                    SectionTitle("Best XIs", sub: "\(report.formation.title) · rated for your roles in and out of possession · click a player for his card", page: true)
-                    Spacer(minLength: 12)
-                    Button { copyImage() } label: {
-                        Label(copied ? "Copied" : "Copy as Image", systemImage: copied ? "checkmark" : "photo.on.rectangle")
+            let gap: CGFloat = 16, padH: CGFloat = 24, padV: CGFloat = 20, header: CGFloat = 52, cardChrome: CGFloat = 40 + 46
+            let inner = min(geo.size.width, 1220) - padH * 2
+            let tall = geo.size.height - padV * 2 - header - cardChrome
+            let half = (inner - gap) / 2 - 40
+            let threeD = view == "3d"
+            // the 3D pitches use the whole card; the flat ones keep the pitch's shape
+            let w = threeD ? half : max(220, min(tall * 0.68, half))
+            VStack(alignment: .leading, spacing: 20) {
+                PageHeader(title: "Best XIs",
+                           sub: "\(report.formation.title) · rated for your roles in and out of possession · click any player for his card") {
+                    HStack(spacing: 8) {
+                        CapsuleAction(title: copied ? "Copied" : "Copy as Image", symbol: copied ? "checkmark" : "doc.on.doc") { copyImage() }
+                            .help("Copies your best XI as a picture")
+                        PillPicker(options: [("3D", "3d"), ("Flat", "flat")], selection: $view)
+                            .help(reduceMotion ? "3D lies flat while Reduce Motion is on" : "3D: drag a pitch to turn it. Flat shows every badge.")
                     }
-                    .help("Copies your best XI as a picture")
-                    switcher
                 }
-                .frame(height: header - 12, alignment: .bottomLeading)
-                let threeD = view == "3d"
-                // the 3D pitches use the full half of the window; the flat ones keep the pitch's shape
-                let w = threeD ? (geo.size.width - pad * 2 - gap) / 2 : width
                 HStack(alignment: .top, spacing: gap) {
-                    XIPitch(report: report, title: "Best XI", sub: "fully fit squad", xi: report.xi1, threeD: threeD).frame(width: w)
-                    XIPitch(report: report, title: "Second XI", sub: "from who's left", xi: report.xi2, threeD: threeD).frame(width: w)
+                    XIPitch(report: report, title: "Best XI", sub: "fully fit squad", xi: report.xi1, threeD: threeD, pitchWidth: w)
+                    XIPitch(report: report, title: "Second XI", sub: "from who's left", xi: report.xi2, threeD: threeD, pitchWidth: w,
+                            muted: true)
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                .frame(maxHeight: .infinity, alignment: .top)
             }
-            .padding(pad)
+            .frame(maxWidth: 1172)
+            .padding(.horizontal, padH).padding(.vertical, padV)
+            .frame(maxWidth: .infinity)
         }
     }
 }
@@ -119,36 +123,51 @@ private struct XIPitch: View {
     let sub: String
     let xi: [XISlot]
     var threeD = false
+    var pitchWidth: CGFloat = 300
+    var muted = false
 
     var body: some View {
         let rows = report.formation.rows
         let ratings = xi.enumerated().compactMap { i, s in report.player(s.uid)?.rating(row: i)?.stars }
         let average = ratings.isEmpty ? nil : ratings.reduce(0, +) / Double(rows.count)
-        VStack(alignment: .leading, spacing: 10) {
-            HStack(alignment: .firstTextBaseline) {
-                Text(title).displayFont(22).fixedSize()
-                Text(sub).foregroundStyle(.secondary).lineLimit(1).truncationMode(.tail)
-                Spacer()
+        let empty = rows.indices.filter { $0 >= xi.count || report.player(xi[$0].uid) == nil }.count
+        VStack(alignment: .leading, spacing: 16) {
+            // the design's card header: title, note, a red pill for empty slots; the average on the right; a rule under
+            HStack(alignment: .center, spacing: 8) {
+                Text(title).displayFont(16, .semibold).fixedSize()
+                Text(sub).font(.system(size: 12)).foregroundStyle(.secondary).lineLimit(1)
+                if empty > 0 { Badge(label: "\(empty) empty slot\(empty == 1 ? "" : "s")", color: DS.Delta.down) }
+                Spacer(minLength: 8)
                 if let average {
-                    StarsView(value: average, size: 12)
-                    Text(String(format: "%.1f", average)).font(.callout.weight(.semibold)).monospacedDigit()
+                    StarsView(value: average, size: 13)
+                    Text(String(format: "%.1f", average)).font(.system(size: 14, weight: .bold)).monospacedDigit()
+                        .foregroundStyle(muted ? .secondary : .primary)
                         .help("Average of the eleven, empty slots count as 0")
                 }
             }
-            if threeD {
-                Pitch3D(report: report, xi: xi, startTilt: 38)   // flatter than the Home hero's, so the tall window is filled
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else {
-            Pitch { size in
-                ForEach(Array(rows.enumerated()), id: \.offset) { i, row in
-                    let slot = i < xi.count ? xi[i] : nil
-                    PitchPlayer(report: report, row: i, rowInfo: row, player: report.player(slot?.uid))
-                        .scaleEffect(min(1, size.width / 470))
-                        .position(x: size.width * (row.x ?? 50) / 100, y: size.height * (row.y ?? 50) / 100)
+            .padding(.bottom, 12)
+            .overlay(alignment: .bottom) { Rectangle().fill(Color.primary.opacity(0.06)).frame(height: 1) }
+            Group {
+                if threeD {
+                    Pitch3D(report: report, xi: xi, startTilt: 38)   // flatter than the Home hero's, so the tall card is filled
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else {
+                    Pitch { size in
+                        ForEach(Array(rows.enumerated()), id: \.offset) { i, row in
+                            let slot = i < xi.count ? xi[i] : nil
+                            PitchPlayer(report: report, row: i, rowInfo: row, player: report.player(slot?.uid))
+                                .scaleEffect(min(1, size.width / 470))
+                                .position(x: size.width * (row.x ?? 50) / 100, y: size.height * (row.y ?? 50) / 100)
+                        }
+                    }
+                    .frame(width: pitchWidth)
+                    .frame(maxWidth: .infinity)
                 }
             }
-            }
         }
+        .padding(20)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .hubCard()
         .accessibilityElement(children: .contain)
         .accessibilityLabel(title)
     }

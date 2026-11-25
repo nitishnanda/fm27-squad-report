@@ -2,20 +2,22 @@ import SwiftUI
 
 /// Positions: everyone who can play each position, best first. Positions that need work come first (red, then amber),
 /// so the depth you're short of is the first thing you see. Same rules as the web app's depth chart.
+/// Laid out from his Figma Make design (PositionsView.tsx): a key bar, then a three-column grid of position cards.
 struct PositionsView: View {
     let report: Report
 
     var body: some View {
         let cards = PositionCards.build(report)
         ScrollView {
-            VStack(alignment: .leading, spacing: 14) {
-                SectionTitle("Position by position", sub: "everyone who can play there · positions that need work first · click a player for his card", page: true)
+            VStack(alignment: .leading, spacing: 20) {
+                PageHeader(title: "Position by position",
+                           sub: "Everyone who can play each tactical slot · positions needing reinforcement listed first")
                 PositionsKey(report: report)
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 330), spacing: 14, alignment: .top)], spacing: 14) {
-                    ForEach(cards) { PositionCardView(card: $0, report: report) }
-                }
+                CardGrid(items: cards, minWidth: 320, maxColumns: 3, spacing: 14) { PositionCardView(card: $0, report: report) }
             }
-            .padding(DS.Space.page)
+            .frame(maxWidth: 1172, alignment: .leading)
+            .padding(.horizontal, 24).padding(.vertical, 20)
+            .frame(maxWidth: .infinity)
         }
     }
 }
@@ -108,43 +110,43 @@ private struct PositionCardView: View {
         let color = Palette.verdict(card.verdict?.level ?? "grey")
         let visible = showAll ? card.entries : Array(card.entries.prefix(shown))
         VStack(alignment: .leading, spacing: 0) {
-            HStack(alignment: .firstTextBaseline, spacing: 8) {
-                Text(card.info.slot).slotFont(22)
-                Text(card.info.name).foregroundStyle(.secondary)
-                Spacer()
+            // the design's card head: code, name, the "with / without the ball" note, the status pill; a rule under
+            HStack(alignment: .center, spacing: 8) {
+                VStack(alignment: .leading, spacing: 2) {
+                    HStack(spacing: 8) {
+                        Text(card.info.slot).font(.system(size: 15, weight: .bold))
+                        Text(card.info.name).font(.system(size: 12)).foregroundStyle(.secondary).lineLimit(1)
+                    }
+                    if card.info.twoPhases {
+                        Text("\(card.info.ip) with the ball · \(card.info.oop) without it")
+                            .font(.system(size: 10.5)).foregroundStyle(.tertiary)
+                    }
+                }
+                Spacer(minLength: 4)
                 if let v = card.verdict {
-                    Text(v.title)
-                        .font(.caption.weight(.bold))
-                        .padding(.horizontal, 8).padding(.vertical, 2)
-                        .foregroundStyle(v.level == "grey" ? Color.secondary : color)
-                        .background(color.opacity(0.16), in: Capsule())
-                        .help(v.text)
+                    Badge(label: v.title, color: v.level == "grey" ? .secondary : color).help(v.text)
                 }
             }
-            .padding(.horizontal, 12).padding(.top, 10).padding(.bottom, 8)
-            if card.info.twoPhases {
-                Text("\(card.info.ip) with the ball · \(card.info.oop) without it")
-                    .font(.caption).foregroundStyle(.secondary)
-                    .padding(.horizontal, 12).padding(.bottom, 6)
-            }
-            Divider()
+            .padding(14)
+            .overlay(alignment: .bottom) { Rectangle().fill(Color.primary.opacity(0.06)).frame(height: 1) }
             if card.entries.isEmpty {
-                Text("Nobody can play here.").foregroundStyle(.secondary).padding(12)
+                Text("Nobody can play here.").font(.system(size: 12)).foregroundStyle(.secondary).padding(14)
             }
-            ForEach(visible) { e in
+            ForEach(Array(visible.enumerated()), id: \.element.id) { i, e in
+                if i > 0 { Rectangle().fill(Color.primary.opacity(0.05)).frame(height: 1) }
                 PositionRow(entry: e, card: card, report: report)
-                Divider().opacity(0.5)
             }
             if card.entries.count > shown || card.moreYouth > 0 || !card.halfOK.isEmpty {
+                Rectangle().fill(Color.primary.opacity(0.05)).frame(height: 1)
                 if showAll {
                     if card.moreYouth > 0 {
-                        Text("+\(card.moreYouth) more in your youth teams").font(.caption).foregroundStyle(.secondary)
-                            .padding(.horizontal, 12).padding(.top, 6)
+                        Text("+\(card.moreYouth) more in your youth teams").font(.system(size: 11)).foregroundStyle(.tertiary)
+                            .padding(.horizontal, 14).padding(.top, 8)
                     }
                     if !card.halfOK.isEmpty {
                         Text("Not listed: your tactic needs \(card.info.ip) in possession and \(card.info.oop) out of it. \(card.halfOK.joined(separator: ", "))")
-                            .font(.caption).foregroundStyle(.secondary)
-                            .padding(.horizontal, 12).padding(.top, 6)
+                            .font(.system(size: 11)).foregroundStyle(.tertiary)
+                            .padding(.horizontal, 14).padding(.top, 8)
                     }
                 }
                 Button {
@@ -152,20 +154,20 @@ private struct PositionCardView: View {
                 } label: {
                     HStack(spacing: 4) {
                         Text(showAll ? "Show fewer" : moreLabel(shown))
-                        Image(systemName: showAll ? "chevron.up" : "chevron.down").font(.caption2.weight(.bold)).accessibilityHidden(true)
+                        Image(systemName: showAll ? "chevron.up" : "chevron.down").font(.system(size: 9, weight: .bold)).accessibilityHidden(true)
                     }
-                    .font(.callout.weight(.semibold))
+                    .font(.system(size: 11.5, weight: .medium))
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal, 12).padding(.vertical, 8)
+                    .padding(.horizontal, 14).frame(height: 32)
                     .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
                 .foregroundStyle(.secondary)
             }
+            Spacer(minLength: 0)
         }
-        .panelFill()
-        .overlay(alignment: .top) { Rectangle().fill(color).frame(height: 3) }
-        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .hubCard()
         .accessibilityElement(children: .contain)
         .accessibilityLabel("\(card.info.name): \(card.verdict?.title ?? "")")
     }
@@ -177,12 +179,13 @@ private struct PositionCardView: View {
     }
 }
 
-/// One line per player: familiarity, name, markers, stars, age. Details are in the hover text and the card.
+/// One 36 pt line per player (the design's rows): familiarity, name, markers | potential, games, stars, age.
 private struct PositionRow: View {
     let entry: PositionEntry
     let card: PositionCard
     let report: Report
     @State private var showCard = false
+    @State private var hover = false
     @AppStorage("showPotential") private var showPotential = true
 
     var body: some View {
@@ -191,111 +194,88 @@ private struct PositionRow: View {
         Button {
             showCard = true
         } label: {
-            HStack(spacing: 6) {
+            HStack(spacing: 8) {
                 FamiliarityBadge(code: entry.rating.fam)
-                Text(p.name).fontWeight(.semibold).lineLimit(1).truncationMode(.tail)
+                Text(p.name).font(.system(size: 12, weight: .medium)).lineLimit(1).truncationMode(.tail)
+                if p.youth {
+                    Text("youth").font(.system(size: 10)).foregroundStyle(.secondary)
+                        .padding(.horizontal, 6).padding(.vertical, 1)
+                        .background(Color.primary.opacity(0.06), in: RoundedRectangle(cornerRadius: 4, style: .continuous))
+                }
+                // statuses keep their own symbol and colour (his rule: injured, banned, loans and moves stay distinct)
                 ForEach(statuses.filter { $0.kind != .expiring }.prefix(2)) { StatusMarker(status: $0) }
-                if p.youth { Tag(text: "youth", color: .secondary) }
-                Spacer(minLength: 4)
                 if !entry.weak.isEmpty {
-                    Image(systemName: "exclamationmark.triangle.fill")
-                        .foregroundStyle(Palette.verdict("amber"))
-                        .font(.caption)
+                    Image(systemName: "exclamationmark.triangle").font(.system(size: 10)).foregroundStyle(DS.Delta.warn)
                         .help("Weak in one phase: your \(card.info.slot) plays \(card.info.ip) with the ball and \(card.info.oop) without it, and he's only \(entry.weak.joined(separator: ", ")).")
                         .accessibilityLabel("Weak in one phase: \(entry.weak.joined(separator: ", "))")
                 }
+                Spacer(minLength: 4)
                 if showPotential, let pot = p.potential {
-                    Text("pot \(Fmt.stars(pot))★")
-                        .font(.system(size: 10, weight: .bold))
-                        .foregroundStyle(Palette.potential)
-                        .padding(.horizontal, 4).padding(.vertical, 1)
+                    Text("pot \(String(format: "%.1f", pot))★")
+                        .font(.system(size: 10, weight: .medium)).foregroundStyle(Palette.potential)
+                        .padding(.horizontal, 6).padding(.vertical, 1)
+                        .background(Palette.potential.opacity(0.12), in: RoundedRectangle(cornerRadius: 4, style: .continuous))
+                        .overlay(RoundedRectangle(cornerRadius: 4, style: .continuous).strokeBorder(Palette.potential.opacity(0.2)))
                         .fixedSize()
-                    .overlay(RoundedRectangle(cornerRadius: 4).strokeBorder(Palette.potential.opacity(0.55), style: StrokeStyle(lineWidth: 1, dash: [2, 2])))
-                    .help("Potential: could reach \(Fmt.stars(pot))★ (from FM's hidden potential)")
-                    .accessibilityLabel("Potential \(Fmt.stars(pot)) stars")
+                        .help("Potential: could reach \(Fmt.stars(pot))★ (from FM's hidden potential)")
+                        .accessibilityLabel("Potential \(Fmt.stars(pot)) stars")
                 }
-                if entry.games > 0 {
-                    let many = entry.games >= (report.positions?.playedMany ?? 5)
-                    Text("\(entry.games)")
-                        .font(.system(size: 11, weight: many ? .semibold : .regular)).monospacedDigit()
-                        .foregroundStyle(many ? AnyShapeStyle(Palette.loanIn) : AnyShapeStyle(.tertiary))
-                        .frame(minWidth: 16, alignment: .trailing)
-                        .help("\(entry.games) games at \(card.info.slot) this season")
-                }
-                StarsView(value: entry.rating.stars).fixedSize()
-                Text(p.age.map(String.init) ?? "").font(.caption).foregroundStyle(.secondary).monospacedDigit()
-                    .frame(width: 20, alignment: .trailing)
+                Text(entry.games > 0 ? "\(entry.games)" : "")
+                    .font(.system(size: 11, weight: .semibold)).monospacedDigit().foregroundStyle(Palette.loanIn)
+                    .frame(width: 18, alignment: .trailing)
+                    .help(entry.games > 0 ? "\(entry.games) games at \(card.info.slot) this season" : "")
+                StarsView(value: entry.rating.stars, size: 10).fixedSize()
+                Text(p.age.map(String.init) ?? "").font(.system(size: 11)).foregroundStyle(.tertiary).monospacedDigit()
+                    .frame(width: 18, alignment: .trailing)
             }
-            .font(.callout)
-            .padding(.horizontal, 12).padding(.vertical, 5)
-            .background(rowTint)
+            .padding(.horizontal, 14)
+            .frame(height: 36)
+            .background(hover ? Color.primary.opacity(0.04) : .clear)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        .onHover { hover = $0 }
         .playerActions(p)
         .popover(isPresented: $showCard, arrowEdge: .trailing) {
             PlayerCard(player: p, slotLabel: card.info.slot, card: card.info.slot, row: nil, report: report)
         }
         .accessibilityElement(children: .combine)
     }
-
-    /// Green: one of his natural positions. Blue: not natural, but he's played here a lot this season.
-    private var rowTint: Color {
-        if entry.natural { return Palette.transferIn.opacity(0.10) }
-        if entry.games >= (report.positions?.playedMany ?? 5) { return Palette.loanIn.opacity(0.13) }
-        return .clear
-    }
 }
 
-private struct Tag: View {
-    let text: String
-    let color: Color
-
-    var body: some View {
-        Text(text)
-            .font(.system(size: 9.5, weight: .bold))
-            .fixedSize()
-            .padding(.horizontal, 4).padding(.vertical, 0.5)
-            .foregroundStyle(color)
-            .overlay(RoundedRectangle(cornerRadius: 4).stroke(color.opacity(0.6)))
-    }
-}
-
-/// The key, each item explaining itself on hover.
+/// The design's key bar: one line, each item explaining itself on hover.
 private struct PositionsKey: View {
     let report: Report
 
     var body: some View {
-        let many = report.positions?.playedMany ?? 5
         let two = report.positions?.cards.first(where: \.twoPhases)
-        FlowRow(spacing: 16) {
+        FlowRow(spacing: 20) {
             item({ HStack(spacing: 2) { FamiliarityBadge(code: "N"); FamiliarityBadge(code: "A") } }, "natural / accomplished",
                  "How well he knows the position, from FM's own position ratings: N natural, A accomplished.")
-            item({ swatch(Palette.transferIn.opacity(0.35)) }, "natural position", "Green row: one of his natural positions, where he's most at home.")
-            item({ swatch(Palette.loanIn.opacity(0.4)) }, "played there \(many)+ times",
-                 "Blue row: not natural for him, but he's played here in \(many) or more matches this season.")
-            item({ Text("7").font(.caption2.weight(.heavy)).foregroundStyle(Palette.loanIn) }, "games there this season",
-                 "Matches he's played in this position this season, from the game's own match data.")
-            item({ Image(systemName: "exclamationmark.triangle.fill").foregroundStyle(Palette.verdict("amber")) }, "weak in one phase",
-                 two.map { "Your \($0.slot) is a \($0.ip) with the ball and a \($0.oop) without it. The warning means he knows one of those well but not the other, so he'll be a bit off in that half of the game." }
-                 ?? "He knows the position in one phase of play but not the other.")
-            item({ Text("pot 4★").font(.system(size: 10, weight: .bold)).foregroundStyle(Palette.potential) }, "potential",
+            item({ Text("13").font(.system(size: 11.5, weight: .semibold)).monospacedDigit().foregroundStyle(Palette.loanIn) },
+                 "appearances this season", "Matches he's played in this position this season, from the game's own match data.")
+            item({
+                Text("pot 4.0★").font(.system(size: 10, weight: .medium)).foregroundStyle(Palette.potential)
+                    .padding(.horizontal, 6).padding(.vertical, 1)
+                    .background(Palette.potential.opacity(0.15), in: RoundedRectangle(cornerRadius: 4, style: .continuous))
+            }, "high potential",
                  "How good he could become, from FM's hidden potential: the only hidden number this app shows, and only for players 23 and under.")
-            item({ Image(systemName: "cross.case.fill").foregroundStyle(Palette.injuryShort) }, "status",
-                 "Injuries, bans, loans and moves, each with its own symbol and colour. Hover one for the details.")
+            item({ Image(systemName: "exclamationmark.triangle").font(.system(size: 10)).foregroundStyle(DS.Delta.warn) }, "phase gap / injury",
+                 two.map { "The triangle: your \($0.slot) is a \($0.ip) with the ball and a \($0.oop) without it, and he knows only one of those well. Injuries, bans and moves have their own symbols; hover one for the details." }
+                 ?? "He knows the position in one phase of play but not the other.")
         }
-        .font(.callout)
+        .font(.system(size: 11.5))
         .foregroundStyle(.secondary)
-    }
-
-    private func swatch(_ color: Color) -> some View {
-        RoundedRectangle(cornerRadius: 4).fill(color).frame(width: 14, height: 14)
+        .padding(.horizontal, 14).padding(.vertical, 8)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color.primary.opacity(0.03), in: RoundedRectangle(cornerRadius: 8, style: .continuous))   // the design's 8 pt bar
+        .overlay(RoundedRectangle(cornerRadius: 8, style: .continuous).strokeBorder(Color.primary.opacity(0.07)))
     }
 
     private func item<V: View>(@ViewBuilder _ visual: () -> V, _ label: String, _ help: String) -> some View {
         HStack(spacing: 6) {
             visual()
-            Text(label).underline(pattern: .dot, color: .secondary.opacity(0.6))
+            Text(label)
         }
         .help(help)
         .accessibilityElement(children: .ignore)

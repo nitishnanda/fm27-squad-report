@@ -113,6 +113,103 @@ extension HubHeader where Trailing == EmptyView {
     init(title: String, sub: String) { self.init(title: title, sub: sub, trailing: { EmptyView() }) }
 }
 
+/// The design's page header: 22 pt bold title, a 12.5 pt line under it, controls on the right.
+struct PageHeader<Trailing: View>: View {
+    let title: String
+    let sub: String
+    @ViewBuilder var trailing: () -> Trailing
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 16) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title).displayFont(22, .bold).accessibilityAddTraits(.isHeader)
+                Text(sub).font(.system(size: 12.5)).foregroundStyle(.secondary)
+            }
+            Spacer(minLength: 8)
+            trailing()
+        }
+    }
+}
+
+extension PageHeader where Trailing == EmptyView {
+    init(title: String, sub: String) { self.init(title: title, sub: sub, trailing: { EmptyView() }) }
+}
+
+/// The design's pill switch: a capsule track, the picked option raised.
+struct PillPicker<Value: Hashable>: View {
+    let options: [(String, Value)]
+    @Binding var selection: Value
+
+    var body: some View {
+        HStack(spacing: 0) {
+            ForEach(Array(options.enumerated()), id: \.offset) { _, o in
+                Button { selection = o.1 } label: {
+                    Text(o.0).font(.system(size: 11.5, weight: .medium)).monospacedDigit()
+                        .foregroundStyle(selection == o.1 ? .primary : .secondary)
+                        .padding(.horizontal, 10).padding(.vertical, 4)
+                        .background(selection == o.1 ? Color.primary.opacity(0.08) : .clear, in: Capsule())
+                        .contentShape(Capsule())
+                }
+                .buttonStyle(.plain)
+                .accessibilityAddTraits(selection == o.1 ? .isSelected : [])
+            }
+        }
+        .padding(2)
+        .background(Color.primary.opacity(0.03), in: Capsule())
+        .overlay(Capsule().strokeBorder(Color.primary.opacity(0.09)))
+        .animation(.easeOut(duration: 0.14), value: selection)
+    }
+}
+
+/// The design's small capsule action (e.g. "Copy as Image"): 32 pt, card fill, 1 pt edge.
+struct CapsuleAction: View {
+    let title: String
+    let symbol: String
+    var tint: Color = Palette.brandHigh
+    let action: () -> Void
+    @State private var hover = false
+
+    var body: some View {
+        Button(action: action) {
+            Label(title, systemImage: symbol)
+                .font(.system(size: 12, weight: .medium))
+                .foregroundStyle(tint)
+                .padding(.horizontal, 12).frame(height: 32)
+                .background(Color.primary.opacity(hover ? 0.07 : 0.04), in: Capsule())
+                .overlay(Capsule().strokeBorder(Color.primary.opacity(0.09)))
+                .contentShape(Capsule())
+        }
+        .buttonStyle(.plain)
+        .onHover { hover = $0 }
+    }
+}
+
+/// A grid whose rows are as tall as their tallest card (like the design's CSS grids): up to `maxColumns` across,
+/// fewer when the window is narrow.
+struct CardGrid<Item: Identifiable, Content: View>: View {
+    let items: [Item]
+    var minWidth: CGFloat = 320
+    var maxColumns = 3
+    var spacing: CGFloat = 12
+    @ViewBuilder var content: (Item) -> Content
+    @State private var width: CGFloat = 1100
+
+    var body: some View {
+        let across = max(1, min(maxColumns, Int((width + spacing) / (minWidth + spacing))))
+        let rows = stride(from: 0, to: items.count, by: across).map { Array(items[$0..<min($0 + across, items.count)]) }
+        Grid(horizontalSpacing: spacing, verticalSpacing: spacing) {
+            ForEach(Array(rows.enumerated()), id: \.offset) { _, row in
+                GridRow {
+                    ForEach(row) { content($0).frame(maxHeight: .infinity, alignment: .top) }
+                    ForEach(0..<(across - row.count), id: \.self) { _ in Color.clear.gridCellUnsizedAxes([.horizontal, .vertical]) }
+                }
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .onGeometryChange(for: CGFloat.self, of: { $0.size.width }) { width = $0 }
+    }
+}
+
 let positionNames = [
     "GK": "Goalkeeper", "LB": "Left Back", "CB": "Centre Back", "RB": "Right Back", "DM": "Defensive Mid",
     "CM": "Central Mid", "AM": "Attacking Mid", "LW": "Left Wing", "RW": "Right Wing", "ST": "Striker",

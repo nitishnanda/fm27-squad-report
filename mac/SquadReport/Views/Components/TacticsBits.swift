@@ -8,18 +8,18 @@ struct RankStrip: View {
 
     var body: some View {
         let cut = max(3, Int((Double(of) * 0.25).rounded()))
-        HStack(spacing: 2) {
+        // the design's rank strip: one 6 pt capsule per team, yours solid and a little taller with a light ring
+        HStack(spacing: 4) {
             ForEach(1...max(of, 1), id: \.self) { k in
-                RoundedRectangle(cornerRadius: 4)
+                Capsule()
                     .fill(color(k, cut: cut))
-                    .frame(height: 7)
-                    .overlay {
-                        if k == rank {
-                            RoundedRectangle(cornerRadius: 4).stroke((good ? Palette.transferIn : Palette.injuryLong).opacity(0.5), lineWidth: 3)
-                        }
-                    }
+                    .frame(height: k == rank ? 8 : 6)
+                    .overlay { if k == rank { Capsule().strokeBorder(Color.white.opacity(0.4), lineWidth: 1) } }
+                    .help("\(Fmt.ordinal(k)) of \(of)")
             }
         }
+        .frame(height: 8)
+        .padding(.vertical, 6)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("\(Fmt.ordinal(rank)) of \(of)")
     }

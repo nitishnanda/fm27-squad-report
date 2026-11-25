@@ -11,23 +11,42 @@ struct TacticalFitView: View {
     }
     @State private var part: Part = .going
 
+    /// The design's tab pills: the picked part in signal green.
     private var partPicker: some View {
-        Picker("Part", selection: $part) {
+        HStack(spacing: 0) {
             ForEach(Part.allCases) { p in
-                Text(p == .style ? (report.style?.name ?? "Style") : p.rawValue).tag(p)
+                let on = part == p
+                Button { part = p } label: {
+                    Text(p == .style ? (report.style?.name ?? "Style") : p.rawValue).font(.system(size: 11.5, weight: .medium))
+                        .foregroundStyle(on ? Palette.brandHigh : .secondary)
+                        .padding(.horizontal, 12).padding(.vertical, 4)
+                        .background(on ? Palette.brandHigh.opacity(0.2) : .clear, in: Capsule())
+                        .overlay(Capsule().strokeBorder(on ? Palette.brandHigh.opacity(0.3) : .clear))
+                        .contentShape(Capsule())
+                }
+                .buttonStyle(.plain)
+                .accessibilityAddTraits(on ? .isSelected : [])
             }
         }
-        .pickerStyle(.segmented)
-        .labelsHidden()
+        .padding(2)
+        .background(Color.primary.opacity(0.03), in: Capsule())
+        .overlay(Capsule().strokeBorder(Color.primary.opacity(0.08)))
         .fixedSize()
+        .animation(.easeOut(duration: 0.14), value: part)
     }
 
     /// "Gegenpress asks for" and its key attributes: label above the chips next to the picker, beside them under it.
     @ViewBuilder private func styleChips(stacked: Bool) -> some View {
         if let style = report.style {
-            let label = Text("\(style.name) asks for").font(.callout).foregroundStyle(.secondary).fixedSize()
-            let chips = FlowRow(spacing: 4) {
-                ForEach(style.keys, id: \.self) { KeyChip(text: report.label($0), kind: .style) }
+            let label = Text("\(report.formation.title) demands").font(.system(size: 11, weight: .medium)).foregroundStyle(.secondary).fixedSize()
+            // the design's amber attribute chips
+            let chips = FlowRow(spacing: 6) {
+                ForEach(style.keys, id: \.self) { key in
+                    Text(report.label(key)).font(.system(size: 10.5, weight: .medium)).foregroundStyle(DS.Delta.warn)
+                        .padding(.horizontal, 8).padding(.vertical, 2)
+                        .background(DS.Delta.warn.opacity(0.10), in: RoundedRectangle(cornerRadius: 5, style: .continuous))
+                        .overlay(RoundedRectangle(cornerRadius: 5, style: .continuous).strokeBorder(DS.Delta.warn.opacity(0.22)))
+                }
             }
             if stacked {
                 VStack(alignment: .trailing, spacing: 4) { label; chips }
@@ -38,22 +57,21 @@ struct TacticalFitView: View {
     }
 
     var body: some View {
-        VStack(spacing: 0) {
-            // side by side on a wide window; on a narrow one the style chips go under the picker
-            ViewThatFits(in: .horizontal) {
-                HStack(spacing: 14) {
-                    partPicker
-                    Spacer()
-                    styleChips(stacked: true).frame(width: 420, alignment: .trailing)
+        // Laid out from his Figma Make design (TacticalFitView.tsx): tab pills, the page title under them, the style's
+        // demands as amber chips on the right, then the part.
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                ViewThatFits(in: .horizontal) {
+                    HStack(alignment: .top, spacing: 16) {
+                        partPicker
+                        Spacer()
+                        styleChips(stacked: true).frame(maxWidth: 380, alignment: .trailing)
+                    }
+                    VStack(alignment: .leading, spacing: 8) {
+                        partPicker
+                        styleChips(stacked: false)
+                    }
                 }
-                VStack(alignment: .leading, spacing: 8) {
-                    partPicker
-                    styleChips(stacked: false)
-                }
-            }
-            .padding(.horizontal, 24).padding(.vertical, 12)
-            Divider()
-            ScrollView {
                 Group {
                     switch part {
                     case .going: HowItsGoing(report: report)
@@ -63,9 +81,11 @@ struct TacticalFitView: View {
                     case .roles: RoleByRole(report: report)
                     }
                 }
-                .padding(24)
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
+            .frame(maxWidth: 1172, alignment: .leading)
+            .padding(.horizontal, 24).padding(.vertical, 20)
+            .frame(maxWidth: .infinity)
         }
     }
 }
@@ -85,32 +105,45 @@ private struct HowItsGoing: View {
                                        description: Text("Play a few league games and this fills in from the match reports."))
             } else {
                 if let rec = perf.record {
-                    HStack(alignment: .firstTextBaseline, spacing: 12) {
-                        Text(Fmt.ordinal(rec.pos)).numberFont(44)   // dot-matrix is for the Home hero only
+                    // the design's standing strip: position and record on the left, the form on the right
+                    HStack(spacing: 12) {
+                        Text(Fmt.ordinal(rec.pos)).numberFont(24)
                         Text("of \(rec.of) · P\(rec.p) W\(rec.w) D\(rec.d) L\(rec.l) · \(rec.pts) pts · \(rec.gf)–\(rec.ga) goals")
-                            .foregroundStyle(.secondary)
-                        HStack(spacing: 4) {
+                            .font(.system(size: 12.5)).monospacedDigit().foregroundStyle(.secondary)
+                        Spacer(minLength: 8)
+                        HStack(spacing: 6) {
                             ForEach(Array(perf.form.enumerated()), id: \.offset) { _, f in
-                                Text(f.res).font(.system(size: 11, weight: .heavy)).foregroundStyle(.white)
-                                    .frame(width: 22, height: 22).background(Palette.result(f.res), in: RoundedRectangle(cornerRadius: 4))
+                                let c = f.res == "W" ? DS.Delta.up : f.res == "L" ? DS.Delta.down : DS.Delta.flat
+                                Text(f.res).font(.system(size: 10.5, weight: .bold)).foregroundStyle(c)
+                                    .frame(width: 22, height: 20)
+                                    .background(c.opacity(0.15), in: RoundedRectangle(cornerRadius: 4, style: .continuous))
+                                    .overlay(RoundedRectangle(cornerRadius: 4, style: .continuous).strokeBorder(c.opacity(0.3)))
                                     .help("\(f.score) \(f.home ? "vs" : "at") \(f.opp)")
                             }
                         }
                     }
+                    .padding(.horizontal, 16).padding(.vertical, 12)
+                    .hubCard()
                 }
                 let of = metrics.first?.of ?? 20
                 let cut = max(3, Int((Double(of) * 0.25).rounded()))
                 let working = metrics.filter { $0.rank <= cut }.sorted { $0.rank < $1.rank }.prefix(6)
                 let failing = metrics.filter { Double($0.rank) > Double(of) / 2 && $0.above != true }.sorted { $0.rank > $1.rank }.prefix(6)
                 let weakest = metrics.sorted { $0.rank > $1.rank }.prefix(3)
-                HStack(alignment: .top, spacing: 16) {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("What's working").displayFont(20).foregroundStyle(Palette.transferIn)
+                HStack(alignment: .top, spacing: 20) {
+                    VStack(alignment: .leading, spacing: 10) {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("What's working").displayFont(15, .semibold).foregroundStyle(DS.Delta.up)
+                            Text("Where you're in the top quarter of the league").font(.system(size: 12)).foregroundStyle(.secondary)
+                        }
                         if working.isEmpty { Text("Nothing in the top quarter of the league yet.").foregroundStyle(.secondary) }
                         ForEach(Array(working)) { MetricCard(metric: $0, good: true) }
                     }
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("What's not working").displayFont(20).foregroundStyle(Palette.injuryLong)
+                    VStack(alignment: .leading, spacing: 10) {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("What's not working").displayFont(15, .semibold).foregroundStyle(DS.Delta.down)
+                            Text("Where you're below the league average").font(.system(size: 12)).foregroundStyle(.secondary)
+                        }
                         if failing.isEmpty {
                             Text("Nothing is below the league average. Your weakest areas:").foregroundStyle(.secondary)
                             ForEach(Array(weakest)) { MetricCard(metric: $0, good: false) }
@@ -127,7 +160,7 @@ private struct HowItsGoing: View {
                     }
                     .padding(14)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .panel(10)
+                    .hubCard()
                 }
             }
         }
@@ -140,23 +173,27 @@ private struct MetricCard: View {
 
     var body: some View {
         let showUnit = metric.unit != "%" && metric.key != "dist_diff"
-        VStack(alignment: .leading, spacing: 5) {
+        // the design's metric card: name and value, the rank strip, then what it means and where you rank
+        VStack(alignment: .leading, spacing: 0) {
             HStack(alignment: .firstTextBaseline) {
-                Text(metric.label).fontWeight(.semibold)
+                Text(metric.label)
                 Spacer()
                 Text((metric.valueText ?? String(format: "%.2f", metric.value)) + (showUnit ? " \(metric.unit)" : ""))
-                    .fontWeight(.bold).monospacedDigit()
             }
+            .font(.system(size: 13, weight: .semibold)).monospacedDigit()
             RankStrip(rank: metric.rank, of: metric.of, good: good)
-            Text("\(Fmt.ordinal(metric.rank)) of \(metric.of) · league avg \(metric.avgText ?? String(format: "%.2f", metric.avg))")
-                .font(.caption).foregroundStyle(.secondary)
-            Text(good ? metric.good : metric.bad).font(.callout).foregroundStyle(.secondary)
+            HStack(alignment: .firstTextBaseline) {
+                Text(good ? metric.good : metric.bad).foregroundStyle(.secondary)
+                Spacer(minLength: 8)
+                Text("\(Fmt.ordinal(metric.rank)) of \(metric.of) · avg \(metric.avgText ?? String(format: "%.2f", metric.avg))")
+                    .foregroundStyle(.tertiary)
+            }
+            .font(.system(size: 11.5)).monospacedDigit()
         }
-        .padding(12)
+        .padding(14)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .panelFill()
-        .overlay(alignment: .leading) { Rectangle().fill(good ? Palette.transferIn : Palette.injuryLong).frame(width: 3) }
-        .clipShape(RoundedRectangle(cornerRadius: 6))
+        .overlay(alignment: .leading) { Rectangle().fill(good ? DS.Delta.up : DS.Delta.down).frame(width: 2) }
+        .hubCard()
         .accessibilityElement(children: .combine)
     }
 }

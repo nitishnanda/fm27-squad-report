@@ -807,7 +807,8 @@ private struct Notes: View {
 struct SectionTitle: View {
     let title: String
     var sub: String?
-    /// The first title on a page: 28 pt. Sections inside a page: 20 pt (DESIGN.md › Typography).
+    /// The first title on a page: 22 pt bold. Sections inside a page: 16 pt semibold. The line goes underneath
+    /// (his Figma Make design's page and section headers).
     var page = false
     @Environment(\.theme) private var theme
 
@@ -818,10 +819,10 @@ struct SectionTitle: View {
     }
 
     var body: some View {
-        HStack(alignment: .firstTextBaseline, spacing: 12) {
-            Text(title).displayFont(page ? 28 : 20)
+        VStack(alignment: .leading, spacing: 2) {
+            Text(title).displayFont(page ? 22 : 16, page ? .bold : .semibold)
                 .accessibilityAddTraits(.isHeader)
-            if let sub { Text(sub).font(.system(size: 13)).foregroundStyle(.secondary) }
+            if let sub { Text(sub).font(.system(size: page ? 12.5 : 12)).foregroundStyle(.secondary) }
         }
     }
 }

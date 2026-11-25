@@ -2,7 +2,7 @@ import Foundation
 
 /// The six sections and their pages, the same as the web app's navbar (and its #hash routes).
 enum AppSection: Int, CaseIterable, Identifiable, Sendable {
-    case home, team, tactics, sandbox, transfers, stats
+    case home, team, tactics, sandbox, transfers, stats, career
     var id: Int { rawValue }
 
     var title: String {
@@ -13,6 +13,7 @@ enum AppSection: Int, CaseIterable, Identifiable, Sendable {
         case .sandbox: "Sandbox"
         case .transfers: "Transfers"
         case .stats: "Stats"
+        case .career: "Career"
         }
     }
 
@@ -24,12 +25,13 @@ enum AppSection: Int, CaseIterable, Identifiable, Sendable {
         case .sandbox: [.sandbox]
         case .transfers: [.transfers]
         case .stats: [.stats]
+        case .career: [.results, .career]
         }
     }
 }
 
 enum Route: String, CaseIterable, Identifiable, Hashable, Sendable {
-    case home, xis, positions, squad, fit, training, sandbox, transfers, stats
+    case home, xis, positions, squad, fit, training, sandbox, transfers, stats, results, career
     var id: String { rawValue }
 
     var title: String {
@@ -43,6 +45,8 @@ enum Route: String, CaseIterable, Identifiable, Hashable, Sendable {
         case .sandbox: "Sandbox"
         case .transfers: "Transfers"
         case .stats: "Stats"
+        case .results: "Results"
+        case .career: "Career stats"
         }
     }
 
@@ -57,6 +61,8 @@ enum Route: String, CaseIterable, Identifiable, Hashable, Sendable {
         case .sandbox: "slider.horizontal.3"
         case .transfers: "arrow.left.arrow.right"
         case .stats: "list.number"
+        case .results: "calendar"
+        case .career: "trophy"
         }
     }
 
@@ -74,6 +80,8 @@ enum Route: String, CaseIterable, Identifiable, Hashable, Sendable {
         case .sandbox: "sandbox"
         case .transfers: "transfers"
         case .stats: "stats"
+        case .results: "career/results"   // Mac only: the web app has no career pages
+        case .career: "career/stats"
         }
     }
 

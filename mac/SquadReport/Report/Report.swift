@@ -21,6 +21,8 @@ struct Report: Decodable, Sendable {
     let xiLevel: Double?
     let verdicts: [Verdict]
     let performance: Performance
+    /// Your managerial record, kept by the engine across seasons (history.json). Nil from older engines.
+    let career: Career?
     let news: [NewsItem]
     let notes: [String]
     let teamNames: [String: String]?
@@ -433,4 +435,43 @@ struct Player: Decodable, Sendable, Identifiable {
     var isInjured: Bool { status.injury != nil }
     var isSuspended: Bool { status.suspendedMatches != nil }
     func has(_ token: String) -> Bool { status.tokens.contains(token) }
+}
+
+/// The engine's career archive: every first-team result since you took each job, the club's net transfer money per
+/// month (the save has no single fees), and each player's best System ★ while you coached him.
+struct Career: Decodable, Sendable {
+    struct Match: Decodable, Sendable, Identifiable {
+        let date: String
+        let season: String
+        let club: String
+        let comp: String
+        let opp: String
+        let home: Bool
+        let gf: Int
+        let ga: Int
+        var id: String { "\(date)|\(opp)|\(comp)" }
+        var res: String { gf > ga ? "W" : gf < ga ? "L" : "D" }
+        var year: String { String(date.prefix(4)) }
+    }
+    struct Money: Decodable, Sendable {
+        let club: String
+        let month: String   // "2026-01"
+        let net: Double
+    }
+    struct Coached: Decodable, Sendable, Identifiable {
+        let uid: Int
+        let name: String?
+        let club: String?
+        let peak: Double?
+        let slot: String?
+        let peakDate: String?
+        let apps: Int
+        let goals: Int
+        let assists: Int
+        var id: String { "\(club ?? "")|\(uid)" }
+    }
+    let manager: String?
+    let matches: [Match]
+    let money: [Money]
+    let players: [Coached]
 }

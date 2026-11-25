@@ -726,6 +726,10 @@ def build(save, save_path: Path) -> dict:
     hist["runs"].append({"date": today.isoformat(),
                          "stars": {str(p["uid"]): half(p["best"][1][0]) for p in players if p["best"]}})
     hist["runs"] = sorted(hist["runs"], key=lambda r: r["date"])[-40:]
+    try:
+        update_career(save, history, today, my, club.club_name, first_team_id, players)
+    except Exception as exc:  # noqa: BLE001 - the rest of the report doesn't need the career archive
+        notes.append(f"Couldn't update your career record ({type(exc).__name__}).")
     save_history(history)
 
     progress(6)
@@ -745,6 +749,81 @@ def build(save, save_path: Path) -> dict:
                 game_date=today, last_run=last_run["date"] if last_run else None, finances=finances,
                 team_names=team_names, targets=targets, perf=perf, training=training,
                 players=players, xi1=xi1, xi2=xi2, xi_level=xi_level, verdicts=verdicts, fit=fit, notes=notes)
+
+
+def season_label(d: date) -> str:
+    """FM seasons run July to June: 14 Mar 2027 is in 2026/27."""
+    y = d.year if d.month >= 7 else d.year - 1
+    return f"{y}/{str(y + 1)[2:]}"
+
+
+def update_career(save, history: dict, today: date, club_uid: int, club_name: str, first_team_id, players: list) -> None:
+    """Keeps your managerial record in history.json, because the save only holds the current season's fixtures
+    (FM drops last season's calendar at the rollover) and has no career screen to read. Every rebuild adds what's new:
+    first-team results since you took the job, the club's monthly net transfer spend (the save keeps only ~6 months,
+    and no single fees), and each player's best System ★ while you coached him (visible attributes only)."""
+    if first_team_id is None:
+        return
+    mc = next(iter(save.managed_clubs()), None)
+    who = str(getattr(mc, "manager_staff_uid", None) or getattr(mc, "manager_name", None) or "you")
+    car = history.setdefault("career", {}).setdefault(who, {"matches": {}, "money": {}, "players": {}})
+    car["name"] = getattr(mc, "manager_name", None) or car.get("name")
+    start = None   # matches before you took this job aren't yours
+    try:
+        start = next((st.contract_start for st in save.staff() if st.is_human_manager and st.club_uid == club_uid), None)
+    except Exception:  # noqa: BLE001 - older readers / the demo save have no staff list
+        start = None
+    clubs = list(save.clubs())
+    team_name = {t.team_id: (getattr(c, "short_name", None) or c.name) for c in clubs for t in c.teams}
+    comps = {c.id: c.name for c in save.competitions()}
+    for f in save.fixtures():
+        if not f.played or not f.date or f.home_goals is None or f.away_goals is None:
+            continue
+        if first_team_id not in (f.home_team_id, f.away_team_id) or f.date > today or (start and f.date < start):
+            continue
+        home = f.home_team_id == first_team_id
+        opp = f.away_team_id if home else f.home_team_id
+        key = f"{f.date.isoformat()}|{f.home_team_id}|{f.away_team_id}|{f.competition_id}"
+        car["matches"][key] = {
+            "date": f.date.isoformat(), "season": season_label(f.date), "club": club_name, "club_uid": club_uid,
+            "comp": getattr(f, "competition_name", None) or comps.get(f.competition_id) or "Match",
+            "opp": team_name.get(opp) or "?", "home": home,
+            "gf": f.home_goals if home else f.away_goals, "ga": f.away_goals if home else f.home_goals}
+    for m in save.finances():
+        if m.club_uid == club_uid and m.month is not None and getattr(m, "net_transfers", None) is not None:
+            car["money"][f"{club_uid}|{m.month.isoformat()[:7]}"] = {"club": club_name, "month": m.month.isoformat()[:7],
+                                                                    "net": m.net_transfers}
+    for p in players:
+        if p.get("where") != "squad" or not p.get("best"):
+            continue
+        stars = half(p["best"][1][0])
+        e = car["players"].setdefault(f"{club_uid}|{p['uid']}", {"uid": p["uid"], "club": club_name, "peak": 0})
+        e["name"] = p["name"]
+        if stars > e["peak"]:
+            e.update(peak=stars, peak_date=today.isoformat(), slot=p["best"][0])
+        st = p.get("stats") or {}
+        if st.get("apps"):   # this season's first-team numbers, kept per season
+            e.setdefault("seasons", {})[season_label(today)] = {"apps": st.get("apps", 0), "g": st.get("g", 0),
+                                                                "a": st.get("a", 0)}
+
+
+def career_json(history: dict, manager: str | None = None) -> dict | None:
+    """The archive for the Mac app: every result, the money per month, and the best players per club."""
+    careers = history.get("career") or {}
+    if not careers:
+        return None
+    car = careers.get(manager) if manager in careers else max(careers.values(), key=lambda c: len(c.get("matches", {})))
+    players = []
+    for e in car.get("players", {}).values():
+        seasons = (e.get("seasons") or {}).values()
+        players.append({"uid": e["uid"], "name": e.get("name"), "club": e.get("club"), "peak": e.get("peak"),
+                        "slot": e.get("slot"), "peak_date": e.get("peak_date"),
+                        "apps": sum(x.get("apps", 0) for x in seasons), "goals": sum(x.get("g", 0) for x in seasons),
+                        "assists": sum(x.get("a", 0) for x in seasons)})
+    return {"manager": car.get("name"),
+            "matches": sorted(car.get("matches", {}).values(), key=lambda m: m["date"]),
+            "money": sorted(car.get("money", {}).values(), key=lambda m: m["month"]),
+            "players": sorted(players, key=lambda x: (-(x["peak"] or 0), -x["apps"]))}
 
 
 def load_history() -> dict:
@@ -5961,6 +6040,7 @@ def report_json(R: dict) -> dict:
                         "insights": team_insights({m["key"]: m for m in perf.get("metrics") or []}),
                         "min_minutes": PERF_MIN_MINUTES,
                         "players": {str(uid): _perf_player_json(v) for uid, v in (perf.get("players") or {}).items()}},
+        "career": career_json(load_history()),
         "style": {"name": TACTICAL_STYLE, "keys": list(STYLE_KEYS)},
         "attribute_labels": {k: attr_label(k) for k in sorted(NEEDED_ATTRS) if k not in HIDDEN_ATTRS},
         "attribute_abbr": {k: v for k, v in ATTR_ABBR.items() if k not in HIDDEN_ATTRS},

@@ -26,7 +26,7 @@ struct HomeView: View {
 // MARK: - the design's card and bits
 
 /// The design's `card-surface`: a raised panel, 1 pt edge, radius 10, a faint top highlight. Colours stay the look's.
-private struct HubCard: ViewModifier {
+struct HubCard: ViewModifier {
     @Environment(\.theme) private var theme
     var hover = false
 
@@ -51,7 +51,7 @@ private struct HubCard: ViewModifier {
 }
 
 /// A clickable card: the design's `card-surface-interactive` (lifts its fill and edge on hover).
-private struct HubButton<Label: View>: View {
+struct HubButton<Label: View>: View {
     let action: () -> Void
     @ViewBuilder var label: () -> Label
     @State private var hover = false
@@ -68,11 +68,11 @@ private struct HubButton<Label: View>: View {
 }
 
 extension View {
-    fileprivate func hubCard() -> some View { modifier(HubCard()) }
+    func hubCard() -> some View { modifier(HubCard()) }
 }
 
 /// The design's StatusBadge: a capsule, 11 pt medium, tinted fill and edge, optional dot.
-private struct Badge: View {
+struct Badge: View {
     let label: String
     let color: Color
     var dot = false
@@ -92,7 +92,7 @@ private struct Badge: View {
 }
 
 /// The design's section header: 16 pt title with a 12.5 pt line under it.
-private struct HubHeader<Trailing: View>: View {
+struct HubHeader<Trailing: View>: View {
     let title: String
     let sub: String
     @ViewBuilder var trailing: () -> Trailing
@@ -113,7 +113,7 @@ extension HubHeader where Trailing == EmptyView {
     init(title: String, sub: String) { self.init(title: title, sub: sub, trailing: { EmptyView() }) }
 }
 
-private let positionNames = [
+let positionNames = [
     "GK": "Goalkeeper", "LB": "Left Back", "CB": "Centre Back", "RB": "Right Back", "DM": "Defensive Mid",
     "CM": "Central Mid", "AM": "Attacking Mid", "LW": "Left Wing", "RW": "Right Wing", "ST": "Striker",
 ]

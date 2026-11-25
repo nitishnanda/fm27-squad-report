@@ -29,6 +29,36 @@ def relative_links(html: str, at_root: bool) -> str:
     return html.replace('href="/"', 'href="../"')
 
 
+def seed_career(path: Path) -> None:
+    """The demo save only has this season. Invent 2025/26 at Brighton (results, money, players), all made up, so the
+    Results and Career pages show a two-club career like a real one would after a few seasons."""
+    import random
+    from datetime import date, timedelta
+    rnd = random.Random(27)
+    opps = ["Arsenal", "Chelsea", "Man City", "Man Utd", "Spurs", "Newcastle", "Aston Villa", "West Ham", "Everton",
+            "Fulham", "Brentford", "Wolves", "Bournemouth", "Forest", "Crystal Palace", "Leeds", "Burnley", "Sunderland",
+            "Liverpool"]
+    matches, day = {}, date(2025, 8, 16)
+    for i in range(46):
+        comp = "Premier League" if i % 5 else ("FA Cup" if i % 2 else "EFL Cup")
+        gf, ga = rnd.choice([0, 1, 1, 2, 2, 3, 4]), rnd.choice([0, 0, 1, 1, 2, 3])
+        key = f"{day.isoformat()}|9{i}|8{i}|{comp}"
+        matches[key] = {"date": day.isoformat(), "season": "2025/26", "club": "Brighton", "club_uid": 9001, "comp": comp,
+                        "opp": opps[i % len(opps)], "home": i % 2 == 0, "gf": gf, "ga": ga}
+        day += timedelta(days=rnd.choice([6, 7, 7, 8]))
+    money = {f"9001|{m}": {"club": "Brighton", "month": m, "net": n} for m, n in
+             [("2025-07", -38_500_000), ("2025-08", -12_000_000), ("2025-09", 4_000_000), ("2026-01", -21_750_000),
+              ("2026-02", 1_500_000), ("2026-06", 55_000_000)]}
+    players = {f"9001|{u}": {"uid": u, "club": "Brighton", "name": n, "peak": pk, "slot": sl, "peak_date": "2026-04-30",
+                             "seasons": {"2025/26": {"apps": ap, "g": g, "a": a}}}
+               for u, n, pk, sl, ap, g, a in [(900101, "Kaoru Mitoma", 4.5, "LW", 41, 11, 9),
+                                              (900102, "Carlos Baleba", 4.5, "DM", 44, 3, 4),
+                                              (900103, "João Pedro", 4.0, "ST", 39, 18, 6),
+                                              (900104, "Bart Verbruggen", 4.0, "GK", 46, 0, 0)]}
+    path.write_text(json.dumps({"career": {"Demo Manager": {"name": "Demo Manager", "matches": matches, "money": money,
+                                                    "players": players}}}))
+
+
 def main() -> None:
     out = ROOT / "docs"
     if out.exists():
@@ -44,13 +74,15 @@ def main() -> None:
         fm.SCOUTING_FILE = Path(tmp) / "scouting.txt"   # never touch your real scouting list
         fm.SCOUTING_FILE.write_text(f"{listed.name}, {listed.club_name} [{listed.uid}]\n", encoding="utf-8")
         save.squad_planner = lambda: [SimpleNamespace(player_uids=[planned.uid])]
+        seed_career(fm.HISTORY_FILE)   # a made-up earlier season, so the Career pages have more than one season
         report = fm.build(save, Path("Demo career.fm"))
+        report_data = fm.report_json(report)   # while the scratch history still exists
     (out / "app" / "index.html").write_text(relative_links(fm.render(report), at_root=False), encoding="utf-8")
     (out / "index.html").write_text(relative_links(fm.landing_page(), at_root=True), encoding="utf-8")
     # the same made-up report as JSON, for the Mac app's previews and tests
     fixtures = ROOT / "mac" / "Fixtures"
     fixtures.mkdir(parents=True, exist_ok=True)
-    (fixtures / "report.json").write_text(json.dumps(fm.report_json(report), ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    (fixtures / "report.json").write_text(json.dumps(report_data, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     shutil.copytree(ROOT / "assets", out / "assets")
     (out / ".nojekyll").write_text("")                 # GitHub Pages: serve the files as they are
     print(f"Built {out}/index.html, {out}/app/index.html and {fixtures}/report.json")

@@ -91,6 +91,7 @@ private struct Sidebar: View {
                 row(.transfers)
                 row(.stats)
             }
+            Section("Career") { ForEach(AppSection.career.pages) { row($0) } }
         }
         .listStyle(.sidebar)
         .tint(Palette.brand)     // the app's own green for the selection, white text on it, like a system accent
@@ -169,6 +170,8 @@ private struct Detail: View {
         case .training: TrainingView(report: report)
         case .transfers: TransfersView(report: report)
         case .stats: StatsView(report: report)
+        case .results: ResultsView(report: report)
+        case .career: CareerView(report: report)
         case .sandbox: SandboxView(report: report)
         }
     }

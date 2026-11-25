@@ -254,7 +254,7 @@ class FakeSave:
         self.fixtures_, self.tms_, self.pms_, self.season_, self.table_ = league_season(self.clubs_, self.players_)
         self.info = NS(game_date=TODAY, save_name="Demo career", known_build=True, build="27.0.0")
 
-    def managed_clubs(self): return [NS(club_uid=1, club_name="Liverpool")]
+    def managed_clubs(self): return [NS(club_uid=1, club_name="Liverpool", manager_name="Demo Manager")]
     def players(self): return iter(self.players_)
     def contracts(self): return iter(self.contracts_)
     def injuries(self): return iter(self.injuries_)

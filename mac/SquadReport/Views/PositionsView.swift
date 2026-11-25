@@ -9,13 +9,13 @@ struct PositionsView: View {
         let cards = PositionCards.build(report)
         ScrollView {
             VStack(alignment: .leading, spacing: 14) {
-                SectionTitle("Position by position", sub: "everyone who can play there · positions that need work first · click a player for his card")
+                SectionTitle("Position by position", sub: "everyone who can play there · positions that need work first · click a player for his card", page: true)
                 PositionsKey(report: report)
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 330), spacing: 14, alignment: .top)], spacing: 14) {
                     ForEach(cards) { PositionCardView(card: $0, report: report) }
                 }
             }
-            .padding(28)
+            .padding(DS.Space.page)
         }
     }
 }
@@ -215,13 +215,11 @@ private struct PositionRow: View {
                     .accessibilityLabel("Potential \(Fmt.stars(pot)) stars")
                 }
                 if entry.games > 0 {
+                    let many = entry.games >= (report.positions?.playedMany ?? 5)
                     Text("\(entry.games)")
-                        .font(.caption2.weight(.heavy)).monospacedDigit()
-                        .padding(.horizontal, 5).padding(.vertical, 1)
-                        .foregroundStyle(entry.games >= (report.positions?.playedMany ?? 5) ? .white : Palette.loanIn)
-                        .background(entry.games >= (report.positions?.playedMany ?? 5) ? Palette.loanIn.opacity(0.75) : .clear, in: RoundedRectangle(cornerRadius: 4))
-                        .overlay(RoundedRectangle(cornerRadius: 4).stroke(Palette.loanIn.opacity(0.6)))
-                        .fixedSize()
+                        .font(.system(size: 11, weight: many ? .semibold : .regular)).monospacedDigit()
+                        .foregroundStyle(many ? AnyShapeStyle(Palette.loanIn) : AnyShapeStyle(.tertiary))
+                        .frame(minWidth: 16, alignment: .trailing)
                         .help("\(entry.games) games at \(card.info.slot) this season")
                 }
                 StarsView(value: entry.rating.stars).fixedSize()
@@ -259,7 +257,7 @@ private struct Tag: View {
             .fixedSize()
             .padding(.horizontal, 4).padding(.vertical, 0.5)
             .foregroundStyle(color)
-            .overlay(RoundedRectangle(cornerRadius: 3).stroke(color.opacity(0.6)))
+            .overlay(RoundedRectangle(cornerRadius: 4).stroke(color.opacity(0.6)))
     }
 }
 
@@ -291,7 +289,7 @@ private struct PositionsKey: View {
     }
 
     private func swatch(_ color: Color) -> some View {
-        RoundedRectangle(cornerRadius: 3).fill(color).frame(width: 14, height: 14)
+        RoundedRectangle(cornerRadius: 4).fill(color).frame(width: 14, height: 14)
     }
 
     private func item<V: View>(@ViewBuilder _ visual: () -> V, _ label: String, _ help: String) -> some View {

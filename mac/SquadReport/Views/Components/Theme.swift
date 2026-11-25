@@ -221,8 +221,16 @@ struct Theme: Sendable {
         case .original: Palette.star
         case .programme: kitOnLight
         case .floodlit: Color(hex: "#F4C95D")
-        case .scoreboard, .glass: Color(hex: "#4FC77F")
+        case .scoreboard, .glass: Palette.star        // ratings are gold, never the "good" green (DESIGN.md)
         case .sticker: Color(hex: "#111111")
+        }
+    }
+    /// The page background as a colour, where the look has a flat one: the sidebar uses it too (one surface, like Linear).
+    var canvas: Color? {
+        switch look {
+        case .scoreboard: DS.Surface.canvas
+        case .floodlit, .glass: Color(hex: "#06110C")
+        default: nil
         }
     }
     var accent: Color {
@@ -244,9 +252,9 @@ struct Theme: Sendable {
         switch look {
         case .floodlit, .glass: 22
         case .programme: 0
-        case .scoreboard: 4
-        case .sticker: 16
-        case .original: 12
+        case .scoreboard: 10
+        case .sticker: 14
+        case .original: 10
         }
     }
     var pitchStripes: (Color, Color) {
@@ -270,7 +278,7 @@ struct Theme: Sendable {
         switch look {
         case .original: Color(hex: "#275A37")
         case .programme: Color(hex: "#1A1A17")
-        case .scoreboard: Color(hex: "#232825")
+        case .scoreboard: DS.Surface.hairline
         case .sticker: Color(hex: "#111111")
         default: .white.opacity(0.1)
         }
@@ -280,7 +288,7 @@ struct Theme: Sendable {
         case .original: Color(hex: "#0E1512").opacity(0.94)
         case .floodlit, .glass: Color(hex: "#09160F").opacity(0.86)
         case .programme: Color(hex: "#151512")
-        case .scoreboard: Color(hex: "#141816")
+        case .scoreboard: DS.Surface.panel
         case .sticker: Color(hex: "#111111")
         }
     }
@@ -362,9 +370,9 @@ private struct PanelModifier: ViewModifier {
             // the programme: no box, a printed rule across the top
             content.overlay(alignment: .top) { Rectangle().fill(Color(hex: "#1A1A17")).frame(height: 1).allowsHitTesting(false) }
         case .board:
-            let fill = Color(hex: "#101211")
+            let fill = DS.Surface.panel
             if clip {
-                content.background(fill, in: shape).overlay(shape.strokeBorder(Color(hex: "#232825")).allowsHitTesting(false))
+                content.background(fill, in: shape).overlay(shape.strokeBorder(DS.Surface.hairline).allowsHitTesting(false))
             } else {
                 content.background(fill)
             }
@@ -421,12 +429,12 @@ private struct PageBackground: ViewModifier {
         case .paper:
             content.background(Color(hex: "#F4F4F0").ignoresSafeArea())
         case .board:
-            content.background(Color(hex: "#0A0B0A").ignoresSafeArea())
+            content.background(DS.Surface.canvas.ignoresSafeArea())
         case .mown:
             // the sticker album: every page is a white sticker sheet laid on a mown pitch
             content
-                .background(.white, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-                .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).strokeBorder(Color(hex: "#111111"), lineWidth: 3).allowsHitTesting(false))
+                .background(.white, in: RoundedRectangle(cornerRadius: DS.Radius.container, style: .continuous))
+                .overlay(RoundedRectangle(cornerRadius: DS.Radius.container, style: .continuous).strokeBorder(Color(hex: "#111111"), lineWidth: 3).allowsHitTesting(false))
                 .compositingGroup()
                 .shadow(color: Color(hex: "#111111"), radius: 0, x: 8, y: 8)
                 .padding(.init(top: 12, leading: 12, bottom: 20, trailing: 20))

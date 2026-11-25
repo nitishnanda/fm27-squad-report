@@ -202,7 +202,7 @@ private struct QRCode: View {
     var body: some View {
         if let image = Self.make(text) {
             Image(nsImage: image).interpolation(.none).resizable().scaledToFit()
-                .padding(8).background(.white, in: RoundedRectangle(cornerRadius: 8))
+                .padding(8).background(.white, in: RoundedRectangle(cornerRadius: 6))
                 .accessibilityLabel("QR code for the phone link")
         }
     }

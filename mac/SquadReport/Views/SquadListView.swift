@@ -387,6 +387,7 @@ struct SquadListView: View {
         } primaryAction: { ids in
             if let uid = ids.first { app.inspect(uid) }   // double-click
         }
+        .alternatingRowBackgrounds(.disabled)   // rows guide by alignment, not banding (DESIGN.md › Don'ts)
     }
 }
 
@@ -412,7 +413,7 @@ private struct Summary: View {
         let inn = report.players.filter { p in p.status.moves.contains { $0.kind == "loan_in" } }.count
         let coming = report.players.filter { p in p.status.moves.contains { ["deal_in", "loan_in_arr"].contains($0.kind) } }.count
         let going = report.players.filter { p in p.status.moves.contains { ["deal_out", "loan_out_arr"].contains($0.kind) } }.count
-        return LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 10, alignment: .top), count: across), spacing: 10) {
+        return LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: DS.Space.grid, alignment: .top), count: across), spacing: DS.Space.grid) {
             figure("First team", "\(first.count)", unit: "players",
                    sub: "avg age \(ages.isEmpty ? "–" : String(format: "%.1f", Double(ages.reduce(0, +)) / Double(ages.count))) · \(youthCount) in the youth teams")
             figure("First-team value", Fmt.money(Double(worth)), sub: "FM's transfer values")
@@ -423,15 +424,15 @@ private struct Summary: View {
     }
 
     private func figure(_ label: String, _ value: String, unit: String? = nil, sub: String) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(label).font(.callout).foregroundStyle(.secondary)
+        VStack(alignment: .leading, spacing: DS.Space.xxs) {
+            Text(label).font(.system(size: 12)).foregroundStyle(.secondary)
             HStack(alignment: .firstTextBaseline, spacing: 5) {
                 NumberText(value, size: 28)
                 if let unit { Text(unit).foregroundStyle(.secondary) }
             }
-            Text(sub).font(.caption).foregroundStyle(.secondary).lineLimit(1).minimumScaleFactor(0.85)
+            Text(sub).font(.system(size: 11)).foregroundStyle(.tertiary).lineLimit(1).minimumScaleFactor(0.85)
         }
-        .padding(12)
+        .padding(DS.Space.s)
         .frame(maxWidth: .infinity, minHeight: 86, alignment: .topLeading)
         .frame(minWidth: 140)
         .panel(10)
@@ -444,8 +445,8 @@ private struct Summary: View {
             show = on ? .all : target
         } label: {
             figure(label, "\(n)", sub: sub)
-                .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous)
-                    .strokeBorder(on ? Palette.brandHigh : .clear, lineWidth: 2))
+                .overlay(RoundedRectangle(cornerRadius: DS.Radius.card, style: .continuous)
+                    .strokeBorder(on ? Palette.brandHigh : .clear, lineWidth: 1))
                 .overlay(alignment: .topTrailing) {
                     Text(on ? "Showing" : "Filter")
                         .font(.caption2.weight(.bold))

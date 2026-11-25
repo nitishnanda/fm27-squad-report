@@ -40,8 +40,8 @@ struct FamiliarityBadge: View {
             .font(.system(size: 9, weight: .heavy))
             .frame(width: 14, height: 14)
             .foregroundStyle(code == "N" ? Color(nsColor: .windowBackgroundColor) : .primary)
-            .background(code == "N" ? Color.primary : .clear, in: RoundedRectangle(cornerRadius: 3))
-            .overlay(RoundedRectangle(cornerRadius: 3).stroke(Color.primary.opacity(code == "N" ? 0 : 0.5), lineWidth: 1))
+            .background(code == "N" ? Color.primary : .clear, in: RoundedRectangle(cornerRadius: 4))
+            .overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.primary.opacity(code == "N" ? 0 : 0.5), lineWidth: 1))
             .help(Self.words(code).prefix(1).uppercased() + Self.words(code).dropFirst())
             .accessibilityLabel(Self.words(code))
     }

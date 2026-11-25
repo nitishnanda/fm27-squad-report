@@ -415,7 +415,7 @@ private struct RosterRow: View {
                 Text("\(label) \(Fmt.stars(r.stars))★").font(.caption2.weight(.semibold))
                     .lineLimit(1).fixedSize()
                     .padding(.horizontal, 4).padding(.vertical, 1)
-                    .background(r.fam == "N" ? Color.primary.opacity(0.18) : Color.primary.opacity(0.07), in: RoundedRectangle(cornerRadius: 3))
+                    .background(r.fam == "N" ? Color.primary.opacity(0.18) : Color.primary.opacity(0.07), in: RoundedRectangle(cornerRadius: 4))
             }
         }
     }

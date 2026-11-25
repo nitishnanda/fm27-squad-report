@@ -8,7 +8,7 @@ struct TransfersView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 22) {
-                SectionTitle("Deals & loans")
+                SectionTitle("Deals & loans", page: true)
                 ComingUp(report: report)
                 MoveColumns(report: report)
             }
@@ -183,7 +183,7 @@ private struct ComingUp: View {
         .font(.callout)
         .padding(9)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .panel(8)
+        .panel(10)
         .accessibilityElement(children: .combine)
     }
 }
@@ -253,7 +253,7 @@ private struct MoveColumns: View {
         }
         .frame(maxWidth: .infinity, alignment: .topLeading)
         .panelFill()
-        .clipShape(RoundedRectangle(cornerRadius: 8))
-        .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(kind.color.opacity(0.35), style: StrokeStyle(lineWidth: 1, dash: dashed ? [4, 3] : [])))
+        .clipShape(RoundedRectangle(cornerRadius: 6))
+        .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(kind.color.opacity(0.35), style: StrokeStyle(lineWidth: 1, dash: dashed ? [4, 3] : [])))
     }
 }

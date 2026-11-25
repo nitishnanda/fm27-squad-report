@@ -74,7 +74,7 @@ struct QuickOpen: View {
         }
         .foregroundStyle(selected ? .white : .primary)
         .padding(.horizontal, 10).padding(.vertical, 6)
-        .background(selected ? AnyShapeStyle(.tint) : AnyShapeStyle(.clear), in: RoundedRectangle(cornerRadius: 7))
+        .background(selected ? AnyShapeStyle(.tint) : AnyShapeStyle(.clear), in: RoundedRectangle(cornerRadius: 6))
         .padding(.horizontal, 6)
         .contentShape(Rectangle())
         .accessibilityElement(children: .combine)

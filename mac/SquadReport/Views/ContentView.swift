@@ -79,6 +79,7 @@ private struct InspectorPanel: View {
 
 private struct Sidebar: View {
     @Environment(AppModel.self) private var model
+    @Environment(\.theme) private var theme
 
     var body: some View {
         @Bindable var model = model
@@ -93,6 +94,9 @@ private struct Sidebar: View {
             }
         }
         .listStyle(.sidebar)
+        // the sidebar shares the page's surface where the look has a flat one (never lighter than the canvas)
+        .scrollContentBackground(theme.canvas == nil ? .automatic : .hidden)
+        .background(theme.canvas ?? .clear)
         .tint(Palette.brand)     // the app's own green for the selection, white text on it, like a system accent
     }
 
@@ -214,7 +218,6 @@ struct EngineStatusPill: View {
 
     private var state: (String, Color, Bool) {
         if ReportStore.demoPath != nil { return ("Demo report", .blue, false) }
-        if model.store.fromCache { return ("Opening your last report", .orange, true) }
         if let step = model.store.buildStep { return ("Reading save · \(step.index + 1) of \(step.of)", .orange, true) }
         switch model.engine.phase {
         case .preparing: return ("Setting up", .orange, true)
@@ -224,6 +227,7 @@ struct EngineStatusPill: View {
         case .stopped: return ("Stopped", .secondary, false)
         case .running, .attached:
             if !model.store.reachable { return ("Reconnecting", .orange, true) }
+            if model.store.fromCache { return ("Opening your last report", .orange, true) }
             return ("Up to date", .green, false)
         }
     }

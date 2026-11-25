@@ -1,5 +1,8 @@
 # FM27 Companion: Mac app design rules
 
+In code: `DS` in `mac/SquadReport/Views/Components/DesignTokens.swift` (spacing, radii, surfaces, deltas, tile sizes)
+and `Meter`.
+
 These are strict rules for `mac/`. They come from `REFERENCE_AUDIT.md`: Linear for surfaces, hairlines and rows;
 TradingView for dense numbers, deltas and panel balance; TablePlus for tables.
 
@@ -129,9 +132,11 @@ All corners are `.continuous`. The pitch keeps the look's `pitchRadius`.
 - The window title shows the page name, and the subtitle "Club · date". Nothing on the page repeats either.
 
 ### KPI tile (TradingView detail block)
-- Height **112**, padding 20.
-- **Exactly four rows:** label (12) / value (34) with its unit on the same baseline / meter slot (6) / sub (11).
-- A tile with no meter **keeps the empty 6 pt slot**, so values and subs line up across a row.
+- Height **148**, padding 20 (20 + label 15 + 8 + value 41 + 8 + slot 14 + 8 + sub 14 + 20).
+- **Exactly four rows:** label (12) / value (34) with its unit on the same baseline / a 14 pt slot holding a 6 pt
+  meter or a star row / sub (11).
+- A tile with nothing for the slot **keeps the empty 14 pt slot** (`Color.clear`, not `EmptyView`, which collapses),
+  so values and subs line up across a row.
 - Tiles in a row share one height and one value baseline. Use 2, 3, 4 or 5 per row, always filling the width.
 
 ### Meter

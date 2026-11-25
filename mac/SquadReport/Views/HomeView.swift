@@ -7,14 +7,14 @@ struct HomeView: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 30) {
+            VStack(alignment: .leading, spacing: DS.Space.section) {
                 Hero(report: report)
                 Snapshot(report: report)
                 NeedsWork(report: report)
                 if !report.news.isEmpty { News(items: report.news) }
                 if !report.notes.isEmpty { Notes(notes: report.notes) }
             }
-            .padding(28)
+            .padding(DS.Space.page)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
@@ -31,20 +31,22 @@ private struct Hero: View {
         let kit = Color(hex: report.club.kit)
         let ink = Color(hex: report.club.ink)
         let style = theme.heroStyle
-        let radius: CGFloat = switch style { case .glass: 26; case .paper: 0; case .board: 6; case .sticker: 16; case .kit: 14 }
+        let radius: CGFloat = switch style { case .glass: DS.Radius.container; case .paper: 0; case .board: DS.Radius.card; case .sticker: DS.Radius.container; case .kit: DS.Radius.container }
         let shape = RoundedRectangle(cornerRadius: radius, style: .continuous)
         // wide: the club on the left, your best XI on a 3D pitch on the right (the web's home band); narrower: no pitch
         ViewThatFits(in: .horizontal) {
-            HStack(alignment: .center, spacing: 32) {
-                VStack(alignment: .leading, spacing: 22) { identity; league; openButton }
-                Spacer(minLength: 0)
+            // two columns that share the width (DESIGN.md › Hero): no fixed pitch frame, no dead gap between them
+            HStack(alignment: .center, spacing: DS.Space.xl) {
+                VStack(alignment: .leading, spacing: DS.Space.l) { identity; league; openButton }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 heroPitch
+                    .frame(minWidth: 380, maxWidth: .infinity)
             }
             HStack(alignment: .bottom, spacing: 32) { identity; Spacer(minLength: 0); VStack(alignment: .leading, spacing: 14) { league; openButton } }
             VStack(alignment: .leading, spacing: 24) { identity; league; openButton }
         }
         .foregroundStyle(style == .kit ? ink : Color.primary)
-        .padding(.horizontal, 20).padding(.vertical, 32)   // the same side inset as the cards below
+        .padding(.horizontal, DS.Space.l).padding(.vertical, DS.Space.xl)   // the same side inset as the cards below
         .frame(maxWidth: .infinity, alignment: .leading)
         .background {
             switch style {
@@ -60,7 +62,7 @@ private struct Hero: View {
                     LinearGradient(colors: [.white.opacity(0.08), .clear, .black.opacity(0.22)], startPoint: .topLeading, endPoint: .bottomTrailing)
                 }
             case .paper: Color.clear                       // printed straight on the page
-            case .board: Color(hex: "#101211")
+            case .board: DS.Surface.panel
             case .sticker: Color.white
             }
         }
@@ -73,7 +75,7 @@ private struct Hero: View {
             }
         }
         .clipShape(shape)
-        .overlay(shape.strokeBorder(style == .glass ? Color.white.opacity(0.12) : style == .board ? Color(hex: "#232825")
+        .overlay(shape.strokeBorder(style == .glass ? Color.white.opacity(0.12) : style == .board ? DS.Surface.hairline
                                     : style == .sticker ? Color(hex: "#111111") : .clear, lineWidth: style == .sticker ? 3 : 1))
         .background(style == .sticker ? shape.fill(Color(hex: "#111111")).offset(x: 8, y: 8) : nil)
         .shadow(color: .black.opacity(style == .glass ? 0.5 : 0), radius: 40, y: 30)
@@ -107,7 +109,8 @@ private struct Hero: View {
     private var heroPitch: some View {
         VStack(spacing: 6) {
             Pitch3D(report: report, xi: report.xi1, compact: true)
-                .frame(width: 460, height: 320)
+                .frame(maxWidth: .infinity)
+                .frame(height: 300)
             Text("Your best XI. Drag to rotate.").font(.caption).opacity(0.8)
         }
     }
@@ -116,7 +119,7 @@ private struct Hero: View {
         VStack(alignment: .leading, spacing: 14) {
             Text("FM27 squad report").font(.headline).opacity(0.8)
             Text(report.club.name.uppercased())
-                .heroFont(64)
+                .heroFont(48)
                 .lineLimit(1)
                 .minimumScaleFactor(0.5)
             Grid(alignment: .leading, horizontalSpacing: 28, verticalSpacing: 4) {
@@ -140,7 +143,7 @@ private struct Hero: View {
             VStack(alignment: .leading, spacing: 8) {
                 HStack(alignment: .firstTextBaseline, spacing: 10) {
                     Text(Fmt.ordinal(rec.pos))
-                        .positionFont(60)
+                        .positionFont(44)
                         .foregroundStyle(positionInk)
                         .shadow(color: theme.isGlass || theme.look == .scoreboard ? Palette.brandHigh.opacity(0.45) : .clear, radius: 12)
                     VStack(alignment: .leading, spacing: 1) {
@@ -157,7 +160,7 @@ private struct Hero: View {
                                 .font(.system(size: 11, weight: .heavy))
                                 .foregroundStyle(.white)
                                 .frame(width: 22, height: 22)
-                                .background(Palette.result(f.res), in: RoundedRectangle(cornerRadius: 5))
+                                .background(Palette.result(f.res), in: RoundedRectangle(cornerRadius: 4))
                                 .help("\(f.score) \(f.home ? "vs" : "at") \(f.opp)")
                                 .accessibilityLabel("\(f.res == "W" ? "Won" : f.res == "L" ? "Lost" : "Drew") \(f.score) \(f.home ? "against" : "at") \(f.opp)")
                         }
@@ -187,7 +190,7 @@ private struct Snapshot: View {
         let injured = squad.filter(\.isInjured).count
         let suspended = squad.filter(\.isSuspended).count
         let f = report.finances
-        return LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 12, alignment: .top), count: across), spacing: 12) {
+        return LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: DS.Space.grid, alignment: .top), count: across), spacing: DS.Space.grid) {
             if let left = f.transferLeft {
                 Tile(label: "Transfer budget left", value: Fmt.money(left), sub: "as of \(Fmt.month(f.month)) month-end")
             }
@@ -195,8 +198,7 @@ private struct Snapshot: View {
                 let room = budget - bill
                 Tile(label: "Wage bill / budget (p/w)", value: Fmt.wage(bill), unit: "/ \(Fmt.wage(budget))",
                      sub: "\(Fmt.wage(abs(room)))/wk \(room >= 0 ? "room" : "over")") {
-                    ProgressView(value: min(bill, budget), total: budget)
-                        .tint(room >= 0 ? Palette.brandHigh : Palette.verdict("red"))
+                    Meter(value: min(bill, budget), total: budget, color: room >= 0 ? DS.Delta.up : DS.Delta.down)
                 }
             }
             if let level = report.xiLevel {
@@ -217,20 +219,23 @@ private struct Tile<Extra: View>: View {
     let sub: String
     @ViewBuilder var extra: () -> Extra
 
+    // Always four rows (DESIGN.md › KPI tile): label / value / a 14 pt slot / sub. A tile with nothing for the slot
+    // keeps it empty, so values and subs line up across the row.
     var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text(label).font(.callout).foregroundStyle(.secondary)
+        VStack(alignment: .leading, spacing: DS.Space.xs) {
+            Text(label).font(.system(size: 12)).foregroundStyle(.secondary)
             HStack(alignment: .firstTextBaseline, spacing: 6) {
                 NumberText(value, size: 34)
-                if let unit { Text(unit).foregroundStyle(.secondary) }
+                if let unit { Text(unit).font(.system(size: 13)).foregroundStyle(.secondary) }
             }
-            extra()
-            Text(sub).font(.caption).foregroundStyle(.secondary)
+            ZStack(alignment: .leading) { Color.clear; extra() }   // Color.clear holds the slot even when extra is empty
+                .frame(maxWidth: .infinity, minHeight: DS.tileSlot, maxHeight: DS.tileSlot)
+            Text(sub).font(.system(size: 11)).foregroundStyle(.tertiary).lineLimit(1)
         }
-        .padding(20)
-        .frame(maxWidth: .infinity, minHeight: 150, alignment: .topLeading)
+        .padding(DS.Space.l)
+        .frame(maxWidth: .infinity, minHeight: DS.tileHeight, maxHeight: DS.tileHeight, alignment: .topLeading)
         .frame(minWidth: 180)
-        .panel(10)
+        .panel(DS.Radius.card)
         .accessibilityElement(children: .combine)
     }
 }
@@ -270,11 +275,11 @@ private struct NeedsWork: View {
                         }
                         .padding(10)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .panel(8)
+                        .panel(10)
                         .overlay(alignment: .leading) {
                             Rectangle().fill(Palette.verdict(v.level)).frame(width: 3)
                         }
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .clipShape(RoundedRectangle(cornerRadius: 6))
                         .accessibilityElement(children: .combine)
                     }
                 }
@@ -297,15 +302,18 @@ private struct VerdictCard: View {
                 Text(verdict.slot).slotFont(22)
                 Text(verdict.title).displayFont(15, .bold).foregroundStyle(color)
             }
-            Text(verdict.text).fixedSize(horizontal: false, vertical: true)
+            // two lines at most, so Starter / Backup start at the same height in every card of a row
+            Text(verdict.text)
+                .lineLimit(2, reservesSpace: true)
+                .help(verdict.text)
             people("Starter", "Starters", report.xi1)
             people("Backup", "Backups", report.xi2)
         }
-        .padding(20)
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(DS.Space.m)
+        .frame(maxWidth: .infinity, alignment: .topLeading)
         .panelFill()
-        .overlay(alignment: .leading) { Rectangle().fill(color).frame(width: 4) }
-        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .overlay(alignment: .leading) { Rectangle().fill(color).frame(width: 3) }
+        .clipShape(RoundedRectangle(cornerRadius: DS.Radius.card, style: .continuous))
         .accessibilityElement(children: .combine)
     }
 
@@ -382,18 +390,21 @@ private struct Notes: View {
 struct SectionTitle: View {
     let title: String
     var sub: String?
+    /// The first title on a page: 28 pt. Sections inside a page: 20 pt (DESIGN.md › Typography).
+    var page = false
     @Environment(\.theme) private var theme
 
-    init(_ title: String, sub: String? = nil) {
+    init(_ title: String, sub: String? = nil, page: Bool = false) {
         self.title = title
         self.sub = sub
+        self.page = page
     }
 
     var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: 12) {
-            Text(title).displayFont(26)
+            Text(title).displayFont(page ? 28 : 20)
                 .accessibilityAddTraits(.isHeader)
-            if let sub { Text(sub).font(theme.noteFont ?? .callout).foregroundStyle(.secondary) }
+            if let sub { Text(sub).font(theme.noteFont ?? .system(size: 13)).foregroundStyle(.secondary) }
         }
     }
 }

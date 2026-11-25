@@ -79,20 +79,20 @@ private struct HowItsGoing: View {
         let perf = report.performance
         let metrics = perf.metrics ?? []
         VStack(alignment: .leading, spacing: 18) {
-            SectionTitle("How the tactic is going", sub: "\(perf.leagueName ?? "League") only · from the game's own match stats\(perf.matches.map { " (\($0) of your matches have full reports)" } ?? "") · ranked against all \(metrics.first?.of ?? 20) teams")
+            SectionTitle("How the tactic is going", sub: "\(perf.leagueName ?? "League") only · from the game's own match stats\(perf.matches.map { " (\($0) of your matches have full reports)" } ?? "") · ranked against all \(metrics.first?.of ?? 20) teams", page: true)
             if metrics.isEmpty {
                 ContentUnavailableView("No league match data yet", systemImage: "chart.bar",
                                        description: Text("Play a few league games and this fills in from the match reports."))
             } else {
                 if let rec = perf.record {
                     HStack(alignment: .firstTextBaseline, spacing: 12) {
-                        Text(Fmt.ordinal(rec.pos)).positionFont(44)
+                        Text(Fmt.ordinal(rec.pos)).numberFont(44)   // dot-matrix is for the Home hero only
                         Text("of \(rec.of) · P\(rec.p) W\(rec.w) D\(rec.d) L\(rec.l) · \(rec.pts) pts · \(rec.gf)–\(rec.ga) goals")
                             .foregroundStyle(.secondary)
                         HStack(spacing: 4) {
                             ForEach(Array(perf.form.enumerated()), id: \.offset) { _, f in
                                 Text(f.res).font(.system(size: 11, weight: .heavy)).foregroundStyle(.white)
-                                    .frame(width: 22, height: 22).background(Palette.result(f.res), in: RoundedRectangle(cornerRadius: 5))
+                                    .frame(width: 22, height: 22).background(Palette.result(f.res), in: RoundedRectangle(cornerRadius: 4))
                                     .help("\(f.score) \(f.home ? "vs" : "at") \(f.opp)")
                             }
                         }
@@ -156,7 +156,7 @@ private struct MetricCard: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .panelFill()
         .overlay(alignment: .leading) { Rectangle().fill(good ? Palette.transferIn : Palette.injuryLong).frame(width: 3) }
-        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .clipShape(RoundedRectangle(cornerRadius: 6))
         .accessibilityElement(children: .combine)
     }
 }
@@ -176,7 +176,7 @@ private struct PlayerByPlayer: View {
             .sorted { $0.1.minutes > $1.1.minutes }
         let shown = showAll ? entries : Array(entries.prefix(10))
         VStack(alignment: .leading, spacing: 14) {
-            SectionTitle("Player by player", sub: "league numbers per 90 minutes, ranked against every league player in the same position with \(report.performance.minMinutes ?? 450)+ minutes")
+            SectionTitle("Player by player", sub: "league numbers per 90 minutes, ranked against every league player in the same position with \(report.performance.minMinutes ?? 450)+ minutes", page: true)
             if entries.isEmpty {
                 Text("Nobody has \(report.performance.minMinutes ?? 450)+ league minutes yet.").foregroundStyle(.secondary)
             }
@@ -211,7 +211,7 @@ private struct PerfCard: View {
         }
         .padding(12)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .panel(8)
+        .panel(10)
     }
 
     private func row(_ title: String, _ items: [Performance.PlayerItem], good: Bool) -> some View {
@@ -228,7 +228,7 @@ private struct PerfCard: View {
                         Text("\(good ? "top" : "bottom") \(share)%").foregroundStyle(.secondary)
                         if item.press == true {
                             Text("press").font(.system(size: 9, weight: .heavy)).padding(.horizontal, 3)
-                                .background(Palette.verdict("amber").opacity(0.3), in: RoundedRectangle(cornerRadius: 3))
+                                .background(Palette.verdict("amber").opacity(0.3), in: RoundedRectangle(cornerRadius: 4))
                         }
                     }
                     .font(.caption)
@@ -268,7 +268,7 @@ private struct StyleBreakdown: View {
         let teamAvg = exact.map { $0.map { Int($0.rounded()) } }
         let weakest = zip(keys, exact).compactMap { k, v in v.map { (k, $0) } }.sorted { $0.1 < $1.1 }.prefix(2)
         VStack(alignment: .leading, spacing: 14) {
-            SectionTitle("\(report.style?.name ?? "Style") breakdown", sub: "the \(keys.count) attributes behind each player's \(report.style?.name.lowercased() ?? "style") score (/20) · the lowest are what to work on in training")
+            SectionTitle("\(report.style?.name ?? "Style") breakdown", sub: "the \(keys.count) attributes behind each player's \(report.style?.name.lowercased() ?? "style") score (/20) · the lowest are what to work on in training", page: true)
             if !weakest.isEmpty {
                 Text("Your best XI is weakest at \(weakest.map { "\(report.label($0.0)) (\(String(format: "%.1f", $0.1)))" }.joined(separator: " and ")) as a group. These are FM's visible attributes, so you can check them on each player's profile.")
                     .foregroundStyle(.secondary)
@@ -320,7 +320,7 @@ private struct StyleBreakdown: View {
 struct XITag: View {
     var body: some View {
         Text("XI").font(.system(size: 9, weight: .heavy)).foregroundStyle(.black).fixedSize()
-            .padding(.horizontal, 4).background(Palette.star, in: RoundedRectangle(cornerRadius: 3))
+            .padding(.horizontal, 4).background(Palette.star, in: RoundedRectangle(cornerRadius: 4))
             .accessibilityLabel("in your best XI")
     }
 }
@@ -333,7 +333,7 @@ private struct Misfits: View {
     var body: some View {
         let misfits = report.fit?.misfits ?? []
         VStack(alignment: .leading, spacing: 14) {
-            SectionTitle("Players who don't fit the system", sub: "first team, judged on the key attributes of their best role in your tactic")
+            SectionTitle("Players who don't fit the system", sub: "first team, judged on the key attributes of their best role in your tactic", page: true)
             if misfits.isEmpty {
                 Label("Everyone in your first team suits a role in this tactic. 🔥", systemImage: "checkmark.seal.fill")
                     .foregroundStyle(Palette.transferIn)
@@ -394,7 +394,7 @@ private struct RoleByRole: View {
         let weakest = xiFit.enumerated().compactMap { i, f in f.map { (i, $0) } }.min { $0.1 < $1.1 }?.0 ?? 0
         let current = picked ?? weakest
         VStack(alignment: .leading, spacing: 14) {
-            SectionTitle("Role by role", sub: "fit = role key attributes (in & out of possession) blended with \(report.style?.name ?? "style") attributes · pick a position")
+            SectionTitle("Role by role", sub: "fit = role key attributes (in & out of possession) blended with \(report.style?.name ?? "style") attributes · pick a position", page: true)
             HStack(spacing: 8) {
                 KeyChip(text: "In possession", kind: .ip)
                 KeyChip(text: "Out of possession", kind: .oop)
@@ -426,8 +426,8 @@ private struct RoleByRole: View {
                             .lineLimit(1)
                     }
                     .frame(width: 74).padding(.vertical, 5)
-                    .background(theme.cardFill, in: RoundedRectangle(cornerRadius: 7))
-                    .overlay(RoundedRectangle(cornerRadius: 7).stroke(i == current ? Palette.star : .clear, lineWidth: 2))
+                    .background(theme.cardFill, in: RoundedRectangle(cornerRadius: 6))
+                    .overlay(RoundedRectangle(cornerRadius: 6).stroke(i == current ? Palette.star : .clear, lineWidth: 2))
                     .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)

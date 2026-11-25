@@ -10,12 +10,12 @@ struct RankStrip: View {
         let cut = max(3, Int((Double(of) * 0.25).rounded()))
         HStack(spacing: 2) {
             ForEach(1...max(of, 1), id: \.self) { k in
-                RoundedRectangle(cornerRadius: 2)
+                RoundedRectangle(cornerRadius: 4)
                     .fill(color(k, cut: cut))
                     .frame(height: 7)
                     .overlay {
                         if k == rank {
-                            RoundedRectangle(cornerRadius: 2).stroke((good ? Palette.transferIn : Palette.injuryLong).opacity(0.5), lineWidth: 3)
+                            RoundedRectangle(cornerRadius: 4).stroke((good ? Palette.transferIn : Palette.injuryLong).opacity(0.5), lineWidth: 3)
                         }
                     }
             }
@@ -120,8 +120,8 @@ struct KeyChip: View {
             .font(.caption.weight(.semibold))
             .padding(.horizontal, 7).padding(.vertical, 2)
             .foregroundStyle(color)
-            .background(color.opacity(0.12), in: RoundedRectangle(cornerRadius: 5))
-            .overlay(RoundedRectangle(cornerRadius: 5).stroke(color.opacity(0.5)))
+            .background(color.opacity(0.12), in: RoundedRectangle(cornerRadius: 4))
+            .overlay(RoundedRectangle(cornerRadius: 4).stroke(color.opacity(0.5)))
     }
 
     private var color: Color {

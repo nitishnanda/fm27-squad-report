@@ -112,7 +112,7 @@ struct PlayerCard: View {
         }
         .padding(10)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .panel(8)
+        .panel(10)
     }
 
     private var others: [(String, Rating)] {

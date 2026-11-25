@@ -61,7 +61,7 @@ private struct Schedules: View {
     var body: some View {
         let teams = report.training ?? []
         VStack(alignment: .leading, spacing: 16) {
-            SectionTitle("Training in place", sub: "read from your save's calendars · schedule names are exactly what your Training screen shows")
+            SectionTitle("Training in place", sub: "read from your save's calendars · schedule names are exactly what your Training screen shows", page: true)
             if teams.isEmpty {
                 ContentUnavailableView("No training calendar in this save", systemImage: "calendar")
             }
@@ -191,7 +191,7 @@ private struct Changes: View {
     var body: some View {
         let advice = report.trainingAdvice
         VStack(alignment: .leading, spacing: 16) {
-            SectionTitle("What to change in the first team's schedule", sub: "each one from your own match numbers (Tactical fit › How it's going)")
+            SectionTitle("What to change in the first team's schedule", sub: "each one from your own match numbers (Tactical fit › How it's going)", page: true)
             if advice?.changes.isEmpty ?? true {
                 Label("Nothing to change: your numbers don't point at a schedule problem.", systemImage: "checkmark.seal.fill")
                     .foregroundStyle(Palette.transferIn)
@@ -248,9 +248,9 @@ private struct Plans: View {
         let shown = prospects || everyone ? rows : rows.filter(\.0.inXi)
         VStack(alignment: .leading, spacing: 14) {
             if prospects {
-                SectionTitle("Prospects", sub: "players 23 and under with 3.5★+ potential")
+                SectionTitle("Prospects", sub: "players 23 and under with 3.5★+ potential", page: true)
             } else {
-                SectionTitle("Individual training: first team", sub: "compare with his card in Training › Individual Training")
+                SectionTitle("Individual training: first team", sub: "compare with his card in Training › Individual Training", page: true)
                 Text("Set his IP and OOP roles to the ones he plays in your tactic, give him the focus shown, and use Position/Role or Individual Out of Possession Training for the position work. One focus at a time: change it once that attribute has gone up.")
                     .font(.callout).foregroundStyle(.secondary)
                 Toggle("Show players outside the best XI too", isOn: $everyone)
@@ -292,8 +292,8 @@ private struct Plans: View {
                             if let f = plan.focus {
                                 Text("\(report.label(f.attribute)) \(f.value)").font(.callout.weight(.semibold))
                                     .padding(.horizontal, 7).padding(.vertical, 2)
-                                    .background(Palette.star.opacity(0.15), in: RoundedRectangle(cornerRadius: 5))
-                                    .overlay(RoundedRectangle(cornerRadius: 5).stroke(Palette.star.opacity(0.5)))
+                                    .background(Palette.star.opacity(0.15), in: RoundedRectangle(cornerRadius: 4))
+                                    .overlay(RoundedRectangle(cornerRadius: 4).stroke(Palette.star.opacity(0.5)))
                             } else {
                                 Text("Nothing at 13 or below").font(.caption).foregroundStyle(Palette.transferIn)
                             }
@@ -333,7 +333,7 @@ private struct MentoringPart: View {
     var body: some View {
         if let m = report.trainingAdvice?.mentoring {
             VStack(alignment: .leading, spacing: 16) {
-                SectionTitle("Mentoring", sub: m.why)
+                SectionTitle("Mentoring", sub: m.why, page: true)
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 300), spacing: 12, alignment: .top)], spacing: 12) {
                     group("Young players with low Determination", "21 and under, Determination 11 or less", m.young,
                           tint: Palette.verdict("amber"))

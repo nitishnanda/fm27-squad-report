@@ -20,7 +20,7 @@ struct BestXIsView: View {
             let width = max(220, min(tall * 0.68, (geo.size.width - pad * 2 - gap) / 2))
             VStack(alignment: .leading, spacing: 12) {
                 HStack(alignment: .bottom) {
-                    SectionTitle("Best XIs", sub: "\(report.formation.title) · rated for your roles in and out of possession · click a player for his card")
+                    SectionTitle("Best XIs", sub: "\(report.formation.title) · rated for your roles in and out of possession · click a player for his card", page: true)
                     Spacer(minLength: 12)
                     Button { copyImage() } label: {
                         Label(copied ? "Copied" : "Copy as Image", systemImage: copied ? "checkmark" : "photo.on.rectangle")

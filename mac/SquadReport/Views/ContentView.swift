@@ -40,12 +40,12 @@ struct ContentView: View {
                 }
                 ToolbarItemGroup(placement: .primaryAction) {
                     EngineStatusPill()
-                    Button { model.showQuickOpen = true } label: { Label("Quick Open", systemImage: "magnifyingglass") }
+                    Button { model.showQuickOpen = true } label: { Label("Quick Open", systemImage: "magnifyingglass").padding(.horizontal, 4) }
                         .help("Search pages, players and actions (⌘K)")
-                    Button { openWindow(id: "matchday") } label: { Label("Matchday", systemImage: "pin") }
+                    Button { openWindow(id: "matchday") } label: { Label("Matchday", systemImage: "pin").padding(.horizontal, 6) }
                         .labelStyle(.titleAndIcon)
                         .help("A small window that floats over FM (⇧⌘M)")
-                    SettingsLink { Label("Settings", systemImage: "gearshape") }
+                    SettingsLink { Label("Settings", systemImage: "gearshape").padding(.horizontal, 4) }
                         .help("Look, folder, notifications, phone access (⌘,)")
                 }
             }
@@ -206,10 +206,21 @@ struct EngineStatusPill: View {
                 Circle().fill(color).frame(width: 8, height: 8)
             }
             Text(text).font(.callout).foregroundStyle(.secondary)
+            if let checked = lastChecked {
+                Text("·").foregroundStyle(.tertiary)
+                // "Last checked 25 Nov, 17:58": when the engine last looked at the save (every few seconds while it runs)
+                Text("Last checked \(checked.formatted(.dateTime.day().month(.abbreviated))), \(checked.formatted(date: .omitted, time: .shortened))")
+                    .font(.callout).monospacedDigit().foregroundStyle(.tertiary)
+            }
         }
-        .padding(.horizontal, 6)
+        .padding(.leading, 10).padding(.trailing, 14)   // room inside the toolbar capsule, so it doesn't feel crammed
         .help(help)
         .accessibilityElement(children: .combine)
+    }
+
+    private var lastChecked: Date? {
+        if ReportStore.demoPath != nil { return model.store.demoLoaded }
+        return model.store.status?.checked.map { Date(timeIntervalSince1970: $0) }
     }
 
     private var state: (String, Color, Bool) {

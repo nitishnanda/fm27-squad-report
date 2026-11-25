@@ -164,10 +164,7 @@ private struct Hero: View {
 
     private var eyebrow: some View {
         HStack(spacing: 8) {
-            HStack(spacing: 6) {
-                Image(systemName: "sparkles").font(.system(size: 10)).foregroundStyle(DS.Delta.warn)
-                Text("FM27 SQUAD REPORT").font(.system(size: 11, weight: .semibold)).tracking(0.77).foregroundStyle(.secondary)
-            }
+            Text("FM27 COMPANION").font(.system(size: 11, weight: .semibold)).tracking(0.77).foregroundStyle(.secondary)
             Text("·").foregroundStyle(.tertiary)
             pill(report.formation.title, symbol: "shield", tint: Palette.brandHigh, strong: true)
             pill(Fmt.day(report.gameDate), symbol: "calendar", tint: .secondary, strong: false)
@@ -218,7 +215,8 @@ private struct Hero: View {
     private var league: some View {
         if let rec = report.performance.record {
             VStack(alignment: .leading, spacing: 12) {
-                HStack(alignment: .firstTextBaseline, spacing: 12) {
+                // the two lines sit centred on the big position, not on its baseline (his ask)
+                HStack(alignment: .center, spacing: 12) {
                     Text(Fmt.ordinal(rec.pos)).positionFont(32).foregroundStyle(positionInk)
                     VStack(alignment: .leading, spacing: 2) {
                         Text("\(Fmt.ordinal(rec.pos)) of \(rec.of)\(report.performance.leagueName.map { " · \($0)" } ?? "") · \(rec.pts) pts")

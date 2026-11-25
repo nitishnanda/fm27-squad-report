@@ -6380,7 +6380,8 @@ def serve_live(argv: list[str]) -> None:
     url = f"http://localhost:{LIVE_PORT}/"
     script = Path(__file__).resolve()
     script_mtime = script.stat().st_mtime
-    state = {"html": None, "json": None, "version": "", "building": False, "error": "", "built": None, "n": 0, "step": -1}
+    state = {"html": None, "json": None, "version": "", "building": False, "error": "", "built": None, "n": 0, "step": -1,
+             "checked": None}   # when the watcher last looked at the newest save (epoch seconds), for the Mac app
     headless = "--headless" in argv
     lock = threading.Lock()
     landing = landing_page()
@@ -6438,7 +6439,8 @@ def serve_live(argv: list[str]) -> None:
             if path == "/api/status":
                 return self.send(json.dumps({"schema": REPORT_SCHEMA, "version": snap["version"], "building": snap["building"],
                                              "step": snap["step"], "steps": BUILD_STEPS, "error": snap["error"],
-                                             "ready": snap["json"] is not None}), "application/json")
+                                             "ready": snap["json"] is not None,
+                                             "checked": snap.get("checked")}), "application/json")
             if path == "/api/phone":   # the Mac app's Settings draws these links as QR codes for his iPhone
                 links = phone_links(key) if phone_on else []
                 return self.send(json.dumps({"on": bool(phone_on), "links": [{"kind": k, "url": u} for k, u in links]}),
@@ -6562,6 +6564,8 @@ def serve_live(argv: list[str]) -> None:
                 save = newest()
                 if save:
                     st = save.stat()
+                    with lock:
+                        state["checked"] = time.time()
                     key = (str(save), st.st_mtime, st.st_size)
                     forced = state.pop("force", False)
                     if forced or (key != attempted and time.time() - st.st_mtime > LIVE_SETTLE_SECONDS):

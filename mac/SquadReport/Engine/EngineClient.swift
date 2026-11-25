@@ -9,6 +9,8 @@ struct EngineStatus: Decodable, Sendable, Equatable {
     let steps: [String]
     let error: String
     let ready: Bool
+    /// When the engine last looked at the newest save (seconds since 1970). Older engines don't send it.
+    var checked: Double? = nil
 }
 
 /// Talks to the engine on this Mac. The API only answers 127.0.0.1 with its own Host header.

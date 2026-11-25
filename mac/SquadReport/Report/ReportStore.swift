@@ -44,7 +44,11 @@ final class ReportStore {
     /// Handy for checking screens with the demo save (mac/Fixtures/report.json), which has injuries, bans and every move.
     static var demoPath: String? { UserDefaults.standard.string(forKey: "demoReport") }
 
+    /// Demo mode has no engine, so "last checked" is when the demo file was opened.
+    var demoLoaded: Date?
+
     func showDemo(_ path: String) {
+        demoLoaded = .now
         guard let data = FileManager.default.contents(atPath: path) else {
             problem = "Couldn't open the demo report at \(path)."
             return

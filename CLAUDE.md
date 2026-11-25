@@ -233,6 +233,22 @@ Load the matching skills before touching the site's look or behaviour (name them
 Skip the React Native / Reanimated / Skia / Next.js / Vercel / monorepo skills: this is one Python file serving vanilla HTML/JS.
 GSAP 3.15.1 (+ScrollTrigger, SplitText, Flip) and Lenis 1.3.27 live in `assets/` so the site works offline.
 
+## Mac app UI: design rules and the "see it running" rule (required)
+- `DESIGN.md` is the design spec for `mac/` (tokens, spacing scale, radii, type, components, Don'ts). Follow it
+  exactly; any value outside it needs a code comment saying why. `REFERENCE_AUDIT.md` explains where it comes from.
+- **After every UI edit in `mac/`, before saying it's done, installing or committing:**
+  1. Build: `mac/build.sh` (or the Xcode `BuildProject` tool). Fix every error.
+  2. Launch the dev build in demo mode: `open -n "mac/build/DerivedData.noindex/Build/Products/Debug/FM27 Companion.app"
+     --args -demoReport "$PWD/mac/Fixtures/report.json" -look <look>` (quit the running copy first).
+  3. Visually inspect it through Computer Use: `app_screenshot` (bundle `com.squadreport.mac`) of **every page the edit
+     touches**, in the look he uses (`defaults read com.squadreport.mac look`) and in one light look when colours or
+     surfaces changed. Take the screenshot after the page entrance has finished (a second capture if the first is
+     mid-fade).
+  4. Check the screenshots against `DESIGN.md` and fix what's off, then repeat 1–3.
+  5. In the reply, say which pages and looks were checked and what wasn't.
+- If the Mac is locked or a capture fails, say so plainly and **don't** describe the change as checked, installed
+  for real use, or done. Demo mode only for anything saved or committed; never commit captures of his real save.
+
 ## Mac app (`mac/`): which skill does which task
 Load the skill (Skill tool) **before** starting a task in its row, and say which one you loaded. A task can match two rows: load both.
 | When the task is… | Load |
